@@ -3,7 +3,7 @@ import { UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { LogIn } from "lucide-react";
-
+import FileUpload from "@/components/ui/FileUpload";
 export default function Home() {
   // TODO fix this with User info
   const isSignedIn = false;
@@ -30,6 +30,7 @@ export default function Home() {
               </Link>
             )}
           </div>
+          <FileUpload />
         </div>
       </div>
     </div>
