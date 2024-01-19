@@ -12,10 +12,14 @@ export default function Home() {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
         <div className="flex flex-col items-center text-center">
           <div className="flex items-center">
-            <h1 className="mr-3 text-5xl font-semibold">Mistah Kurtz - he dead.</h1>
+            <h1 className="mr-3 text-5xl font-semibold">
+              Mistah Kurtz - he dead.
+            </h1>
             <UserButton afterSignOutUrl="/" />
           </div>
-          <div className="flex mt-2">{isSignedIn && <Button>Go to Chats</Button>}</div>
+          <div className="flex mt-2">
+            {isSignedIn && <Button>Go to Chats</Button>}
+          </div>
           <div className="w-full mt-4">
             {" "}
             {isSignedIn ? (
@@ -25,7 +29,7 @@ export default function Home() {
                 <Button>
                   {" "}
                   Login to get started
-                  <LogIn className="w-4 h-4 ml-2" />
+                  <LogIn className="w-4 h-4 ml-2 " />
                 </Button>
               </Link>
             )}
