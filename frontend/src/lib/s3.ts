@@ -1,6 +1,9 @@
 import AWS from "aws-sdk";
 
 export async function uploadFileToS3(file: File): Promise<{ fileKey: string; fileName: string }> {
+  if (!(file instanceof File)) {
+    throw new Error("Invalid file type. Expected instance of File.");
+  }
   try {
     AWS.config.update({
       accessKeyId: process.env.NEXT_PUBLIC_S3_ACCESS_KEY_ID,
@@ -10,32 +13,35 @@ export async function uploadFileToS3(file: File): Promise<{ fileKey: string; fil
       params: {
         Bucket: process.env.NEXT_PUBLIC_S3_BUCKET_NAME,
       },
-      region: "eu-west-2",
+      region: process.env.NEXT_PUBLIC_S3_REGION,
     });
 
     const cleanedFileName = file.name.replace(/[^a-zA-Z0-9.]/g, "");
-    const fileKey = "uploads/" + Date.now() + "_" + cleanedFileName;
-
+    const fileKey = "uploads/" + Date.now() + "_" + cleanedFileName;'
+    
+    const bucketName = process.env.NEXT_PUBLIC_S3_BUCKET_NAME;
+    if (!bucketName) {
+      throw new Error("S3 bucket name is not set in environment variables");
+    }
     const params = {
-      Bucket: process.env.NEXT_PUBLIC_S3_BUCKET_NAME,
+      Bucket: bucketName,
       Key: fileKey,
       Body: file,
     };
 
     // TODO fix error
-    const upload = s3
-      .putObject(params)
-      .on("httpUploadProgress", (evt) => {
-        // TODO add a progress bar
-        console.log(evt.loaded + " of " + evt.total + " Bytes");
-      })
-      .promise();
-
-    await upload.then((data) => {
+    try {
+      
+      const upload = s3.putObject(params).promise();
+  
+      const data = await upload;
       console.log(data);
       console.log("File uploaded successfully to S3", fileKey);
-      return Promise.resolve({ fileKey, fileName: file.name });
-    });
+      return { fileKey, fileName: file.name }; // Fixed by removing Promise.resolve and directly returning the object
+    } catch (error) {
+      console.log(error);
+      throw new Error("Error uploading file to S3");
+    }
   } catch (error) {
     console.log(error);
     throw new Error("Error uploading file to S3");
