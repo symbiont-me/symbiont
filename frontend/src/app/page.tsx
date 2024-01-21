@@ -1,12 +1,17 @@
-import { UserButton } from "@clerk/nextjs";
-
+import { UserButton, auth } from "@clerk/nextjs";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { LogIn } from "lucide-react";
 import FileUpload from "@/components/ui/FileUpload";
 export default function Home() {
   // TODO fix this with User info
-  const isSignedIn = false;
+  const {  userId } = auth();
+  console.log("userId", userId);
+  if (userId) {
+    console.log("signed in");
+  }
+  const isSignedIn = !!userId;
+
   return (
     <div className="w-screen min-h-screen bg-gradient-to-r from-indigo-200 via-red-200 to-yellow-100">
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
@@ -34,7 +39,7 @@ export default function Home() {
               </Link>
             )}
           </div>
-          <FileUpload />
+          {isSignedIn && <FileUpload />}
         </div>
       </div>
     </div>
