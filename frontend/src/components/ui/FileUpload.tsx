@@ -12,7 +12,7 @@ const FileUpload = () => {
         throw new Error("fileKey or fileName is undefined");
       }
       try {
-        const response = await axios.post("/create-chat", {"message": "tiberius"});
+        const response = await axios.post("/create-chat", {fileKey, fileName});
         console.log("response", response);
       }
       catch (e) {
