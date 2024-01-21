@@ -7,7 +7,8 @@ const config = new Configuration({
 
 const openai = new OpenAIApi(config);
 
-export async function getEmbeddings(text: string): Promise<number[]> {
+export async function getEmbeddings(text: string) : Promise<number[]>{
+  
   try {
 
     const response = await openai.createEmbedding({
@@ -18,9 +19,8 @@ export async function getEmbeddings(text: string): Promise<number[]> {
 
 
     const result = await response.json()
-    return result.data.embeddings[0] as number[]
-
-
+    
+    return result.data[0].embedding as number[]
   } catch (error) {
     console.log(error)
     throw error
