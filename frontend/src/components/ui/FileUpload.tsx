@@ -4,16 +4,21 @@ import { Inbox } from "lucide-react";
 import { uploadFileToS3, getS3Url } from "@/lib/s3";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
+import {useRouter} from "next/navigation";
+import { useState } from "react";
+
 // The FileUpload component allows users to upload PDF files
 const FileUpload = () => {
-  // useMutation is a hook from react-query that handles asynchronous updates
+  const router = useRouter();
+  const [uploading, setUploading] = useState(false);
 
+  // useMutation is a hook from react-query that handles asynchronous updates
   const { mutate } = useMutation({
     // mutationFn is the function that will be called when mutate is invoked
-
     mutationFn: async ({
       fileKey,
       fileName,
+      
     }: {
       fileKey: string;
       fileName: string;
@@ -27,7 +32,7 @@ const FileUpload = () => {
           fileKey,
           fileName,
         });
-        console.log("response", response);
+        return response.data
       } catch (e) {
         throw e;
       }
@@ -36,48 +41,45 @@ const FileUpload = () => {
   // useDropzone is a hook that manages file dropping functionality
   const { getRootProps, getInputProps } = useDropzone({
     // Only accept PDF files
-
     accept: { "application/pdf": [".pdf"] },
     maxFiles: 1,
     // onDrop is the function that will be called when a file is dropped
-
     onDrop: async (acceptedFiles) => {
       console.log(acceptedFiles);
       // Get the first file from the array of accepted files
-
       const file = acceptedFiles[0];
       // Check if the file size exceeds 10MB and alert the user if it does
-
       if (file.size > 10000000) {
+        // TODO add toast component here
         alert("File is too big!");
         return;
       }
       // Try to upload the file to S3
-
       try {
+        setUploading(true);
         const data = await uploadFileToS3(file);
-        console.log("file uploaded", data);
-        if (!data.fileKey || !data.fileName) {
-          alert("Error uploading file");
+        if (!data?.fileKey || !data.fileName) {
+          // toast.error("Something went wrong");
           return;
         }
-        // If the upload was successful, call mutate to post the file information
-
         mutate(data, {
-          onSuccess: () => {
-            console.log("success", data);
+          onSuccess: (data: { chat_id: number }) => {
+            // toast.success("Chat created!");
+            router.push(`/chat/${data.chat_id}`);
           },
-          onError: (error) => {
-            console.log("error", error);
+          onError: (err) => {
+            // toast.error("Error creating chat");
+            console.error(err);
           },
         });
-      } catch (e) {
-        throw e;
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setUploading(false);
       }
     },
   });
   // Render the dropzone UI
-
   return (
     <div className="p-2 bg-white rounded-xl">
       <div
