@@ -8,7 +8,16 @@ import axios from "axios";
 const FileUpload = () => {
   const { mutate } = useMutation({
     mutationFn: async ({fileKey, fileName}: {fileKey: string, fileName: string}) => {
-      const response = await axios.post("/api/create-chat", {fileKey, fileName});
+      if (!fileKey || !fileName) {
+        throw new Error("fileKey or fileName is undefined");
+      }
+      try {
+        const response = await axios.post("/create-chat", {"message": "tiberius"});
+        console.log("response", response);
+      }
+      catch (e) {
+        throw e;
+      }
     }
     });
 
@@ -25,6 +34,7 @@ const FileUpload = () => {
   
       try {
         const data = await uploadFileToS3(file);
+        console.log("file uploaded",data);
         if (!data.fileKey || !data.fileName) {
           alert("Error uploading file");
           return;
