@@ -10,9 +10,9 @@ type Props = {
 const Providers = ({children}: Props) => {
 const [client] = useState(() => new QueryClient());
   return (
-    <div>
+    <>
       <QueryClientProvider client={client}> {children}</QueryClientProvider>
-    </div>
+    </>
   );
 };
 
