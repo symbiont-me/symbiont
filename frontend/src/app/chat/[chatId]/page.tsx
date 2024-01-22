@@ -4,6 +4,7 @@ import { db } from "../../../lib/db"
 import { chats } from "../../../lib/db/schema"
 import { eq } from "drizzle-orm"
 import ChatSidebar from "../../../components/ChatSideBar";
+import PDFViewer from "../../../components/PdfViewer";
 
 type Props = {
   params: {
@@ -23,13 +24,16 @@ const ChatPage = async ({ params: { chatId } }: Props) => {
     return redirect("/");
   }
 
-   // TODO fix string to number
    if (!_chats.find((chat) => chat.id === parseInt(chatId))) {
     return redirect("/")
   };
 
+// get current chat from db using the chatId
+const currentChat = _chats.find((chat) => chat.id === parseInt(chatId));
+console.log(currentChat?.pdfUrl);
+
   return (
-    <div>
+    <div className="flex max-h-screen overflow-scroll">
       {/* chat sidebar */}
       <div className="flex-[1] max-w-xs">
         <ChatSidebar chats={_chats} chatId= {chatId}/>
@@ -37,6 +41,7 @@ const ChatPage = async ({ params: { chatId } }: Props) => {
       </div>
       {/* pdf viewer */}
       <div className="flex-[5] max-h-screen p-4 overflow-scroll">
+        <PDFViewer pdfUrl={currentChat?.pdfUrl || ""}/>
       </div>
       {/* chat */}
       <div className="flex-[3] max-w-xs border-slate-200">
