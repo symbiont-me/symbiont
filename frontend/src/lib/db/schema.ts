@@ -12,6 +12,11 @@ export const chats = pgTable("chats", {
   fileKey: varchar("file_key", { length: 256 }).notNull(),
 });
 
+// This type alias 'DrizzleChat' represents the shape of the data selected from the 'chats' table using Drizzle ORM.
+export type DrizzleChat = typeof chats.$inferSelect;
+
+
+
 export const messages = pgTable("messages", {
   id: serial("id").primaryKey(),
   chatId: integer("chat_id").notNull(),
