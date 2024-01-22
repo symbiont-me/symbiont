@@ -1,10 +1,9 @@
 import { UserButton, auth } from "@clerk/nextjs";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 import { LogIn } from "lucide-react";
 import FileUpload from "@/components/ui/FileUpload";
 export default function Home() {
-  // TODO fix this with User info
   const {  userId } = auth();
   console.log("userId", userId);
   if (userId) {
