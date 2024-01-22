@@ -5,6 +5,7 @@ import { chats } from "../../../lib/db/schema"
 import { eq } from "drizzle-orm"
 import ChatSidebar from "../../../components/ChatSideBar";
 import PDFViewer from "../../../components/PdfViewer";
+import Chat from "../../../components/ChatComponent";
 
 type Props = {
   params: {
@@ -45,6 +46,8 @@ console.log(currentChat?.pdfUrl);
       </div>
       {/* chat */}
       <div className="flex-[3] max-w-xs border-slate-200">
+        <Chat />
+
       </div>
     </div>
   )
