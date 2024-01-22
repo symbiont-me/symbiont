@@ -1,20 +1,15 @@
 import { Pinecone, PineconeRecord } from "@pinecone-database/pinecone";
 import { downloadFromS3 } from "./s3-server";
 import { PDFLoader } from "langchain/document_loaders/fs/pdf";
-import {
-  Document,
-  RecursiveCharacterTextSplitter,
-} from "@pinecone-database/doc-splitter";
+import { Document, RecursiveCharacterTextSplitter } from "@pinecone-database/doc-splitter";
 import md5 from "md5";
 import { getEmbeddings } from "./embeddings";
 import { convertToAscii } from "./utils";
-import { Pin } from "lucide-react";
 
 let pinecone: Pinecone | null = null;
 
 import dotenv from "dotenv";
 dotenv.config();
-
 
 /**
  * Retrieves the singleton Pinecone client instance. If the client does not exist, it is created with the API key from environment variables.
@@ -38,7 +33,6 @@ type PdfPage = {
     loc: { pageNumber: number };
   };
 };
-
 
 /**
  * Downloads a PDF file from S3, processes its content, and uploads the data to Pinecone.
@@ -79,7 +73,6 @@ export async function loadS3DataIntoPinecone(fileKey: string) {
 async function embedDocument(doc: Document) {
   try {
     const embeddings = await getEmbeddings(doc.pageContent);
-    
 
     const hash = md5(doc.pageContent);
     return {
@@ -118,7 +111,7 @@ async function prepareDocument(pdfPage: PdfPage) {
       pageContent,
       metadata: {
         pageNumber: metadata.loc.pageNumber,
-        text: truncatedText
+        text: truncatedText,
       },
     }),
   ]);
