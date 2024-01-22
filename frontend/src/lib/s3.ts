@@ -49,6 +49,6 @@ export async function uploadFileToS3(file: File): Promise<{ fileKey: string; fil
 // helper
 export function getS3Url(fileKey: string) {
   const url =
-    "https://" + process.env.NEXT_PUBLIC_S3_BUCKET_NAME + ".s3.eu-wes-2.amazonaws.com/" + fileKey;
+    `https://${process.env.NEXT_PUBLIC_S3_BUCKET_NAME}.s3.${process.env.NEXT_PUBLIC_S3_REGION}.amazonaws.com/${fileKey}`
   return url;
 }
