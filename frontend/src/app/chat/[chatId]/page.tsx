@@ -46,7 +46,7 @@ console.log(currentChat?.pdfUrl);
       </div>
       {/* chat */}
       <div className="flex-[3] max-w-xs border-slate-200">
-        <Chat />
+        <Chat chatId={parseInt(chatId)}/>
 
       </div>
     </div>
