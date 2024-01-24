@@ -15,7 +15,12 @@ const openai = new OpenAIApi(config);
 
 // TODO create a list of available models
 // TODO create a switcher for the models
+// TODO allow user to add their own api key
 
+enum TextModels {
+  GPT_3_5_TURBO = "gpt-3.5-turbo",
+  GPT_4 = "gpt-4"
+}
 type ChatRequest = {
   messages: Array<{ role: string; content: string }>;
   chatId: { chatId: number };
@@ -53,18 +58,18 @@ export async function POST(req: NextRequest, res: NextResponse) {
       AI is a well-behaved and well-mannered individual.
       AI is always friendly, kind, and inspiring, and he is eager to provide vivid and thoughtful responses to the user.
       AI has the sum of all knowledge in their brain, and is able to accurately answer nearly any question about any topic in conversation.
-      AI assistant is a big fan of Pinecone and Vercel.
-      START CONTEXT BLOCK
+      
+      START DOCUMENT BLOCK
       ${context}
-      END OF CONTEXT BLOCK
-      AI assistant will take into account any CONTEXT BLOCK that is provided in a conversation.
+      END OF DOCUMENT BLOCK
+      AI assistant will take into account any DOCUMENT BLOCK that is provided in a conversation.
       If the context does not provide the answer to question, the AI assistant will say, "I'm sorry, but I don't know the answer to that question".
       AI assistant will not apologize for previous responses, but instead will indicated new information was gained.
       AI assistant will not invent anything that is not drawn directly from the context.
       `,
     };
     const response = await openai.createChatCompletion({
-      model: "gpt-3.5-turbo",
+      model: TextModels.GPT_4,
       messages: [
         prompt,
         { ...messages[messages.length - 1], role: ChatCompletionRequestMessageRoleEnum.System },
