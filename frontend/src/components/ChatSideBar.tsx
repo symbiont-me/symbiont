@@ -20,7 +20,6 @@ const ChatSidebar =  ({chats, chatId}: Props) => {
         </Link>
         <div>
             {chats.map((chat) => {
-                console.log(chat)
                 return (
                     <Link href={`/chat/${chat.id}`} key={chat.id} className={`block p-2 my-2 rounded-xl ${chat.id === parseInt(chatId) ? 'bg-gray-700' : ''}`}>
                             {chat.pdfName}
