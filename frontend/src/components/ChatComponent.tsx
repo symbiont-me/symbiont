@@ -7,11 +7,16 @@ import {Send} from "lucide-react";
 import {useChat} from "ai/react"
 import MessageList from "./MessageList";
 
-type Props = {};
+type Props = {
+  chatId: number;
+};
 
-const ChatComponent = () => {
+const ChatComponent = (chatId: Props) => {
   const { messages, input, handleInputChange, handleSubmit } = useChat({
     api: "/api/chat",
+    body: {
+      chatId,
+    }
   });
 
 
