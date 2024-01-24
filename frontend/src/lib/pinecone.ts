@@ -8,24 +8,14 @@ import { convertToAscii } from "./utils";
 
 let pinecone: Pinecone | null = null;
 
-import dotenv from "dotenv";
-dotenv.config();
 
 /**
  * Retrieves the singleton Pinecone client instance. If the client does not exist, it is created with the API key from environment variables.
  */
 export const getPineconeClient = async () => {
-  const pineconeApiKey = process.env.PINECONE_API_KEY;
-  if (!pineconeApiKey) {
-    throw new Error("Pinecone API key is not set in environment variables");
-  }
-  if (pinecone === null) {
-    pinecone = new Pinecone({
-      apiKey: pineconeApiKey,
-    });
-  }
-
-  return pinecone;
+  return new Pinecone({
+    apiKey: process.env.PINECONE_API_KEY!,
+  });
 };
 type PdfPage = {
   pageContent: string;
