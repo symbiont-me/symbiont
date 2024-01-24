@@ -33,7 +33,6 @@ export async function uploadFileToS3(file: File): Promise<{ fileKey: string; fil
       const upload = s3.putObject(params).promise();
   
       const data = await upload;
-      console.log(data);
       console.log("File uploaded successfully to S3", fileKey);
       return { fileKey, fileName: file.name }; // Fixed by removing Promise.resolve and directly returning the object
     } catch (error) {
