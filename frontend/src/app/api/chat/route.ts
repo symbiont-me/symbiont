@@ -31,7 +31,6 @@ export async function POST(req: NextRequest, res: NextResponse) {
     if (isNaN(chatId)) {
       return NextResponse.json({ error: "Invalid chatId" }, { status: 400 });
     }
-    console.log(messages)
     // get user message
     const lastMessage = messages[messages.length - 1].content;
     
@@ -44,6 +43,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
     // get context
     const context = await getContext(lastMessage, fileKey);
+    // console.log(context);
     
     // create base prompt
     const prompt = {
