@@ -19,7 +19,7 @@ export async function downloadFromS3(file_key: string): Promise<string> {
       const file_name = `/tmp/cheddar${Date.now().toString()}.pdf`;
 
       // from: https://github.com/Elliott-Chong/chatpdf-yt/
-      if (obj.Body instanceof require("stream").Readable) {
+      if (obj.Body) {
         // AWS-SDK v3 has some issues with their typescript definitions, but this works
         // https://github.com/aws/aws-sdk-js-v3/issues/843
         //open the writable stream and write the file
@@ -39,5 +39,3 @@ export async function downloadFromS3(file_key: string): Promise<string> {
     }
   });
 }
-
-// downloadFromS3("uploads/1693568801787chongzhisheng_resume.pdf");
