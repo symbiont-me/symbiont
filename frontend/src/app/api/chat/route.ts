@@ -6,6 +6,7 @@ import { chats } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 export const runtime = "edge";
 import { getContext } from "@/lib/context";
+import { TextModels } from "@/const";
 
 const config = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
@@ -13,10 +14,7 @@ const config = new Configuration({
 
 const openai = new OpenAIApi(config);
 
-enum TextModels {
-  GPT_3_5_TURBO = "gpt-3.5-turbo",
-  GPT_4 = "gpt-4"
-}
+
 type ChatRequest = {
   messages: Array<{ role: string; content: string }>;
   chatId: { chatId: number };
@@ -27,6 +25,10 @@ export async function POST(req: NextRequest, res: NextResponse) {
     const requestBody: ChatRequest = await req.json();
     const {chatId} = requestBody.chatId
     const messages = requestBody.messages; 
+    const llm = requestBody.model;
+    const apiKey = requestBody.apiKey;
+
+    console.log("Using the", apiKey);
 
     if (isNaN(chatId)) {
       return NextResponse.json({ error: "Invalid chatId" }, { status: 400 });
@@ -65,7 +67,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
     };
     // TODO should use md syntax so that we can parse it to display it in the frontend
     const response = await openai.createChatCompletion({
-      model: TextModels.GPT_3_5_TURBO,
+      model: llm,
       messages: [
         prompt,
         { ...messages[messages.length - 1], role: ChatCompletionRequestMessageRoleEnum.System },
