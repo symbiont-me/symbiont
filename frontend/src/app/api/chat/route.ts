@@ -13,10 +13,6 @@ const config = new Configuration({
 
 const openai = new OpenAIApi(config);
 
-// TODO create a list of available models
-// TODO create a switcher for the models
-// TODO allow user to add their own api key
-
 enum TextModels {
   GPT_3_5_TURBO = "gpt-3.5-turbo",
   GPT_4 = "gpt-4"
@@ -32,7 +28,6 @@ export async function POST(req: NextRequest, res: NextResponse) {
     const {chatId} = requestBody.chatId
     const messages = requestBody.messages; 
 
-    // const chatId = parseInt(requestBody.chatId, 10);
     if (isNaN(chatId)) {
       return NextResponse.json({ error: "Invalid chatId" }, { status: 400 });
     }
@@ -68,8 +63,9 @@ export async function POST(req: NextRequest, res: NextResponse) {
       AI assistant will not invent anything that is not drawn directly from the context.
       `,
     };
+    // TODO should use md syntax so that we can parse it to display it in the frontend
     const response = await openai.createChatCompletion({
-      model: TextModels.GPT_4,
+      model: TextModels.GPT_3_5_TURBO,
       messages: [
         prompt,
         { ...messages[messages.length - 1], role: ChatCompletionRequestMessageRoleEnum.System },
