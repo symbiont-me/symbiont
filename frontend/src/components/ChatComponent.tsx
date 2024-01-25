@@ -1,17 +1,30 @@
 "use client";
-import {useChat} from "ai/react"
+import {useChat, Message} from "ai/react"
 import MessageList from "./MessageList";
 import UserChatInput from "./UserChatInput";
 import {useState, useEffect} from "react";
 import ModelSelectDropdown from "./ModelSelectDropdown";
 import {TextModels} from '@/const';
 import ApiKeyInput from "./ApiKeyInput";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+
 
 type Props = {
   chatId: number;
 };
 
 const ChatComponent = (chatId: Props) => {
+  const { data, isLoading } = useQuery({
+    queryKey: ["chat", chatId],
+    queryFn: async () => {
+      const response = await axios.post<Message[]>("/api/get-messages", {
+        chatId,
+      });
+      return response.data;
+    },
+  });
+  console.log(data)
   const [selectedModel, setSelectedModel] = useState<TextModels> (TextModels.GPT_3_5_TURBO)
   const [apiKey, setApiKey] = useState<string> ("")
   const { messages, input, handleInputChange, handleSubmit } = useChat({
@@ -20,7 +33,8 @@ const ChatComponent = (chatId: Props) => {
       chatId,
       model: selectedModel,
       apiKey: apiKey
-    }
+    },
+    initialMessages: data|| [],
   });
 
 
@@ -51,7 +65,7 @@ useEffect(() => {
       </div>
 
       {/* message list */}
-      <MessageList messages={messages}  />
+      <MessageList messages={messages} />
 
 
       {/* input */}
