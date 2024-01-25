@@ -22,9 +22,20 @@ const ChatComponent = (chatId: Props) => {
 
 //  TODO add choose model dropdown
 // TODO add option for adding own api key
+// TODO allow user to add their own api key
+
+const messageContainer = document.getElementById("message-container");
+if (messageContainer) {
+  messageContainer.scrollTo(
+    0,
+    messageContainer.scrollHeight - messageContainer.clientHeight
+  )
+
+}
+
   return (
     <div
-      className="relative max-h-screen overflow-scroll"
+      className="relative max-h-screen overflow-scroll" 
       id="message-container"
     >
       {/* header */}
