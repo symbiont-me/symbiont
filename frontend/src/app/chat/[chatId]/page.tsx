@@ -36,12 +36,12 @@ console.log(currentChat?.pdfUrl);
   return (
     <div className="flex max-h-screen overflow-scroll">
       {/* chat sidebar */}
-      <div className="flex-[1] max-w-xs">
+      <div className="flex-[5] max-w-xs">
         <ChatSidebar chats={_chats} chatId= {chatId}/>
 
       </div>
       {/* pdf viewer */}
-      <div className="flex-[5] max-h-screen p-4 overflow-scroll">
+      <div className="max-h-screen p-4 overflow-scroll w-[600px]">
         <PDFViewer pdfUrl={currentChat?.pdfUrl || ""}/>
       </div>
       {/* chat */}
