@@ -1,11 +1,8 @@
 "use client";
-
-import {Input}  from "./ui/Input";
-import {useState} from "react";
-import {Button} from "./ui/Button";
-import {Send} from "lucide-react";
 import {useChat} from "ai/react"
 import MessageList from "./MessageList";
+import UserChatInput from "./UserChatInput";
+import {useEffect} from "react";
 
 type Props = {
   chatId: number;
@@ -24,14 +21,13 @@ const ChatComponent = (chatId: Props) => {
 // TODO add option for adding own api key
 // TODO allow user to add their own api key
 
-const messageContainer = document.getElementById("message-container");
-if (messageContainer) {
-  messageContainer.scrollTo(
-    0,
-    messageContainer.scrollHeight - messageContainer.clientHeight
-  )
+useEffect(() => {
+  const messageContainer = document.getElementById("message-container");
+  if (messageContainer) {
+    messageContainer.scrollTo(0, messageContainer.scrollHeight);
+  }
+}, [messages]); // Dependency array includes messages to trigger scroll when they change
 
-}
 
   return (
     <div
@@ -46,22 +42,9 @@ if (messageContainer) {
       {/* message list */}
       <MessageList messages={messages}  />
 
-      <form
-        onSubmit={handleSubmit}
-        className="sticky bottom-0 inset-x-0 px-2 py-4 bg-white"
-      >
-        <div className="flex">
-          <Input
-            value={input}
-            onChange={handleInputChange}
-            placeholder="Ask any question..."
-            className="w-full"
-          />
-          <Button className="bg-blue-600 ml-2">
-            <Send className="h-4 w-4" />
-          </Button>
-        </div>
-      </form>
+
+      {/* input */}
+      <UserChatInput input={input} handleInputChange={handleInputChange} handleSubmit={handleSubmit}/>
     </div>
   );
 };
