@@ -9,9 +9,7 @@ type Props = {
 };
 
 const MessageList = ({ messages, isLoading }: Props) => {
-    // TODO change
-
-    isLoading = false;
+  
 
   if (isLoading) {
     return (
