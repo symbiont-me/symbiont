@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Button } from '../components/ui/Button'
+import { Button } from '../ui/Button'
 import { PlusCircle } from 'lucide-react'
 import {DrizzleChat} from '@/lib/db/schema'
 

@@ -1,11 +1,11 @@
 "use client";
 import {useChat, Message} from "ai/react"
-import MessageList from "./MessageList";
-import UserChatInput from "./UserChatInput";
+import MessageList from "@/components/ChatComponent/MessageList";
+import UserChatInput from "@/components/ChatComponent/UserChatInput";
 import {useState, useEffect} from "react";
-import ModelSelectDropdown from "./ModelSelectDropdown";
+import ModelSelectDropdown from "@/components/ModelSelectDropdown";
 import {TextModels} from '@/const';
-import ApiKeyInput from "./ApiKeyInput";
+import ApiKeyInput from "@/components/ApiKeyInput";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
@@ -57,10 +57,10 @@ useEffect(() => {
     >
       {/* header */}
       <div className="sticky top-0 inset-x-0 p-2 bg-white h-fit">
-        <div className="flex flex-row items-center">
+      <div className="flex flex-row items-center justify-between mx-4 my-2 space-x-4">
         
-        <ModelSelectDropdown setModel = {setSelectedModel}/>
-        <ApiKeyInput setApiKey = {setApiKey}/>
+        <ModelSelectDropdown setModel={setSelectedModel}/>
+        <ApiKeyInput setApiKey={setApiKey}/>
         </div>
       </div>
 

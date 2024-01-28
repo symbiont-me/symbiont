@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 import { Message } from "ai/react";
 import { Loader2 } from "lucide-react";
 import React from "react";
-import AiChatMessage from "@/components/AiChatMessage";
+import AiChatMessage from "@/components/ChatComponent/AiChatMessage";
 
 type Props = {
   isLoading: boolean;
@@ -21,12 +21,8 @@ const MessageList = ({ messages, isLoading }: Props) => {
   }
   if (!messages) return <></>;
   
-  
-
-
-  
   return (
-    <div className="flex flex-col gap-2 px-4  ">
+    <div className="flex flex-col gap-2 px-4  h-screen">
       {messages.map((message) => {
         return (
           <div
@@ -44,8 +40,8 @@ const MessageList = ({ messages, isLoading }: Props) => {
                 }
               )}
             >
+              {/* renders markdown */}
               <AiChatMessage message={message.content} />
-              {/* <p>{message.content}</p> */}
             </div>
           </div>
         );
