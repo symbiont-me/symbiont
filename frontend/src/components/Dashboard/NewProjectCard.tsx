@@ -1,7 +1,8 @@
 "use client";
 import React from "react";
 import axios from "axios";
-import {useAuth} from "@clerk/nextjs"
+import { useAuth } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
 // TODO update the style of New Project Button
 // TODO take the name of the project as input
@@ -11,23 +12,33 @@ import {useAuth} from "@clerk/nextjs"
 // TODO redirect to the new project page
 
 const NewProjectCard: React.FC = () => {
+  const router = useRouter();
   const [studyName, setStudyName] = React.useState("");
 
-  const {userId} = useAuth();
+  const { userId } = useAuth();
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setStudyName(event.target.value);
   };
 
-
   const createStudyHandler = async () => {
-    const response = await axios.post("/api/create-study", {
-      studyName: studyName,
-      userId: userId
-    });
-    console.log(response);
-  }
-  
+    try {
+      const response = await axios.post("/api/create-study", {
+        studyName: studyName,
+        userId: userId,
+      });
+      if (response.status === 200) {
+        console.log("Study created successfully");
+        const studyId = response.data.studyId;
+        // TODO fix the redirect
+        router.push(`/studies/${studyId}`);
+      }
+    } catch (error) {
+      console.error("Failed to create study", error);
+      // Handle error appropriately
+    }
+  };
+
   return (
     <div>
       {/* Open the modal using document.getElementById('ID').showModal() method */}
@@ -54,7 +65,9 @@ const NewProjectCard: React.FC = () => {
             onChange={handleInputChange}
           />{" "}
           {/* TODO wrap into a submit form to allow creating with Enter */}
-          <button className="btn btn-info" onClick={createStudyHandler}>Create Study</button>
+          <button className="btn btn-info" onClick={createStudyHandler}>
+            Create Study
+          </button>
         </div>
         <form method="dialog" className="modal-backdrop">
           <button>close</button>
