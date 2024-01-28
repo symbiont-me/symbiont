@@ -6,7 +6,11 @@ import StudyNavbar from "@/components/Study/StudyNavbar";
 import PdfViewer from "@/components/PdfViewer";
 import McqTest from "@/components/Study/MCQTest";
 import SciPapers from "@/components/Study/SciPapers";
+import VideoViewer from "@/components/Study/VideoViewer";
+import AudioPlayer from "@/components/Study/AudioPlayer";
+import TextEvaluation from "@/components/Study/TextEvaluation";
 import { ViewSelected } from "@/const";
+
 
 // an object that maps each ViewSelected enum value to a corresponding React component.
 // this allows the application to dynamically render different components based on the current view selection
@@ -15,6 +19,10 @@ const viewComponents: Record<ViewSelected, React.ComponentType<{ pdfUrl: string 
   [ViewSelected.PDFViewer]: PdfViewer,
   [ViewSelected.MCQTest]: McqTest, 
   [ViewSelected.SciencePapers]: SciPapers, 
+  [ViewSelected.Evaluation] : TextEvaluation,
+  [ViewSelected.VideoViewer]: VideoViewer,
+  [ViewSelected.AudioPlayer]: AudioPlayer,
+
 };
 
 type StudyPageProps = {
