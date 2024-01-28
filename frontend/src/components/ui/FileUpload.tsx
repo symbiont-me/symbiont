@@ -4,13 +4,23 @@ import { Inbox } from "lucide-react";
 import { uploadFileToS3, getS3Url } from "@/lib/s3";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
-import {useRouter} from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Image from "next/image";
+import ToastMessage from "./ToastMessage";
+import { usePathname } from 'next/navigation'
+
+
+
+// TODO fix toast messages
 
 // The FileUpload component allows users to upload PDF files
 const FileUpload = () => {
   const router = useRouter();
+  const path = usePathname()
+  const studyId = path.split("/")[2];
+
+
   const [uploading, setUploading] = useState(false);
 
   // useMutation is a hook from react-query that handles asynchronous updates
@@ -19,7 +29,6 @@ const FileUpload = () => {
     mutationFn: async ({
       fileKey,
       fileName,
-      
     }: {
       fileKey: string;
       fileName: string;
@@ -32,8 +41,16 @@ const FileUpload = () => {
         const response = await axios.post("/api/create-chat", {
           fileKey,
           fileName,
+          studyId
         });
-        return response.data
+
+        if (response.status !== 200) {
+          <ToastMessage message="Error creating chat" type="error" />;
+          throw new Error("Error creating chat");
+        }
+        <ToastMessage message="Chat created successfully" type="success" />;
+
+        return response.data;
       } catch (e) {
         throw e;
       }
@@ -60,16 +77,16 @@ const FileUpload = () => {
         setUploading(true);
         const data = await uploadFileToS3(file);
         if (!data?.fileKey || !data.fileName) {
-          // toast.error("Something went wrong");
+          
           return;
         }
         mutate(data, {
           onSuccess: (data: { chat_id: number }) => {
-            // toast.success("Chat created!");
-            router.push(`/chat/${data.chat_id}`);
+            <ToastMessage message="Chat created successfully" type="success" />;           
+            console.log(data);
           },
           onError: (err) => {
-            // toast.error("Error creating chat");
+            <ToastMessage message="Error creating chat" type="error" />;
             console.error(err);
           },
         });
@@ -90,10 +107,13 @@ const FileUpload = () => {
         })}
       >
         <input {...getInputProps()} />
-        
-        <Image src="/icons/plus.svg" width={20} height={20} alt="upload resources"/>
 
-        
+        <Image
+          src="/icons/plus.svg"
+          width={20}
+          height={20}
+          alt="upload resources"
+        />
       </div>
     </div>
   );
