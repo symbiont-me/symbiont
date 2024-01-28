@@ -10,6 +10,7 @@ import VideoViewer from "@/components/Study/VideoViewer";
 import AudioPlayer from "@/components/Study/AudioPlayer";
 import TestKnowledge from "@/components/Study/TestKnowledge";
 import TextEvaluation from "@/components/Study/TextEvaluation";
+import Summaries from "@/components/Study/Summaries";
 import { ViewSelected } from "@/const";
 
 
@@ -31,6 +32,7 @@ const viewComponents: Record<ViewSelected, React.ComponentType<{ pdfUrl: string 
   [ViewSelected.Evaluation] : TextEvaluation,
   [ViewSelected.VideoViewer]: VideoViewer,
   [ViewSelected.AudioPlayer]: AudioPlayer,
+  [ViewSelected.Summaries]: Summaries
 
 };
 
