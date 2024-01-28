@@ -3,9 +3,9 @@ import { redirect } from "next/navigation";
 import { db } from "../../../lib/db"
 import { chats } from "../../../lib/db/schema"
 import { eq } from "drizzle-orm"
-import ChatSidebar from "../../../components/ChatSideBar";
-import PDFViewer from "../../../components/PdfViewer";
-import Chat from "../../../components/ChatComponent";
+import ChatSidebar from "../../../components/ChatComponent/ChatSideBar";
+import PDFViewer from "../../../components/Study/PdfViewer";
+import Chat from "../../../components/ChatComponent/ChatComponentMain";
 
 type Props = {
   params: {
