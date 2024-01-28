@@ -1,15 +1,33 @@
 "use client";
 import React from "react";
-
+import axios from "axios";
+import {useAuth} from "@clerk/nextjs"
 
 // TODO update the style of New Project Button
-// TODO take the name of the project as input 
+// TODO take the name of the project as input
 // TODO create a new project in the backend
 // TODO update the list of projects in the dashboard
 // TODO add new project to the database
 // TODO redirect to the new project page
 
 const NewProjectCard: React.FC = () => {
+  const [studyName, setStudyName] = React.useState("");
+
+  const {userId} = useAuth();
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setStudyName(event.target.value);
+  };
+
+
+  const createStudyHandler = async () => {
+    const response = await axios.post("/api/create-study", {
+      studyName: studyName,
+      userId: userId
+    });
+    console.log(response);
+  }
+  
   return (
     <div>
       {/* Open the modal using document.getElementById('ID').showModal() method */}
@@ -28,9 +46,15 @@ const NewProjectCard: React.FC = () => {
       <dialog id="my_modal_2" className="modal">
         <div className="modal-box">
           <h3 className="font-bold text-lg mb-6">Create New Study</h3>
-          <input type="text" placeholder="Study Name" className="input input-bordered input-primary w-full max-w-xs mr-4" />
-          <button className="btn btn-info">Create Study</button>
-
+          <input
+            type="text"
+            placeholder="Study Name"
+            className="input input-bordered input-primary w-full max-w-xs mr-4"
+            value={studyName}
+            onChange={handleInputChange}
+          />{" "}
+          {/* TODO wrap into a submit form to allow creating with Enter */}
+          <button className="btn btn-info" onClick={createStudyHandler}>Create Study</button>
         </div>
         <form method="dialog" className="modal-backdrop">
           <button>close</button>
