@@ -6,6 +6,7 @@ import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import {useRouter} from "next/navigation";
 import { useState } from "react";
+import Image from "next/image";
 
 // The FileUpload component allows users to upload PDF files
 const FileUpload = () => {
@@ -89,10 +90,10 @@ const FileUpload = () => {
         })}
       >
         <input {...getInputProps()} />
-        <>
-          <Inbox className="w-10 h-10 text-blue-500" />
-          <p>Drop the PDF here</p>
-        </>
+        
+        <Image src="/icons/plus.svg" width={20} height={20} alt="upload resources"/>
+
+        
       </div>
     </div>
   );
