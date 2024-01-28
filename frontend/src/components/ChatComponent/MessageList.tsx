@@ -25,8 +25,11 @@ const MessageList = ({ messages, isLoading }: Props) => {
     <div className="flex flex-col gap-2 px-4  h-screen">
       {messages.map((message) => {
         return (
+          
+          
           <div
             key={message.id}
+            
             className={cn("flex", {
               "justify-end pl-10": message.role === "user",
               "justify-start pr-10": message.role === "assistant",
