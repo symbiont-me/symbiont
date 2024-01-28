@@ -8,5 +8,5 @@ export default function TextEditor() {
   const [value, setValue] = useState('');
 
   return (
-  <div className='w-full'><ReactQuill theme="snow" value={value} onChange={setValue} /></div>);
+  <div className='w-full h-screen'><ReactQuill className='h-screen' theme="snow" value={value} onChange={setValue} /></div>);
 }
