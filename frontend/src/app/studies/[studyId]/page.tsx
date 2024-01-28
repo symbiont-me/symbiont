@@ -1,15 +1,24 @@
 "use client"
 import React from "react";
 import TextEditor from "@/components/Study/TextEditor";
-import ChatComponent from "@/components/ChatComponent";
+import ChatComponent from "@/components/ChatComponent/ChatComponentMain";
 import StudyNavbar from "@/components/Study/StudyNavbar";
-import PdfViewer from "@/components/PdfViewer";
-import McqTest from "@/components/Study/MCQTest";
+import PdfViewer from "@/components/Study/PdfViewer";
+import McqTest from "@/components/Study/TestKnowledge";
 import SciPapers from "@/components/Study/SciPapers";
 import VideoViewer from "@/components/Study/VideoViewer";
 import AudioPlayer from "@/components/Study/AudioPlayer";
+import TestKnowledge from "@/components/Study/TestKnowledge";
 import TextEvaluation from "@/components/Study/TextEvaluation";
 import { ViewSelected } from "@/const";
+
+
+// TODO add sidebar
+// TODO add chat component bar on the right
+// TODO add pdf viewer
+// TODO add video viewer
+// TODO add audio player
+// TODO add multiple choice quiz
 
 
 // an object that maps each ViewSelected enum value to a corresponding React component.
@@ -17,7 +26,7 @@ import { ViewSelected } from "@/const";
 const viewComponents: Record<ViewSelected, React.ComponentType<{ pdfUrl: string | undefined}>> = {
   [ViewSelected.Writer]: TextEditor,
   [ViewSelected.PDFViewer]: PdfViewer,
-  [ViewSelected.MCQTest]: McqTest, 
+  [ViewSelected.TestKnowledge]: TestKnowledge, 
   [ViewSelected.SciencePapers]: SciPapers, 
   [ViewSelected.Evaluation] : TextEvaluation,
   [ViewSelected.VideoViewer]: VideoViewer,
@@ -51,9 +60,3 @@ const StudyPage: React.FC<StudyPageProps> = ({pdfUrl}: StudyPageProps) => {
 export default StudyPage;
 
 
-// TODO add sidebar
-// TODO add chat component bar on the right
-// TODO add pdf viewer
-// TODO add video viewer
-// TODO add audio player
-// TODO add multiple choice quiz
