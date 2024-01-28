@@ -6,7 +6,7 @@ export enum TextModels {
 export enum ViewSelected {
     Writer = 'writer',
     PDFViewer = 'PDF viewer',
-    MCQTest = 'mcq test',
+    TestKnowledge = 'test knowledge',
     SciencePapers = 'sci papers',
     Evaluation = 'evaluation',
     VideoViewer = 'video viewer',
