@@ -1,6 +1,6 @@
 import LeftSidebar from "../LeftSidebar";
-import ProjectCard from "./ProjectCard";
-import NewProjectCard from "./NewProjectCard";
+import ProjectCard from "./StudyCard";
+import NewStudyCard from "./NewStudyCard";
 
 // TODO get projects from db
 // TODO handle errors in case of no projects
@@ -15,7 +15,7 @@ export default function UserDashboard() {
                 <ProjectCard title="test" img="" description=""/>
            
                 <div className="border p-4">
-                    <NewProjectCard/>
+                    <NewStudyCard/>
                 </div>
                 
             </div>
