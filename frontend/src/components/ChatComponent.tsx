@@ -52,7 +52,7 @@ useEffect(() => {
 
   return (
     <div
-      className="relative max-h-screen overflow-scroll w-full " 
+      className=" max-h-screen overflow-scroll" 
       id="message-container"
     >
       {/* header */}
