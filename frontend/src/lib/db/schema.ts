@@ -2,6 +2,22 @@ import { pgTable, text, serial, timestamp, varchar, integer, pgEnum } from "driz
 
 export const userSystemEnum = pgEnum("user_system_enum", ["admin", "user"]);
 
+export const studies = pgTable("studies", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  image: text("image"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  userId: varchar("user_id", { length: 256 }).notNull(),
+});
+
+export const studyTexts = pgTable("texts", {
+  id: serial("id").primaryKey(),
+  content: text("content").notNull(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  userId: varchar("user_id", { length: 256 }).notNull(),
+  studyId: integer("study_id").notNull(),
+})
+
 export const chats = pgTable("chats", {
   id: serial("id").primaryKey(),
   pdfName: text("pdf_name").notNull(),
@@ -10,6 +26,7 @@ export const chats = pgTable("chats", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
   userId: varchar("user_id", { length: 256 }).notNull(),
   fileKey: varchar("file_key", { length: 256 }).notNull(),
+  studyId: integer("study_id").notNull(),
 });
 
 // This type alias 'DrizzleChat' represents the shape of the data selected from the 'chats' table using Drizzle ORM.
