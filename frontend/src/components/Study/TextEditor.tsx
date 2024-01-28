@@ -6,7 +6,7 @@ import 'react-quill/dist/quill.snow.css';
 // NOTE this fixes the issue with document not being defined at initial render
 const ReactQuill = dynamic(() => import('react-quill'), {
   ssr: false,
-  loading: () => <p>Loading...</p>,
+  loading: () => <div className="flex justify-center items-center h-screen"><span className="loading loading-dots loading-md"></span></div>,
 });
 
 
