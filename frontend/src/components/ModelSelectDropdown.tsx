@@ -7,11 +7,14 @@ type Props = {
 export default function ModelSelectDropdown({setModel}:Props) {
   return (
     <div>
-        <select  onChange={(e) => setModel(e.target.value as TextModels)}>
-
+        <select className = "select select-success w-full max-w-xs" onChange={(e) => setModel(e.target.value as TextModels)}>
+        <option disabled selected>Pick a Model</option>
           {Object.values(TextModels).map((model) => (
             <option key={model} value={model}>{model}</option>
+            
+
           ))}
+          
         </select>
       
     </div>
