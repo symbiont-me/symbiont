@@ -5,6 +5,14 @@ import { db } from "../../../lib/db";
 import { chats } from "../../../lib/db/schema";
 import { getS3Url } from "../../../lib/s3";
 
+
+type CreateChatRequestBody = {
+  fileKey: string;
+  fileName: string;
+  studyId: number;
+}
+
+
 export async function POST(req: Request, res: Response) {
   const { userId } = auth();
 
@@ -12,8 +20,9 @@ export async function POST(req: Request, res: Response) {
     return NextResponse.json({ error: "Not authorized" }, { status: 401 });
   }
 
-  const body = await req.json();
-  const { fileKey, fileName } = body;
+
+  const body: CreateChatRequestBody = await req.json();
+  const { fileKey, fileName, studyId } = body;
   console.log("Loading data into Pinecone");
   await loadS3DataIntoPinecone(fileKey);
 
@@ -25,6 +34,7 @@ export async function POST(req: Request, res: Response) {
       pdfName: fileName,
       pdfUrl: getS3Url(fileKey),
       userId: userId,
+      studyId: studyId
     })
     .returning({ insertedId: chats.id })
     .execute();
