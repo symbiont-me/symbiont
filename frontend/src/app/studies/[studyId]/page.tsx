@@ -24,7 +24,7 @@ import { ViewSelected } from "@/const";
 
 // an object that maps each ViewSelected enum value to a corresponding React component.
 // this allows the application to dynamically render different components based on the current view selection
-const viewComponents: Record<ViewSelected, React.ComponentType<{ pdfUrl: string | undefined}>> = {
+const viewComponents: Record<ViewSelected, React.ComponentType<{ pdfUrl: string | undefined, value: string }>> = {
   [ViewSelected.Writer]: TextEditor,
   [ViewSelected.PDFViewer]: PdfViewer,
   [ViewSelected.TestKnowledge]: TestKnowledge, 
