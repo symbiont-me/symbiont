@@ -11,4 +11,5 @@ export enum ViewSelected {
     Evaluation = 'evaluation',
     VideoViewer = 'video viewer',
     AudioPlayer = 'audio player',
+    Summaries = 'summaries',
   }
