@@ -1,6 +1,6 @@
 import React from 'react';
 
-const MCQTest: React.FC = () => {
+const TestKnowledge: React.FC = () => {
   return (
     <div>
       <h1>Multiple Choice Questions Test</h1>
@@ -9,5 +9,5 @@ const MCQTest: React.FC = () => {
   );
 };
 
-export default MCQTest;
+export default TestKnowledge;
 
