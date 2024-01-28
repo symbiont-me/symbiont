@@ -10,7 +10,7 @@ export default function ModelSelectDropdown({setModel}:Props) {
         <select 
           className="select select-success w-full max-w-xs" 
           onChange={(e) => setModel(e.target.value as TextModels)}
-          defaultValue="" 
+          defaultValue=""  
         >
           <option value="" disabled>Pick a Model</option> {/* Removed selected from here */}
           {Object.values(TextModels).map((model) => (
