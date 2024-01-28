@@ -3,7 +3,7 @@
 
 
 type Props = {
-    pdfUrl: string;
+    pdfUrl: string | undefined;
 
 }
 
