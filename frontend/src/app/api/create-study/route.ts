@@ -19,7 +19,7 @@ export const POST = async (req: NextRequest, res: NextResponse) => {
       .execute();
 
     console.log(studyId);
-    return NextResponse.json({ message: "Study created successfully" });
+    return NextResponse.json({ studyId: studyId[0].insertedId }, { status: 201 });
   } catch (error) {
     console.error(error);
     return NextResponse.json(
