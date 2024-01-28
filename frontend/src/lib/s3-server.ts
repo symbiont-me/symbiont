@@ -16,7 +16,7 @@ export async function downloadFromS3(file_key: string): Promise<string> {
       };
 
       const obj = await s3.getObject(params);
-      const file_name = `/tmp/cheddar${Date.now().toString()}.pdf`;
+      const file_name = `/tmp/symbiont${Date.now().toString()}.pdf`;
 
       // from: https://github.com/Elliott-Chong/chatpdf-yt/
       if (obj.Body) {
