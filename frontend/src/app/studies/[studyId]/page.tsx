@@ -12,6 +12,12 @@ import TestKnowledge from "@/components/Study/TestKnowledge";
 import TextEvaluation from "@/components/Study/TextEvaluation";
 import Summaries from "@/components/Study/Summaries";
 import { ViewSelected } from "@/const";
+import {db} from "@/lib/db";
+import {studies, chats} from "@/lib/db/schema";
+import {eq} from "drizzle-orm";
+import axios from 'axios';
+import {useState, useEffect} from 'react';
+
 
 
 // TODO add sidebar
@@ -24,7 +30,7 @@ import { ViewSelected } from "@/const";
 
 // an object that maps each ViewSelected enum value to a corresponding React component.
 // this allows the application to dynamically render different components based on the current view selection
-const viewComponents: Record<ViewSelected, React.ComponentType<{ pdfUrl: string | undefined, value: string }>> = {
+const viewComponents: Record<ViewSelected, React.ComponentType<{ pdfUrl: string | undefined, textWriterValue: string, video_url:string | undefined}>> = {
   [ViewSelected.Writer]: TextEditor,
   [ViewSelected.PDFViewer]: PdfViewer,
   [ViewSelected.TestKnowledge]: TestKnowledge, 
@@ -33,7 +39,6 @@ const viewComponents: Record<ViewSelected, React.ComponentType<{ pdfUrl: string 
   [ViewSelected.VideoViewer]: VideoViewer,
   [ViewSelected.AudioPlayer]: AudioPlayer,
   [ViewSelected.Summaries]: Summaries
-
 };
 
 type StudyPageProps = {
@@ -42,7 +47,26 @@ type StudyPageProps = {
 }
 
 const StudyPage: React.FC<StudyPageProps> = ({pdfUrl}: StudyPageProps) => {
-  const [viewSelected, setViewSelected] = React.useState<ViewSelected>(ViewSelected.Writer);
+  const [viewSelected, setViewSelected] =useState<ViewSelected>(ViewSelected.Writer);
+  const [pdfs, setPdfs] = useState<string[]>([]);
+  const [textWriterValue, setTextWriterValue] = useState<string>('');
+  const [video_url, setVideoUrl] = useState<string | undefined>(undefined);
+
+
+  useEffect(() => {
+    const fetchPDFs = async () => {
+      try {
+        const response = await axios.post('/api/get-pdfs', { studyId: 1});
+        // TODO add pdfUrl to state
+        setPdfs(response.data);
+      } catch (error) {
+        console.error('Error fetching PDFs:', error);
+      }
+    };
+
+    fetchPDFs();
+  }, []);
+  
 
   const SelectedViewComponent = viewComponents[viewSelected] || null;
 
@@ -52,7 +76,8 @@ const StudyPage: React.FC<StudyPageProps> = ({pdfUrl}: StudyPageProps) => {
       <div className="flex flex-row  ">
         {/* <Sidebar /> */}
         
-        {SelectedViewComponent && <SelectedViewComponent  pdfUrl={pdfUrl}/>}
+        
+        {SelectedViewComponent && <SelectedViewComponent  pdfUrls={pdfs}/>}
         <ChatComponent />
       </div>
     </div>
