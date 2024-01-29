@@ -19,8 +19,8 @@ const ChatPage = async ({ params: { chatId } }: Props) => {
     return redirect("/sign-in");
   }
   // get chats from db using the userId
-  // TODO fix missing eq
   const _chats = await db.select().from(chats).where(eq(chats.userId, userId));
+  
   if (!_chats) {
     return redirect("/");
   }
