@@ -4,9 +4,11 @@ import {Message, OpenAIStream, StreamingTextResponse} from "ai";
 import { db } from "@/lib/db";
 import { chats, messages as _messages } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
-export const runtime = "edge";
 import { getContext } from "@/lib/context";
 import { TextModels } from "@/const";
+
+
+export const runtime = "edge";
 
 const config = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
@@ -45,7 +47,6 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
     // get context
     const context = await getContext(lastMessage, fileKey);
-    // console.log(context);
     
     // create base prompt
     const prompt = {
