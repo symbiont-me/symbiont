@@ -34,7 +34,7 @@ const ChatComponent = (chatId: Props) => {
       chatId,
       model: selectedModel,
       apiKey: apiKey,
-      
+
     },
     initialMessages: data || [],
   });
