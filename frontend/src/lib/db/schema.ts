@@ -10,7 +10,7 @@ export const studies = pgTable("studies", {
   userId: varchar("user_id", { length: 256 }).notNull(),
 });
 
-export const studyTexts = pgTable("texts", {
+export const texts = pgTable("texts", {
   id: serial("id").primaryKey(),
   content: text("content").notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
