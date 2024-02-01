@@ -7,6 +7,8 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import ToastMessage from "./ToastMessage";
 import { usePathname } from "next/navigation";
+import { StudyResource, StudyResourceCategory } from "@/app/types";
+
 // TODO fix toast messages
 // TODO update to handle audio file uploads
 
@@ -37,15 +39,16 @@ const FileUpload = () => {
         // TODO upload file to S3
         // TODO get the necessary information from the response
         // TODO set file type either audio or pdf
-        const fileType = "pdf";
+        const fileType = "pdf" as StudyResourceCategory;
         // create the resource in the database
-        const response = await axios.post("/api/upload-resource", {
-          studyId: studyId,
-          resourceCategory: fileType,
-          resourceUrl: getS3Url(fileKey),
-          resourceIdentifier: fileKey, // this identifies the file in the s3 bucket
-          resourceName: fileName,
-        });
+        const resourceData: StudyResource = {
+          studyId: parseInt(studyId),
+          studyResourceName: fileName,
+          studyResourceUrl: getS3Url(fileKey),
+          studyResourceIdentifier: fileKey,
+          studyResourceCategory: fileType,
+        };
+        const response = await axios.post("/api/upload-resource", resourceData);
 
         if (response.status !== 201) {
           <ToastMessage message="Error creating resource" type="error" />;
