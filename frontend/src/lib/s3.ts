@@ -17,7 +17,8 @@ export async function uploadFileToS3(file: File): Promise<{ fileKey: string; fil
     });
 
     const cleanedFileName = file.name.replace(/[^a-zA-Z0-9.]/g, "");
-    const fileKey = `uploads/${Date.now()}_${cleanedFileName}`;    
+    // creates a unique file name based on the current time and the file name
+    const fileKey = `uploads/${Date.now()}_${cleanedFileName}`;
     const bucketName = process.env.NEXT_PUBLIC_S3_BUCKET_NAME;
     if (!bucketName) {
       throw new Error("S3 bucket name is not set in environment variables");
@@ -29,9 +30,8 @@ export async function uploadFileToS3(file: File): Promise<{ fileKey: string; fil
     };
 
     try {
-      
       const upload = s3.putObject(params).promise();
-  
+
       const data = await upload;
       console.log("File uploaded successfully to S3", fileKey);
       return { fileKey, fileName: file.name }; // Fixed by removing Promise.resolve and directly returning the object
@@ -47,7 +47,6 @@ export async function uploadFileToS3(file: File): Promise<{ fileKey: string; fil
 
 // helper
 export function getS3Url(fileKey: string) {
-  const url =
-    `https://${process.env.NEXT_PUBLIC_S3_BUCKET_NAME}.s3.${process.env.NEXT_PUBLIC_S3_REGION}.amazonaws.com/${fileKey}`
+  const url = `https://${process.env.NEXT_PUBLIC_S3_BUCKET_NAME}.s3.${process.env.NEXT_PUBLIC_S3_REGION}.amazonaws.com/${fileKey}`;
   return url;
 }
