@@ -14,7 +14,7 @@ export default function Home() {
   const isSignedIn = !!userId;
 
   if (isSignedIn) {
-    return <UserDashboard />;
+  return <UserDashboard userId = {userId}/>;
   }
 
   return (
