@@ -3,7 +3,7 @@ import { pgTable, text, serial, timestamp, varchar, integer, pgEnum } from "driz
 export const userSystemEnum = pgEnum("user_system_enum", ["admin", "user"]);
 export const resourceCategoryEnum = pgEnum("resource_category_enum", [
   "pdf",
-  "image",
+  "webpage",
   "audio",
   "video",
 ]);
@@ -46,6 +46,8 @@ export const chats = pgTable("chats", {
   // fileKey: varchar("file_key", { length: 256 }).notNull(),
   studyId: integer("study_id").notNull(),
 });
+
+export type DrizzleStudyResource = typeof studyResources.$inferSelect;
 
 // // This type alias 'DrizzleChat' represents the shape of the data selected from the 'chats' table using Drizzle ORM.
 // export type DrizzleChat = typeof chats.$inferSelect;
