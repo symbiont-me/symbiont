@@ -1,25 +1,20 @@
 "use client";
 import { useDropzone } from "react-dropzone";
-import { Inbox } from "lucide-react";
 import { uploadFileToS3, getS3Url } from "@/lib/s3";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import Image from "next/image";
 import ToastMessage from "./ToastMessage";
-import { usePathname } from 'next/navigation'
-
-
-
+import { usePathname } from "next/navigation";
 // TODO fix toast messages
+// TODO update to handle audio file uploads
 
 // The FileUpload component allows users to upload PDF files
 const FileUpload = () => {
   const router = useRouter();
-  const path = usePathname()
+  const path = usePathname();
   const studyId = path.split("/")[2];
-
 
   const [uploading, setUploading] = useState(false);
 
@@ -36,21 +31,28 @@ const FileUpload = () => {
       if (!fileKey || !fileName) {
         throw new Error("fileKey or fileName is undefined");
       }
+
+      // NOTE ?Where is FileKey coming from?
       try {
-        // Try to post the file information to the '/api/create-chat' endpoint
-        const response = await axios.post("/api/create-chat", {
-          fileKey,
-          fileName,
-          studyId
+        // TODO upload file to S3
+        // TODO get the necessary information from the response
+        // TODO set file type either audio or pdf
+        const fileType = "pdf";
+        // create the resource in the database
+        const response = await axios.post("/api/upload-resource", {
+          studyId: studyId,
+          resourceCategory: fileType,
+          resourceUrl: getS3Url(fileKey),
+          resourceIdentifier: fileKey, // this identifies the file in the s3 bucket
+          resourceName: fileName,
         });
 
-        if (response.status !== 200) {
-          <ToastMessage message="Error creating chat" type="error" />;
-          throw new Error("Error creating chat");
+        if (response.status !== 201) {
+          <ToastMessage message="Error creating resource" type="error" />;
+          throw new Error("Error creating resource");
         }
-        <ToastMessage message="Chat created successfully" type="success" />;
 
-        return response.data;
+        return;
       } catch (e) {
         throw e;
       }
@@ -58,7 +60,7 @@ const FileUpload = () => {
   });
   // useDropzone is a hook that manages file dropping functionality
   const { getRootProps, getInputProps } = useDropzone({
-    // Only accept PDF files
+    // TODO accept PDF and audio files
     accept: { "application/pdf": [".pdf"] },
     maxFiles: 1,
     // onDrop is the function that will be called when a file is dropped
@@ -77,12 +79,12 @@ const FileUpload = () => {
         setUploading(true);
         const data = await uploadFileToS3(file);
         if (!data?.fileKey || !data.fileName) {
-          
           return;
         }
+        // NOTE ? What is mutate doing here?
         mutate(data, {
           onSuccess: (data: { chat_id: number }) => {
-            <ToastMessage message="Chat created successfully" type="success" />;           
+            <ToastMessage message="Chat created successfully" type="success" />;
             console.log(data);
           },
           onError: (err) => {
@@ -99,20 +101,12 @@ const FileUpload = () => {
   });
   // Render the dropzone UI
   return (
-    <div className="p-2 bg-white rounded-xl">
-      <div
-        {...getRootProps({
-          className:
-            "p-2 bg-white rounded-xl border-2 border-dashed border-gray-300 text-center cursor-pointer",
-        })}
-      >
+    <div className="flex justify-center items-start mr-4 mt-2">
+      <div {...getRootProps({ className: "dropzone" })}>
         <input {...getInputProps()} />
-
-        <Image
-          src="/icons/plus.svg"
-          width={20}
-          height={20}
-          alt="upload resources"
+        <input
+          type="file"
+          className="file-input file-input-bordered file-input-primary w-full max-w-xs"
         />
       </div>
     </div>
