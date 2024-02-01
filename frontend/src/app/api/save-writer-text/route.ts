@@ -7,6 +7,7 @@ import { eq } from "drizzle-orm";
 // TODO maybe we need to create the text entry on study creation
 export const POST = async (req: NextRequest, res: NextResponse) => {
   const { studyId, userId, studyTextContent, studyTextId } = await req.json();
+
   // Note overwrites any existing text with the same studyId
   // ? do we need the uderId check as well
   const savedText = await db
@@ -14,9 +15,8 @@ export const POST = async (req: NextRequest, res: NextResponse) => {
     .set({
       content: studyTextContent,
     })
-    .where(eq(studyTexts.id, studyTextId))
+    .where(eq(studyTexts.studyId, studyId))
     .execute();
 
-  // console.log("Text Updated: ", savedText);
-  return NextResponse.json({ studyTextId: studyTextId }, { status: 201 });
+  return NextResponse.json(savedText);
 };
