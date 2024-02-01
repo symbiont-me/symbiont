@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { studies, studyTexts } from "@/lib/db/schema";
+import { studies, studyTexts, chats } from "@/lib/db/schema";
 
 export const POST = async (req: NextRequest, res: NextResponse) => {
   try {
@@ -24,6 +24,15 @@ export const POST = async (req: NextRequest, res: NextResponse) => {
         studyId: studyId[0].insertedId,
       })
       .returning({ insertedId: studyTexts.id })
+      .execute();
+
+    // create a single chat for the study
+    const chatId = await db
+      .insert(chats)
+      .values({
+        studyId: studyId[0].insertedId,
+      })
+      .returning({ insertedId: chats.id })
       .execute();
 
     return NextResponse.json({ studyId: studyId[0].insertedId }, { status: 201 });
