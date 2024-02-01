@@ -7,6 +7,7 @@ export const resourceCategoryEnum = pgEnum("resource_category_enum", [
   "audio",
   "video",
 ]);
+
 export const studies = pgTable("studies", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
@@ -23,25 +24,28 @@ export const studyTexts = pgTable("study_texts", {
   studyId: integer("study_id").notNull(),
 });
 
+// NOTE multiple resources per study
 export const studyResources = pgTable("study_resources", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
   url: text("url").notNull(),
+  identifier: varchar("identifier", { length: 256 }).notNull(),
   category: resourceCategoryEnum("category").notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   studyId: integer("study_id").notNull(),
 });
 
-// export const chats = pgTable("chats", {
-//   id: serial("id").primaryKey(),
-//   pdfName: text("pdf_name").notNull(),
-//   pdfUrl: text("pdf_url").notNull(),
-//   // pdfSize: integer("pdf_size").notNull(),
-//   createdAt: timestamp("created_at").notNull().defaultNow(),
-//   userId: varchar("user_id", { length: 256 }).notNull(),
-//   fileKey: varchar("file_key", { length: 256 }).notNull(),
-//   studyId: integer("study_id").notNull(),
-// });
+// NOTE each chat is linked to multiple resources but only one study
+export const chats = pgTable("chats", {
+  id: serial("id").primaryKey(),
+  // pdfName: text("pdf_name").notNull(),
+  // pdfUrl: text("pdf_url").notNull(),
+  // pdfSize: integer("pdf_size").notNull(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  // userId: varchar("user_id", { length: 256 }).notNull(),
+  // fileKey: varchar("file_key", { length: 256 }).notNull(),
+  studyId: integer("study_id").notNull(),
+});
 
 // // This type alias 'DrizzleChat' represents the shape of the data selected from the 'chats' table using Drizzle ORM.
 // export type DrizzleChat = typeof chats.$inferSelect;
