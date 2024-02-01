@@ -1,7 +1,12 @@
 import { pgTable, text, serial, timestamp, varchar, integer, pgEnum } from "drizzle-orm/pg-core";
 
 export const userSystemEnum = pgEnum("user_system_enum", ["admin", "user"]);
-
+export const resourceCategoryEnum = pgEnum("resource_category_enum", [
+  "pdf",
+  "image",
+  "audio",
+  "video",
+]);
 export const studies = pgTable("studies", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
@@ -10,9 +15,19 @@ export const studies = pgTable("studies", {
   userId: varchar("user_id", { length: 256 }).notNull(),
 });
 
+// NOTE only one text per study
 export const studyTexts = pgTable("study_texts", {
   id: serial("id").primaryKey(),
   content: text("content").notNull(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  studyId: integer("study_id").notNull(),
+});
+
+export const studyResources = pgTable("study_resources", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  url: text("url").notNull(),
+  category: resourceCategoryEnum("category").notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   studyId: integer("study_id").notNull(),
 });
