@@ -1,25 +1,22 @@
-import { NextResponse } from "next/server";
+import { NextResponse , NextRequest} from "next/server";
 import { loadS3DataIntoPinecone } from "../../../lib/pinecone";
 import { auth } from "@clerk/nextjs";
 import { db } from "../../../lib/db";
 import { chats } from "../../../lib/db/schema";
 import { getS3Url } from "../../../lib/s3";
 
-
 type CreateChatRequestBody = {
   fileKey: string;
   fileName: string;
   studyId: number;
-}
+};
 
-
-export async function POST(req: Request, res: Response) {
+export async function POST(req: NextRequest, res: NextResponse) {
   const { userId } = auth();
 
   if (!userId) {
     return NextResponse.json({ error: "Not authorized" }, { status: 401 });
   }
-
 
   const body: CreateChatRequestBody = await req.json();
   const { fileKey, fileName, studyId } = body;
@@ -34,11 +31,10 @@ export async function POST(req: Request, res: Response) {
       pdfName: fileName,
       pdfUrl: getS3Url(fileKey),
       userId: userId,
-      studyId: studyId
+      studyId: studyId,
     })
     .returning({ insertedId: chats.id })
     .execute();
-
 
   return NextResponse.json({ chat_id: chat_id[0].insertedId }, { status: 200 });
 }
