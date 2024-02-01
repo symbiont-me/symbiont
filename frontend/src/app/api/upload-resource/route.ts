@@ -1,22 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { StudyResource, StudyResourceCategory } from "@/app/types";
 import { studyResources } from "@/lib/db/schema";
 
 export async function POST(req: NextRequest, res: NextResponse) {
-  const {
-    studyId,
-    resourceUrl,
-    resourceCategory,
-    resourceIdentifier,
-    resourceName,
-  } = await req.json();
+  const body: StudyResource = await req.json();
+  const { studyId, studyResourceName, studyResourceUrl, studyResourceIdentifier, studyResourceCategory } = body;
+  if (!Object.values(StudyResourceCategory).includes(studyResourceCategory)) {
+    return NextResponse.json({ error: "Invalid resource category" }, { status: 400 });
+  }
   const resourceId = db
     .insert(studyResources)
     .values({
-      name: resourceName,
-      identifier: resourceIdentifier,
-      category: resourceCategory,
-      url: resourceUrl,
+      name: studyResourceName,
+      identifier: studyResourceIdentifier,
+      category: studyResourceCategory,
+      url: studyResourceUrl,
       studyId: studyId,
     })
     .returning({ insertedId: studyResources.id })
