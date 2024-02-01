@@ -10,34 +10,31 @@ export const studies = pgTable("studies", {
   userId: varchar("user_id", { length: 256 }).notNull(),
 });
 
-export const texts = pgTable("texts", {
+export const studyTexts = pgTable("study_texts", {
   id: serial("id").primaryKey(),
   content: text("content").notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
-  userId: varchar("user_id", { length: 256 }).notNull(),
-  studyId: integer("study_id").notNull(),
-})
-
-export const chats = pgTable("chats", {
-  id: serial("id").primaryKey(),
-  pdfName: text("pdf_name").notNull(),
-  pdfUrl: text("pdf_url").notNull(),
-  // pdfSize: integer("pdf_size").notNull(),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-  userId: varchar("user_id", { length: 256 }).notNull(),
-  fileKey: varchar("file_key", { length: 256 }).notNull(),
   studyId: integer("study_id").notNull(),
 });
 
-// This type alias 'DrizzleChat' represents the shape of the data selected from the 'chats' table using Drizzle ORM.
-export type DrizzleChat = typeof chats.$inferSelect;
+// export const chats = pgTable("chats", {
+//   id: serial("id").primaryKey(),
+//   pdfName: text("pdf_name").notNull(),
+//   pdfUrl: text("pdf_url").notNull(),
+//   // pdfSize: integer("pdf_size").notNull(),
+//   createdAt: timestamp("created_at").notNull().defaultNow(),
+//   userId: varchar("user_id", { length: 256 }).notNull(),
+//   fileKey: varchar("file_key", { length: 256 }).notNull(),
+//   studyId: integer("study_id").notNull(),
+// });
 
+// // This type alias 'DrizzleChat' represents the shape of the data selected from the 'chats' table using Drizzle ORM.
+// export type DrizzleChat = typeof chats.$inferSelect;
 
-
-export const messages = pgTable("messages", {
-  id: serial("id").primaryKey(),
-  chatId: integer("chat_id").notNull(),
-  content: text("content").notNull(),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-  role: userSystemEnum("role").notNull(),
-});
+// export const messages = pgTable("messages", {
+//   id: serial("id").primaryKey(),
+//   chatId: integer("chat_id").notNull(),
+//   content: text("content").notNull(),
+//   createdAt: timestamp("created_at").notNull().defaultNow(),
+//   role: userSystemEnum("role").notNull(),
+// });
