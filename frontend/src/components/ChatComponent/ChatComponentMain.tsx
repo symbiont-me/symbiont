@@ -8,7 +8,7 @@ import { TextModels } from "@/const";
 import ApiKeyInput from "@/components/ApiKeyInput";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-
+import ResourceSwitcher from "@/components/ResourceSwitcher";
 type Props = {
   chatId: number;
 };
@@ -27,6 +27,7 @@ const ChatComponent = (chatId: Props) => {
   const [selectedModel, setSelectedModel] = useState<TextModels>(
     TextModels.GPT_3_5_TURBO
   );
+  const [selectedResource, setSelectedResource] = useState<string>("");
   const [apiKey, setApiKey] = useState<string>("");
   const { messages, input, handleInputChange, handleSubmit } = useChat({
     api: "/api/chat",
@@ -39,6 +40,8 @@ const ChatComponent = (chatId: Props) => {
     initialMessages: data || [],
   });
 
+  console.log(selectedResource);
+
   //  TODO add choose model dropdown
   // TODO add option for adding own api key
   // TODO allow user to add their own api key
@@ -48,15 +51,31 @@ const ChatComponent = (chatId: Props) => {
     if (messageContainer) {
       messageContainer.scrollTo(0, messageContainer.scrollHeight);
     }
-  }, [messages]);
+      // Function to switch the context for the chat when selectedResource changes
+      const switchChatContext = async () => {
+        try {
+          // TODO update context in the chat and pinecone
+          const response = await axios.post('/api/switch-context', { chatId, resourceUrl: selectedResource });
+          console.log('Chat context switched', response.data);
+        } catch (error) {
+          console.error('Error switching chat context:', error);
+        }
+      };
+
+      if (selectedResource) {
+        switchChatContext();
+      }
+    
+  }, [messages, selectedResource]);
 
   return (
     <div className="max-h-screen overflow-hidden w-1/2" id="message-container">
       {/* header */}
       <div className="sticky top-0 inset-x-0 p-2 bg-white h-fit">
         <div className="flex flex-row items-center justify-between mx-4 my-2 space-x-4">
-          <ModelSelectDropdown setModel={setSelectedModel} />
-          <ApiKeyInput setApiKey={setApiKey} />
+          {/* <ModelSelectDropdown setModel={setSelectedModel} /> */}
+          {/* <ApiKeyInput setApiKey={setApiKey} /> */}
+          <ResourceSwitcher selectedResource={setSelectedResource}/>
         </div>
       </div>
 
