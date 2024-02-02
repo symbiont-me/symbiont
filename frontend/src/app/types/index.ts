@@ -1,11 +1,12 @@
 // NOTE not using Drizzle types because backend will be separated in python
+// need to update this to match the actual schema
 export type StudyResource = {
     studyId: number;
-    studyResourceId?: number;
-    studyResourceName: string;
-    studyResourceUrl: string;
-    studyResourceIdentifier: string;
-    studyResourceCategory: StudyResourceCategory;
+    id?: number;
+    name: string;
+    url: string;
+    identifier: string;
+    category: StudyResourceCategory;
     createdAt?: Date;
 }
 
