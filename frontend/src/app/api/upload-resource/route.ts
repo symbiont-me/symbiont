@@ -5,17 +5,17 @@ import { studyResources } from "@/lib/db/schema";
 
 export async function POST(req: NextRequest, res: NextResponse) {
   const body: StudyResource = await req.json();
-  const { studyId, studyResourceName, studyResourceUrl, studyResourceIdentifier, studyResourceCategory } = body;
-  if (!Object.values(StudyResourceCategory).includes(studyResourceCategory)) {
+  const { studyId, name, url, identifier, category } = body;
+  if (!Object.values(StudyResourceCategory).includes(category)) {
     return NextResponse.json({ error: "Invalid resource category" }, { status: 400 });
   }
   const resourceId = db
     .insert(studyResources)
     .values({
-      name: studyResourceName,
-      identifier: studyResourceIdentifier,
-      category: studyResourceCategory,
-      url: studyResourceUrl,
+      name: name,
+      identifier: identifier,
+      category: category,
+      url: url,
       studyId: studyId,
     })
     .returning({ insertedId: studyResources.id })
