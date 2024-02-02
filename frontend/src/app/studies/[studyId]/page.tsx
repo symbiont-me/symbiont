@@ -18,7 +18,7 @@ import { studies, chats } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import axios from "axios";
 import { useState, useEffect } from "react";
-
+import { usePathname } from "next/navigation";
 // TODO add sidebar
 // TODO add chat component bar on the right
 // TODO add pdf viewer
@@ -57,19 +57,34 @@ const StudyPage: React.FC<StudyPageProps> = ({ pdfUrl }: StudyPageProps) => {
   const [pdfs, setPdfs] = useState<string[]>([]);
   const [textWriterValue, setTextWriterValue] = useState<string>("");
   const [video_url, setVideoUrl] = useState<string | undefined>(undefined);
+  const path = usePathname();
+  const studyId = path.split("/")[2];
+  // const chatId = path.split("/")[3]; // NOTE this method can avoid a db call
+  const [chatId, setChatId] = useState<number | undefined>(undefined);
 
   useEffect(() => {
+    // TODO move it out
+    // TODO remove the hardcoded studyId
     const fetchPDFs = async () => {
       try {
-        const response = await axios.post("/api/get-pdfs", { studyId: 1 });
+        const response = await axios.post("/api/get-pdfs", { studyId: studyId });
         // TODO add pdfUrl to state
         setPdfs(response.data);
       } catch (error) {
         console.error("Error fetching PDFs:", error);
       }
     };
-
+    const fetchLinkedChat = async () => {
+      try {
+        const response = await axios.post("/api/get-chat", { studyId: studyId });
+        setChatId(response.data.chat_id);
+      }
+      catch (error) {
+        console.error("Error fetching chat:", error);
+      }
+    }
     fetchPDFs();
+    fetchLinkedChat();
   }, []);
 
   const SelectedViewComponent = viewComponents[viewSelected] || null;
@@ -81,7 +96,7 @@ const StudyPage: React.FC<StudyPageProps> = ({ pdfUrl }: StudyPageProps) => {
         {/* <Sidebar /> */}
 
         {SelectedViewComponent && <SelectedViewComponent pdfUrls={pdfs} />}
-        <ChatComponent />
+        <ChatComponent chatId={chatId}/>
       </div>
     </div>
   );
