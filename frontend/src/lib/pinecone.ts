@@ -26,6 +26,7 @@ type PdfPage = {
 
 /**
  * Downloads a PDF file from S3, processes its content, and uploads the data to Pinecone.
+ * TODO handle audio file transcripts as well
  */
 export async function loadS3DataIntoPinecone(fileKey: string) {
   console.log("Downloading file from S3");
