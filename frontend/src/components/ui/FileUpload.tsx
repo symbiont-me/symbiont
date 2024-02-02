@@ -33,20 +33,17 @@ const FileUpload = () => {
       if (!fileKey || !fileName) {
         throw new Error("fileKey or fileName is undefined");
       }
-
-      // NOTE ?Where is FileKey coming from?
+      // TODO ? Find where is FileKey coming from?
       try {
-        // TODO upload file to S3
-        // TODO get the necessary information from the response
         // TODO set file type either audio or pdf
         const fileType = "pdf" as StudyResourceCategory;
         // create the resource in the database
         const resourceData: StudyResource = {
           studyId: parseInt(studyId),
-          studyResourceName: fileName,
-          studyResourceUrl: getS3Url(fileKey),
-          studyResourceIdentifier: fileKey,
-          studyResourceCategory: fileType,
+          name: fileName,
+          url: getS3Url(fileKey),
+          identifier: fileKey,
+          category: fileType,
         };
         const response = await axios.post("/api/upload-resource", resourceData);
 
@@ -54,7 +51,6 @@ const FileUpload = () => {
           <ToastMessage message="Error creating resource" type="error" />;
           throw new Error("Error creating resource");
         }
-
         return;
       } catch (e) {
         throw e;
@@ -63,7 +59,7 @@ const FileUpload = () => {
   });
   // useDropzone is a hook that manages file dropping functionality
   const { getRootProps, getInputProps } = useDropzone({
-    // TODO accept PDF and audio files
+    // TODO accept and handle PDF and audio files
     accept: { "application/pdf": [".pdf"] },
     maxFiles: 1,
     // onDrop is the function that will be called when a file is dropped
@@ -84,7 +80,7 @@ const FileUpload = () => {
         if (!data?.fileKey || !data.fileName) {
           return;
         }
-        // NOTE ? What is mutate doing here?
+        // TODO ?Find what is mutate doing here?
         mutate(data, {
           onSuccess: (data: { chat_id: number }) => {
             <ToastMessage message="Chat created successfully" type="success" />;
