@@ -32,8 +32,6 @@ export default function Resources() {
         placeholder="Add audio link"
         className="input input-bordered w-full max-w-xs"
       />
-      {/* NOTE does not work with audio files yet */}
-      <FileUpload />
     </div>
   );
 }
