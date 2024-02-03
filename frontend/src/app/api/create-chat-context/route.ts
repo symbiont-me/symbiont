@@ -1,3 +1,5 @@
+// TODO remove as context being uploaded in the upload-resource endpoint
+
 import { NextResponse , NextRequest} from "next/server";
 import { loadS3DataIntoPinecone } from "../../../lib/pinecone";
 import { auth } from "@clerk/nextjs";
