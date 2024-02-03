@@ -2,23 +2,20 @@ import { UserButton, auth } from "@clerk/nextjs";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { LogIn } from "lucide-react";
-import FileUpload from "@/components/ui/FileUpload";
 import UserDashboard from "@/components/Dashboard/UserDashboardMain";
 
 export default function Home() {
-  const {  userId } = auth();
-  console.log("userId", userId);
+  const { userId } = auth();
   if (userId) {
     console.log("signed in");
   }
   const isSignedIn = !!userId;
-
   if (isSignedIn) {
-  return <UserDashboard userId = {userId}/>;
+    // TODO route the user to /dashboard
+    return <UserDashboard userId={userId} />;
   }
 
   return (
-
     // TODO Create LandingPage component
     <div className="w-screen min-h-screen bg-gradient-to-r from-indigo-200 via-red-200 to-yellow-100">
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
@@ -30,13 +27,9 @@ export default function Home() {
             <UserButton afterSignOutUrl="/" />
           </div>
           <div className="flex mt-2">
-            {isSignedIn && <Button>Go to Chats</Button>}
           </div>
           <div className="w-full mt-4">
-            {" "}
-            {isSignedIn ? (
-              <h1>File Upload</h1>
-            ) : (
+            {
               <Link href="/sign-in">
                 <Button>
                   {" "}
@@ -44,9 +37,8 @@ export default function Home() {
                   <LogIn className="w-4 h-4 ml-2 " />
                 </Button>
               </Link>
-            )}
+            }
           </div>
-          {isSignedIn && <FileUpload />}
         </div>
       </div>
     </div>
