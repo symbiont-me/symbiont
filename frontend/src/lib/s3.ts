@@ -18,6 +18,7 @@ export async function uploadFileToS3(file: File): Promise<{ fileKey: string; fil
 
     const cleanedFileName = file.name.replace(/[^a-zA-Z0-9.]/g, "");
     // creates a unique file name based on the current time and the file name
+    // TODO update to to use sha256 hash and timestamp (and userId if possible)
     const fileKey = `uploads/${Date.now()}_${cleanedFileName}`;
     const bucketName = process.env.NEXT_PUBLIC_S3_BUCKET_NAME;
     if (!bucketName) {
