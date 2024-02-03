@@ -1,26 +1,41 @@
-import {NextResponse, NextRequest} from 'next/server';
-
-import { Configuration, OpenAIApi, ChatCompletionRequestMessageRoleEnum } from "openai-edge";
-import {Message, OpenAIStream, StreamingTextResponse} from "ai";
+import { NextRequest, NextResponse } from "next/server";
+import {
+  Configuration,
+  OpenAIApi,
+  ChatCompletionRequestMessageRoleEnum,
+} from "openai-edge";
+import { Message, OpenAIStream, StreamingTextResponse } from "ai";
 import { db } from "@/lib/db";
 import { chats, messages as _messages } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { getContext } from "@/lib/context";
 import { TextModels } from "@/const";
-export async function POST(req: NextRequest) {
 
+export const runtime = "edge";
+
+const config = new Configuration({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
+const openai = new OpenAIApi(config);
+
+type ChatRequest = {
+  messages: Array<{ role: string; content: string }>;
+  chatId: { chatId: number };
+};
+
+export async function POST(req: NextRequest) {
+  try {
     const requestBody = await req.json();
-    const {chatId} = requestBody.chatId
-    const messages = requestBody.messages; 
-    const resource = requestBody.resource;
-    console.log("Messages", messages)
+    const { chatId } = requestBody.chatId;
+    const messages = requestBody.messages;
+    const resourceIdentifier = requestBody.resourceIdentifier;
     if (isNaN(chatId)) {
       return NextResponse.json({ error: "Invalid chatId" }, { status: 400 });
     }
-    
 
     const lastMessage = messages[messages.length - 1].content;
-    
+
     // get fileKey using the chatId
     // TODO from the chosen resource, get the fileKey
     const _chats = await db.select().from(chats).where(eq(chats.id, chatId));
@@ -28,11 +43,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "chat not found" }, { status: 404 });
     }
 
-    const fileKey = "uploads/1706805971042_12DesigningDataIntensiveApplicationsMartinKleppmannExtracted.pdf"
+    const fileKey = resourceIdentifier;
     // get context from pinecone
-    // TODO update the loadS3DataIntoPinecone function so that context is create when the resource is added and not when the chat is created
     const context = await getContext(lastMessage, fileKey);
-    console.log("Context", context)
     // create base prompt
     const prompt = {
       role: ChatCompletionRequestMessageRoleEnum.System,
@@ -52,42 +65,39 @@ export async function POST(req: NextRequest) {
       `,
     };
 
-
-
-  //   // TODO should use md syntax so that we can parse it to display it in the frontend
-  //   const response = await openai.createChatCompletion({
-  //     model: llm,
-  //     messages: [
-  //       prompt,
-  //       { ...messages[messages.length - 1], role: ChatCompletionRequestMessageRoleEnum.System },
-  //     ],
-  //     stream: true,
-  //   });
-  //   const stream = OpenAIStream(response, {
-  //     onStart: async () => {
-  //       // save user message into db
-  //       await db.insert(_messages).values({
-  //         chatId,
-  //         content: lastMessage,
-  //         role: "user",
-  //       });
-  //     },
-  //     onCompletion: async (completion) => {
-  //       // save ai message into db
-  //       await db.insert(_messages).values({
-  //         chatId,
-  //         content: completion,
-  //         role: "admin",
-  //       });
-  //     },
-  //   });
-  //   console.log("stream", stream);
-  //   return new StreamingTextResponse(stream)
-
-  // } catch (error) {
-  //   console.log(error);
-  //   return NextResponse.json({ error: "An error occurred" }, { status: 500 });
-  // }
-
-    return NextResponse.json({ chat: "Welcome to the Underworld of the Underworld" }, { status: 200 });
+    // TODO should use md syntax so that we can parse it to display it in the frontend
+    const response = await openai.createChatCompletion({
+      model: TextModels.GPT_3_5_TURBO,
+      messages: [
+        prompt,
+        {
+          ...messages[messages.length - 1],
+          role: ChatCompletionRequestMessageRoleEnum.System,
+        },
+      ],
+      stream: true,
+    });
+    const stream = OpenAIStream(response, {
+      onStart: async () => {
+        // save user message into db
+        await db.insert(_messages).values({
+          chatId,
+          content: lastMessage,
+          role: "user",
+        });
+      },
+      onCompletion: async (completion) => {
+        // save ai message into db
+        await db.insert(_messages).values({
+          chatId,
+          content: completion,
+          role: "admin",
+        });
+      },
+    });
+    return new StreamingTextResponse(stream);
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({ error: "An error occurred" }, { status: 500 });
+  }
 }
