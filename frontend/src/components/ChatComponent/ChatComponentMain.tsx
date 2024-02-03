@@ -9,49 +9,50 @@ import ApiKeyInput from "@/components/ApiKeyInput";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import ResourceSwitcher from "@/components/ResourceSwitcher";
+import { StudyResource } from "@/app/types";
 type ChatComponentProps = {
   chatId: number | undefined;
 };
 
+// TODO fix on load selectedResource is undefined even though it is set in the ResourceSwitcher
+// TODO model selection and api key input should be on the Dashboard
 const ChatComponent = (chatId: ChatComponentProps) => {
   const { data, isLoading } = useQuery({
     queryKey: ["chat", chatId],
-    
+
     queryFn: async () => {
-      const response = await axios.post<Message[]>("/api/get-messages", {chatId});
+      const response = await axios.post<Message[]>("/api/get-messages", {
+        chatId,
+      });
       return response.data;
     },
   });
   const [selectedModel, setSelectedModel] = useState<TextModels>(
     TextModels.GPT_3_5_TURBO
   );
-  const [selectedResource, setSelectedResource] = useState<string>("");
+
+  // NOTE this is used to switch the context for the chat
+  const [selectedResource, setSelectedResource] = useState<
+    StudyResource | undefined
+  >(undefined);
   const [apiKey, setApiKey] = useState<string>("");
   const { messages, input, handleInputChange, handleSubmit } = useChat({
     api: "/api/send-chat-message",
     body: {
-      chatId, 
+      chatId,
       // model: selectedModel,
       // apiKey: apiKey,
-      resource: selectedResource,
+      resourceIdentifier: selectedResource?.identifier || "",
     },
     initialMessages: data || [],
   });
-
-
-  //  TODO add choose model dropdown
-  // TODO add option for adding own api key
-  // TODO allow user to add their own api key
 
   useEffect(() => {
     const messageContainer = document.getElementById("message-container");
     if (messageContainer) {
       messageContainer.scrollTo(0, messageContainer.scrollHeight);
     }
-      // Function to switch the context for the chat when selectedResource changes
-    
   }, [messages]);
-
 
   return (
     <div className="max-h-screen overflow-hidden w-1/2" id="message-container">
@@ -60,7 +61,7 @@ const ChatComponent = (chatId: ChatComponentProps) => {
         <div className="flex flex-row items-center justify-between mx-4 my-2 space-x-4">
           {/* <ModelSelectDropdown setModel={setSelectedModel} /> */}
           {/* <ApiKeyInput setApiKey={setApiKey} /> */}
-          <ResourceSwitcher selectedResource={setSelectedResource}/>
+          <ResourceSwitcher selectedResource={setSelectedResource} />
         </div>
       </div>
 
