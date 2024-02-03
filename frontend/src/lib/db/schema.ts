@@ -1,4 +1,12 @@
-import { pgTable, text, serial, timestamp, varchar, integer, pgEnum } from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  text,
+  serial,
+  timestamp,
+  varchar,
+  integer,
+  pgEnum,
+} from "drizzle-orm/pg-core";
 
 export const userSystemEnum = pgEnum("user_system_enum", ["admin", "user"]);
 export const resourceCategoryEnum = pgEnum("resource_category_enum", [
@@ -16,7 +24,7 @@ export const studies = pgTable("studies", {
   userId: varchar("user_id", { length: 256 }).notNull(),
 });
 
-// NOTE only one text per study
+// NOTE This is the text in the Writer tab. Only one text per study
 export const studyTexts = pgTable("study_texts", {
   id: serial("id").primaryKey(),
   content: text("content").notNull(),
