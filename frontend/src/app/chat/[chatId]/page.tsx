@@ -1,3 +1,4 @@
+// TODO remove as not using this anymore
 import { auth } from "@clerk/nextjs"
 import { redirect } from "next/navigation";
 import { db } from "../../../lib/db"
@@ -13,13 +14,19 @@ type Props = {
   };
 }
 
-const ChatPage = async ({ params: { chatId } }: Props) => {
+function ChatPage ({ params: { chatId } }: Props) {
+
   const { userId } = auth();
   if (!userId) {
     return redirect("/sign-in");
   }
   // get chats from db using the userId
-  const _chats = await db.select().from(chats).where(eq(chats.userId, userId));
+  // TODO fix the where clause to use the correct column. Chats is linked to Study table now
+ 
+ async function getChats() {
+  return await db.select().from(chats).where(eq(chats.userId, userId));
+ }
+  const _chats = getChats();
   
   if (!_chats) {
     return redirect("/");
