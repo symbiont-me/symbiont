@@ -2,13 +2,16 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { StudyResource, StudyResourceCategory } from "@/app/types";
 import { studyResources } from "@/lib/db/schema";
-
+import {loadS3DataIntoPinecone} from "@/lib/pinecone";
 export async function POST(req: NextRequest, res: NextResponse) {
   const body: StudyResource = await req.json();
   const { studyId, name, url, identifier, category } = body;
   if (!Object.values(StudyResourceCategory).includes(category)) {
     return NextResponse.json({ error: "Invalid resource category" }, { status: 400 });
   }
+
+  loadS3DataIntoPinecone(identifier);
+
   const resourceId = db
     .insert(studyResources)
     .values({
