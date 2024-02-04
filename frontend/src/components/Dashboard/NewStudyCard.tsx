@@ -5,13 +5,6 @@ import { useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { HttpStatus } from "@/const";
 
-// TODO update the style of New Project Button
-// TODO take the name of the project as input
-// TODO create a new project in the backend
-// TODO update the list of projects in the dashboard
-// TODO add new project to the database
-// TODO redirect to the new project page
-
 const NewStudyCard: React.FC = () => {
   const router = useRouter();
   const [studyName, setStudyName] = React.useState("");
