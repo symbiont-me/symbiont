@@ -20,7 +20,7 @@ export enum StudyResourceCategory {
 export type Study = {
   id?: number;
   name: string;
-  image: string | null;
+  image: string | undefined;
   createdAt?: Date;
   userId?: string;
 };
