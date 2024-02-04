@@ -22,11 +22,11 @@ const NewStudyCard: React.FC = () => {
         userId: userId,
       });
       if (response.status === HttpStatus.CREATED) {
-        console.log("Study created successfully");
         const studyId = response.data.studyId;
         router.push(`/studies/${studyId}`);
       }
     } catch (error) {
+      // TODO add a toast notification
       console.error("Failed to create study", error);
       throw error;
     }
