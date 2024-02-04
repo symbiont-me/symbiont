@@ -3,6 +3,7 @@ import React from "react";
 import axios from "axios";
 import { useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
+import { HttpStatus } from "@/const";
 
 // TODO update the style of New Project Button
 // TODO take the name of the project as input
@@ -27,10 +28,9 @@ const NewStudyCard: React.FC = () => {
         studyName: studyName,
         userId: userId,
       });
-      if (response.status === 200) {
+      if (response.status === HttpStatus.CREATED) {
         console.log("Study created successfully");
         const studyId = response.data.studyId;
-        // TODO fix the redirect
         router.push(`/studies/${studyId}`);
       }
     } catch (error) {
