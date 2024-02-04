@@ -24,7 +24,7 @@ function UserDashboard({ userId }: UserDashboardProps) {
       }
     }
     fetchStudies();
-  }, []);
+  }, [userId]);
 
   return (
     <div className="m-10">
@@ -34,7 +34,12 @@ function UserDashboard({ userId }: UserDashboardProps) {
       <div className="">
         <div className="grid grid-cols-4 gap-4">
           {projects.map((project) => (
-            <ProjectCard key={project.id} name={project.name} image={project.image} />
+            <ProjectCard
+              key={project.id}
+              name={project.name}
+              image={project.image}
+              id={project.id}
+            />
           ))}
 
           <div className="border p-4">
