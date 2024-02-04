@@ -94,7 +94,7 @@ const StudyPage: React.FC<StudyPageProps> = ({ pdfUrl }: StudyPageProps) => {
   const SelectedViewComponent = viewComponents[viewSelected] || null;
 
   return (
-    <div className="study-container w-full h-screen overflow-hidden">
+    <div className="study-container w-full h-screen">
       <div className="study-nav">
         <StudyNavbar setViewSelected={setViewSelected} />
       </div>
