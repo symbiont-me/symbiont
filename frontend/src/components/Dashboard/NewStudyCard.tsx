@@ -4,10 +4,13 @@ import axios from "axios";
 import { useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { HttpStatus } from "@/const";
+import { useState } from "react";
 
-const NewStudyCard: React.FC = () => {
+// TODO maybe separate the modal into a separate component
+
+function NewStudyCard() {
   const router = useRouter();
-  const [studyName, setStudyName] = React.useState("");
+  const [studyName, setStudyName] = useState("");
 
   const { userId } = useAuth();
 
@@ -68,6 +71,6 @@ const NewStudyCard: React.FC = () => {
       </dialog>
     </div>
   );
-};
+}
 
 export default NewStudyCard;
