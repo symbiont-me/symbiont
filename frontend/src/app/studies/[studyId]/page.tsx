@@ -13,12 +13,11 @@ import TextEvaluation from "@/components/Study/TextEvaluation";
 import Summaries from "@/components/Study/Summaries";
 import Resources from "@/components/Study/Resources";
 import { ViewSelected } from "@/const";
-import { db } from "@/lib/db";
-import { studies, chats } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
+import "../../../app/styles.css";
+
 // TODO add sidebar
 // TODO add chat component bar on the right
 // TODO add pdf viewer
@@ -53,7 +52,9 @@ type StudyPageProps = {
 };
 
 const StudyPage: React.FC<StudyPageProps> = ({ pdfUrl }: StudyPageProps) => {
-  const [viewSelected, setViewSelected] = useState<ViewSelected>(ViewSelected.Writer);
+  const [viewSelected, setViewSelected] = useState<ViewSelected>(
+    ViewSelected.Writer,
+  );
   const [pdfs, setPdfs] = useState<string[]>([]);
   const [textWriterValue, setTextWriterValue] = useState<string>("");
   const [video_url, setVideoUrl] = useState<string | undefined>(undefined);
@@ -67,7 +68,9 @@ const StudyPage: React.FC<StudyPageProps> = ({ pdfUrl }: StudyPageProps) => {
     // TODO remove the hardcoded studyId
     const fetchPDFs = async () => {
       try {
-        const response = await axios.post("/api/get-pdfs", { studyId: studyId });
+        const response = await axios.post("/api/get-pdfs", {
+          studyId: studyId,
+        });
         // TODO add pdfUrl to state
         setPdfs(response.data);
       } catch (error) {
@@ -76,13 +79,14 @@ const StudyPage: React.FC<StudyPageProps> = ({ pdfUrl }: StudyPageProps) => {
     };
     const fetchLinkedChat = async () => {
       try {
-        const response = await axios.post("/api/get-chat", { studyId: studyId });
+        const response = await axios.post("/api/get-chat", {
+          studyId: studyId,
+        });
         setChatId(response.data.chat_id);
-      }
-      catch (error) {
+      } catch (error) {
         console.error("Error fetching chat:", error);
       }
-    }
+    };
     fetchPDFs();
     fetchLinkedChat();
   }, []);
@@ -90,13 +94,15 @@ const StudyPage: React.FC<StudyPageProps> = ({ pdfUrl }: StudyPageProps) => {
   const SelectedViewComponent = viewComponents[viewSelected] || null;
 
   return (
-    <div className="flex flex-col h-screen overflow-hidden">
-      <StudyNavbar setViewSelected={setViewSelected} />
-      <div className="flex flex-row  ">
-        {/* <Sidebar /> */}
-
+    <div className="study-container w-full h-screen overflow-hidden">
+      <div className="study-nav">
+        <StudyNavbar setViewSelected={setViewSelected} />
+      </div>
+      <div className="view-container">
         {SelectedViewComponent && <SelectedViewComponent pdfUrls={pdfs} />}
-        <ChatComponent chatId={chatId}/>
+      </div>
+      <div className="chat-container">
+        <ChatComponent chatId={chatId} />
       </div>
     </div>
   );
