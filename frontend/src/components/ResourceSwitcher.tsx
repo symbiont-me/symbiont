@@ -8,20 +8,17 @@ type ResourceSwitcherProps = {
   selectedResource: (resource: StudyResource) => void;
 };
 
-const ResourceSwitcher: React.FC<ResourceSwitcherProps> = ({
-  selectedResource,
-}) => {
-    // TODO add the updated study resource type
+function ResourceSwitcher({ selectedResource }: ResourceSwitcherProps) {
   const [resources, setResources] = useState<StudyResource[]>([]);
   const path = usePathname();
   const studyId = path.split("/")[2];
 
   const handleResourceChange = (
-    event: React.ChangeEvent<HTMLSelectElement>
+    event: React.ChangeEvent<HTMLSelectElement>,
   ) => {
     const resourceIdentifier = event.target.value;
     // TODO there must be a better way to set the resource I am missing something obvious
-    const resource = resources.find(r => r.identifier === resourceIdentifier);
+    const resource = resources.find((r) => r.identifier === resourceIdentifier);
     if (resource) {
       selectedResource(resource);
     }
@@ -39,26 +36,23 @@ const ResourceSwitcher: React.FC<ResourceSwitcherProps> = ({
     fetchResources();
     // TODO use react-query to fetch the list of resources
     // TODO on resource change switch the context for the chat
-  }, []);
+  }, [studyId]);
 
   return (
     <div>
-        <h2>Resource Switcher</h2>
-        <select
-          className="select select-bordered w-full max-w-xs"
-          onChange={handleResourceChange}
-        >
-          {resources.map((resource) => (
-            <option
-              key={resource.identifier}
-              value={resource.identifier}
-            >
-              {resource.name}
-            </option>
-          ))}
-        </select>
-      </div>
+      <h2>Resource Switcher</h2>
+      <select
+        className="select select-bordered w-full max-w-xs"
+        onChange={handleResourceChange}
+      >
+        {resources.map((resource) => (
+          <option key={resource.identifier} value={resource.identifier}>
+            {resource.name}
+          </option>
+        ))}
+      </select>
+    </div>
   );
-};
+}
 
 export default ResourceSwitcher;
