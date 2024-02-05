@@ -19,13 +19,13 @@ type ChatComponentProps = {
 const ChatComponent = ({ chatId }: ChatComponentProps) => {
   const path = usePathname();
   const studyId = path.split("/")[2];
+  console.log("chatId", chatId);
 
-  const { data, isLoading } = useQuery({
-    queryKey: ["chat", chatId],
-
+  const getMessagesQuery = useQuery({
+    queryKey: ["chat-messages", chatId],
     queryFn: async () => {
       const response = await axios.post<Message[]>("/api/get-messages", {
-        chatId,
+        chatId: chatId,
       });
       return response.data;
     },
@@ -42,7 +42,7 @@ const ChatComponent = ({ chatId }: ChatComponentProps) => {
       chatId,
       resourceIdentifier: selectedResource?.identifier || "",
     },
-    initialMessages: data || [],
+    initialMessages: getMessagesQuery.data || [],
   });
 
   useEffect(() => {
@@ -77,6 +77,6 @@ const ChatComponent = ({ chatId }: ChatComponentProps) => {
       </div>
     </div>
   );
-}
+};
 
 export default ChatComponent;
