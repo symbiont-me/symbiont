@@ -9,15 +9,10 @@ type MessageListProps = {
   messages: Message[];
 };
 
-// TODO use loader component from DaisyUI
-// TODO use chat bubble styles from DaisyUI
+// TODO use cn function from utils to conditionally render classes
 const MessageList = ({ messages, isLoading }: MessageListProps) => {
   if (isLoading) {
-    return (
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-        <Loader2 className="w-6 h-6 animate-spin" />
-      </div>
-    );
+    return <span className="loading loading-ring loading-lg"></span>;
   }
   if (!messages) return <></>;
 
@@ -25,29 +20,26 @@ const MessageList = ({ messages, isLoading }: MessageListProps) => {
     <div className="flex flex-col gap-2 px-4  h-screen">
       {messages.map((message) => {
         return (
-          <div
-            key={message.id}
-            className={cn("flex", {
-              "justify-end pl-10": message.role === "user",
-              "justify-start pr-10": message.role === "assistant",
-            })}
-          >
-            <div
-              className={cn(
-                "rounded-lg px-3 text-sm py-1 shadow-md ring-1 ring-gray-900/10",
-                {
-                  "bg-blue-600 text-white": message.role === "user",
-                },
-              )}
-            >
-              {/* renders markdown */}
-              <AiChatMessage message={message.content} />
-            </div>
+          <div key={message.id}>
+            {message.role === "user" ? (
+              <div className="chat chat-end">
+                <div className="chat-bubble chat-bubble-primary text-sm p-6">
+                  {message.content}
+                </div>
+              </div>
+            ) : (
+              <div className="chat chat-start">
+                <div className="chat-bubble text-sm p-6">
+                  <AiChatMessage message={message.content} />
+                </div>
+              </div>
+            )}
+            {/* renders markdown */}
           </div>
         );
       })}
     </div>
   );
-}
+};
 
 export default MessageList;
