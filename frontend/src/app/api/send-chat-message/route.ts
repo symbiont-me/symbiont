@@ -30,9 +30,10 @@ type ChatRequest = {
 export async function POST(req: NextRequest) {
   try {
     const requestBody = await req.json();
-    const { chatId } = requestBody.chatId;
+    const chatId = requestBody.chatId;
     const messages = requestBody.messages;
     const resourceIdentifier = requestBody.resourceIdentifier;
+    console.log("chatId", chatId);
     if (isNaN(chatId)) {
       return NextResponse.json({ error: "Invalid chatId" }, { status: 400 });
     }
@@ -81,6 +82,7 @@ export async function POST(req: NextRequest) {
     });
     const stream = OpenAIStream(response, {
       onStart: async () => {
+        console.log("stream started", lastMessage);
         // save user message into db
         await db.insert(_messages).values({
           chatId,
@@ -89,6 +91,7 @@ export async function POST(req: NextRequest) {
         });
       },
       onCompletion: async (completion) => {
+        console.log("stream completed", completion);
         // save ai message into db
         await db.insert(_messages).values({
           chatId,
