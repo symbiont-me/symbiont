@@ -39,7 +39,7 @@ const ChatComponent = ({ chatId }: ChatComponentProps) => {
   const { messages, input, handleInputChange, handleSubmit } = useChat({
     api: "/api/send-chat-message",
     body: {
-      chatId,
+      chatId: chatId,
       resourceIdentifier: selectedResource?.identifier || "",
     },
     initialMessages: getMessagesQuery.data || [],
