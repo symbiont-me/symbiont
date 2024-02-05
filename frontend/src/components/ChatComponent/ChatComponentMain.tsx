@@ -6,8 +6,10 @@ import { useState, useEffect } from "react";
 import { TextModels } from "@/const";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import ResourceSwitcher from "@/components/ResourceSwitcher";
+import { usePathname } from "next/navigation";
 import { StudyResource } from "@/app/types";
+import ResourceSwitcher from "@/components/ResourceSwitcher";
+
 
 type ChatComponentProps = {
   chatId: number | undefined;
@@ -17,6 +19,9 @@ type ChatComponentProps = {
 // TODO model selection and api key input should be on the Dashboard
 
 function ChatComponent(chatId: ChatComponentProps) {
+  const path = usePathname();
+  const studyId = path.split("/")[2];
+ 
   const { data, isLoading } = useQuery({
     queryKey: ["chat", chatId],
 
@@ -27,15 +32,13 @@ function ChatComponent(chatId: ChatComponentProps) {
       return response.data;
     },
   });
-  const [selectedModel, setSelectedModel] = useState<TextModels>(
-    TextModels.GPT_3_5_TURBO,
-  );
 
   // NOTE this is used to switch the context for the chat
   const [selectedResource, setSelectedResource] = useState<
     StudyResource | undefined
   >(undefined);
-  console.log(selectedResource);
+
+
   const { messages, input, handleInputChange, handleSubmit } = useChat({
     api: "/api/send-chat-message",
     body: {
@@ -55,7 +58,10 @@ function ChatComponent(chatId: ChatComponentProps) {
   return (
     <div className="h-full p-2 overflow-hidden">
       <div className="h-20 flex flex-col justify-center pr-20 pl-20">
-        <ResourceSwitcher selectedResource={setSelectedResource} />
+        <ResourceSwitcher
+          studyId={studyId}
+          onResourceChange={setSelectedResource}
+        />
       </div>
       <div
         className="h-screen overflow-auto p-2 bg-slate-100"
