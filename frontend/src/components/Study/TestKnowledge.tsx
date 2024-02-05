@@ -1,6 +1,6 @@
-import React from 'react';
+import React from "react";
 
-const TestKnowledge  () => {
+const TestKnowledge = () => {
   return (
     <div>
       <h1>Multiple Choice Questions Test</h1>
@@ -10,4 +10,3 @@ const TestKnowledge  () => {
 };
 
 export default TestKnowledge;
-
