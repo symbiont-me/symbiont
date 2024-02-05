@@ -6,8 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 type PDFViewerProps = {
   studyId: string;
 };
-
-// TODO use react-query
+// TODO replace Google Viewer with a better PDF viewer
 //  TODO need to add a loader to show when pdf is loading when clicked Next or Previous
 /*
  * TODO fix error below
