@@ -9,6 +9,8 @@ type MessageListProps = {
   messages: Message[];
 };
 
+// TODO use loader component from DaisyUI
+// TODO use chat bubble styles from DaisyUI
 function MessageList({ messages, isLoading }: MessageListProps) {
   if (isLoading) {
     return (
