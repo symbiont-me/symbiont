@@ -30,9 +30,9 @@ import "../../../app/styles.css";
 const viewComponents: Record<
   ViewSelected,
   React.ComponentType<{
-    pdfUrl: string | undefined;
     textWriterValue: string;
     video_url: string | undefined;
+    studyId: string;
   }>
 > = {
   // TODO fix the errors
@@ -63,49 +63,33 @@ const StudyPage: React.FC<StudyPageProps> = ({ pdfUrl }: StudyPageProps) => {
   // const chatId = path.split("/")[3]; // NOTE this method can avoid a db call
   const [chatId, setChatId] = useState<number | undefined>(undefined);
 
-  useEffect(() => {
-    // TODO move it out
-    // TODO remove the hardcoded studyId
-    const fetchPDFs = async () => {
-      try {
-        const response = await axios.post("/api/get-pdfs", {
-          studyId: studyId,
-        });
-        // TODO add pdfUrl to state
-        setPdfs(response.data);
-      } catch (error) {
-        console.error("Error fetching PDFs:", error);
-      }
-    };
-    const fetchLinkedChat = async () => {
-      try {
-        const response = await axios.post("/api/get-chat", {
-          studyId: studyId,
-        });
-        setChatId(response.data.chat_id);
-      } catch (error) {
-        console.error("Error fetching chat:", error);
-      }
-    };
-    fetchPDFs();
-    fetchLinkedChat();
-  }, []);
+  const fetchLinkedChat = async () => {
+    try {
+      const response = await axios.post("/api/get-chat", {
+        studyId: studyId,
+      });
+      setChatId(response.data.chat_id);
+    } catch (error) {
+      console.error("Error fetching chat:", error);
+    }
+  };
+  fetchLinkedChat();
 
-  const SelectedViewComponent = viewComponents[viewSelected] || null;
+const SelectedViewComponent = viewComponents[viewSelected] || null;
 
-  return (
-    <div className="study-container w-full h-screen">
-      <div className="study-nav">
-        <StudyNavbar setViewSelected={setViewSelected} />
-      </div>
-      <div className="view-container">
-        {SelectedViewComponent && <SelectedViewComponent pdfUrls={pdfs} />}
-      </div>
-      <div className="chat-container">
-        <ChatComponent chatId={chatId} />
-      </div>
+return (
+  <div className="study-container w-full h-screen">
+    <div className="study-nav">
+      <StudyNavbar setViewSelected={setViewSelected} />
     </div>
-  );
+    <div className="view-container">
+      {SelectedViewComponent && <SelectedViewComponent studyId={studyId} />}
+    </div>
+    <div className="chat-container">
+      <ChatComponent chatId={chatId} />
+    </div>
+  </div>
+);
 };
 
 export default StudyPage;
