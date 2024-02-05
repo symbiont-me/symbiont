@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { StudyResource } from "@/app/types";
+import { StudyResource } from "@/types";
 
 type ResourceSwitcherProps = {
   studyId: string;

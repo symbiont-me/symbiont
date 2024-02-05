@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import ToastMessage from "./ToastMessage";
 import { usePathname } from "next/navigation";
-import { StudyResource, StudyResourceCategory } from "@/app/types";
+import { StudyResource, StudyResourceCategory } from "@/types";
 
 // TODO fix toast messages
 // TODO update to handle audio file uploads

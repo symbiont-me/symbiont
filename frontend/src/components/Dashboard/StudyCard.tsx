@@ -1,5 +1,5 @@
 import React from "react";
-import { Study } from "@/app/types";
+import { Study } from "@/types";
 import Link from "next/link";
 
 type StudyCardProps = Study;

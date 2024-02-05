@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { StudyResource } from "@/app/types";
+import { StudyResource } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 
 type PDFViewerProps = {

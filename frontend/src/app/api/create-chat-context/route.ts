@@ -6,7 +6,7 @@ import { auth } from "@clerk/nextjs";
 import { db } from "../../../lib/db";
 import { chats } from "../../../lib/db/schema";
 import { getS3Url } from "../../../lib/s3";
-import { StudyResource, StudyResourceCategory } from "@/app/types";
+import { StudyResource, StudyResourceCategory } from "@/types";
 import axios from "axios";
 
 

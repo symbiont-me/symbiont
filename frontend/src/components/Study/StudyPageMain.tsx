@@ -1,6 +1,6 @@
 import React from "react";
 
-const StudyPageMain: React.FC = () => {
+const StudyPageMain= () => {
   return (
     <div>
     </div>

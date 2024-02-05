@@ -3,7 +3,7 @@ import ProjectCard from "./StudyCard";
 import NewStudyCard from "./NewStudyCard";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Study } from "@/app/types";
+import { Study } from "@/types";
 
 // TODO use react query to fetch the projects
 // TODO add left sidebar if included in the design

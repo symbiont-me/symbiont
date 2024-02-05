@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { StudyResource, StudyResourceCategory } from "@/app/types";
+import { StudyResource, StudyResourceCategory } from "@/types";
 import { studyResources } from "@/lib/db/schema";
 import {loadS3DataIntoPinecone} from "@/lib/pinecone";
 export async function POST(req: NextRequest, res: NextResponse) {
