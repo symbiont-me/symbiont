@@ -2,18 +2,14 @@ import { Input } from "../ui/Input";
 import { Button } from "../ui/Button";
 import { Send } from "lucide-react";
 
+// TODO use styles from DaisyUI
 type UserChatInputProps = {
   input: string;
   handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
 };
 
-// TODO add file uploader here
-const uploadFileHandler = () => {
-  console.log("upload file");
-};
-
-export default function UserChatInput({
+function UserChatInput({
   input,
   handleInputChange,
   handleSubmit,
@@ -36,3 +32,5 @@ export default function UserChatInput({
     </form>
   );
 }
+
+export default UserChatInput;
