@@ -4,6 +4,8 @@ import {
   OpenAIApi,
   ChatCompletionRequestMessageRoleEnum,
 } from "openai-edge";
+
+// TODO use Message where it is needed
 import { Message, OpenAIStream, StreamingTextResponse } from "ai";
 import { db } from "@/lib/db";
 import { chats, messages as _messages } from "@/lib/db/schema";
@@ -19,6 +21,7 @@ const config = new Configuration({
 
 const openai = new OpenAIApi(config);
 
+// TODO use where it is needed
 type ChatRequest = {
   messages: Array<{ role: string; content: string }>;
   chatId: { chatId: number };
@@ -37,7 +40,6 @@ export async function POST(req: NextRequest) {
     const lastMessage = messages[messages.length - 1].content;
 
     // get fileKey using the chatId
-    // TODO from the chosen resource, get the fileKey
     const _chats = await db.select().from(chats).where(eq(chats.id, chatId));
     if (_chats.length != 1) {
       return NextResponse.json({ error: "chat not found" }, { status: 404 });
