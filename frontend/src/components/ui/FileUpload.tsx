@@ -83,9 +83,12 @@ const FileUpload = () => {
         }
         // TODO ?Find what is mutate doing here?
         mutate(data, {
-          onSuccess: (data: { chat_id: number }) => {
-            <ToastMessage message="Chat created successfully" type="success" />;
-            console.log(data);
+          onSuccess: ()=> {
+            /*  NOTE this is supposed to referesh the resources query in the ResourceSwitcher component
+                but seems to be working without it
+            */
+            // console.log("successfully uploaded file to s3 and created resource. Now invalidating resources query.");
+            // queryClient.invalidateQueries({ queryKey: ['resources', studyId] })
           },
           onError: (err) => {
             <ToastMessage message="Error creating chat" type="error" />;
