@@ -29,7 +29,6 @@ const viewComponents: Record<
     studyId: string;
   }>
 > = {
-  // TODO fix the errors
   [ViewSelected.Writer]: TextEditor,
   [ViewSelected.PDFViewer]: PdfViewer,
   [ViewSelected.TestKnowledge]: TestKnowledge,
