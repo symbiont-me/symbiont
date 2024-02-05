@@ -1,12 +1,15 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { db } from '@/lib/db'
-import { studies, studyResources } from '@/lib/db/schema'
-import { eq } from 'drizzle-orm'
+import { NextRequest, NextResponse } from "next/server";
+import { db } from "@/lib/db";
+import { resourceCategoryEnum, studies, studyResources } from "@/lib/db/schema";
+import { eq, and } from "drizzle-orm";
 
 export const POST = async (req: NextRequest, res: NextResponse) => {
-    const {studyId} = await req.json()
+  const { studyId } = await req.json();
 
-    const _pdfs = await db.select().from(studyResources).where(eq(studyId, studyId) && eq(studyResources.category, 'pdf'))
-
-    return NextResponse.json(_pdfs)
-}
+  // TODO fix query to get only PDFs
+  const _pdfs = await db
+    .select()
+    .from(studyResources)
+    .where(eq(studyResources.studyId, studyId));
+  return NextResponse.json(_pdfs);
+};
