@@ -10,18 +10,16 @@ import { usePathname } from "next/navigation";
 import { StudyResource } from "@/app/types";
 import ResourceSwitcher from "@/components/ResourceSwitcher";
 
-
 type ChatComponentProps = {
   chatId: number | undefined;
 };
 
-// TODO fix on load selectedResource is undefined even though it is set in the ResourceSwitcher
 // TODO model selection and api key input should be on the Dashboard
 
 function ChatComponent(chatId: ChatComponentProps) {
   const path = usePathname();
   const studyId = path.split("/")[2];
- 
+
   const { data, isLoading } = useQuery({
     queryKey: ["chat", chatId],
 
@@ -37,7 +35,6 @@ function ChatComponent(chatId: ChatComponentProps) {
   const [selectedResource, setSelectedResource] = useState<
     StudyResource | undefined
   >(undefined);
-
 
   const { messages, input, handleInputChange, handleSubmit } = useChat({
     api: "/api/send-chat-message",
