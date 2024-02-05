@@ -1,7 +1,7 @@
 "use client";
 import { useDropzone } from "react-dropzone";
 import { uploadFileToS3, getS3Url } from "@/lib/s3";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient} from "@tanstack/react-query";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -20,6 +20,7 @@ const FileUpload = () => {
 
   const [uploading, setUploading] = useState(false);
 
+  const queryClient = useQueryClient()
   // useMutation is a hook from react-query that handles asynchronous updates
   const { mutate } = useMutation({
     // mutationFn is the function that will be called when mutate is invoked
