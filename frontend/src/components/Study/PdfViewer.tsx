@@ -65,7 +65,7 @@ function PdfViewer({ studyId }: PDFViewerProps) {
       {pdfs.length > 0 && (
         <iframe
           src={`https://docs.google.com/gview?url=${pdfs[currentIndex].url}&embedded=true`}
-          className="w-full h-full"
+          className="w-full h-screen"
         ></iframe>
       )}
     </div>
