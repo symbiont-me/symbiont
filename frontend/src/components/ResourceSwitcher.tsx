@@ -1,42 +1,46 @@
-import React from "react";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { usePathname } from "next/navigation";
 import { StudyResource } from "@/app/types";
 
 type ResourceSwitcherProps = {
-  selectedResource: (resource: StudyResource) => void;
+  studyId: string;
+  onResourceChange: (resource: StudyResource) => void;
 };
 
-function ResourceSwitcher({ selectedResource }: ResourceSwitcherProps) {
+const ResourceSwitcher = ({ studyId, onResourceChange }: ResourceSwitcherProps) => {
   const [resources, setResources] = useState<StudyResource[]>([]);
-  const path = usePathname();
-  const studyId = path.split("/")[2];
+
+  const resourcesQuery = useQuery({
+    queryKey: ["resources", studyId],
+    queryFn: () =>
+      axios.post("/api/get-resources", { studyId }).then((res) => res.data),
+  });
+
+  useEffect(() => {
+    if (resourcesQuery.data && resourcesQuery.data.length > 0) {
+      setResources(resourcesQuery.data);
+      onResourceChange(resourcesQuery.data[0]); // Set the first resource as the default
+    }
+  }, [resourcesQuery.data, onResourceChange]);
 
   const handleResourceChange = (
-    event: React.ChangeEvent<HTMLSelectElement>,
+    event: React.ChangeEvent<HTMLSelectElement>
   ) => {
     const resourceIdentifier = event.target.value;
-    // TODO there must be a better way to set the resource I am missing something obvious
     const resource = resources.find((r) => r.identifier === resourceIdentifier);
     if (resource) {
-      selectedResource(resource);
+      onResourceChange(resource);
     }
   };
 
-  useEffect(() => {
-    async function fetchResources() {
-      try {
-        const response = await axios.post("/api/get-resources", { studyId });
-        setResources(response.data);
-      } catch (error) {
-        console.error("Error fetching projects:", error);
-      }
-    }
-    fetchResources();
-    // TODO use react-query to fetch the list of resources
-    // TODO on resource change switch the context for the chat
-  }, [studyId]);
+  if (resourcesQuery.isPending) {
+    return <div>Loading resources...</div>;
+  }
+
+  if (resourcesQuery.error) {
+    return <div>Error loading resources: {resourcesQuery.error.toString()}</div>;
+  }
 
   return (
     <div>
@@ -53,6 +57,6 @@ function ResourceSwitcher({ selectedResource }: ResourceSwitcherProps) {
       </select>
     </div>
   );
-}
+};
 
 export default ResourceSwitcher;
