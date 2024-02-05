@@ -41,7 +41,7 @@ const viewComponents: Record<
   [ViewSelected.Resources]: Resources,
 };
 
-function StudyPage() {
+export default function StudyPage() {
   const [viewSelected, setViewSelected] = useState<ViewSelected>(
     ViewSelected.Writer
   );
@@ -95,5 +95,3 @@ function StudyPage() {
     </div>
   );
 }
-
-export default StudyPage;
