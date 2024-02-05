@@ -5,7 +5,7 @@ type SummariesProps = {
   // Define any props you need for this component
 };
 
-const Summaries: React.FC<SummariesProps> = (props) => {
+const Summaries = (props: SummariesProps) => {
   // Component logic goes here
 
   return (

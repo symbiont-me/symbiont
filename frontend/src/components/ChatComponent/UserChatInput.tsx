@@ -9,11 +9,11 @@ type UserChatInputProps = {
   handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
 };
 
-function UserChatInput({
+const UserChatInput = ({
   input,
   handleInputChange,
   handleSubmit,
-}: UserChatInputProps) {
+}: UserChatInputProps) => {
   return (
     <form onSubmit={handleSubmit}>
       <div className="flex">

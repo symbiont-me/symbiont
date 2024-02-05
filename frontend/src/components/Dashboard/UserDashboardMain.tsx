@@ -11,7 +11,7 @@ type UserDashboardProps = {
   userId: string;
 };
 
-function UserDashboard({ userId }: UserDashboardProps) {
+const UserDashboard = ({ userId }: UserDashboardProps) => {
   const [projects, setProjects] = useState<Study[]>([]);
 
   useEffect(() => {

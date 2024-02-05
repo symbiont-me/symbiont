@@ -1,6 +1,6 @@
 import React from 'react';
 
-const TestKnowledge: React.FC = () => {
+const TestKnowledge  () => {
   return (
     <div>
       <h1>Multiple Choice Questions Test</h1>

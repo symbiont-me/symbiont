@@ -7,6 +7,9 @@ import { useAuth } from "@clerk/nextjs";
 import { usePathname } from "next/navigation";
 // TODO on render, fetch text from db and set value to that text
 
+
+
+// TODO move inside the component
 // NOTE this fixes the issue with document not being defined at initial render
 // ref: https://github.com/zenoamaro/react-quill/issues/292
 const ReactQuill = dynamic(() => import("react-quill"), {
@@ -18,7 +21,7 @@ const ReactQuill = dynamic(() => import("react-quill"), {
   ),
 });
 
-export default function TextEditor() {
+const TextEditor = () =>  {
   const auth = useAuth();
   const [text, setText] = useState("");
 
@@ -60,3 +63,5 @@ export default function TextEditor() {
     </div>
   );
 }
+
+export default TextEditor;

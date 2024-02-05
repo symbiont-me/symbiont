@@ -8,7 +8,7 @@ import { useState } from "react";
 
 // TODO maybe separate the modal into a separate component
 
-function NewStudyCard() {
+const NewStudyCard = () => {
   const router = useRouter();
   const [studyName, setStudyName] = useState("");
 

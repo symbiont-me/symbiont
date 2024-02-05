@@ -2,10 +2,9 @@
 // TODO should be refactored to make a dialog box where users can add and remove resources
 // TODO add a separate component for the Study Navbar which lists the resources being used
 import FileUpload from "@/components/ui/FileUpload";
-import { useState } from "react";
 // TODO handle audio file uploads using the FileUpload component
 // TODO refactor to loop over an array of resources
-export default function Resources() {
+const Resources = () =>{
   // TODO handle state changes for each resource type
   // TODO send resource data to backend and update db
 
@@ -35,3 +34,5 @@ export default function Resources() {
     </div>
   );
 }
+
+export default Resources;

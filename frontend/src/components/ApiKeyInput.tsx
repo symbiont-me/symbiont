@@ -1,11 +1,11 @@
 
 import React, {useState} from 'react';
 
-type Props = {
+type ApiKeyInputProps = {
     setApiKey: (value: string) => void;
 };
 
-export default function ApiKeyInput ({setApiKey}: Props) {
+const ApiKeyInput = ({setApiKey}: ApiKeyInputProps)  => {
     const [apiKey, setApiKeyLocal] = useState('');
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -32,3 +32,5 @@ export default function ApiKeyInput ({setApiKey}: Props) {
         </div>
     )
 }
+
+export default ApiKeyInput;

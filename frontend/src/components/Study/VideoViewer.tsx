@@ -1,14 +1,14 @@
-// ts
-import React from 'react';
+
+import {useState, useEffect} from 'react';
 import YouTube, { YouTubeProps } from 'react-youtube';
 
 type VideoViewerProps = {
-  video_url: string | undefined;
+  studyId: string | undefined;
 }
 
-function VideoViewer() {
-  const [videoId, setVideoId] = React.useState<string | undefined>(undefined);
-  const [videoUrl, setVideoUrl] = React.useState<string | undefined>("https://www.youtube.com/watch?v=2U9WMftV40c");
+const  VideoViewer = ({studyId}: VideoViewerProps) => {
+  const [videoId, setVideoId] = useState<string | undefined>(undefined);
+  const [videoUrl, setVideoUrl] = useState<string | undefined>("https://www.youtube.com/watch?v=2U9WMftV40c");
 
   if (!videoUrl) {
     return (
@@ -24,7 +24,7 @@ function VideoViewer() {
     )
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     // parse video_url to get videoId
     if (videoUrl) {
       const url = new URL(videoUrl);

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const SciPapers: React.FC = () => {
+const SciPapers = () => {
   return (
     <div>
       <h1>Science Papers</h1>

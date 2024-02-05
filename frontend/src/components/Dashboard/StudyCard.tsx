@@ -6,7 +6,7 @@ type StudyCardProps = Study;
 
 // TODO replace img with Image
 
-function StudyCard({ name, image, id }: StudyCardProps) {
+const StudyCard = ({ name, image, id }: StudyCardProps) => {
   return (
     <div className="project-card">
       <div className="card lg:card-side bg-base-100 shadow-xl">

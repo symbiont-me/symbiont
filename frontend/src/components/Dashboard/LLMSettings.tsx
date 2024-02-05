@@ -1,6 +1,6 @@
 import React from "react";
 
-function LLMSettings() {
+const LLMSettings = () => {
   // TODO: Implement LLMSettings component
   return <div>{/* Your LLMSettings component code goes here */}</div>;
 }

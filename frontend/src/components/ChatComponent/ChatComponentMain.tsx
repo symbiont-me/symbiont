@@ -16,7 +16,7 @@ type ChatComponentProps = {
 
 // TODO model selection and api key input should be on the Dashboard
 // TODO Fix isLoading state in the message list
-function ChatComponent(chatId: ChatComponentProps) {
+const ChatComponent = ({ chatId }: ChatComponentProps) => {
   const path = usePathname();
   const studyId = path.split("/")[2];
 

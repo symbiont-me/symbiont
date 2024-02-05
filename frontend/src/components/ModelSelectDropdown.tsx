@@ -1,10 +1,10 @@
 import {TextModels} from '@/const';
 
-type Props = {
+type ModelSelectDropdownProps = {
     setModel: (model: TextModels) => void;
 };
 
-export default function ModelSelectDropdown({setModel}:Props) {
+const ModelSelectDropdown = ({setModel}:ModelSelectDropdownProps) => {
   return (
     <div>
         <select 
@@ -12,7 +12,7 @@ export default function ModelSelectDropdown({setModel}:Props) {
           onChange={(e) => setModel(e.target.value as TextModels)}
           defaultValue=""  
         >
-          <option value="" disabled>Pick a Model</option> {/* Removed selected from here */}
+          <option value="" disabled>Pick a Model</option> 
           {Object.values(TextModels).map((model) => (
             <option key={model} value={model}>{model}</option>
           ))}
@@ -20,3 +20,5 @@ export default function ModelSelectDropdown({setModel}:Props) {
     </div>
   )
 }
+
+export default ModelSelectDropdown;

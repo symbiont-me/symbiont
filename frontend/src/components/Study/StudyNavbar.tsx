@@ -1,7 +1,11 @@
 import React from 'react';
 import { ViewSelected } from '@/const';
 
-const Navigation: React.FC<{ setViewSelected: (view: ViewSelected) => void }> = ({ setViewSelected }) => {
+type NavigationProps = {
+  setViewSelected: (view: ViewSelected) => void;
+};
+
+const Navigation = ({ setViewSelected }: NavigationProps) => {
   return (
     <nav className="flex justify-between items-center p-4 bg-gray-200">
       <div className="flex gap-4">

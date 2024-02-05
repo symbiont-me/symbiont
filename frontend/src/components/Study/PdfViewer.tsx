@@ -16,7 +16,7 @@ type PDFViewerProps = {
  * either a hash or nonce value is present in the source list.
  */
 
-function PdfViewer({ studyId }: PDFViewerProps) {
+const PdfViewer = ({ studyId }: PDFViewerProps) => {
   const [pdfs, setPdfs] = useState<StudyResource[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
