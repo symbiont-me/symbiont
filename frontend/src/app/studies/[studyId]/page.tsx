@@ -16,7 +16,8 @@ import axios from "axios";
 import { useState} from "react";
 import { usePathname } from "next/navigation";
 import "../../../app/styles.css";
-
+import {useQuery} from "@tanstack/react-query";
+import {useEffect} from "react";
 
 // an object that maps each ViewSelected enum value to a corresponding React component.
 // this allows the application to dynamically render different components based on the current view selection
@@ -52,17 +53,31 @@ function StudyPage() {
   // const chatId = path.split("/")[3]; // NOTE this method can avoid a db call
   const [chatId, setChatId] = useState<number | undefined>(undefined);
 
-  const fetchLinkedChat = async () => {
-    try {
+  const fetchLinkedChatQuery = useQuery({
+    queryKey: ["get-chat", studyId],
+    queryFn: async () => {
       const response = await axios.post("/api/get-chat", {
         studyId: studyId,
       });
-      setChatId(response.data.chat_id);
-    } catch (error) {
-      console.error("Error fetching chat:", error);
+      return response.data.chat_id;
+    },
+  });
+  
+  useEffect(() => {
+    if (fetchLinkedChatQuery.data) {
+      setChatId(fetchLinkedChatQuery.data);
     }
-  };
-  fetchLinkedChat();
+  }, [fetchLinkedChatQuery.data]);
+
+  if (fetchLinkedChatQuery.isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (fetchLinkedChatQuery.isError) {
+    console.error("Error fetching chat:", fetchLinkedChatQuery.error);
+    // TODO: handle error with a toast
+  }
+
 
   const SelectedViewComponent = viewComponents[viewSelected] || null;
 
