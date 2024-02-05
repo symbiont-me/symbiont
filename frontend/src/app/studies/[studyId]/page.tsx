@@ -13,11 +13,11 @@ import Summaries from "@/components/Study/Summaries";
 import Resources from "@/components/Study/Resources";
 import { ViewSelected } from "@/const";
 import axios from "axios";
-import { useState} from "react";
+import { useState } from "react";
 import { usePathname } from "next/navigation";
 import "../../../app/styles.css";
-import {useQuery} from "@tanstack/react-query";
-import {useEffect} from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
 
 // an object that maps each ViewSelected enum value to a corresponding React component.
 // this allows the application to dynamically render different components based on the current view selection
@@ -42,7 +42,7 @@ const viewComponents: Record<
 
 export default function StudyPage() {
   const [viewSelected, setViewSelected] = useState<ViewSelected>(
-    ViewSelected.Writer
+    ViewSelected.Writer,
   );
   // TODO Test and remove the following unused state variables
   const [textWriterValue, setTextWriterValue] = useState<string>("");
@@ -61,7 +61,8 @@ export default function StudyPage() {
       return response.data.chat_id;
     },
   });
-  
+
+  console.log(chatId);
   useEffect(() => {
     if (fetchLinkedChatQuery.data) {
       setChatId(fetchLinkedChatQuery.data);
@@ -76,7 +77,6 @@ export default function StudyPage() {
     console.error("Error fetching chat:", fetchLinkedChatQuery.error);
     // TODO: handle error with a toast
   }
-
 
   const SelectedViewComponent = viewComponents[viewSelected] || null;
 
