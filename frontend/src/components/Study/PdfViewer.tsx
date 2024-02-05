@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { StudyResource } from "@/app/types";
+import { useQuery } from "@tanstack/react-query";
+
 type PDFViewerProps = {
-  pdfUrl: string[] | undefined;
+  studyId: string;
 };
 
 // TODO use react-query
@@ -15,29 +17,43 @@ type PDFViewerProps = {
  * either a hash or nonce value is present in the source list.
  */
 
-const PdfViewer = ({ pdfUrl }: PDFViewerProps) => {
-  const [pdf, setPdf] = useState<StudyResource[]>([]);
+function PdfViewer({ studyId }: PDFViewerProps) {
+  const [pdfs, setPdfs] = useState<StudyResource[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  useEffect(() => {
-    const getPdfs = async () => {
+  const pdfQuery = useQuery({
+    queryKey: ["pdfViewer", studyId, "pdf"],
+    queryFn: async () => {
       const response = await axios.post("/api/get-pdfs", {
-        studyId: 1,
+        studyId: studyId,
         category: "pdf",
       });
-      console.log(response.data);
-      setPdf(response.data);
-    };
-    getPdfs();
-    console.log(pdf);
-  }, []);
+      return response.data;
+    },
+  });
+
+  useEffect(() => {
+    if (pdfQuery.data) {
+      setPdfs(pdfQuery.data);
+    }
+  }, [pdfQuery.data]);
+
+  if (pdfQuery.isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (pdfQuery.isError) {
+    return <div>Error: {pdfQuery.error.message}</div>;
+  }
+
+  // console.log(pdfs);
   const goToPreviousPdf = () => {
     setCurrentIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : prevIndex));
   };
 
   const goToNextPdf = () => {
     setCurrentIndex((prevIndex) =>
-      prevIndex < pdf.length - 1 ? prevIndex + 1 : prevIndex
+      prevIndex < pdfs.length - 1 ? prevIndex + 1 : prevIndex,
     );
   };
 
@@ -47,14 +63,14 @@ const PdfViewer = ({ pdfUrl }: PDFViewerProps) => {
         <button onClick={goToPreviousPdf}>Previous</button>
         <button onClick={goToNextPdf}>Next</button>
       </div>
-      {pdf.length > 0 && (
+      {pdfs.length > 0 && (
         <iframe
-          src={`https://docs.google.com/gview?url=${pdf[currentIndex].url}&embedded=true`}
+          src={`https://docs.google.com/gview?url=${pdfs[currentIndex].url}&embedded=true`}
           className="w-full h-full"
         ></iframe>
       )}
     </div>
   );
-};
+}
 
 export default PdfViewer;
