@@ -24,3 +24,8 @@ export type Study = {
   createdAt?: Date;
   userId?: string;
 };
+
+export type UserAuthDetails = {
+  email: string;
+  password: string;
+};
