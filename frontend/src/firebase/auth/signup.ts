@@ -1,5 +1,5 @@
 import { auth } from "../config";
-import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { UserAuthDetails } from "@/types";
 
 // TODO handle error properly

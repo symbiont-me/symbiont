@@ -1,5 +1,6 @@
 import { auth } from "../config";
 import { UserAuthDetails } from "@/types";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 // TODO handle error properly
 // TODO add return types
