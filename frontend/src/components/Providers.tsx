@@ -7,7 +7,7 @@ type Props = {
 
 
 
-const Providers = ({children}: Props) => {
+const ReactQueryProvider = ({children}: Props) => {
 const [client] = useState(() => new QueryClient());
   return (
     <>
@@ -16,4 +16,4 @@ const [client] = useState(() => new QueryClient());
   );
 };
 
-export default Providers;
+export default ReactQueryProvider;
