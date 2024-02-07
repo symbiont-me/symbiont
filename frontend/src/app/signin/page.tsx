@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { createUserWithEmailAndPassword } from "firebase/auth";
 
-import { useAuth } from '../context/AuthUserContext';
+import { useAuth } from '../../context/AuthUserContext';
 
 import { Container, Row, Col, Button, Form, FormGroup, Label, Input, Alert } from 'reactstrap';
 
