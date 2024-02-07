@@ -1,5 +1,4 @@
 // TODO remove as not using this anymore
-import { auth } from "@clerk/nextjs"
 import { redirect } from "next/navigation";
 import { db } from "../../../lib/db"
 import { chats } from "../../../lib/db/schema"
@@ -16,7 +15,7 @@ type Props = {
 
 function ChatPage ({ params: { chatId } }: Props) {
 
-  const { userId } = auth();
+  const userId = "mock"
   if (!userId) {
     return redirect("/sign-in");
   }

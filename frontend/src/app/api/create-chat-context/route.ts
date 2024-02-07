@@ -2,7 +2,6 @@
 
 import { NextResponse , NextRequest} from "next/server";
 import { loadS3DataIntoPinecone } from "../../../lib/pinecone";
-import { auth } from "@clerk/nextjs";
 import { db } from "../../../lib/db";
 import { chats } from "../../../lib/db/schema";
 import { getS3Url } from "../../../lib/s3";
@@ -15,8 +14,7 @@ type CreateChatContextRequestBody = {
 };
 
 export async function POST(req: NextRequest, res: NextResponse) {
-  const { userId } = auth();
-
+  const userId = "mock";
   if (!userId) {
     return NextResponse.json({ error: "Not authorized" }, { status: 401 });
   }

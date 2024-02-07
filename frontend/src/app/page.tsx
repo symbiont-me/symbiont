@@ -1,19 +1,18 @@
-import { UserButton, auth } from "@clerk/nextjs";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { LogIn } from "lucide-react";
 import UserDashboard from "@/components/Dashboard/UserDashboardMain";
 
 export default function Home() {
-  const { userId } = auth();
-  if (userId) {
-    console.log("signed in");
-  }
-  const isSignedIn = !!userId;
-  if (isSignedIn) {
-    // TODO route the user to /dashboard
-    return <UserDashboard userId={userId} />;
-  }
+  // const { userId } = auth();
+  // if (userId) {
+  //   console.log("signed in");
+  // }
+  // const isSignedIn = !!userId;
+  // if (isSignedIn) {
+  //   // TODO route the user to /dashboard
+  //   return <UserDashboard userId={userId} />;
+  // }
 
   return (
     // TODO Create LandingPage component
@@ -24,7 +23,6 @@ export default function Home() {
             <h1 className="mr-3 text-5xl font-semibold">
               Mistah Kurtz - he dead.
             </h1>
-            <UserButton afterSignOutUrl="/" />
           </div>
           <div className="flex mt-2">
           </div>

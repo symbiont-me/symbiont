@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import axios from "axios";
-import { useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { HttpStatus } from "@/const";
 import { useState } from "react";
@@ -12,8 +11,8 @@ const NewStudyCard = () => {
   const router = useRouter();
   const [studyName, setStudyName] = useState("");
 
-  const { userId } = useAuth();
 
+  const userId = "mock";
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setStudyName(event.target.value);
   };

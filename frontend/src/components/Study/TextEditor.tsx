@@ -3,11 +3,8 @@ import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import "react-quill/dist/quill.snow.css";
 import axios from "axios";
-import { useAuth } from "@clerk/nextjs";
 import { usePathname } from "next/navigation";
 // TODO on render, fetch text from db and set value to that text
-
-
 
 // TODO move inside the component
 // NOTE this fixes the issue with document not being defined at initial render
@@ -21,25 +18,21 @@ const ReactQuill = dynamic(() => import("react-quill"), {
   ),
 });
 
-const TextEditor = () =>  {
-  const auth = useAuth();
+const TextEditor = () => {
   const [text, setText] = useState("");
 
   // NOTE I don't like doing it this way
   const path = usePathname();
   const studyId = path.split("/")[2];
 
-  if (!auth) {
-    return <div>Please Log in </div>;
-  }
-
+  const user_id = "mock";
   useEffect(() => {
     const saveText = async () => {
       try {
         const response = await axios.post("/api/save-writer-text", {
           // TODO fix studyTextId and studyId
           studyId: studyId,
-          userId: auth.userId,
+          userId: user_id,
           studyTextContent: text,
         });
         if (response.status === 200) {
@@ -59,9 +52,14 @@ const TextEditor = () =>  {
 
   return (
     <div className="w-full h-screen">
-      <ReactQuill className="h-screen" theme="snow" value={text} onChange={setText} />
+      <ReactQuill
+        className="h-screen"
+        theme="snow"
+        value={text}
+        onChange={setText}
+      />
     </div>
   );
-}
+};
 
 export default TextEditor;
