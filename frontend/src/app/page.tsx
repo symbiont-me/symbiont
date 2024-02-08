@@ -8,7 +8,6 @@ import { useContext } from "react";
 
 export default function Home() {
   const { user, googleSignIn, signOut } = UserAuth();
-console.log(user);
   const handleSignIn = () => {
     try {
       googleSignIn();
@@ -17,15 +16,15 @@ console.log(user);
     }
   };
 
-  // const { userId } = auth();
-  // if (userId) {
-  //   console.log("signed in");
-  // }
-  // const isSignedIn = !!userId;
-  // if (isSignedIn) {
-  //   // TODO route the user to /dashboard
-  //   return <UserDashboard userId={userId} />;
-  // }
+  if (user) {
+    console.log("signed in");
+  }
+  console.log(user.uid);
+  const isSignedIn = !!user;
+  if (isSignedIn) {
+    // TODO route the user to /dashboard
+    return <UserDashboard userId={user.uid} />;
+  }
 
   return (
     // TODO Create LandingPage component

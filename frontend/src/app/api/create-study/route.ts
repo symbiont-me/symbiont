@@ -6,6 +6,7 @@ export const POST = async (req: NextRequest, res: NextResponse) => {
   try {
     // Extract data from request body
     const { studyName, userId, studyImage } = await req.json();
+    console.log(studyName, userId, studyImage);
     // Create a new study in the database
     const studyId = await db
       .insert(studies)

@@ -4,15 +4,19 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { HttpStatus } from "@/const";
 import { useState } from "react";
-
+import { UserAuth } from "@/app/context/AuthContext";
 // TODO maybe separate the modal into a separate component
 
 const NewStudyCard = () => {
   const router = useRouter();
   const [studyName, setStudyName] = useState("");
+  const { user } = UserAuth();
 
+  if (!user) {
+    return null;
+  }
 
-  const userId = "mock";
+  const userId = user.uid;
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setStudyName(event.target.value);
   };

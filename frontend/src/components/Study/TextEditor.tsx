@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import "react-quill/dist/quill.snow.css";
 import axios from "axios";
 import { usePathname } from "next/navigation";
+import {UserAuth} from "@/app/context/AuthContext";
 // TODO on render, fetch text from db and set value to that text
 
 // TODO move inside the component
@@ -20,12 +21,13 @@ const ReactQuill = dynamic(() => import("react-quill"), {
 
 const TextEditor = () => {
   const [text, setText] = useState("");
+  const {user} = UserAuth();
 
   // NOTE I don't like doing it this way
   const path = usePathname();
   const studyId = path.split("/")[2];
 
-  const user_id = "mock";
+  const user_id = user?.uid;
   useEffect(() => {
     const saveText = async () => {
       try {
