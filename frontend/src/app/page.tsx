@@ -4,26 +4,24 @@ import { Button } from "@/components/ui/Button";
 import { LogIn } from "lucide-react";
 import UserDashboard from "@/components/Dashboard/UserDashboardMain";
 import { UserAuth } from "@/app/context/AuthContext";
-import { useContext } from "react";
 
 export default function Home() {
-  const { user, googleSignIn, signOut } = UserAuth();
+  const authContext = UserAuth();
+
+  if (!authContext) {
+    throw new Error("AuthContext is not available");
+  }
   const handleSignIn = () => {
     try {
-      googleSignIn();
+      authContext.googleSignIn();
     } catch (error) {
       console.error(error);
     }
   };
 
-  if (user) {
-    console.log("signed in");
-  }
-  console.log(user.uid);
-  const isSignedIn = !!user;
-  if (isSignedIn) {
-    // TODO route the user to /dashboard
-    return <UserDashboard userId={user.uid} />;
+  if (authContext.user && authContext.user.uid) {
+    console.log(authContext.user.uid);
+    return <UserDashboard userId={authContext.user.uid} />;
   }
 
   return (
