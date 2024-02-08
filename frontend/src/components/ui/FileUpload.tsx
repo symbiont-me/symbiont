@@ -1,9 +1,8 @@
 "use client";
 import { useDropzone } from "react-dropzone";
 import { uploadFileToS3, getS3Url } from "@/lib/s3";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import ToastMessage from "./ToastMessage";
 import { usePathname } from "next/navigation";
