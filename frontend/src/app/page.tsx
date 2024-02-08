@@ -1,9 +1,22 @@
+"use client";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { LogIn } from "lucide-react";
 import UserDashboard from "@/components/Dashboard/UserDashboardMain";
+import { UserAuth } from "@/app/context/AuthContext";
+import { useContext } from "react";
 
 export default function Home() {
+  const { user, googleSignIn, signOut } = UserAuth();
+console.log(user);
+  const handleSignIn = () => {
+    try {
+      googleSignIn();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   // const { userId } = auth();
   // if (userId) {
   //   console.log("signed in");
@@ -24,12 +37,11 @@ export default function Home() {
               Mistah Kurtz - he dead.
             </h1>
           </div>
-          <div className="flex mt-2">
-          </div>
+          <div className="flex mt-2"></div>
           <div className="w-full mt-4">
             {
               <Link href="/sign-in">
-                <Button>
+                <Button onClick={handleSignIn}>
                   {" "}
                   Login to get started
                   <LogIn className="w-4 h-4 ml-2 " />
