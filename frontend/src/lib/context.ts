@@ -4,7 +4,7 @@ import { getEmbeddings } from "./embeddings";
 
 export async function getMatchesFromEmbeddings(
   embeddings: number[],
-  fileKey: string
+  fileKey: string,
 ) {
   try {
     const client = new Pinecone({
@@ -29,13 +29,11 @@ export const getContext = async (query: string, fileKey: string) => {
   const queryEmbeddings = await getEmbeddings(query);
   const queryResponse = await getMatchesFromEmbeddings(
     queryEmbeddings,
-    fileKey
+    fileKey,
   );
- 
+
   // Assuming the matches are in a property called `results`
-  const filteredMatches = queryResponse.filter(
-    (match) => match.score! > 0.7
-  );
+  const filteredMatches = queryResponse.filter((match) => match.score! > 0.7);
   //  console.log(filteredMatches);
 
   type Metadata = {
@@ -51,7 +49,10 @@ export const getContext = async (query: string, fileKey: string) => {
     };
   });
   // joins the text from embeddings together
-  const combinedContext =  docs.map(doc => doc.text.replace(/\n/g, ' ')).join(' ').substring(0, 3000);
-  
-  return combinedContext
+  const combinedContext = docs
+    .map((doc) => doc.text.replace(/\n/g, " "))
+    .join(" ")
+    .substring(0, 3000);
+
+  return combinedContext;
 };
