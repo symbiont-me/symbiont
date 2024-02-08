@@ -1,7 +1,7 @@
 "use client";
 import { useDropzone } from "react-dropzone";
 import { uploadFileToS3, getS3Url } from "@/lib/s3";
-import { useMutation, useQueryClient} from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -14,13 +14,11 @@ import { StudyResource, StudyResourceCategory } from "@/types";
 
 // The FileUpload component allows users to upload PDF files
 const FileUpload = () => {
-  const router = useRouter();
   const path = usePathname();
   const studyId = path.split("/")[2];
-
+  // TODO use uploading state
   const [uploading, setUploading] = useState(false);
 
-  const queryClient = useQueryClient()
   // useMutation is a hook from react-query that handles asynchronous updates
   const { mutate } = useMutation({
     // mutationFn is the function that will be called when mutate is invoked
@@ -83,7 +81,7 @@ const FileUpload = () => {
         }
         // TODO ?Find what is mutate doing here?
         mutate(data, {
-          onSuccess: ()=> {
+          onSuccess: () => {
             /*  NOTE this is supposed to referesh the resources query in the ResourceSwitcher component
                 but seems to be working without it
             */
