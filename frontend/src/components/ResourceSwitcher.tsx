@@ -8,9 +8,11 @@ type ResourceSwitcherProps = {
   onResourceChange: (resource: StudyResource) => void;
 };
 
-const ResourceSwitcher = ({ studyId, onResourceChange }: ResourceSwitcherProps) => {
+const ResourceSwitcher = ({
+  studyId,
+  onResourceChange,
+}: ResourceSwitcherProps) => {
   const [resources, setResources] = useState<StudyResource[]>([]);
-
   const resourcesQuery = useQuery({
     queryKey: ["resources", studyId],
     queryFn: () =>
@@ -25,7 +27,7 @@ const ResourceSwitcher = ({ studyId, onResourceChange }: ResourceSwitcherProps) 
   }, [resourcesQuery.data, onResourceChange]);
 
   const handleResourceChange = (
-    event: React.ChangeEvent<HTMLSelectElement>
+    event: React.ChangeEvent<HTMLSelectElement>,
   ) => {
     const resourceIdentifier = event.target.value;
     const resource = resources.find((r) => r.identifier === resourceIdentifier);
@@ -39,7 +41,9 @@ const ResourceSwitcher = ({ studyId, onResourceChange }: ResourceSwitcherProps) 
   }
 
   if (resourcesQuery.error) {
-    return <div>Error loading resources: {resourcesQuery.error.toString()}</div>;
+    return (
+      <div>Error loading resources: {resourcesQuery.error.toString()}</div>
+    );
   }
 
   return (
