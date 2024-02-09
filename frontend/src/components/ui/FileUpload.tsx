@@ -7,7 +7,7 @@ import { useState } from "react";
 import ToastMessage from "./ToastMessage";
 import { usePathname } from "next/navigation";
 import { StudyResource, StudyResourceCategory } from "@/types";
-
+import { uploadToFirebaseStorage } from "@/firebase/uploadToStorage";
 // TODO fix toast messages
 // TODO update to handle audio file uploads
 
@@ -74,6 +74,8 @@ const FileUpload = () => {
       // Try to upload the file to S3
       try {
         setUploading(true);
+        const fireBaseStorageData = await uploadToFirebaseStorage(file);
+        console.log(fireBaseStorageData);
         const data = await uploadFileToS3(file);
         if (!data?.fileKey || !data.fileName) {
           return;
