@@ -1,13 +1,16 @@
 import { Pinecone, PineconeRecord } from "@pinecone-database/pinecone";
 import { downloadFromS3 } from "./s3-server";
 import { PDFLoader } from "langchain/document_loaders/fs/pdf";
-import { Document, RecursiveCharacterTextSplitter } from "@pinecone-database/doc-splitter";
+import {
+  Document,
+  RecursiveCharacterTextSplitter,
+} from "@pinecone-database/doc-splitter";
 import md5 from "md5";
 import { getEmbeddings } from "./embeddings";
 import { convertToAscii } from "./utils";
-
+import { downloadFromStorage as downloadfromFirebase } from "@/firebase/downloadFromStorage";
+import { deleteFileFromFolder } from "@/firebase/downloadFromStorage";
 let pinecone: Pinecone | null = null;
-
 
 /**
  * Retrieves the singleton Pinecone client instance. If the client does not exist, it is created with the API key from environment variables.
@@ -27,17 +30,20 @@ type PdfPage = {
 /**
  * Downloads a PDF file from S3, processes its content, and uploads the data to Pinecone.
  * TODO handle audio file transcripts as well
+ * TODO fix Pincone error: Namespaces names can only be ASCII-printable characters. Try again with a different name.
  */
 export async function loadS3DataIntoPinecone(fileKey: string) {
-  console.log("Downloading file from S3");
-  const fileName = await downloadFromS3(fileKey);
+  console.log("Downloading file from firebase");
+  const fileName = await downloadfromFirebase(fileKey);
   if (fileName === null) {
-    throw new Error("Could not download file from S3");
+    throw new Error("Could not download file from Firebase Storage");
   }
   console.log("loading pdf into memory" + fileName);
   const loader = new PDFLoader(fileName);
   const pages = (await loader.load()) as PdfPage[];
   console.log("Preparing documents");
+
+  await deleteFileFromFolder(fileName);
 
   // split the pdf into smaller chunks
   const documents = await Promise.all(pages.map(prepareDocument));
@@ -55,8 +61,10 @@ export async function loadS3DataIntoPinecone(fileKey: string) {
   // console.log(vectors);
   await namespace.upsert([...vectors]);
   console.log("Vectors uploaded to Pinecone");
+  // delete downloaded the file from the folder
   return documents[0]; // NOTE some other value might be better here
 }
+
 
 /**
  * Generates a vector representation of a document's content and creates a unique hash ID for it.
