@@ -1,5 +1,6 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
+// import { promises as fs } from 'fs';
 
 /**
  * Combines class names into a single string with deduplication and conditional classes support.
@@ -16,9 +17,18 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-
+// TODO redundant, one exists in firebase utils as well
 export function convertToAscii(inputString: string) {
   // remove non ascii characters
   return inputString.replace(/[^\x00-\x7F]+/g, "");
   
 }
+
+// export async function deleteFileFromFolder(fileName: string) {
+//   try {
+//     await fs.unlink(fileName);
+//     console.log(`Deleted file: ${fileName}`);
+//   } catch (error) {
+//     console.error(`Error deleting file ${fileName}:`, error);
+//   }
+// }
