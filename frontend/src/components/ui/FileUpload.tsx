@@ -1,6 +1,5 @@
 "use client";
 import { useDropzone } from "react-dropzone";
-import { uploadFileToS3, getS3Url } from "@/lib/s3";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { useState } from "react";
@@ -24,11 +23,13 @@ const FileUpload = () => {
     mutationFn: async ({
       fileKey,
       fileName,
+      downloadUrl,
     }: {
       fileKey: string;
       fileName: string;
+      downloadUrl: string;
     }) => {
-      if (!fileKey || !fileName) {
+      if (!fileKey || !fileName || !downloadUrl) {
         throw new Error("fileKey or fileName is undefined");
       }
       // TODO ? Find where is FileKey coming from?
@@ -39,7 +40,7 @@ const FileUpload = () => {
         const resourceData: StudyResource = {
           studyId: parseInt(studyId),
           name: fileName,
-          url: getS3Url(fileKey),
+          url: downloadUrl,
           identifier: fileKey,
           category: fileType,
         };
@@ -74,9 +75,10 @@ const FileUpload = () => {
       // Try to upload the file to S3
       try {
         setUploading(true);
-        const fireBaseStorageData = await uploadToFirebaseStorage(file);
-        console.log(fireBaseStorageData);
-        const data = await uploadFileToS3(file);
+        // const data = await uploadFileToS3(file);
+        const data = await uploadToFirebaseStorage(file);
+        console.log("Firebase Storage Data", data.downloadUrl);
+
         if (!data?.fileKey || !data.fileName) {
           return;
         }
