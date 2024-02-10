@@ -7,7 +7,7 @@ import {
 } from "@pinecone-database/doc-splitter";
 import md5 from "md5";
 import { getEmbeddings } from "./embeddings";
-import { convertToAscii } from "./utils";
+import { removeNonAscii } from "./utils";
 import { downloadFromStorage as downloadfromFirebase } from "@/firebase/downloadFromStorage";
 import { deleteFileFromFolder } from "@/firebase/downloadFromStorage";
 
@@ -55,7 +55,7 @@ export async function loadS3DataIntoPinecone(fileKey: string) {
   // create a pinecone client
   const client = await getPineconeClient();
   const pineconeIndex = await client.index(process.env.PINECONE_INDEX_NAME!);
-  const namespace = pineconeIndex.namespace(convertToAscii(fileKey));
+  const namespace = pineconeIndex.namespace(removeNonAscii(fileKey));
   // TODO fix PineconeBadRequestError: Upsert into uploads/1707587437769_1_Designing Data-Intensive Applications - Martin Kleppmann_Extracted.pdf failed. Namespaces names can only be ASCII-printable characters. Try again with a different name
   await namespace.upsert([...vectors]);
   console.log("Vectors uploaded to Pinecone");

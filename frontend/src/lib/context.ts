@@ -1,5 +1,5 @@
 import { Pinecone } from "@pinecone-database/pinecone";
-import { convertToAscii } from "./utils";
+import { removeNonAscii } from "./utils";
 import { getEmbeddings } from "./embeddings";
 
 export async function getMatchesFromEmbeddings(
@@ -11,7 +11,7 @@ export async function getMatchesFromEmbeddings(
       apiKey: process.env.PINECONE_API_KEY!,
     });
     const pineconeIndex = await client.index(process.env.PINECONE_INDEX_NAME!);
-    const namespace = pineconeIndex.namespace(convertToAscii(fileKey));
+    const namespace = pineconeIndex.namespace(removeNonAscii(fileKey));
     const queryResult = await namespace.query({
       topK: 5,
       vector: embeddings,

@@ -1,7 +1,7 @@
-import {app} from "@/firebase/config"
-import { getStorage, ref} from "firebase/storage";
+import { app } from "@/firebase/config";
+import { getStorage, ref } from "firebase/storage";
 import { getDownloadURL } from "firebase/storage";
-import {convertToAscii} from "@/lib/utils"
+import { removeNonAscii } from "@/lib/utils";
 export async function getUrl(fileKey: string): Promise<string> {
   const storage = getStorage(app);
   const gsReference = ref(
@@ -17,9 +17,9 @@ export async function getUrl(fileKey: string): Promise<string> {
   }
 }
 
-
 // create file name
 export function createFileName(file: File): string {
-  const cleanedFileName = convertToAscii(file.name);
+  const cleanedFileName = removeNonAscii(file.name);
+  console.log("cleanedFileName", cleanedFileName);
   return `uploads/${Date.now()}_${cleanedFileName}`;
 }
