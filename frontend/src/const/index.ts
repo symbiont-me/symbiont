@@ -15,6 +15,7 @@ export enum ViewSelected {
   Resources = "resources",
 }
 
+// TODO use these wherever possible
 export enum HttpStatus {
   OK = 200,
   CREATED = 201,
