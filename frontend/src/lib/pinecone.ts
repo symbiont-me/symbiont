@@ -10,10 +10,9 @@ import { getEmbeddings } from "./embeddings";
 import { convertToAscii } from "./utils";
 import { downloadFromStorage as downloadfromFirebase } from "@/firebase/downloadFromStorage";
 import { deleteFileFromFolder } from "@/firebase/downloadFromStorage";
-let pinecone: Pinecone | null = null;
 
 /**
- * Retrieves the singleton Pinecone client instance. If the client does not exist, it is created with the API key from environment variables.
+ * Retrieves the single Pinecone client instance. If the client does not exist, it is created with the API key from environment variables.
  */
 export const getPineconeClient = async () => {
   return new Pinecone({
@@ -28,7 +27,7 @@ type PdfPage = {
 };
 
 /**
- * Downloads a PDF file from S3, processes its content, and uploads the data to Pinecone.
+ * Downloads a PDF file from Firebase storage, processes its content, and uploads the data to Pinecone.
  * TODO handle audio file transcripts as well
  * TODO fix Pincone error: Namespaces names can only be ASCII-printable characters. Try again with a different name.
  */
@@ -41,14 +40,13 @@ export async function loadS3DataIntoPinecone(fileKey: string) {
   console.log("loading pdf into memory" + fileName);
   const loader = new PDFLoader(fileName);
   const pages = (await loader.load()) as PdfPage[];
-  console.log("Preparing documents");
 
+  // delete the temp file from storage
   await deleteFileFromFolder(fileName);
 
   // split the pdf into smaller chunks
   const documents = await Promise.all(pages.map(prepareDocument));
   console.log("Embedding documents");
-
   /* Flatten the array of documents and map each document to the embedDocument function
    which generates a vector representation for it. The Promise.all ensures that we wait
    for all the embeddings to be generated before proceeding. */
@@ -58,13 +56,11 @@ export async function loadS3DataIntoPinecone(fileKey: string) {
   const client = await getPineconeClient();
   const pineconeIndex = await client.index(process.env.PINECONE_INDEX_NAME!);
   const namespace = pineconeIndex.namespace(convertToAscii(fileKey));
-  // console.log(vectors);
+  // TODO fix PineconeBadRequestError: Upsert into uploads/1707587437769_1_Designing Data-Intensive Applications - Martin Kleppmann_Extracted.pdf failed. Namespaces names can only be ASCII-printable characters. Try again with a different name
   await namespace.upsert([...vectors]);
   console.log("Vectors uploaded to Pinecone");
-  // delete downloaded the file from the folder
   return documents[0]; // NOTE some other value might be better here
 }
-
 
 /**
  * Generates a vector representation of a document's content and creates a unique hash ID for it.
@@ -104,6 +100,7 @@ async function prepareDocument(pdfPage: PdfPage) {
   pageContent = pageContent.replace(/\n/g, "");
   // split the document
   const splitter = new RecursiveCharacterTextSplitter();
+  // TODO try removing await
   const truncatedText = await truncateStringByBytes(pageContent, 36000);
   const docs = await splitter.splitDocuments([
     new Document({
