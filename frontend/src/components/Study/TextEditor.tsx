@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import "react-quill/dist/quill.snow.css";
 import axios from "axios";
 import { usePathname } from "next/navigation";
-import {UserAuth} from "@/app/context/AuthContext";
+import { UserAuth } from "@/app/context/AuthContext";
 import { HttpStatus } from "@/const";
 // TODO on render, fetch text from db and set value to that text
 
@@ -22,13 +22,13 @@ const ReactQuill = dynamic(() => import("react-quill"), {
 
 const TextEditor = () => {
   const [text, setText] = useState("");
-  const {user} = UserAuth();
+  const authContext = UserAuth();
 
-  // NOTE I don't like doing it this way
+  // NOTE I don't like getting the studyId this way
   const path = usePathname();
   const studyId = path.split("/")[2];
 
-  const user_id = user?.uid;
+  const user_id = authContext?.user?.uid;
   useEffect(() => {
     const saveText = async () => {
       try {
