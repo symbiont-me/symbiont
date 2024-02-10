@@ -8,6 +8,7 @@ type ResourceSwitcherProps = {
   onResourceChange: (resource: StudyResource) => void;
 };
 
+// TODO give option to "Search All"
 const ResourceSwitcher = ({
   studyId,
   onResourceChange,
