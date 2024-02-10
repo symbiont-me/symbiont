@@ -5,6 +5,7 @@ import "react-quill/dist/quill.snow.css";
 import axios from "axios";
 import { usePathname } from "next/navigation";
 import {UserAuth} from "@/app/context/AuthContext";
+import { HttpStatus } from "@/const";
 // TODO on render, fetch text from db and set value to that text
 
 // TODO move inside the component
@@ -37,7 +38,7 @@ const TextEditor = () => {
           userId: user_id,
           studyTextContent: text,
         });
-        if (response.status === 200) {
+        if (response.status === HttpStatus.OK) {
           console.log("text saved");
         }
       } catch (error) {
