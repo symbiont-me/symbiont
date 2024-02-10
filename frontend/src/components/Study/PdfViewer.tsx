@@ -35,7 +35,7 @@ const PdfViewer = ({ studyId }: PDFViewerProps) => {
     if (pdfQuery.data) {
       setPdfs(pdfQuery.data);
     }
-  }, [pdfQuery.data]);
+  }, [pdfQuery.data, pdfs]);
 
   if (pdfQuery.isLoading) {
     return <div>Loading...</div>;
