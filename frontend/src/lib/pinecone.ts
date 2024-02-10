@@ -29,7 +29,6 @@ type PdfPage = {
 /**
  * Downloads a PDF file from Firebase storage, processes its content, and uploads the data to Pinecone.
  * TODO handle audio file transcripts as well
- * TODO fix Pincone error: Namespaces names can only be ASCII-printable characters. Try again with a different name.
  */
 export async function loadS3DataIntoPinecone(fileKey: string) {
   console.log("Downloading file from firebase");
@@ -56,7 +55,6 @@ export async function loadS3DataIntoPinecone(fileKey: string) {
   const client = await getPineconeClient();
   const pineconeIndex = await client.index(process.env.PINECONE_INDEX_NAME!);
   const namespace = pineconeIndex.namespace(removeNonAscii(fileKey));
-  // TODO fix PineconeBadRequestError: Upsert into uploads/1707587437769_1_Designing Data-Intensive Applications - Martin Kleppmann_Extracted.pdf failed. Namespaces names can only be ASCII-printable characters. Try again with a different name
   await namespace.upsert([...vectors]);
   console.log("Vectors uploaded to Pinecone");
   return documents[0]; // NOTE some other value might be better here
