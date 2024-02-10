@@ -6,6 +6,7 @@ type VideoViewerProps = {
 };
 
 // TODO get videos from the studyId and display them
+// TODO Keep the video playing in the background
 const VideoViewer = ({ studyId }: VideoViewerProps) => {
   const [videoId, setVideoId] = useState<string | undefined>(undefined);
   const [videoUrl, setVideoUrl] = useState<string | undefined>(
