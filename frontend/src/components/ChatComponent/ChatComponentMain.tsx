@@ -19,7 +19,6 @@ type ChatComponentProps = {
 const ChatComponent = ({ chatId }: ChatComponentProps) => {
   const path = usePathname();
   const studyId = path.split("/")[2];
-  console.log("chatId", chatId);
 
   const getMessagesQuery = useQuery({
     queryKey: ["chat-messages", chatId],
