@@ -1,24 +1,15 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { StudyResource } from "@/types";
 import { useQuery } from "@tanstack/react-query";
-
+import {StudyResource} from "../../types";
 type PDFViewerProps = {
   studyId: string;
 };
-// TODO replace Google Viewer with a better PDF viewer
-//  TODO need to add a loader to show when pdf is loading when clicked Next or Previous
-/*
- * TODO fix error below
- * Refused to execute inline script because it violates the following Content Security Policy
- * directive: "script-src 'report-sample' 'nonce-ri5IuITOGnLsdMi2beov1A' 'unsafe-inline'
- * 'strict-dynamic' https: http: 'unsafe-eval'". Note that 'unsafe-inline' is ignored if
- * either a hash or nonce value is present in the source list.
- */
-
+// TODO display the PDF name
 const PdfViewer = ({ studyId }: PDFViewerProps) => {
   const [pdfs, setPdfs] = useState<StudyResource[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [pdfUrl, setPdfUrl] = useState("");
 
   const pdfQuery = useQuery({
     queryKey: ["pdfViewer", studyId, "pdf"],
@@ -35,7 +26,35 @@ const PdfViewer = ({ studyId }: PDFViewerProps) => {
     if (pdfQuery.data) {
       setPdfs(pdfQuery.data);
     }
-  }, [pdfQuery.data, pdfs]);
+  }, [pdfQuery.data]);
+
+  useEffect(() => {
+    const loadPdf = async () => {
+      if (pdfs.length > 0 && pdfs[currentIndex]) {
+        const currentPdfUrl = pdfs[currentIndex].url;
+        try {
+          const response = await fetch(currentPdfUrl);
+          const existingPdfBytes = await response.arrayBuffer();
+          const blob = new Blob([existingPdfBytes], { type: "application/pdf" });
+          // @note using Blob intead of a byte array to avoid security issues
+          const blobUrl = URL.createObjectURL(blob);
+          setPdfUrl(blobUrl); 
+        } catch (error) {
+          console.error("Error loading PDF", error);
+          setPdfUrl(""); 
+        }
+      }
+    };
+
+    loadPdf();
+
+    // Cleanup function to revoke the object URL to avoid memory leaks
+    return () => {
+      if (pdfUrl) {
+        URL.revokeObjectURL(pdfUrl);
+      }
+    };
+  }, [currentIndex, pdfs]);
 
   if (pdfQuery.isLoading) {
     return <div>Loading...</div>;
@@ -45,15 +64,12 @@ const PdfViewer = ({ studyId }: PDFViewerProps) => {
     return <div>Error: {pdfQuery.error.message}</div>;
   }
 
-  // console.log(pdfs);
   const goToPreviousPdf = () => {
     setCurrentIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : prevIndex));
   };
 
   const goToNextPdf = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex < pdfs.length - 1 ? prevIndex + 1 : prevIndex,
-    );
+    setCurrentIndex((prevIndex) => (prevIndex < pdfs.length - 1 ? prevIndex + 1 : prevIndex));
   };
 
   return (
@@ -62,11 +78,14 @@ const PdfViewer = ({ studyId }: PDFViewerProps) => {
         <button onClick={goToPreviousPdf}>Previous</button>
         <button onClick={goToNextPdf}>Next</button>
       </div>
-      {pdfs.length > 0 && (
-        <iframe
-          src={`https://docs.google.com/gview?url=${pdfs[currentIndex].url}&embedded=true`}
-          className="w-full h-screen"
-        ></iframe>
+      {pdfUrl && (
+        <>
+          <h3>Current PDF: {pdfs[currentIndex].name}</h3>
+          <iframe
+            src={pdfUrl}
+            className="w-full h-screen"
+          ></iframe>
+        </>
       )}
     </div>
   );
