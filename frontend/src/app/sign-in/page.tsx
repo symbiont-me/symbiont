@@ -2,8 +2,7 @@
 import React from 'react';
 import {UserAuth} from "@/app/context/AuthContext";
 function SignInPage() {
-  const {user} = UserAuth();
-  console.log(user);
+  const authContext = UserAuth();
   return (
     <div>
       <h1>Sign In</h1>
