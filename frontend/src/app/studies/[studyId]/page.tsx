@@ -18,6 +18,9 @@ import { usePathname } from "next/navigation";
 import "../../../app/styles.css";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
+import { UserAuth } from "@/app/context/AuthContext";
+import { useRouter } from "next/navigation";
+import { User } from "firebase/auth";
 
 // an object that maps each ViewSelected enum value to a corresponding React component.
 // this allows the application to dynamically render different components based on the current view selection
@@ -41,9 +44,24 @@ const viewComponents: Record<
 };
 
 export default function StudyPage() {
+  const authContext = UserAuth();
+  const router = useRouter();
+
   const [viewSelected, setViewSelected] = useState<ViewSelected>(
-    ViewSelected.Writer,
+    ViewSelected.Writer
   );
+  const [user, setUser] = useState<User | null>(null);
+  // TODO fix
+  // NOTE note correct: authContext is undefined on first render and then it is set to the user object
+  // and this pushes the user to the home page
+  useEffect(() => {
+    if (authContext?.user) {
+      setUser(authContext.user);
+    } else {
+      router.push("/");
+    }
+  }, [authContext, router]);
+
   // TODO Test and remove the following unused state variables
   const [textWriterValue, setTextWriterValue] = useState<string>("");
   const [video_url, setVideoUrl] = useState<string | undefined>(undefined);
@@ -57,12 +75,12 @@ export default function StudyPage() {
     queryFn: async () => {
       const response = await axios.post("/api/get-chat", {
         studyId: studyId,
+        userId: user?.uid,
       });
       return response.data.chat_id;
     },
   });
 
-  console.log(chatId);
   useEffect(() => {
     if (fetchLinkedChatQuery.data) {
       setChatId(fetchLinkedChatQuery.data);
