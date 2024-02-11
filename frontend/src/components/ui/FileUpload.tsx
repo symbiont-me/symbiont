@@ -63,11 +63,10 @@ const FileUpload = () => {
     maxFiles: 1,
     // onDrop is the function that will be called when a file is dropped
     onDrop: async (acceptedFiles) => {
-      console.log(acceptedFiles);
       // Get the first file from the array of accepted files
       const file = acceptedFiles[0];
-      // Check if the file size exceeds 10MB and alert the user if it does
-      if (file.size > 10000000) {
+      // Check if the file size exceeds 5MB and alert the user if it does
+      if (file.size > 5000000) {
         // TODO add toast component here
         alert("File is too big!");
         return;
