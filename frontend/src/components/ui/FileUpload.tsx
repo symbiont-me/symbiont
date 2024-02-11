@@ -71,10 +71,9 @@ const FileUpload = () => {
         alert("File is too big!");
         return;
       }
-      // Try to upload the file to S3
+      // Try to upload the file
       try {
         setUploading(true);
-        // const data = await uploadFileToS3(file);
         const data = await uploadToFirebaseStorage(file);
         console.log("Firebase Storage Data", data.downloadUrl);
 
