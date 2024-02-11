@@ -10,13 +10,18 @@ import { UserAuth } from "@/app/context/AuthContext";
 const NewStudyCard = () => {
   const router = useRouter();
   const [studyName, setStudyName] = useState("");
-  const { user } = UserAuth();
+  const authContext = UserAuth();
 
-  if (!user) {
+  if (!authContext) {
     return null;
   }
 
-  const userId = user.uid;
+  const userId = authContext?.user?.uid;
+// TODO remove this check 
+  if (typeof userId === "undefined") {
+    return null;
+  }
+
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setStudyName(event.target.value);
   };
@@ -74,6 +79,6 @@ const NewStudyCard = () => {
       </dialog>
     </div>
   );
-}
+};
 
 export default NewStudyCard;
