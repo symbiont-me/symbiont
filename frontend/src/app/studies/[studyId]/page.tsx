@@ -15,14 +15,13 @@ import { ViewSelected } from "@/const";
 import axios from "axios";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
-import "../../../app/styles.css";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { UserAuth } from "@/app/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { User } from "firebase/auth";
 import LeftSideBarMain from "@/components/LeftSideBar/LeftSideBarMain";
-
+import "../../../app/styles.css";
 // an object that maps each ViewSelected enum value to a corresponding React component.
 // this allows the application to dynamically render different components based on the current view selection
 const viewComponents: Record<

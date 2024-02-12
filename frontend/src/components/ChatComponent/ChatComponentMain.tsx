@@ -53,15 +53,15 @@ const ChatComponent = ({ chatId }: ChatComponentProps) => {
   }, [messages, selectedResource]);
 
   return (
-    <div className="container">
-      <div className="resource-switcher">
+    <div className="h-80">
+      <div className="">
         <ResourceSwitcher
           studyId={studyId}
           onResourceChange={setSelectedResource}
         />
       </div>
-      <div className="messages-container" id="message-container">
-        <div className="  overflow-auto p-4 w-full" style={{ height: "700px" }}>
+      <div className="" id="message-container">
+        <div className="overflow-auto p-4 w-full" style={{ height: "700px" }}>
           <MessageList messages={messages} />
         </div>
       </div>
