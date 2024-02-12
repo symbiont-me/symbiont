@@ -23,13 +23,13 @@ const MessageList = ({ messages, isLoading }: MessageListProps) => {
           <div key={message.id}>
             {message.role === "user" ? (
               <div className="chat chat-end">
-                <div className="chat-bubble chat-bubble-primary text-sm p-6">
+                <div className="rounded-xl text-xs p-4 bg-symbiont-chatMessageUser">
                   {message.content}
                 </div>
               </div>
             ) : (
               <div className="chat chat-start">
-                <div className="chat-bubble text-sm p-6">
+                <div className="text-xs p-6 bg-symbiont-chatMessageAi rounded-xl">
                   <AiChatMessage message={message.content} />
                 </div>
               </div>
