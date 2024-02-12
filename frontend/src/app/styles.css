@@ -1,4 +1,4 @@
-.container {
+.study-container {
   max-width: 1600px;
   display: grid;
   grid-template-columns: 0.5fr 1.5fr 1fr;
@@ -23,3 +23,21 @@
 
 
 .ql-container.ql-snow{ border: none !important;}
+
+
+.dashboard-container {  display: grid;
+  grid-template-columns: 0.5fr 1.5fr 1fr;
+  grid-template-rows: 0.3fr 1.7fr 1fr;
+  gap: 0px 0px;
+  grid-auto-flow: row;
+  grid-template-areas:
+    "left-sidebar navbar navbar"
+    "left-sidebar dashboard dashboard"
+    "left-sidebar dashboard dashboard";
+}
+
+.navbar { grid-area: navbar; }
+
+.left-sidebar { grid-area: left-sidebar; }
+
+.dashboard { grid-area: dashboard; }
