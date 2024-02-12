@@ -4,7 +4,8 @@ import NewStudyCard from "./NewStudyCard";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Study } from "@/types";
-
+import "@/app/styles.css";
+import LeftSideBar from "@/components/LeftSideBar/LeftSideBarMain";
 // TODO use react query to fetch the projects
 // TODO add left sidebar if included in the design
 type UserDashboardProps = {
@@ -27,12 +28,22 @@ const UserDashboard = ({ userId }: UserDashboardProps) => {
   }, [userId]);
 
   return (
-    <div className="m-10">
+    <div className="dashboard-container">
       {/* Left Sidebar */}
+      <div className="left-sidebar">
+        {/* TODO create Sidebar component */}
+        <LeftSideBar />
+      </div>
+
+      {/* Navbar */}
+      <div className="navbar">
+        {/* TODO create Navbar component */}
+        <div className="h-16 bg-symbiont-900 rounded-b-2xl w-full m-2 mt-2"></div>
+      </div>
 
       {/* Center Dashboard */}
-      <div className="">
-        <div className="grid grid-cols-4 gap-4">
+      <div className="dashboard">
+        <div className="w-full h-full ">
           {projects.map((project) => (
             <ProjectCard
               key={project.id}
@@ -41,14 +52,14 @@ const UserDashboard = ({ userId }: UserDashboardProps) => {
               id={project.id}
             />
           ))}
+        </div>
 
-          <div className="border p-4">
-            <NewStudyCard />
-          </div>
+        <div className="border p-4">
+          <NewStudyCard />
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default UserDashboard;
