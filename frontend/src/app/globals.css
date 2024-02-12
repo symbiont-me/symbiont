@@ -23,7 +23,7 @@
 @tailwind utilities;
 
 body {
-  padding: 0;
+  padding: 2px;
   margin: 0;
   line-height: 1.6;
   font-size: 18px;
