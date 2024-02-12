@@ -28,7 +28,7 @@ const ResourceSwitcher = ({
   }, [resourcesQuery.data, onResourceChange]);
 
   const handleResourceChange = (
-    event: React.ChangeEvent<HTMLSelectElement>,
+    event: React.ChangeEvent<HTMLSelectElement>
   ) => {
     const resourceIdentifier = event.target.value;
     const resource = resources.find((r) => r.identifier === resourceIdentifier);
@@ -49,7 +49,7 @@ const ResourceSwitcher = ({
 
   return (
     <div>
-      <h2>Resource Switcher</h2>
+      <h2 className="text-xs mb-4">Resource Switcher</h2>
       <select
         className="select select-bordered w-full max-w-xs"
         onChange={handleResourceChange}
