@@ -1,0 +1,18 @@
+.container {  display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 0.1fr 2.6fr 0.2fr;
+    grid-auto-columns: 1fr;
+    gap: 0px 0px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      "resource-switcher"
+      "messages-container"
+      "chat-input";
+  }
+  
+  .resource-switcher { grid-area: resource-switcher; }
+  
+  .messages-container { grid-area: messages-container; }
+  
+  .chat-input { grid-area: chat-input; }
+  

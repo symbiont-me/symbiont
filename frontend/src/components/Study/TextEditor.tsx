@@ -54,9 +54,9 @@ const TextEditor = () => {
   }, [text]);
 
   return (
-    <div className="w-full h-screen bg-symbiont-900 rounded-2xl">
+    <div className="w-full bg-symbiont-900 rounded-2xl h-viewerheight">
       <ReactQuill
-        className="h-screen ql-container q-snow"
+        className="ql-container q-snow"
         theme="snow"
         value={text}
         onChange={setText}

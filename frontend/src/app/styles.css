@@ -1,5 +1,6 @@
 .study-container {
   max-width: 1600px;
+
   display: grid;
   grid-template-columns: 0.5fr 1.5fr 1fr;
   /* grid-template-rows: 0.3fr 1.7fr 1fr; */

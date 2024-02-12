@@ -9,6 +9,7 @@ import axios from "axios";
 import { usePathname } from "next/navigation";
 import { StudyResource } from "@/types";
 import ResourceSwitcher from "@/components/ResourceSwitcher";
+import "./chats.css";
 
 type ChatComponentProps = {
   chatId: number | undefined;
@@ -52,19 +53,19 @@ const ChatComponent = ({ chatId }: ChatComponentProps) => {
   }, [messages, selectedResource]);
 
   return (
-    <div className="h-full p-2 overflow-hidden">
-      <div className="h-20 flex flex-col justify-center pr-20 pl-20">
+    <div className="container">
+      <div className="resource-switcher">
         <ResourceSwitcher
           studyId={studyId}
           onResourceChange={setSelectedResource}
         />
       </div>
-      <div className="h-screen overflow-auto p-2" id="message-container">
-        <MessageList messages={messages} />
+      <div className="messages-container" id="message-container">
+        <div className="  overflow-auto p-4 w-full" style={{ height: "700px" }}>
+          <MessageList messages={messages} />
+        </div>
       </div>
-
-      {/* Input */}
-      <div className="h-20 flex flex-col justify-center pr-20 pl-20">
+      <div className="chat-input h-20 flex flex-col justify-center pr-20 pl-20">
         <UserChatInput
           input={input}
           handleInputChange={handleInputChange}

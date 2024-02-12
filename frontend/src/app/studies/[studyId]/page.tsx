@@ -100,20 +100,20 @@ export default function StudyPage() {
   const SelectedViewComponent = viewComponents[viewSelected] || null;
 
   return (
-    <div className="study-container">
-      <div className="left-sidebar">
-        <LeftSideBarMain />
-      </div>
-      <div className="study-nav">
-        <StudyNavbar setViewSelected={setViewSelected} />
-      </div>
-      <div className="view-container">
-        <div className="h-full w-full bg-symbiont-900 rounded-2xl p-4">
+    <div className="h-screen">
+      <div className="study-container h-full w-full">
+        <div className="left-sidebar">
+          <LeftSideBarMain />
+        </div>
+        <div className="study-nav">
+          <StudyNavbar setViewSelected={setViewSelected} />
+        </div>
+        <div className="view-container">
           {SelectedViewComponent && <SelectedViewComponent studyId={studyId} />}
         </div>
-      </div>
-      <div className="chat-container">
-        <ChatComponent chatId={chatId} />
+        <div className="chat-container">
+          <ChatComponent chatId={chatId} />
+        </div>
       </div>
     </div>
   );

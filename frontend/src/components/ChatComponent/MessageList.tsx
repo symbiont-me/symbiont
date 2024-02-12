@@ -17,28 +17,28 @@ const MessageList = ({ messages, isLoading }: MessageListProps) => {
   if (!messages) return <></>;
 
   return (
-    <div className="flex flex-col gap-2 px-4  h-screen">
+    <>
       {messages.map((message) => {
         return (
           <div key={message.id}>
             {message.role === "user" ? (
               <div className="chat chat-end">
-                <div className="rounded-xl text-xs p-4 bg-symbiont-chatMessageUser">
+                <p className="rounded-xl text-xs p-4 bg-symbiont-chatMessageUser text-symbiont-900">
                   {message.content}
-                </div>
+                </p>
               </div>
             ) : (
               <div className="chat chat-start">
-                <div className="text-xs p-6 bg-symbiont-chatMessageAi rounded-xl">
+                <p className="text-xs p-6 bg-symbiont-chatMessageAi rounded-xl">
                   <AiChatMessage message={message.content} />
-                </div>
+                </p>
               </div>
             )}
             {/* renders markdown */}
           </div>
         );
       })}
-    </div>
+    </>
   );
 };
 

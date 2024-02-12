@@ -17,20 +17,19 @@ const UserChatInput = ({
   return (
     <form onSubmit={handleSubmit}>
       <div className="flex">
-        <>
-          <Input
-            value={input}
-            onChange={handleInputChange}
-            placeholder="Ask any question..."
-            className="w-full "
-          />
-        </>
-        <Button className="bg-blue-600 ml-2">
+        <input
+          value={input}
+          onChange={handleInputChange}
+          placeholder="Ask any question..."
+          className="w-full h-10"
+        />
+
+        <Button className="ml-2 rounded-xl bg-slate-800">
           <Send className="h-4 w-4" />
         </Button>
       </div>
     </form>
   );
-}
+};
 
 export default UserChatInput;
