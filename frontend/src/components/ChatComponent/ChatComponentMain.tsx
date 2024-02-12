@@ -59,10 +59,7 @@ const ChatComponent = ({ chatId }: ChatComponentProps) => {
           onResourceChange={setSelectedResource}
         />
       </div>
-      <div
-        className="h-screen overflow-auto p-2 bg-slate-100"
-        id="message-container"
-      >
+      <div className="h-screen overflow-auto p-2" id="message-container">
         <MessageList messages={messages} />
       </div>
 
