@@ -17,6 +17,10 @@ module.exports = {
       },
     },
     extend: {
+      height: {
+        viewerheight: "calc(100vh - 150px)",
+        chatHeight: "calc(100vh - 250px)",
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
