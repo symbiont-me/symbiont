@@ -1,4 +1,4 @@
-.study-container {
+/* .study-container {
   display: grid;
   grid-template-columns: 1fr 0.5fr;
   grid-template-rows: 0.3fr 2fr;
@@ -14,4 +14,29 @@
 }
 .chat-container {
   grid-area: 2 / 2 / 3 / 3;
+} */
+
+.container {
+  display: grid;
+  grid-template-columns: 0.5fr 1.5fr 1fr;
+  /* grid-template-rows: 0.3fr 1.7fr 1fr; */
+  gap: 0px 0px;
+  grid-auto-flow: row;
+  grid-template-areas:
+    "left-sidebar study-nav study-nav"
+    "left-sidebar view-container chat-container"
+    "left-sidebar view-container chat-container";
+  margin: 0;
+  padding: 0;
 }
+
+.study-nav { grid-area: study-nav; }
+
+.left-sidebar { grid-area: left-sidebar; }
+
+.chat-container { grid-area: chat-container; }
+
+.view-container { grid-area: view-container; }
+
+
+.ql-container.ql-snow{ border: none !important;}
