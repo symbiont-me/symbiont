@@ -48,8 +48,7 @@ export async function POST(req: NextRequest) {
     const fileKey = resourceIdentifier;
     // get context from pinecone
     const context = await getContext(lastMessage, fileKey);
-    console.log("previousMessage: ", messages);
-
+    console.log("context", context);
     // create base prompt
     const prompt = {
       role: ChatCompletionRequestMessageRoleEnum.System,
@@ -62,6 +61,7 @@ export async function POST(req: NextRequest) {
       END OF DOCUMENT BLOCK
       If the context does not provide the answer to question or the context is empty, the AI assistant will say, "I'm sorry, but I don't know the answer to that question".
       AI assistant will not invent anything that is not drawn directly from the context.
+      AI will keep answers short and to the point.
       AI will return the response in valid Markdown format.
       `,
     };
