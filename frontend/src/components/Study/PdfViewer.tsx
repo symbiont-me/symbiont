@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
-import {StudyResource} from "../../types";
+import { StudyResource } from "../../types";
+import "../ui/uiStyles.css";
 type PDFViewerProps = {
   studyId: string;
 };
@@ -35,13 +36,15 @@ const PdfViewer = ({ studyId }: PDFViewerProps) => {
         try {
           const response = await fetch(currentPdfUrl);
           const existingPdfBytes = await response.arrayBuffer();
-          const blob = new Blob([existingPdfBytes], { type: "application/pdf" });
+          const blob = new Blob([existingPdfBytes], {
+            type: "application/pdf",
+          });
           // @note using Blob intead of a byte array to avoid security issues
           const blobUrl = URL.createObjectURL(blob);
-          setPdfUrl(blobUrl); 
+          setPdfUrl(blobUrl);
         } catch (error) {
           console.error("Error loading PDF", error);
-          setPdfUrl(""); 
+          setPdfUrl("");
         }
       }
     };
@@ -69,26 +72,35 @@ const PdfViewer = ({ studyId }: PDFViewerProps) => {
   };
 
   const goToNextPdf = () => {
-    setCurrentIndex((prevIndex) => (prevIndex < pdfs.length - 1 ? prevIndex + 1 : prevIndex));
+    setCurrentIndex((prevIndex) =>
+      prevIndex < pdfs.length - 1 ? prevIndex + 1 : prevIndex
+    );
   };
 
   return (
-    <div className="flex flex-col">
-      <div className="flex flex-row">
-        <button onClick={goToPreviousPdf}>Previous</button>
-        <button onClick={goToNextPdf}>Next</button>
+    <div className="flex flex-col h-viewerheight">
+      <div className="flex flex-row items-center justify-center">
+        <button
+          onClick={goToPreviousPdf}
+          className="p-4 text-xs rounded-xl m-2 w-20 border text-symbiont-textUnSelected bg-symbiont-800"
+        >
+          Previous
+        </button>
+        <button
+          onClick={goToNextPdf}
+          className=" p-4 text-xs rounded-xl m-2 w-20 border text-symbiont-textUnSelected"
+        >
+          Next
+        </button>
       </div>
       {pdfUrl && (
         <>
-          <h3>Current PDF: {pdfs[currentIndex].name}</h3>
-          <iframe
-            src={pdfUrl}
-            className="w-full h-screen"
-          ></iframe>
+          <h3 className="text-xs p-2">{pdfs[currentIndex].name}</h3>
+          <iframe src={pdfUrl} className="w-full h-full"></iframe>
         </>
       )}
     </div>
   );
-}
+};
 
 export default PdfViewer;
