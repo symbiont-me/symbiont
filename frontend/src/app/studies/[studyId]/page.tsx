@@ -106,7 +106,7 @@ export default function StudyPage() {
           <LeftSideBarMain />
         </div>
         <div className="study-nav">
-          <StudyNavbar setViewSelected={setViewSelected} />
+          <StudyNavbar setViewSelected={setViewSelected} studyId={studyId} />
         </div>
         <div className="view-container">
           {SelectedViewComponent && <SelectedViewComponent studyId={studyId} />}
