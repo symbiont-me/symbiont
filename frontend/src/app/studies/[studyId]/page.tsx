@@ -21,6 +21,7 @@ import { useEffect } from "react";
 import { UserAuth } from "@/app/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { User } from "firebase/auth";
+import LeftSideBarMain from "@/components/LeftSideBar/LeftSideBarMain";
 
 // an object that maps each ViewSelected enum value to a corresponding React component.
 // this allows the application to dynamically render different components based on the current view selection
@@ -99,9 +100,9 @@ export default function StudyPage() {
   const SelectedViewComponent = viewComponents[viewSelected] || null;
 
   return (
-    <div className="container">
+    <div className="study-container">
       <div className="left-sidebar">
-        <div className="h-full bg-symbiont-900 m-2 rounded-2xl ">Projects</div>
+        <LeftSideBarMain />
       </div>
       <div className="study-nav">
         <StudyNavbar setViewSelected={setViewSelected} />
