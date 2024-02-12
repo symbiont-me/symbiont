@@ -60,15 +60,14 @@ export async function POST(req: NextRequest) {
       START DOCUMENT BLOCK
       ${context}
       END OF DOCUMENT BLOCK
-      If the context does not provide the answer to question, the AI assistant will say, "I'm sorry, but I don't know the answer to that question".
+      If the context does not provide the answer to question or the context is empty, the AI assistant will say, "I'm sorry, but I don't know the answer to that question".
       AI assistant will not invent anything that is not drawn directly from the context.
       AI will return the response in valid Markdown format.
       `,
     };
 
-    // TODO should use md syntax so that we can parse it to display it in the frontend
     const response = await openai.createChatCompletion({
-      model: TextModels.GPT_4,
+      model: TextModels.GPT_3_5_TURBO,
       messages: [
         prompt,
         {
