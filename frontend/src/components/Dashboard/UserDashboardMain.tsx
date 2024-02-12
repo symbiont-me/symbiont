@@ -6,6 +6,7 @@ import axios from "axios";
 import { Study } from "@/types";
 import "@/app/styles.css";
 import LeftSideBar from "@/components/LeftSideBar/LeftSideBarMain";
+import StudyCard from "@/components/Study/StudyCard";
 // TODO use react query to fetch the projects
 // TODO add left sidebar if included in the design
 type UserDashboardProps = {
@@ -43,14 +44,9 @@ const UserDashboard = ({ userId }: UserDashboardProps) => {
 
       {/* Center Dashboard */}
       <div className="dashboard">
-        <div className="w-full h-full ">
+        <div className="w-full h-full flex flex-row">
           {projects.map((project) => (
-            <ProjectCard
-              key={project.id}
-              name={project.name}
-              image={project.image}
-              id={project.id}
-            />
+            <StudyCard key={project.id} study={project} />
           ))}
         </div>
 
