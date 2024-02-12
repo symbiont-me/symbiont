@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Symbiont",
-  description: "Symbiont is a platform to help researchers and writers"
+  description: "Symbiont is a platform to help researchers and writers",
 };
 
 export default function RootLayout({
