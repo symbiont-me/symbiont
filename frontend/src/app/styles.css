@@ -1,21 +1,3 @@
-/* .study-container {
-  display: grid;
-  grid-template-columns: 1fr 0.5fr;
-  grid-template-rows: 0.3fr 2fr;
-  grid-column-gap: 0px;
-  grid-row-gap: 0px;
-}
-
-.study-nav {
-  grid-area: 1 / 1 / 2 / 3;
-}
-.view-container {
-  grid-area: 2 / 1 / 3 / 2;
-}
-.chat-container {
-  grid-area: 2 / 2 / 3 / 3;
-} */
-
 .container {
   display: grid;
   grid-template-columns: 0.5fr 1.5fr 1fr;
