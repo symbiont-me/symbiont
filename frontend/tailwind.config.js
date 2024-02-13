@@ -59,6 +59,7 @@ module.exports = {
           chatMessageUser: "#4AC97E",
           chatMessageAi: "#686B6E",
           textUnSelected: "#9B9C9E",
+          foreground: "#252525",
           800: "#1A1D21",
           900: "#0D0F10",
         },
