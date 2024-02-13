@@ -2,9 +2,11 @@ import "@/components/LeftSideBar/leftSideBar.css";
 import OverLayGradient from "@/components/ui/OverLayGradient";
 const LeftSideBarMain = () => {
   return (
-    <div className="left-sidebar-container h-screen bg-symbiont-900 m-2 rounded-2xl ">
+    <div className="left-sidebar-container h-screen bg-symbiont-foreground m-2 rounded-2xl ">
       <div className="mt-10 logo border-b-4 border-symbiont-800 flex flex-col items-center">
-        <div className="h-10 w-10 rounded-full bg-symbiont-chatMessageUser"></div>
+        <p className="text-xs uppercase font-semibold  tracking-widest">
+          Symbiont
+        </p>
       </div>
       <div className="navigation border-b-4 border-symbiont-800 flex">
         <div className="flex flex-col p-6">

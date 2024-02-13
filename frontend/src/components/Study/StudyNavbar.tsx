@@ -1,6 +1,7 @@
 import { ViewSelected } from "@/const";
 import StudyInfo from "./StudyInfo";
-
+import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
 type NavigationProps = {
   studyId: string;
   setViewSelected: (view: ViewSelected) => void;
@@ -10,7 +11,7 @@ const Navigation = ({ setViewSelected, studyId }: NavigationProps) => {
   return (
     <>
       <StudyInfo studyId={studyId} />
-      <nav className="flex justify-between items-center p-4 bg-symbiont-900 rounded-2xl mb-2 mt-2">
+      <nav className="flex justify-between items-center p-4 bg-symbiont-foreground rounded-2xl mb-2 mt-2">
         <div className="flex gap-4">
           {Object.values(ViewSelected).map((view) => (
             <button key={view} onClick={() => setViewSelected(view)}>

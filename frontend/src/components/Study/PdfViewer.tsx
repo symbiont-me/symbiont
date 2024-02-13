@@ -82,7 +82,7 @@ const PdfViewer = ({ studyId }: PDFViewerProps) => {
       <div className="flex flex-row items-center justify-center">
         <button
           onClick={goToPreviousPdf}
-          className="p-4 text-xs rounded-xl m-2 w-20 border text-symbiont-textUnSelected bg-symbiont-800"
+          className="p-4 text-xs rounded-xl m-2 w-20 border text-symbiont-textUnSelected bg-symbiont-foreground"
         >
           Previous
         </button>

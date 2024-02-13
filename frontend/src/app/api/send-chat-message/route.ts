@@ -49,6 +49,13 @@ export async function POST(req: NextRequest) {
     // get context from pinecone
     const context = await getContext(lastMessage, fileKey);
     console.log("context", context);
+    // TODO if context is empty, return a message to the user
+    // if (!context) {
+    //   return new StreamingTextResponse(
+    //     OpenAIStream.fromText("No related information in the document found")
+    //   );
+    // }
+
     // create base prompt
     const prompt = {
       role: ChatCompletionRequestMessageRoleEnum.System,
@@ -79,7 +86,6 @@ export async function POST(req: NextRequest) {
     });
     const stream = OpenAIStream(response, {
       onStart: async () => {
-        console.log("stream started", lastMessage);
         // save user message into db
         await db.insert(_messages).values({
           chatId,
@@ -88,7 +94,6 @@ export async function POST(req: NextRequest) {
         });
       },
       onCompletion: async (completion) => {
-        console.log("stream completed", completion);
         // save ai message into db
         await db.insert(_messages).values({
           chatId,

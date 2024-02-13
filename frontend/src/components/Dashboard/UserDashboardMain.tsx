@@ -39,19 +39,19 @@ const UserDashboard = ({ userId }: UserDashboardProps) => {
       {/* Navbar */}
       <div className="navbar">
         {/* TODO create Navbar component */}
-        <div className="h-16 bg-symbiont-900 rounded-b-2xl w-full m-2 mt-2"></div>
+        <div className="h-16 bg-symbiont-foreground rounded-b-2xl w-full m-2 mt-2"></div>
       </div>
 
       {/* Center Dashboard */}
-      <div className="dashboard">
+      <div className="dashboard flex flex-row">
+        <div>
+          <NewStudyCard />
+        </div>
+
         <div className="w-full h-full flex flex-row">
           {projects.map((project) => (
             <StudyCard key={project.id} study={project} />
           ))}
-        </div>
-
-        <div className="border p-4">
-          <NewStudyCard />
         </div>
       </div>
     </div>

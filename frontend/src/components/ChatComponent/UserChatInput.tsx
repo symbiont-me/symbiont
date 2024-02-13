@@ -21,7 +21,7 @@ const UserChatInput = ({
           value={input}
           onChange={handleInputChange}
           placeholder="Ask any question..."
-          className="w-full h-10"
+          className="w-full h-10 px-4 rounded-xl bg-slate-800"
         />
 
         <Button className="ml-2 rounded-xl bg-slate-800">

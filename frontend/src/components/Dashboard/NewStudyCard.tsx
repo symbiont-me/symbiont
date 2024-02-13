@@ -17,7 +17,7 @@ const NewStudyCard = () => {
   }
 
   const userId = authContext?.user?.uid;
-// TODO remove this check 
+  // TODO remove this check
   if (typeof userId === "undefined") {
     return null;
   }
@@ -44,7 +44,7 @@ const NewStudyCard = () => {
   };
 
   return (
-    <div>
+    <div className="  h-60 w-60 mt-2 rounded-xl flex flex-col items-center justify-center border">
       {/* Open the modal using document.getElementById('ID').showModal() method */}
       <button
         className="btn"
@@ -55,8 +55,9 @@ const NewStudyCard = () => {
           }
         }}
       >
-        New Project
+        +
       </button>
+      <p className="p-4">Create New Study</p>
 
       <dialog id="my_modal_2" className="modal">
         <div className="modal-box">

@@ -21,7 +21,7 @@ import { UserAuth } from "@/app/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { User } from "firebase/auth";
 import LeftSideBarMain from "@/components/LeftSideBar/LeftSideBarMain";
-import "../../../app/styles.css";
+import "@/app/studies/studyStyles.css";
 // an object that maps each ViewSelected enum value to a corresponding React component.
 // this allows the application to dynamically render different components based on the current view selection
 const viewComponents: Record<
@@ -65,6 +65,7 @@ export default function StudyPage() {
   // TODO Test and remove the following unused state variables
   const [textWriterValue, setTextWriterValue] = useState<string>("");
   const [video_url, setVideoUrl] = useState<string | undefined>(undefined);
+  const [currentStudy, setCurrentStudy] = useState<any>(null); // TODO set to type study
   const path = usePathname();
   const studyId = path.split("/")[2];
   // const chatId = path.split("/")[3]; // NOTE this method can avoid a db call
@@ -80,6 +81,26 @@ export default function StudyPage() {
       return response.data.chat_id;
     },
   });
+
+  // TODO make this a GET request
+  const fetchStudyQuery = useQuery({
+    queryKey: ["get-study", studyId],
+    queryFn: async () => {
+      const response = await axios.post(`/api/get-study`, {
+        studyId: studyId,
+      });
+      return response.data;
+    },
+  });
+
+  useEffect(() => {
+    if (fetchStudyQuery.data) {
+      setCurrentStudy(fetchStudyQuery.data);
+      // setTextWriterValue(fetchStudyQuery.data.text);
+      // setVideoUrl(fetchStudyQuery.data.video_url);
+      console.log("fetchStudyQuery.data", currentStudy);
+    }
+  }, [fetchStudyQuery.data]);
 
   useEffect(() => {
     if (fetchLinkedChatQuery.data) {
@@ -99,19 +120,27 @@ export default function StudyPage() {
   const SelectedViewComponent = viewComponents[viewSelected] || null;
 
   return (
-    <div className="h-screen">
-      <div className="study-container h-full w-full">
-        <div className="left-sidebar">
-          <LeftSideBarMain />
-        </div>
-        <div className="study-nav">
-          <StudyNavbar setViewSelected={setViewSelected} studyId={studyId} />
-        </div>
-        <div className="view-container">
-          {SelectedViewComponent && <SelectedViewComponent studyId={studyId} />}
-        </div>
-        <div className="chat-container">
-          <ChatComponent chatId={chatId} />
+    <div className="parent h-screen overflow-hidden">
+      <div className="div1">
+        <LeftSideBarMain />
+      </div>
+      <div className="div2">
+        <div className="viewer-container">
+          <div className="header">
+            <StudyNavbar setViewSelected={setViewSelected} studyId={studyId} />
+          </div>
+          <div className="viewer">
+            {SelectedViewComponent && (
+              <SelectedViewComponent
+                textWriterValue={textWriterValue}
+                video_url={video_url}
+                studyId={studyId}
+              />
+            )}
+          </div>
+          <div className="chat flex flex-col">
+            <ChatComponent chatId={chatId} studyId={studyId} />
+          </div>
         </div>
       </div>
     </div>

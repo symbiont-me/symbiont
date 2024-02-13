@@ -6,21 +6,18 @@ import { useState, useEffect } from "react";
 import { TextModels } from "@/const";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { usePathname } from "next/navigation";
 import { StudyResource } from "@/types";
 import ResourceSwitcher from "@/components/ResourceSwitcher";
 import "./chats.css";
 
 type ChatComponentProps = {
   chatId: number | undefined;
+  studyId: string;
 };
 
 // TODO model selection and api key input should be on the Dashboard
 // TODO Fix isLoading state in the message list
-const ChatComponent = ({ chatId }: ChatComponentProps) => {
-  const path = usePathname();
-  const studyId = path.split("/")[2];
-
+const ChatComponent = ({ chatId, studyId }: ChatComponentProps) => {
   const getMessagesQuery = useQuery({
     queryKey: ["chat-messages", chatId],
     queryFn: async () => {
@@ -53,26 +50,47 @@ const ChatComponent = ({ chatId }: ChatComponentProps) => {
   }, [messages, selectedResource]);
 
   return (
-    <div className="h-80">
-      <div className="">
-        <ResourceSwitcher
-          studyId={studyId}
-          onResourceChange={setSelectedResource}
-        />
-      </div>
-      <div className="" id="message-container">
-        <div className="overflow-auto p-4 w-full" style={{ height: "700px" }}>
+    <>
+      <div className="h-screen p-4">
+        <div className="">
+          <ResourceSwitcher
+            studyId={studyId}
+            onResourceChange={setSelectedResource}
+          />
+        </div>
+        <div
+          className=" h-80 flex-1 overflow-scroll p-4"
+          style={{ height: "500px" }}
+        >
           <MessageList messages={messages} />
         </div>
+        <div className=" h-20 flex flex-col justify-center items-center ">
+          <UserChatInput
+            input={input}
+            handleInputChange={handleInputChange}
+            handleSubmit={handleSubmit}
+          />
+        </div>
       </div>
-      <div className="chat-input h-20 flex flex-col justify-center pr-20 pl-20">
-        <UserChatInput
-          input={input}
-          handleInputChange={handleInputChange}
-          handleSubmit={handleSubmit}
-        />
-      </div>
-    </div>
+    </>
+    //   <div className="">
+    //     <ResourceSwitcher
+    //       studyId={studyId}
+    //       onResourceChange={setSelectedResource}
+    //     />
+    //   </div>
+    //   <div className="" id="message-container">
+    //     <div className="overflow-auto p-4 w-full" style={{ height: "700px" }}>
+    //       <MessageList messages={messages} />
+    //     </div>
+    //   </div>
+    //   <div className="chat-input h-20 flex flex-col justify-center pr-20 pl-20">
+    //     <UserChatInput
+    //       input={input}
+    //       handleInputChange={handleInputChange}
+    //       handleSubmit={handleSubmit}
+    //     />
+    // </div>
   );
 };
 
