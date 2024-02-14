@@ -2,7 +2,7 @@ import { Study } from "@/types";
 
 const StudyInfo = ({ study }: { study: Study }) => {
   const placeholder =
-    "https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=2873&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+    "https://images.unsplash.com/photo-1455390582262-044cdead277a";
 
   console.log(study);
   return (
@@ -14,7 +14,7 @@ const StudyInfo = ({ study }: { study: Study }) => {
       <div className="flex flex-col mr-8">
         <img
           className="h-10 w-10 bg-symbiont-chatMessageUser rounded-full"
-          src={study.image ? study.image : placeholder}
+          src={study?.image ? study.image : placeholder}
         />
       </div>
     </div>
