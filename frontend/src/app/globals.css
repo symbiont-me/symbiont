@@ -28,7 +28,7 @@ body {
   background-color: #131619;
 }
 
-.selected_gradient {
+.selected-gradient {
   background: rgb(74, 201, 126);
   background: linear-gradient(
     162deg,
