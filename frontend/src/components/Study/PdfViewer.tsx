@@ -6,7 +6,7 @@ import "../ui/uiStyles.css";
 type PDFViewerProps = {
   studyId: string;
 };
-// TODO display the PDF name
+
 const PdfViewer = ({ studyId }: PDFViewerProps) => {
   const [pdfs, setPdfs] = useState<StudyResource[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -79,26 +79,30 @@ const PdfViewer = ({ studyId }: PDFViewerProps) => {
 
   return (
     <div className="flex flex-col h-viewerheight">
-      <div className="flex flex-row items-center justify-center">
+      {pdfUrl && (
+        <>
+          <h3 className="text-xs p-2">{pdfs[currentIndex].name}</h3>
+          <iframe
+            src={pdfUrl}
+            className="w-full h-full"
+            style={{ filter: "brightness(80%)" }}
+          ></iframe>
+        </>
+      )}
+      <div className="flex flex-row items-center justify-center mb-6">
         <button
           onClick={goToPreviousPdf}
-          className="p-4 text-xs rounded-xl m-2 w-20 border text-symbiont-textUnSelected bg-symbiont-foreground"
+          className="p-4 text-xs rounded-xl m-2 w-20 text-symbiont-textUnSelected  "
         >
           Previous
         </button>
         <button
           onClick={goToNextPdf}
-          className=" p-4 text-xs rounded-xl m-2 w-20 border text-symbiont-textUnSelected"
+          className=" p-4 text-xs rounded-xl m-2 w-20 text-symbiont-textUnSelected"
         >
           Next
         </button>
       </div>
-      {pdfUrl && (
-        <>
-          <h3 className="text-xs p-2">{pdfs[currentIndex].name}</h3>
-          <iframe src={pdfUrl} className="w-full h-full"></iframe>
-        </>
-      )}
     </div>
   );
 };
