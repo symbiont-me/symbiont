@@ -29,24 +29,18 @@ const UserDashboard = ({ userId }: UserDashboardProps) => {
   }, [userId]);
 
   return (
-    <div className="dashboard-container">
+    <div className="main-container">
       {/* Left Sidebar */}
-      <div className="left-sidebar">
+      <div className="sidebar">
         {/* TODO create Sidebar component */}
         <LeftSideBar />
       </div>
 
-      {/* Navbar */}
-      <div className="navbar">
-        {/* TODO create Navbar component */}
-        <div className="h-16 bg-symbiont-foreground rounded-b-2xl w-full m-2 mt-2"></div>
-      </div>
-
       {/* Center Dashboard */}
-      <div className="dashboard flex flex-row">
-        <div>
+      <div className="main-window flex flex-row">
+        <>
           <NewStudyCard />
-        </div>
+        </>
 
         <div className="w-full h-full flex flex-row">
           {projects.map((project) => (
