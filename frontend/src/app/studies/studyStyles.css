@@ -6,19 +6,21 @@
   grid-row-gap: 0px;
   }
   
-  .div1 { grid-area: 1 / 1 / 2 / 2; }
+  .left-sidebar { grid-area: 1 / 1 / 2 / 2; }
   .div2 { grid-area: 1 / 2 / 2 / 3; }
 
 
 
-  .viewer-container {
-    display: grid;
-    grid-template-columns: 1fr 0.5fr;
-    grid-template-rows: 0.2fr 1fr;
-    grid-column-gap: 0px;
-    grid-row-gap: 0px;
-    }
-    
-    .header { grid-area: 1 / 1 / 2 / 3; }
-    .viewer { grid-area: 2 / 1 / 4 / 2; }
-    .chat { grid-area: 2 / 2 / 4 / 4; }
+ 
+
+    .viewer-container {
+      display: grid;
+      grid-template-columns: 1fr 0.5fr;
+      grid-template-rows: 0.15fr 1fr 0.2fr;
+      grid-column-gap: 0px;
+      grid-row-gap: 0px;
+      }
+      
+      .header { grid-area: 1 / 1 / 2 / 3; }
+      .chat { grid-area: 2 / 2 / 4 / 3; }
+      .viewer { grid-area: 2 / 1 / 4 / 2; }
