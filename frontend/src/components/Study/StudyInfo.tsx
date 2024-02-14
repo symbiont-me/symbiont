@@ -1,6 +1,6 @@
 import { Study } from "@/types";
 
-const StudyInfo = (study: Study) => {
+const StudyInfo = ({ study }: { study: Study }) => {
   return (
     <div className="w-full h-20 bg-symbiont-foreground mt-2 mb-2 p-4 rounded-2xl flex flex-row justify-between">
       <div className="flex flex-col flex-start">
