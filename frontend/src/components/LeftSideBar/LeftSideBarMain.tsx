@@ -8,11 +8,15 @@ import { Study } from "@/types";
 import Link from "next/link";
 import NavItem from "./NavItem";
 import { faHouse, faBook } from "@fortawesome/free-solid-svg-icons";
-
+import { usePathname } from "next/navigation";
+import "@/app/globals.css";
 const LeftSideBarMain = () => {
   const authContext = UserAuth();
   const userId = authContext?.user?.uid;
   const [studies, setStudies] = useState<Study[]>([]);
+  const pathname = usePathname();
+  const studyId = pathname.split("/")[2];
+
   if (userId) {
     const fetchLinkedChatQuery = useQuery({
       queryKey: ["get-studies", userId],
@@ -62,9 +66,19 @@ const LeftSideBarMain = () => {
           <Link
             href={`studies/${study.id}`}
             key={study.id}
-            className="flex flex-row justify-between items-center p-4 cursor-pointer bg-symbiont-foreground hover:bg-symbiont-800 rounded-2xl m-2"
+            className="flex flex-col items-start p-4 cursor-pointer bg-symbiont-foreground hover:bg-symbiont-800 rounded-2xl m-2"
           >
-            <p className="text-xs ml-2 capitalize">{study.name}</p>
+            {study.id?.toString() === studyId ? (
+              <div>
+                <p className="text-xs ml-2 capitalize">{study.name}</p>
+                <div
+                  className="h-2 w-full selected-gradient rounded-full"
+                  style={{ margin: "5px" }}
+                ></div>
+              </div>
+            ) : (
+              <p className="text-xs ml-2 capitalize">{study.name}</p>
+            )}
           </Link>
         ))}
       </div>
