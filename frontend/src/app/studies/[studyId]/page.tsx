@@ -22,6 +22,7 @@ import { useRouter } from "next/navigation";
 import { User } from "firebase/auth";
 import LeftSideBarMain from "@/components/LeftSideBar/LeftSideBarMain";
 import "@/app/studies/studyStyles.css";
+import { Study } from "@/types";
 // an object that maps each ViewSelected enum value to a corresponding React component.
 // this allows the application to dynamically render different components based on the current view selection
 const viewComponents: Record<
@@ -30,6 +31,7 @@ const viewComponents: Record<
     textWriterValue: string;
     video_url: string | undefined;
     studyId: string;
+    study: Study;
   }>
 > = {
   [ViewSelected.Writer]: TextEditor,
@@ -95,10 +97,9 @@ export default function StudyPage() {
 
   useEffect(() => {
     if (fetchStudyQuery.data) {
-      setCurrentStudy(fetchStudyQuery.data);
+      setCurrentStudy(fetchStudyQuery.data.study[0]);
       // setTextWriterValue(fetchStudyQuery.data.text);
       // setVideoUrl(fetchStudyQuery.data.video_url);
-      console.log("fetchStudyQuery.data", currentStudy);
     }
   }, [fetchStudyQuery.data]);
 
@@ -127,7 +128,10 @@ export default function StudyPage() {
       <div className="div2">
         <div className="viewer-container">
           <div className="header">
-            <StudyNavbar setViewSelected={setViewSelected} studyId={studyId} />
+            <StudyNavbar
+              setViewSelected={setViewSelected}
+              study={currentStudy}
+            />
           </div>
           <div className="viewer">
             {SelectedViewComponent && (
@@ -135,6 +139,7 @@ export default function StudyPage() {
                 textWriterValue={textWriterValue}
                 video_url={video_url}
                 studyId={studyId}
+                study={currentStudy}
               />
             )}
           </div>
