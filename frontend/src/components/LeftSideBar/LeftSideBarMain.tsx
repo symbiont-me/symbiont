@@ -59,17 +59,13 @@ const LeftSideBarMain = () => {
           Projects
         </h3>
         {studies.map((study) => (
-          <div
+          <Link
+            href={`studies/${study.id}`}
             key={study.id}
             className="flex flex-row justify-between items-center p-4 cursor-pointer bg-symbiont-foreground hover:bg-symbiont-800 rounded-2xl m-2"
           >
-            <Link
-              href={`studies/${study.id}`}
-              className="text-xs ml-2 capitalize"
-            >
-              {study.name}
-            </Link>
-          </div>
+            <p className="text-xs ml-2 capitalize">{study.name}</p>
+          </Link>
         ))}
       </div>
       <div className="settings p-2 flex flex-col flex-end">
