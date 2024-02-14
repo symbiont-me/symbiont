@@ -49,8 +49,8 @@ const LeftSideBarMain = () => {
       </div>
       <div className="navigation border-b-4 border-symbiont-800 flex">
         <div className="flex flex-col p-6">
-          <NavItem icon={faHouse} text="Home" iconColorClass="#363A3D" />
-          <NavItem icon={faBook} text="Library" iconColorClass="#363A3D" />
+          <NavItem icon={faHouse} text="Home" iconColor="#46CDAF" />
+          <NavItem icon={faBook} text="Library" iconColor="#363A3D" />
         </div>
       </div>
 
@@ -61,7 +61,7 @@ const LeftSideBarMain = () => {
         {studies.map((study) => (
           <div
             key={study.id}
-            className="flex flex-row justify-between items-center p-4 cursor-pointer"
+            className="flex flex-row justify-between items-center p-4 cursor-pointer bg-symbiont-foreground hover:bg-symbiont-800 rounded-2xl m-2"
           >
             <Link
               href={`studies/${study.id}`}
