@@ -11,7 +11,7 @@ const StudyInfo = ({ study }: { study: Study }) => {
   return (
     <div className="w-full h-20 bg-symbiont-foreground mt-2 mb-2 p-2 pl-4  rounded-2xl flex flex-row justify-between">
       <div className="flex flex-col items-start space-y-2">
-        <h1 className="text-sm">{study?.name}</h1>
+        <h1 className="text-sm font-bold">{study?.name}</h1>
         <p className="text-symbiont-textUnSelected text-xs ">Description</p>
         <div className="flex flex-row justify-center items-center">
           <FontAwesomeIcon icon={faFloppyDisk} size="xs" className="mr-4" />
