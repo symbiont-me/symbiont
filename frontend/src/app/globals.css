@@ -23,11 +23,12 @@
 @tailwind utilities;
 
 body {
-  padding: 2px;
-  margin: 0;
+  /* padding: 2px; */
+  margin: 2px;
   background-color: #131619;
 }
 
+/* gradient for selected view */
 .selected-gradient {
   background: rgb(74, 201, 126);
   background: linear-gradient(
