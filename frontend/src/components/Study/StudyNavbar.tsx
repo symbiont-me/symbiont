@@ -8,8 +8,6 @@ type NavigationProps = {
   study: Study;
 };
 
-// TODO fix style of the selected view text. It sould not push the text down
-
 const Navigation = ({ setViewSelected, study }: NavigationProps) => {
   const [selectedView, setSelectedView] = useState<ViewSelected | undefined>(
     ViewSelected.Writer
@@ -24,17 +22,18 @@ const Navigation = ({ setViewSelected, study }: NavigationProps) => {
     <>
       <StudyInfo study={study} />
       <nav className="flex justify-between items-center p-4 bg-symbiont-foreground rounded-2xl mb-2 mt-2">
-        <div className="flex gap-4">
+        <div className="flex gap-4 ">
           {Object.values(ViewSelected).map((view) => (
             <button
               key={view}
               onClick={() => handleViewSelection(view)}
-              className="capitalize text-xs"
+              className="capitalize text-xs h-full"
             >
               {selectedView === view ? (
                 <div className="flex flex-col items-center justify-center">
-                  <div className="w-full h-2 selected-gradient rounded-full"></div>
                   <p> {view} </p>
+
+                  <div className="w-full h-2 selected-gradient rounded-full"></div>
                 </div>
               ) : (
                 <div>{view}</div>
