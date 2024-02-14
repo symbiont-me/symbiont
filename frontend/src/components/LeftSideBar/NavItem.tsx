@@ -3,11 +3,11 @@ import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import Link from "next/link";
 interface NavItemProps {
   icon: IconDefinition;
-  iconColorClass: string;
+  iconColor: string;
   text: string;
 }
 
-const NavItem = ({ icon, iconColorClass, text }: NavItemProps) => {
+const NavItem = ({ icon, iconColor, text }: NavItemProps) => {
   const navLink = text === "Home" ? "/" : "/library";
   return (
     <Link
@@ -16,7 +16,8 @@ const NavItem = ({ icon, iconColorClass, text }: NavItemProps) => {
     >
       <FontAwesomeIcon
         icon={icon}
-        className={`h-4 w-4 rounded-full ${iconColorClass} mr-2`}
+        color={iconColor}
+        className={`h-4 w-4 rounded-full mr-2`}
       />
       <p className="text-sm">{text}</p>
     </Link>
