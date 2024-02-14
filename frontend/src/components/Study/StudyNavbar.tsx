@@ -8,7 +8,7 @@ type NavigationProps = {
   study: Study;
 };
 
-// TODO fix colour and change style of the selected view text
+// TODO fix style of the selected view text. It sould not push the text down
 
 const Navigation = ({ setViewSelected, study }: NavigationProps) => {
   const [selectedView, setSelectedView] = useState<ViewSelected | undefined>(
@@ -33,7 +33,7 @@ const Navigation = ({ setViewSelected, study }: NavigationProps) => {
             >
               {selectedView === view ? (
                 <div className="flex flex-col items-center justify-center">
-                  <div className="w-full h-2 bg-symbiont-chatMessageUser rounded-full"></div>
+                  <div className="w-full h-2 selected-gradient rounded-full"></div>
                   <p> {view} </p>
                 </div>
               ) : (
