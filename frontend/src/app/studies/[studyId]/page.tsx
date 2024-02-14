@@ -23,6 +23,7 @@ import { User } from "firebase/auth";
 import LeftSideBarMain from "@/components/LeftSideBar/LeftSideBarMain";
 import "@/app/studies/studyStyles.css";
 import { Study } from "@/types";
+import "@/app/styles.css";
 // an object that maps each ViewSelected enum value to a corresponding React component.
 // this allows the application to dynamically render different components based on the current view selection
 const viewComponents: Record<
@@ -121,11 +122,11 @@ export default function StudyPage() {
   const SelectedViewComponent = viewComponents[viewSelected] || null;
 
   return (
-    <div className="parent h-screen overflow-hidden">
-      <div className="div1">
+    <div className="main-container h-screen overflow-hidden">
+      <div className="sidebar">
         <LeftSideBarMain />
       </div>
-      <div className="div2">
+      <div className="main-window">
         <div className="viewer-container">
           <div className="header">
             <StudyNavbar
