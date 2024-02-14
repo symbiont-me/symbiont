@@ -26,5 +26,13 @@ body {
   padding: 2px;
   margin: 0;
   background-color: #131619;
-  
+}
+
+.selected_gradient {
+  background: rgb(74, 201, 126);
+  background: linear-gradient(
+    162deg,
+    rgba(74, 201, 126, 1) 0%,
+    rgba(77, 98, 229, 1) 100%
+  );
 }
