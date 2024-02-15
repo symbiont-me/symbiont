@@ -4,7 +4,7 @@ import "./studyStyles.css";
 
 const StudyCard = ({ study }: { study: Study }) => {
   return (
-    <div className="container bg-symbiont-900 w-60 m-4 h-60 rounded-xl p-0">
+    <div className="container bg-symbiont-background w-60 m-4 h-60 rounded-xl p-0">
       <div className="card-title">
         <Link href={`studies/${study.id}`} className="">
           <h1 className="text-sm p-4">{study.name}</h1>
