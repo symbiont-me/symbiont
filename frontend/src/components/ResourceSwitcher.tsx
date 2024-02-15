@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { StudyResource } from "@/types";
+import { truncateFileName } from "@/lib/utils";
 
 type ResourceSwitcherProps = {
   studyId: string;
@@ -49,14 +50,14 @@ const ResourceSwitcher = ({
 
   return (
     <div>
-      <h2 className="text-xs mb-4">Resource Switcher</h2>
+      <h2 className="text-xs mb-4 text-center font-bold">Context Switcher</h2>
       <select
         className="select select-bordered w-full max-w-xs"
         onChange={handleResourceChange}
       >
         {resources.map((resource) => (
           <option key={resource.identifier} value={resource.identifier}>
-            {resource.name}
+            {truncateFileName(resource.name)}
           </option>
         ))}
       </select>
