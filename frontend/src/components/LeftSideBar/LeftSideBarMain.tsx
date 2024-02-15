@@ -46,12 +46,18 @@ const LeftSideBarMain = () => {
 
   return (
     <div className="left-sidebar-container h-screen bg-symbiont-foreground m-2 rounded-2xl ">
-      <div className="mt-10 logo border-b-4 border-symbiont-800 flex flex-col items-center">
+      <div
+        className="mt-10 logo flex flex-col items-center"
+        style={{ borderBottom: "2px solid #292927" }}
+      >
         <p className="text-xs uppercase font-semibold  tracking-widest">
           Symbiont
         </p>
       </div>
-      <div className="navigation border-b-4 border-symbiont-800 flex">
+      <div
+        className="navigation flex"
+        style={{ borderBottom: "2px solid #292927" }}
+      >
         <div className="flex flex-col p-6">
           <NavItem icon={faHouse} text="Home" iconColor="#46CDAF" />
           <NavItem icon={faBook} text="Library" iconColor="#363A3D" />
@@ -82,7 +88,7 @@ const LeftSideBarMain = () => {
           </Link>
         ))}
       </div>
-      <div className="settings p-2 flex flex-col flex-end">
+      <div className="settings p-2 flex flex-col justify-end">
         <OverLayGradient />
       </div>
     </div>
