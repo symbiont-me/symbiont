@@ -14,8 +14,7 @@ const StudyInfo = ({ study }: { study: Study }) => {
         <h1 className="text-sm font-bold">{study?.name}</h1>
         <p className="text-symbiont-textUnSelected text-xs ">Description</p>
         <div className="flex flex-row justify-center items-center">
-          <FontAwesomeIcon icon={faFloppyDisk} size="xs" className="mr-4" />
-          <p className="text-xs">18:32</p>
+          <p className="text-2xs pr-2"> Last Saved: 18:32</p>
         </div>
       </div>
       <div className="flex flex-col mr-8 items-center justify-center">
