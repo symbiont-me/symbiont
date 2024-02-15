@@ -23,11 +23,8 @@ export function removeNonAscii(inputString: string) {
   return inputString.replace(/[^\x00-\x7F]+/g, "").replace(/\s+/g, "-");
 }
 
-// export async function deleteFileFromFolder(fileName: string) {
-//   try {
-//     await fs.unlink(fileName);
-//     console.log(`Deleted file: ${fileName}`);
-//   } catch (error) {
-//     console.error(`Error deleting file ${fileName}:`, error);
-//   }
-// }
+export function truncateFileName(fileName: string) {
+  return fileName.length > 20
+    ? fileName.substring(0, 20) + "..." + fileName.slice(-10)
+    : fileName;
+}
