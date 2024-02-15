@@ -21,9 +21,10 @@ import { UserAuth } from "@/app/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { User } from "firebase/auth";
 import LeftSideBarMain from "@/components/LeftSideBar/LeftSideBarMain";
-import "@/app/studies/studyStyles.css";
 import { Study } from "@/types";
-import "@/app/styles.css";
+import "@/app/studies/studyStyles.css";
+import "@/app/globals.css";
+
 // an object that maps each ViewSelected enum value to a corresponding React component.
 // this allows the application to dynamically render different components based on the current view selection
 const viewComponents: Record<
@@ -126,7 +127,7 @@ export default function StudyPage() {
   const SelectedViewComponent = viewComponents[viewSelected] || null;
 
   return (
-    <div className="main-container h-screen overflow-hidden">
+    <div className="layout">
       <div className="sidebar">
         <LeftSideBarMain />
       </div>
@@ -148,7 +149,7 @@ export default function StudyPage() {
               />
             )}
           </div>
-          <div className="chat flex flex-col">
+          <div className="chat flex flex-col h-screen">
             <ChatComponent chatId={chatId} studyId={studyId} />
           </div>
         </div>
