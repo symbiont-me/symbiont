@@ -29,7 +29,7 @@ const UserDashboard = ({ userId }: UserDashboardProps) => {
   }, [userId]);
 
   return (
-    <div className="main-container">
+    <div className="layout">
       {/* Left Sidebar */}
       <div className="sidebar">
         {/* TODO create Sidebar component */}
