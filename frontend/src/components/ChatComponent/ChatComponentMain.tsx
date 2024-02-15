@@ -51,46 +51,26 @@ const ChatComponent = ({ chatId, studyId }: ChatComponentProps) => {
 
   return (
     <>
-      <div className="h-screen p-4">
-        <div className="">
-          <ResourceSwitcher
-            studyId={studyId}
-            onResourceChange={setSelectedResource}
-          />
-        </div>
-        <div
-          className=" h-80 flex-1 overflow-scroll p-4"
-          style={{ height: "500px" }}
-        >
-          <MessageList messages={messages} />
-        </div>
-        <div className=" h-20 flex flex-col justify-center items-center ">
-          <UserChatInput
-            input={input}
-            handleInputChange={handleInputChange}
-            handleSubmit={handleSubmit}
-          />
-        </div>
+      <div className="p-4">
+        <ResourceSwitcher
+          studyId={studyId}
+          onResourceChange={setSelectedResource}
+        />
+      </div>
+      <div
+        className=" h-80 flex-1 overflow-scroll p-4"
+        style={{ height: "500px" }}
+      >
+        <MessageList messages={messages} />
+      </div>
+      <div className=" h-20 flex flex-col justify-center items-center ">
+        <UserChatInput
+          input={input}
+          handleInputChange={handleInputChange}
+          handleSubmit={handleSubmit}
+        />
       </div>
     </>
-    //   <div className="">
-    //     <ResourceSwitcher
-    //       studyId={studyId}
-    //       onResourceChange={setSelectedResource}
-    //     />
-    //   </div>
-    //   <div className="" id="message-container">
-    //     <div className="overflow-auto p-4 w-full" style={{ height: "700px" }}>
-    //       <MessageList messages={messages} />
-    //     </div>
-    //   </div>
-    //   <div className="chat-input h-20 flex flex-col justify-center pr-20 pl-20">
-    //     <UserChatInput
-    //       input={input}
-    //       handleInputChange={handleInputChange}
-    //       handleSubmit={handleSubmit}
-    //     />
-    // </div>
   );
 };
 
