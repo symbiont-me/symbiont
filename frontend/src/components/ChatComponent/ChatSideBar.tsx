@@ -11,7 +11,7 @@ type Props = {
 
 const ChatSidebar = ({ chats, chatId }: Props) => {
   return (
-    <div className="w-full h-screen p-4 text-gray-200 bg-gray-900">
+    <div className="w-full h-screen p-4 text-gray-200 bg-symbiont-background">
       <Link href="/">
         <Button>
           <PlusCircle className="mr-2 w-4 h-4" />
@@ -24,7 +24,9 @@ const ChatSidebar = ({ chats, chatId }: Props) => {
             <Link
               href={`/chat/${chat.id}`}
               key={chat.id}
-              className={`block p-2 my-2 rounded-xl ${chat.id === parseInt(chatId) ? "bg-gray-700" : ""}`}
+              className={`block p-2 my-2 rounded-xl ${
+                chat.id === parseInt(chatId) ? "bg-gray-700" : ""
+              }`}
             >
               {chat.pdfName}
             </Link>
