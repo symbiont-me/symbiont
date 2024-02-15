@@ -3,6 +3,8 @@ import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { StudyResource } from "../../types";
 import "../ui/uiStyles.css";
+import { truncateFileName } from "../../lib/utils";
+
 type PDFViewerProps = {
   studyId: string;
 };
@@ -81,7 +83,9 @@ const PdfViewer = ({ studyId }: PDFViewerProps) => {
     <div className="flex flex-col h-viewerheight">
       {pdfUrl && (
         <>
-          <h3 className="text-xs p-2">{pdfs[currentIndex].name}</h3>
+          <h3 className="text-xs p-2 text-center">
+            {truncateFileName(pdfs[currentIndex].name)}
+          </h3>
           <iframe
             src={pdfUrl}
             className="w-full h-full"
