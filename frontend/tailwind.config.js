@@ -17,6 +17,7 @@ module.exports = {
       },
     },
     extend: {
+      // custom height
       height: {
         viewerheight: "calc(100vh - 150px)",
         chatHeight: "calc(100vh - 250px)",
@@ -56,12 +57,12 @@ module.exports = {
           foreground: "hsl(var(--card-foreground))",
         },
         symbiont: {
-          chatMessageUser: "#4AC97E",
+          chatMessageUser: "#46CDAF",
           chatMessageAi: "#686B6E",
           textUnSelected: "#9B9C9E",
-          foreground: "#0D0F10",
-          800: "#1A1D21",
-          900: "#0D0F10",
+          // foreground: "#0D0F10",
+          foreground: "#1F1F1D",
+          background: "#292927",
         },
       },
       borderRadius: {
@@ -82,6 +83,10 @@ module.exports = {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+      },
+      fontSize: {
+        "2xs": "0.625rem",
+        "3xs": "0.5rem",
       },
     },
   },
