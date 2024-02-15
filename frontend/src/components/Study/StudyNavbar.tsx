@@ -3,6 +3,9 @@ import StudyInfo from "./StudyInfo";
 import { Study } from "@/types";
 import { useState } from "react";
 import "@/app/globals.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSave, faShare } from "@fortawesome/free-solid-svg-icons";
+
 type NavigationProps = {
   setViewSelected: (view: ViewSelected) => void;
   study: Study;
@@ -40,6 +43,16 @@ const Navigation = ({ setViewSelected, study }: NavigationProps) => {
               )}
             </button>
           ))}
+        </div>
+        <div className="flex gap-4  mr-6">
+          <div className="flex flex-row">
+            <button className="text-xs">
+              <FontAwesomeIcon icon={faSave} />
+            </button>
+          </div>
+          <button className="text-xs">
+            <FontAwesomeIcon icon={faShare} />
+          </button>
         </div>
       </nav>
     </>
