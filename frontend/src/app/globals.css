@@ -18,6 +18,10 @@
     @apply list-disc;
     @apply ml-2;
   }
+  li {
+    @apply mb-2;
+    @apply mt-2;
+  }
 }
 @tailwind components;
 @tailwind utilities;
@@ -25,7 +29,8 @@
 body {
   /* padding: 2px; */
   margin: 2px;
-  background-color: #131619;
+  /* background-color: #131619; */
+  background-color: #292927;
 }
 
 /* gradient for selected view */
@@ -36,4 +41,23 @@ body {
     rgba(74, 201, 126, 1) 0%,
     rgba(77, 98, 229, 1) 100%
   );
+}
+
+/* Main Grid Layout */
+.layout {
+  width: 1366px;
+  height: px;
+
+  display: grid;
+  grid:
+    "sidebar main-window" 1fr
+    / 312px 1fr;
+  gap: 8px;
+}
+
+.sidebar {
+  grid-area: sidebar;
+}
+.main-window {
+  grid-area: main-window;
 }
