@@ -4,7 +4,7 @@ import { createFileName } from "@/firebase/utils";
 
 export async function uploadToFirebaseStorage(
   file: File,
-): Promise<{ fileKey: string; fileName: string , downloadUrl: string}> {
+): Promise<{ fileKey: string; fileName: string; downloadUrl: string }> {
   // create root reference
   const storage = getStorage();
   if (!(file instanceof File)) {
@@ -15,7 +15,11 @@ export async function uploadToFirebaseStorage(
 
     const res = await uploadBytes(fileRef, file);
     const downloadLink = await getUrl(fileRef.fullPath);
-    return { fileKey: fileRef.fullPath, fileName: fileRef.name , downloadUrl: downloadLink};
+    return {
+      fileKey: fileRef.fullPath,
+      fileName: fileRef.name,
+      downloadUrl: downloadLink,
+    };
   } catch (error) {
     console.log(error);
     throw new Error("Error uploading file to Firebase Storage");
