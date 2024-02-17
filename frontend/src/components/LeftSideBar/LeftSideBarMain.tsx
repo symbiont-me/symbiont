@@ -10,38 +10,51 @@ import NavItem from "./NavItem";
 import { faHouse, faBook } from "@fortawesome/free-solid-svg-icons";
 import { usePathname } from "next/navigation";
 import "@/app/globals.css";
+
+const fetchUserStudies = async (userToken: string) => {
+  const response = await axios.post(
+    "http://127.0.0.1:8000/get-user-studies",
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+      },
+    }
+  );
+  return response.data;
+};
+
 const LeftSideBarMain = () => {
   const authContext = UserAuth();
-  const userId = authContext?.user?.uid;
+  const userTokenPromise = authContext?.user?.getIdToken();
   const [studies, setStudies] = useState<Study[]>([]);
   const pathname = usePathname();
   const studyId = pathname.split("/")[2];
 
-  if (userId) {
-    const fetchLinkedChatQuery = useQuery({
-      queryKey: ["get-studies", userId],
-      queryFn: async () => {
-        const response = await axios.post("/api/get-studies", {
-          userId: userId,
-        });
-        return response.data;
-      },
-    });
+  // TODO remove conditional
+  // see: https://stackoverflow.com/questions/57620799/react-hook-useeffect-is-called-conditionally
+  // TODO explain this a little
+  const fetchStudiesQuery = useQuery({
+    queryKey: ["get-studies", userTokenPromise],
+    queryFn: () =>
+      userTokenPromise
+        ? userTokenPromise.then((token) => fetchUserStudies(token))
+        : Promise.reject("No token"),
+    enabled: !!userTokenPromise, // This will ensure the query does not run until the token is available
+  });
 
-    useEffect(() => {
-      if (fetchLinkedChatQuery.data) {
-        setStudies(fetchLinkedChatQuery.data);
-        console.log("fetchLinkedChatQuery.data", fetchLinkedChatQuery.data);
-      }
-    }, [fetchLinkedChatQuery.data]);
-
-    if (fetchLinkedChatQuery.isError) {
-      console.error("Error fetching chat:", fetchLinkedChatQuery.error);
+  useEffect(() => {
+    if (fetchStudiesQuery.data) {
+      setStudies(fetchStudiesQuery.data.studies);
     }
+  }, [fetchStudiesQuery.data]);
 
-    if (fetchLinkedChatQuery.isLoading) {
-      return <div>Loading...</div>;
-    }
+  if (fetchStudiesQuery.isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (fetchStudiesQuery.isError) {
+    return <div>Error: {fetchStudiesQuery.error.message}</div>;
   }
 
   return (
