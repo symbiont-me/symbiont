@@ -7,26 +7,34 @@ import { Study } from "@/types";
 import "@/app/styles.css";
 import LeftSideBar from "@/components/LeftSideBar/LeftSideBarMain";
 import StudyCard from "@/components/Study/StudyCard";
+import { UserAuth } from "@/app/context/AuthContext";
+
 // TODO use react query to fetch the projects
 // TODO add left sidebar if included in the design
-type UserDashboardProps = {
-  userId: string;
-};
 
-const UserDashboard = ({ userId }: UserDashboardProps) => {
+const UserDashboard = () => {
   const [projects, setProjects] = useState<Study[]>([]);
-
+  const authContext = UserAuth();
   useEffect(() => {
     async function fetchStudies() {
+      const userToken = await authContext?.user?.getIdToken();
       try {
-        const response = await axios.post("/api/get-studies", { userId });
-        setProjects(response.data);
+        const response = await axios.post(
+          "http://127.0.0.1:8000/get-user-studies",
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${userToken}`,
+            },
+          }
+        );
+        setProjects(response.data.studies);
       } catch (error) {
         console.error("Error fetching projects:", error);
       }
     }
     fetchStudies();
-  }, [userId]);
+  }, [authContext?.user?.getIdToken()]);
 
   return (
     <div className="layout">
