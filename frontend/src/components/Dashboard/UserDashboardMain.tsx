@@ -8,33 +8,52 @@ import "@/app/styles.css";
 import LeftSideBar from "@/components/LeftSideBar/LeftSideBarMain";
 import StudyCard from "@/components/Study/StudyCard";
 import { UserAuth } from "@/app/context/AuthContext";
+import { useQuery } from "@tanstack/react-query";
+
+const fetchUserStudies = async (userToken: string) => {
+  const response = await axios.post(
+    "http://127.0.0.1:8000/get-user-studies",
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+      },
+    }
+  );
+  return response.data;
+};
 
 // TODO use react query to fetch the projects
 // TODO add left sidebar if included in the design
-
+// TODO is it possible to use same react query for both left sidebar and user dashboard?
+// TODO use a custom hook to fetch the user studies and use it here and in the left sidebar
 const UserDashboard = () => {
-  const [projects, setProjects] = useState<Study[]>([]);
+  const [studies, setStudies] = useState<Study[]>([]);
   const authContext = UserAuth();
+  const userTokenPromise = authContext?.user?.getIdToken();
+
+  const fetchStudiesQuery = useQuery({
+    queryKey: ["get-studies", userTokenPromise],
+    queryFn: () =>
+      userTokenPromise
+        ? userTokenPromise.then((token) => fetchUserStudies(token))
+        : Promise.reject("No token"),
+    enabled: !!userTokenPromise, // This will ensure the query does not run until the token is available
+  });
+
   useEffect(() => {
-    async function fetchStudies() {
-      const userToken = await authContext?.user?.getIdToken();
-      try {
-        const response = await axios.post(
-          "http://127.0.0.1:8000/get-user-studies",
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${userToken}`,
-            },
-          }
-        );
-        setProjects(response.data.studies);
-      } catch (error) {
-        console.error("Error fetching projects:", error);
-      }
+    if (fetchStudiesQuery.data) {
+      setStudies(fetchStudiesQuery.data.studies);
     }
-    fetchStudies();
-  }, [authContext?.user?.getIdToken()]);
+  }, [fetchStudiesQuery.data]);
+
+  if (fetchStudiesQuery.isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (fetchStudiesQuery.isError) {
+    return <div>Error: {fetchStudiesQuery.error.message}</div>;
+  }
 
   return (
     <div className="layout">
@@ -51,8 +70,8 @@ const UserDashboard = () => {
         </>
 
         <div className="w-full h-full flex flex-row">
-          {projects.map((project) => (
-            <StudyCard key={project.id} study={project} />
+          {studies.map((study) => (
+            <StudyCard key={study.id} study={study} />
           ))}
         </div>
       </div>
