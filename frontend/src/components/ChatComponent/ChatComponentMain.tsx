@@ -15,16 +15,24 @@ type ChatComponentProps = {
   studyId: string;
 };
 
+type Chat = {
+  chatMessages: Message[];
+};
+
 // TODO model selection and api key input should be on the Dashboard
 // TODO Fix isLoading state in the message list
 const ChatComponent = ({ chatId, studyId }: ChatComponentProps) => {
   const getMessagesQuery = useQuery({
     queryKey: ["chat-messages", chatId],
     queryFn: async () => {
-      const response = await axios.post<Message[]>("/api/get-messages", {
-        chatId: chatId,
-      });
-      return response.data;
+      // TODO add return type
+      const response = await axios.post<Chat>(
+        `http://127.0.0.1:8000/get-chat-messages?studyId=${studyId}`
+        // {
+        //   chatId: chatId,
+        // }
+      );
+      return response.data.chatMessages;
     },
   });
 
