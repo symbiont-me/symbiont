@@ -14,22 +14,24 @@ const ResourceSwitcher = ({
   studyId,
   onResourceChange,
 }: ResourceSwitcherProps) => {
-  const [resources, setResources] = useState<StudyResource[]>([]);
+  const [resources, setResources] = useState([]);
   const resourcesQuery = useQuery({
-    queryKey: ["resources", studyId],
+    queryKey: ["resources"],
     queryFn: () =>
-      axios.post("/api/get-resources", { studyId }).then((res) => res.data),
+      axios
+        .post(`http://127.0.0.1:8000/get-resources/?studyId=${studyId}`)
+        .then((res) => res.data),
   });
 
   useEffect(() => {
-    if (resourcesQuery.data && resourcesQuery.data.length > 0) {
-      setResources(resourcesQuery.data);
-      onResourceChange(resourcesQuery.data[0]); // Set the first resource as the default
+    if (resourcesQuery.data) {
+      setResources(resourcesQuery.data.resources);
+      onResourceChange(resourcesQuery.data.resources[0]); // Set the first resource as the default
     }
   }, [resourcesQuery.data, onResourceChange]);
 
   const handleResourceChange = (
-    event: React.ChangeEvent<HTMLSelectElement>
+    event: React.ChangeEvent<HTMLSelectElement>,
   ) => {
     const resourceIdentifier = event.target.value;
     const resource = resources.find((r) => r.identifier === resourceIdentifier);
