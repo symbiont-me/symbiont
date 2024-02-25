@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { StudyResource } from "../../types";
 import "../ui/uiStyles.css";
 import { truncateFileName } from "../../lib/utils";
+import { getStorage, ref, getDownloadURL } from "firebase/storage";
 
 type PDFViewerProps = {
   studyId: string;
@@ -14,36 +15,36 @@ const PdfViewer = ({ studyId }: PDFViewerProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [pdfUrl, setPdfUrl] = useState("");
 
+  const filterPdfs = (pdfs: StudyResource[]) => {
+    return pdfs.filter((pdf) => pdf.category === "pdf");
+  };
+
   const pdfQuery = useQuery({
     queryKey: ["pdfViewer", studyId, "pdf"],
     queryFn: async () => {
-      const response = await axios.post("/api/get-pdfs", {
-        studyId: studyId,
-        category: "pdf",
-      });
+      const response = await axios.post(
+        `http://127.0.0.1:8000/get-resources/?studyId=${studyId}`
+      );
       return response.data;
     },
   });
 
   useEffect(() => {
     if (pdfQuery.data) {
-      setPdfs(pdfQuery.data);
+      setPdfs(pdfQuery.data.resources);
     }
   }, [pdfQuery.data]);
 
   useEffect(() => {
     const loadPdf = async () => {
       if (pdfs.length > 0 && pdfs[currentIndex]) {
-        const currentPdfUrl = pdfs[currentIndex].url;
+        const currentPdfUrl = pdfs[currentIndex].identifier;
+
         try {
-          const response = await fetch(currentPdfUrl);
-          const existingPdfBytes = await response.arrayBuffer();
-          const blob = new Blob([existingPdfBytes], {
-            type: "application/pdf",
-          });
-          // @note using Blob intead of a byte array to avoid security issues
-          const blobUrl = URL.createObjectURL(blob);
-          setPdfUrl(blobUrl);
+          const storage = getStorage();
+          const storageRef = ref(storage, currentPdfUrl);
+          const url = await getDownloadURL(storageRef);
+          setPdfUrl(url);
         } catch (error) {
           console.error("Error loading PDF", error);
           setPdfUrl("");
