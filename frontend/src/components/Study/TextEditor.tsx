@@ -32,11 +32,10 @@ const TextEditor = () => {
   useEffect(() => {
     const saveText = async () => {
       try {
-        const response = await axios.post("/api/save-writer-text", {
+        const response = await axios.post("http://127.0.0.1:8000/update-text", {
           // TODO fix studyTextId and studyId
           studyId: studyId,
-          userId: user_id,
-          studyTextContent: text,
+          text: text,
         });
         if (response.status === HttpStatus.OK) {
           console.log("text saved");
