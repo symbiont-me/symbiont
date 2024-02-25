@@ -51,9 +51,7 @@ export default function StudyPage() {
   const authContext = UserAuth();
   const router = useRouter();
 
-  const [viewSelected, setViewSelected] = useState<ViewSelected>(
-    ViewSelected.Writer
-  );
+  const [viewSelected, setViewSelected] = useState<ViewSelected>(ViewSelected.Writer);
   const [user, setUser] = useState<User | null>(null);
   // TODO fix
   // NOTE note correct: authContext is undefined on first render and then it is set to the user object
@@ -75,22 +73,22 @@ export default function StudyPage() {
   // const chatId = path.split("/")[3]; // NOTE this method can avoid a db call
   const [chatId, setChatId] = useState<number | undefined>(undefined);
 
-  const fetchLinkedChatQuery = useQuery({
-    queryKey: ["get-chat", studyId],
-    queryFn: async () => {
-      const response = await axios.post("/api/get-chat", {
-        studyId: studyId,
-        userId: user?.uid,
-      });
-      return response.data.chat_id;
-    },
-  });
+  // const fetchLinkedChatQuery = useQuery({
+  //   queryKey: ["get-chat", studyId],
+  //   queryFn: async () => {
+  //     const response = await axios.post("/api/get-chat", {
+  //       studyId: studyId,
+  //       userId: user?.uid,
+  //     });
+  //     return response.data.chat_id;
+  //   },
+  // });
 
   // TODO make this a GET request
   const fetchStudyQuery = useQuery({
     queryKey: ["get-study", studyId],
     queryFn: async () => {
-      const response = await axios.post(`/api/get-study`, {
+      const response = await axios.post(`http://127.0.0.1:8000/get-study/?studyId=${studyId}`, {
         studyId: studyId,
       });
       return response.data;
@@ -105,24 +103,24 @@ export default function StudyPage() {
     }
   }, [fetchStudyQuery.data]);
 
-  useEffect(() => {
-    if (fetchLinkedChatQuery.data) {
-      setChatId(fetchLinkedChatQuery.data);
-    }
-  }, [fetchLinkedChatQuery.data]);
+  // useEffect(() => {
+  //   if (fetchLinkedChatQuery.data) {
+  //     setChatId(fetchLinkedChatQuery.data);
+  //   }
+  // }, [fetchLinkedChatQuery.data]);
 
-  if (fetchLinkedChatQuery.isLoading) {
-    return (
-      <div className="flex flex-col items-center justify-center h-screen">
-        <span className="loading loading-ring loading-lg"></span>
-      </div>
-    );
-  }
+  // if (fetchLinkedChatQuery.isLoading) {
+  //   return (
+  //     <div className="flex flex-col items-center justify-center h-screen">
+  //       <span className="loading loading-ring loading-lg"></span>
+  //     </div>
+  //   );
+  // }
 
-  if (fetchLinkedChatQuery.isError) {
-    console.error("Error fetching chat:", fetchLinkedChatQuery.error);
-    // TODO: handle error with a toast
-  }
+  // if (fetchLinkedChatQuery.isError) {
+  //   console.error("Error fetching chat:", fetchLinkedChatQuery.error);
+  //   // TODO: handle error with a toast
+  // }
 
   const SelectedViewComponent = viewComponents[viewSelected] || null;
 
@@ -134,10 +132,7 @@ export default function StudyPage() {
       <div className="main-window">
         <div className="viewer-container">
           <div className="header">
-            <StudyNavbar
-              setViewSelected={setViewSelected}
-              study={currentStudy}
-            />
+            <StudyNavbar setViewSelected={setViewSelected} study={currentStudy} />
           </div>
           <div className="viewer">
             {SelectedViewComponent && (
