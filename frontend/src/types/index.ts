@@ -1,7 +1,7 @@
 // NOTE not using Drizzle types because backend will be separated in python
 // need to update this to match the actual schema
 export type StudyResource = {
-  studyId: number;
+  studyId: number | string;
   id?: number;
   name: string;
   url: string;
