@@ -60,10 +60,7 @@ const ChatComponent = ({ chatId, studyId }: ChatComponentProps) => {
       messageContainer.scrollTo(0, messageContainer.scrollHeight);
     }
     setUserQuery(input);
-
-    console.log("User Input", userQuery);
-
-    setPreviousMessage(messages[messages.length - 1].content);
+    setPreviousMessage(messages[messages.length - 1]?.content);
   }, [messages, selectedResource, input]);
 
   return (
