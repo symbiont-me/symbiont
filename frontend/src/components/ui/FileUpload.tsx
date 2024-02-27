@@ -52,9 +52,8 @@ const FileUpload = () => {
           category: fileType,
         };
 
-        // TODO make a POST request to the FastAPI server to store data in Firestore
         const response = await axios.post(
-          `http://127.0.0.1:8000/upload-resource?studyId=Pp0ZYO6EL54A2XiIr7Eu`,
+          `http://127.0.0.1:8000/upload-resource?studyId=Pp0ZYO6EL54A2XiIr7Eu`
         );
         // TODO use the HTTP status code defined in Types
         if (response.status !== 201) {
@@ -108,7 +107,7 @@ const FileUpload = () => {
               <ToastMessage message="Error creating chat" type="error" />;
               console.error(err);
             },
-          },
+          }
         );
       } catch (error) {
         console.log(error);
