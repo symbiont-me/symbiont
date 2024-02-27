@@ -40,12 +40,16 @@ const ChatComponent = ({ chatId, studyId }: ChatComponentProps) => {
   const [selectedResource, setSelectedResource] = useState<
     StudyResource | undefined
   >(undefined);
+  const [userQuery, setUserQuery] = useState("");
+  const [previousMessage, setPreviousMessage] = useState("");
 
   const { messages, input, handleInputChange, handleSubmit } = useChat({
-    api: "/api/send-chat-message",
+    api: "http://127.0.0.1:8000/chat",
     body: {
-      chatId: chatId,
-      resourceIdentifier: selectedResource?.identifier || "",
+      user_query: userQuery,
+      previous_message: previousMessage,
+      study_id: studyId,
+      resource_identifier: selectedResource?.identifier,
     },
     initialMessages: getMessagesQuery.data || [],
   });
@@ -55,7 +59,12 @@ const ChatComponent = ({ chatId, studyId }: ChatComponentProps) => {
     if (messageContainer) {
       messageContainer.scrollTo(0, messageContainer.scrollHeight);
     }
-  }, [messages, selectedResource]);
+    setUserQuery(input);
+
+    console.log("User Input", userQuery);
+
+    setPreviousMessage(messages[messages.length - 1].content);
+  }, [messages, selectedResource, input]);
 
   return (
     <>
