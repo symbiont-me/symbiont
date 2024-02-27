@@ -11,19 +11,26 @@ import { uploadToFirebaseStorage } from "@/firebase/uploadToStorage";
 // TODO update to handle audio file uploads
 
 type FileUploadData = {
-  fileKey: string;
-  fileName: string;
-  downloadUrl: string;
+  study_id: string;
+  identifier: string;
+  name: string;
+  url: string;
+  category: string;
 };
 
-async function sendFileUploadRequest(file: File) {
+async function sendFileUploadRequest(file: File): Promise<FileUploadData> {
   const formData = new FormData();
   formData.append("file", file);
-  return axios.post("http://127.0.0.1:8000/upload-resource", formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
+  const response = await axios.post(
+    `http://127.0.0.1:8000/upload-resource/?studyId=Pp0ZYO6EL54A2XiIr7Eu`,
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+  return response.data.resource;
 }
 
 // The FileUpload component allows users to upload PDF files
@@ -36,8 +43,8 @@ const FileUpload = () => {
   // useMutation is a hook from react-query that handles asynchronous updates
   const fileUploadRequest = useMutation({
     // The mutate method is called within the onDrop method of the useDropzone hook, where data returned from uploadToFirebaseStorage is passed to it. This data object should contain the fileKey, fileName, and downloadUrl needed to construct the resourceData object.
-    mutationFn: async ({ fileKey, fileName, downloadUrl }: FileUploadData) => {
-      if (!fileKey || !fileName || !downloadUrl) {
+    mutationFn: async ({ identifier, name, url }: FileUploadData) => {
+      if (!identifier || !name || !url) {
         throw new Error("fileKey or fileName is undefined");
       }
       try {
@@ -46,14 +53,14 @@ const FileUpload = () => {
         // create the resource in the database
         const resourceData: StudyResource = {
           studyId: parseInt(studyId),
-          name: fileName,
-          url: downloadUrl,
-          identifier: fileKey,
+          name: name,
+          url: url,
+          identifier: identifier,
           category: fileType,
         };
 
         const response = await axios.post(
-          `http://127.0.0.1:8000/upload-resource?studyId=Pp0ZYO6EL54A2XiIr7Eu`
+          `http://127.0.0.1:8000/upload-resource?studyId=${studyId}`
         );
         // TODO use the HTTP status code defined in Types
         if (response.status !== 201) {
@@ -84,17 +91,16 @@ const FileUpload = () => {
       try {
         setUploading(true);
         // send the file to the FastAPI server
-        sendFileUploadRequest(file);
-        const data = await uploadToFirebaseStorage(file);
-        console.log("Firebase Storage Data", data.downloadUrl);
+        const data = await sendFileUploadRequest(file);
+        console.log(data);
 
-        if (!data?.fileKey || !data.fileName) {
+        if (!data?.identifier || !data.name) {
           return;
         }
-        const { fileKey, fileName, downloadUrl } = data;
+        const { identifier, name, url, category, study_id } = data;
         // The mutate function is used to asynchronously upload a file and create a resource in the database, with onSuccess and onError callbacks for post-upload handling.
         fileUploadRequest.mutate(
-          { fileKey, fileName, downloadUrl },
+          { identifier, name, url, study_id, category }, // Adjust "pdf" as necessary
           {
             onSuccess: () => {
               /*  NOTE this is supposed to referesh the resources query in the ResourceSwitcher component
