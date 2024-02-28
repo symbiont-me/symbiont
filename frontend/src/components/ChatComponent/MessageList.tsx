@@ -33,9 +33,9 @@ const MessageList = ({ messages, isLoading }: MessageListProps) => {
 
   return (
     <>
-      {messages.map((message) => {
+      {messages.map((message, index) => {
         return (
-          <div key={message.id} className="relative">
+          <div key={index} className="relative">
             {message.role === "user" ? (
               <div className="chat chat-end">
                 <p className="rounded-xl text-xs p-4 bg-symbiont-chatMessageUser text-symbiont-background">
