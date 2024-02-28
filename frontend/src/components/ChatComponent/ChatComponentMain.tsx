@@ -11,7 +11,6 @@ import ResourceSwitcher from "@/components/ResourceSwitcher";
 import "./chats.css";
 
 type ChatComponentProps = {
-  chatId: number | undefined;
   studyId: string;
 };
 
@@ -21,9 +20,9 @@ type Chat = {
 
 // TODO model selection and api key input should be on the Dashboard
 // TODO Fix isLoading state in the message list
-const ChatComponent = ({ chatId, studyId }: ChatComponentProps) => {
+const ChatComponent = ({ studyId }: ChatComponentProps) => {
   const getMessagesQuery = useQuery({
-    queryKey: ["chat-messages", chatId],
+    queryKey: ["chat-messages", studyId],
     queryFn: async () => {
       // TODO add return type
       const response = await axios.post<Chat>(
