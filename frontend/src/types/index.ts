@@ -23,6 +23,8 @@ export type Study = {
   image: string | undefined;
   createdAt?: Date;
   userId?: string;
+  description: string;
+  resources: StudyResource[];
 };
 
 export type UserAuthDetails = {
