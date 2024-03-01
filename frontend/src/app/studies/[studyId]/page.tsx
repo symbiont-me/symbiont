@@ -50,20 +50,18 @@ const viewComponents: Record<
 export default function StudyPage() {
   const authContext = UserAuth();
   const router = useRouter();
-
+  const [loading, setLoading] = useState(true);
   const [viewSelected, setViewSelected] = useState<ViewSelected>(
     ViewSelected.Writer
   );
   const [user, setUser] = useState<User | null>(null);
-  // TODO fix
-  // NOTE fix: authContext is undefined on first render and then it is set to the user object
-  // and this pushes the user to the home page
   useEffect(() => {
-    if (authContext?.user) {
-      setUser(authContext.user);
-    } else {
+    if (!authContext) {
       router.push("/");
+    } else {
+      setUser(authContext.user);
     }
+    setLoading(false);
   }, [authContext, router]);
 
   // TODO Test and remove the following unused state variables
@@ -97,6 +95,10 @@ export default function StudyPage() {
   }, [fetchStudyQuery.data, currentStudy]);
 
   const SelectedViewComponent = viewComponents[viewSelected] || null;
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="layout">
