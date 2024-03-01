@@ -1,9 +1,11 @@
-import React from 'react';
-import { ViewSelected } from '@/const/index';
+import React from "react";
+import { ViewSelected } from "@/const/index";
 
 type SummariesProps = {
   // Define any props you need for this component
 };
+
+// TODO call get-summaries route
 
 const Summaries = (props: SummariesProps) => {
   // Component logic goes here
