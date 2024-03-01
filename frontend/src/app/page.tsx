@@ -21,7 +21,7 @@ export default function Home() {
 
   if (authContext.user && authContext.user.uid) {
     console.log(authContext.user.uid);
-    return <UserDashboard userId={authContext.user.uid} />;
+    return <UserDashboard />;
   }
 
   return (
