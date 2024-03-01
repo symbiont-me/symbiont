@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { StudyResource } from "@/types";
 import { truncateFileName } from "@/lib/utils";
+import { useFetchResources } from "@/hooks/useFetchResources";
 
 type ResourceSwitcherProps = {
   studyId: string;
@@ -16,21 +17,20 @@ const ResourceSwitcher = ({
   studyId,
   onResourceChange,
 }: ResourceSwitcherProps) => {
-  const [resources, setResources] = useState<StudyResource[] | undefined>([]);
-  const resourcesQuery = useQuery({
-    queryKey: ["resources"],
-    queryFn: () =>
-      axios
-        .post(`http://127.0.0.1:8000/get-resources/?studyId=${studyId}`)
-        .then((res) => res.data),
-  });
+  const [resources, setResources] = useState<StudyResource[]>([]);
+  const {
+    data: resourcesData,
+    isLoading,
+    isError,
+    error,
+  } = useFetchResources(studyId);
 
   useEffect(() => {
-    if (resourcesQuery.data) {
-      setResources(resourcesQuery.data.resources);
-      onResourceChange(resourcesQuery.data.resources[0]); // Set the first resource as the default
+    if (resourcesData) {
+      setResources(resourcesData.resources);
+      console.log("resourcesData", resourcesData);
     }
-  }, [resourcesQuery.data, onResourceChange]);
+  }, [resourcesData]);
 
   const handleResourceChange = (
     event: React.ChangeEvent<HTMLSelectElement>
@@ -44,14 +44,12 @@ const ResourceSwitcher = ({
     }
   };
 
-  if (resourcesQuery.isPending) {
+  if (isLoading || !resources) {
     return <div>Loading resources...</div>;
   }
 
-  if (resourcesQuery.error) {
-    return (
-      <div>Error loading resources: {resourcesQuery.error.toString()}</div>
-    );
+  if (isError) {
+    return <div>Error loading resources: {error?.message}</div>;
   }
 
   return (
@@ -62,6 +60,7 @@ const ResourceSwitcher = ({
         onChange={handleResourceChange}
       >
         {resources &&
+          Array.isArray(resources) &&
           resources.map((resource) => (
             <option key={resource.identifier} value={resource.identifier}>
               {truncateFileName(resource.name)}
