@@ -23,9 +23,6 @@ const fetchUserStudies = async (userToken: string) => {
   return response.data;
 };
 
-// TODO use react query to fetch the projects
-// TODO add left sidebar if included in the design
-// TODO is it possible to use same react query for both left sidebar and user dashboard?
 // TODO use a custom hook to fetch the user studies and use it here and in the left sidebar
 const UserDashboard = () => {
   const [studies, setStudies] = useState<Study[]>([]);
@@ -37,7 +34,7 @@ const UserDashboard = () => {
     queryFn: () =>
       userTokenPromise
         ? userTokenPromise.then((token) => fetchUserStudies(token))
-        : Promise.reject("No token"),
+        : Promise.reject("No user token"),
     enabled: !!userTokenPromise, // This will ensure the query does not run until the token is available
   });
 
@@ -57,13 +54,11 @@ const UserDashboard = () => {
 
   return (
     <div className="layout">
-      {/* Left Sidebar */}
       <div className="sidebar">
-        {/* TODO create Sidebar component */}
         <LeftSideBar />
       </div>
 
-      {/* Center Dashboard */}
+      {/*  Dashboard */}
       <div className="main-window flex flex-row">
         <>
           <NewStudyCard />
