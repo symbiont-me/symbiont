@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
 import { StudyResource } from "../../types";
 import "../ui/uiStyles.css";
 import { truncateFileName } from "../../lib/utils";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
+import { useFetchResources } from "@/hooks/useFetchResources";
 
 type PDFViewerProps = {
   studyId: string;
@@ -19,21 +18,18 @@ const PdfViewer = ({ studyId }: PDFViewerProps) => {
     return pdfs.filter((pdf) => pdf.category === "pdf");
   };
 
-  const pdfQuery = useQuery({
-    queryKey: ["pdfViewer", studyId, "pdf"],
-    queryFn: async () => {
-      const response = await axios.post(
-        `http://127.0.0.1:8000/get-resources/?studyId=${studyId}`
-      );
-      return response.data;
-    },
-  });
+  const {
+    data: resourcesData,
+    isLoading,
+    isError,
+    error,
+  } = useFetchResources(studyId);
 
   useEffect(() => {
-    if (pdfQuery.data) {
-      setPdfs(pdfQuery.data.resources);
+    if (resourcesData) {
+      setPdfs(filterPdfs(resourcesData.resources));
     }
-  }, [pdfQuery.data]);
+  }, [resourcesData]);
 
   useEffect(() => {
     const loadPdf = async () => {
@@ -62,12 +58,12 @@ const PdfViewer = ({ studyId }: PDFViewerProps) => {
     };
   }, [currentIndex, pdfs]);
 
-  if (pdfQuery.isLoading) {
+  if (isLoading) {
     return <div>Loading...</div>;
   }
 
-  if (pdfQuery.isError) {
-    return <div>Error: {pdfQuery.error.message}</div>;
+  if (isError) {
+    return <div>Error: {error?.message}</div>;
   }
 
   const goToPreviousPdf = () => {
