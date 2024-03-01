@@ -1,3 +1,5 @@
+// TODO move this to Study folder
+
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -14,7 +16,7 @@ const ResourceSwitcher = ({
   studyId,
   onResourceChange,
 }: ResourceSwitcherProps) => {
-  const [resources, setResources] = useState([]);
+  const [resources, setResources] = useState<StudyResource[] | undefined>([]);
   const resourcesQuery = useQuery({
     queryKey: ["resources"],
     queryFn: () =>
@@ -31,10 +33,12 @@ const ResourceSwitcher = ({
   }, [resourcesQuery.data, onResourceChange]);
 
   const handleResourceChange = (
-    event: React.ChangeEvent<HTMLSelectElement>,
+    event: React.ChangeEvent<HTMLSelectElement>
   ) => {
     const resourceIdentifier = event.target.value;
-    const resource = resources.find((r) => r.identifier === resourceIdentifier);
+    const resource = resources?.find(
+      (r) => r.identifier === resourceIdentifier
+    );
     if (resource) {
       onResourceChange(resource);
     }
@@ -57,11 +61,12 @@ const ResourceSwitcher = ({
         className="select select-bordered w-full max-w-xs"
         onChange={handleResourceChange}
       >
-        {resources.map((resource) => (
-          <option key={resource.identifier} value={resource.identifier}>
-            {truncateFileName(resource.name)}
-          </option>
-        ))}
+        {resources &&
+          resources.map((resource) => (
+            <option key={resource.identifier} value={resource.identifier}>
+              {truncateFileName(resource.name)}
+            </option>
+          ))}
       </select>
     </div>
   );
