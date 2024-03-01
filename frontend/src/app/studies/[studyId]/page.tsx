@@ -24,6 +24,7 @@ import LeftSideBarMain from "@/components/LeftSideBar/LeftSideBarMain";
 import { Study } from "@/types";
 import "@/app/studies/studyStyles.css";
 import "@/app/globals.css";
+import { useFetchUserStudies } from "@/hooks/useFetchStudies";
 
 // an object that maps each ViewSelected enum value to a corresponding React component.
 // this allows the application to dynamically render different components based on the current view selection
@@ -50,11 +51,15 @@ const viewComponents: Record<
 export default function StudyPage() {
   const authContext = UserAuth();
   const router = useRouter();
+  const [studies, setStudies] = useState<Study[]>([]);
   const [loading, setLoading] = useState(true);
   const [viewSelected, setViewSelected] = useState<ViewSelected>(
     ViewSelected.Writer
   );
+
   const [user, setUser] = useState<User | null>(null);
+  const { data, isLoading, isError, error } = useFetchUserStudies();
+
   useEffect(() => {
     if (!authContext) {
       router.push("/");
@@ -64,42 +69,27 @@ export default function StudyPage() {
     setLoading(false);
   }, [authContext, router]);
 
-  // TODO Test and remove the following unused state variables
+  // TODO update the writer state in its own component
   const [textWriterValue, setTextWriterValue] = useState<string>("");
   const [currentStudy, setCurrentStudy] = useState<any>(null); // TODO set to type study
   const path = usePathname();
   const studyId = path.split("/")[2];
-
-  // TODO make this a GET request
-  const fetchStudyQuery = useQuery({
-    queryKey: ["get-study", studyId],
-    queryFn: async () => {
-      const response = await axios.post(
-        `http://127.0.0.1:8000/get-study/?studyId=${studyId}`
-      );
-      console.log("Study", response.data);
-      return response.data;
-    },
-  });
-
-  useEffect(() => {
-    if (fetchStudyQuery.data) {
-      console.log("Study", fetchStudyQuery.data.study);
-      setCurrentStudy(fetchStudyQuery.data.study);
-    }
-    if (currentStudy) {
-      setTextWriterValue(currentStudy.text);
-      // This block filters the resources related to the current study to find only those of type 'video'.
-      // It then extracts the URLs of these video resources and updates the state to hold these video URLs.
-    }
-  }, [fetchStudyQuery.data, currentStudy]);
-
   const SelectedViewComponent = viewComponents[viewSelected] || null;
 
-  if (loading) {
+  useEffect(() => {
+    if (data) {
+      console.log(data.studies);
+      setStudies(data.studies);
+    }
+  }, [data]);
+
+  if (isLoading) {
     return <div>Loading...</div>;
   }
 
+  if (isError) {
+    return <div>Error: {error?.message}</div>;
+  }
   return (
     <div className="layout">
       <div className="sidebar">
