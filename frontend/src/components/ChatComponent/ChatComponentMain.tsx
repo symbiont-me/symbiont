@@ -9,6 +9,8 @@ import axios from "axios";
 import { StudyResource } from "@/types";
 import ResourceSwitcher from "@/components/ResourceSwitcher";
 import "./chats.css";
+import { UserAuth } from "@/app/context/AuthContext";
+import { useFetchChatMessages } from "@/hooks/useFetchChatMessages";
 
 type ChatComponentProps = {
   studyId: string;
@@ -21,19 +23,14 @@ type Chat = {
 // TODO model selection and api key input should be on the Dashboard
 // TODO Fix isLoading state in the message list
 const ChatComponent = ({ studyId }: ChatComponentProps) => {
-  const getMessagesQuery = useQuery({
-    queryKey: ["chat-messages", studyId],
-    queryFn: async () => {
-      // TODO add return type
-      const response = await axios.post<Chat>(
-        `http://127.0.0.1:8000/get-chat-messages?studyId=${studyId}`
-        // {
-        //   chatId: chatId,
-        // }
-      );
-      return response.data.chatMessages;
-    },
-  });
+  const authContext = UserAuth();
+  const {
+    data,
+    isLoading: chatLoading,
+    isError,
+    error,
+  } = useFetchChatMessages(studyId);
+  const [userToken, setUserToken] = useState<string | undefined>(undefined);
 
   // NOTE this is used to switch the context for the chat
   const [selectedResource, setSelectedResource] = useState<
@@ -42,16 +39,27 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
   const [userQuery, setUserQuery] = useState("");
   const [previousMessage, setPreviousMessage] = useState("");
 
-  const { messages, input, handleInputChange, handleSubmit } = useChat({
-    api: "http://127.0.0.1:8000/chat",
-    body: {
-      user_query: userQuery,
-      previous_message: previousMessage,
-      study_id: studyId,
-      resource_identifier: selectedResource?.identifier,
-    },
-    initialMessages: getMessagesQuery.data || [],
-  });
+  async function getUserAuthToken() {
+    if (authContext?.user?.getIdToken) {
+      const token = await authContext.user.getIdToken();
+      setUserToken(token);
+    }
+  }
+
+  const { messages, input, handleInputChange, handleSubmit, isLoading } =
+    useChat({
+      api: "http://127.0.0.1:8000/chat",
+      body: {
+        user_query: userQuery,
+        previous_message: previousMessage,
+        study_id: studyId,
+        resource_identifier: selectedResource?.identifier,
+      },
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+      },
+      initialMessages: data?.chatMessages || [],
+    });
 
   useEffect(() => {
     const messageContainer = document.getElementById("message-container");
@@ -60,6 +68,7 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
     }
     setUserQuery(input);
     setPreviousMessage(messages[messages.length - 1]?.content);
+    getUserAuthToken();
   }, [messages, selectedResource, input]);
 
   return (
@@ -71,10 +80,11 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
         />
       </div>
       <div
+        id="message-container"
         className=" h-80 flex-1 overflow-scroll p-4"
         style={{ height: "500px" }}
       >
-        <MessageList messages={messages} />
+        {chatLoading ? (
       </div>
       <div className=" h-20 flex flex-col justify-center items-center ">
         <UserChatInput
