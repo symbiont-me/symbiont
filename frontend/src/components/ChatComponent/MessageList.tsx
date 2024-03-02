@@ -13,9 +13,6 @@ type MessageListProps = {
 
 // TODO use cn function from utils to conditionally render classes
 const MessageList = ({ messages, isLoading }: MessageListProps) => {
-  if (isLoading) {
-    return <span className="loading loading-ring loading-lg"></span>;
-  }
   if (!messages) return <></>;
 
   // TODO add tooltip to copy icon
@@ -31,9 +28,13 @@ const MessageList = ({ messages, isLoading }: MessageListProps) => {
     }
   };
 
+  if (!Array.isArray(messages)) return null;
+
   return (
     <>
       {messages.map((message, index) => {
+        // we want to display a loader on the upcoming message if the response is delayed
+        const isLastMessage = index === messages.length - 1;
         return (
           <div key={index} className="relative">
             {message.role === "user" ? (
@@ -50,12 +51,18 @@ const MessageList = ({ messages, isLoading }: MessageListProps) => {
                 >
                   <FontAwesomeIcon icon={faCopy} />
                 </div>
-                <p className="text-xs p-6 bg-symbiont-chatMessageAi rounded-xl">
-                  <AiChatMessage message={message.content} />
-                </p>
+
+                {isLastMessage && isLoading ? (
+                  <div className="flex justify-center items-center p-6">
+                    <span className="loading loading-spinner loading-xs"></span>
+                  </div>
+                ) : (
+                  <div className="text-xs p-6 bg-symbiont-chatMessageAi rounded-xl">
+                    <AiChatMessage message={message.content} />
+                  </div>
+                )}
               </div>
             )}
-            {/* renders markdown */}
           </div>
         );
       })}
