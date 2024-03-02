@@ -6,6 +6,7 @@ import axios from "axios";
 import { usePathname } from "next/navigation";
 import { UserAuth } from "@/app/context/AuthContext";
 import { HttpStatus } from "@/const";
+import { useFetchWriterText } from "@/hooks/useFetchWriterText";
 // TODO on render, fetch text from db and set value to that text
 
 // TODO move inside the component
@@ -20,25 +21,50 @@ const ReactQuill = dynamic(() => import("react-quill"), {
   ),
 });
 
+async function updatWriterText(
+  userToken: string,
+  studyId: string,
+  text: string
+) {
+  const response = await axios.post(
+    "http://127.0.0.1:8000/update-text",
+    {
+      studyId: studyId,
+      text: text,
+    },
+
+    {
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+      },
+    }
+  );
+  return response;
+}
+
 const TextEditor = () => {
   const [text, setText] = useState("");
-  const authContext = UserAuth();
-
-  // NOTE I don't like getting the studyId this way
   const path = usePathname();
   const studyId = path.split("/")[2];
+  const authContext = UserAuth();
 
-  const user_id = authContext?.user?.uid;
+  const { data: writerText } = useFetchWriterText(studyId);
+
+  useEffect(() => {
+    if (writerText) {
+      setText(writerText.text);
+    }
+  }, [writerText]);
+
   useEffect(() => {
     const saveText = async () => {
       try {
-        const response = await axios.post("http://127.0.0.1:8000/update-text", {
-          // TODO fix studyTextId and studyId
-          studyId: studyId,
-          text: text,
-        });
-        if (response.status === HttpStatus.OK) {
-          console.log("text saved");
+        const userToken = await authContext?.user?.getIdToken();
+        if (userToken) {
+          const response = await updatWriterText(userToken, studyId, text);
+          if (response && response.status === HttpStatus.OK) {
+            console.log("Text Updated");
+          }
         }
       } catch (error) {
         throw error;
