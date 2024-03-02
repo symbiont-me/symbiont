@@ -85,6 +85,12 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
         style={{ height: "500px" }}
       >
         {chatLoading ? (
+          <div className="flex justify-center items-center">
+            <span className="loading loading-spinner loading-md"></span>
+          </div>
+        ) : (
+          <MessageList messages={messages} isLoading={isLoading} />
+        )}
       </div>
       <div className=" h-20 flex flex-col justify-center items-center ">
         <UserChatInput
