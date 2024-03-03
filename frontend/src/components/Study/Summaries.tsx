@@ -14,11 +14,10 @@ type Summary = {
   summary: string;
 };
 // TODO get Study from the parent component
-const Summaries = ({ study }: { study: Study }) => {
+const Summaries = () => {
+  const studyId = usePathname().split("/")[2];
   const [summaries, setSummaries] = useState<Summary[]>([]);
-  const { data, isLoading, isError, error } = useFetchSummaries(
-    study.id!.toString()
-  );
+  const { data, isLoading, isError, error } = useFetchSummaries(studyId);
   useEffect(() => {
     if (data && data.summaries) {
       setSummaries(data.summaries);
@@ -30,10 +29,11 @@ const Summaries = ({ study }: { study: Study }) => {
       <h1>Summaries</h1>
       {isLoading && <div>Loading...</div>}
       {isError && <div>Error: {error?.message}</div>}
+
       <ul>
         {summaries.map((summary) => (
-          <>
-            <li key={summary.identifier}>
+          <div key={summary.identifier}>
+            <li>
               <a
                 href={summary.url}
                 className="hover:underline text-symbiont-chatMessageUser"
@@ -42,7 +42,7 @@ const Summaries = ({ study }: { study: Study }) => {
               </a>
             </li>
             <p>{summary.summary}</p>
-          </>
+          </div>
         ))}
       </ul>
     </div>
