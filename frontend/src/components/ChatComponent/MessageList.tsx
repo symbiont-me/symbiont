@@ -1,6 +1,5 @@
 import { cn } from "@/lib/utils";
 import { Message } from "ai/react";
-import { Loader2 } from "lucide-react";
 import React from "react";
 import AiChatMessage from "@/components/ChatComponent/AiChatMessage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
