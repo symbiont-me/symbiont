@@ -1,5 +1,6 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { UserAuth } from "@/app/context/AuthContext";
 // import { promises as fs } from 'fs';
 
 /**
@@ -27,4 +28,12 @@ export function truncateFileName(fileName: string) {
   return fileName.length > 20
     ? fileName.substring(0, 20) + "..." + fileName.slice(-10)
     : fileName;
+}
+
+export async function getUserAuthToken() {
+  const authContext = UserAuth();
+  if (authContext?.user?.getIdToken) {
+    const token = await authContext.user.getIdToken();
+    return token;
+  }
 }
