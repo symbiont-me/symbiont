@@ -2,7 +2,7 @@
 // need to update this to match the actual schema
 export type StudyResource = {
   studyId: number | string;
-  id?: number;
+  id?: string | number;
   name: string;
   url: string;
   identifier: string;
@@ -18,7 +18,7 @@ export enum StudyResourceCategory {
 }
 
 export type Study = {
-  id?: number;
+  id?: number | string;
   name: string;
   image: string | undefined;
   createdAt?: Date;
