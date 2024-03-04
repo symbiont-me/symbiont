@@ -73,25 +73,6 @@ const Resources = () => {
     getUserAuthToken();
   }, [authContext]);
 
-  useEffect(() => {
-    const sendResources = async () => {
-      if (!userToken) return;
-
-      if (webResources.length > 0) {
-        await addWebResource(studyId, webResources, userToken);
-      }
-      if (textResourceName && textResourceContent) {
-        await addTextResource(
-          studyId,
-          textResourceName,
-          textResourceContent,
-          userToken
-        );
-      }
-    };
-    sendResources();
-  }, [webResources, textResourceName, textResourceContent, userToken, studyId]);
-
   const isValidURL = (url: string) => {
     try {
       new URL(url);
@@ -104,11 +85,26 @@ const Resources = () => {
   const handleWebLinks = () => {
     const links = webLink.split("\n").filter(isValidURL);
     setWebResources(links);
+    if (userToken && webLink.length > 0) {
+      addWebResource(studyId, links, userToken);
+    }
     setWebLink(""); // Clear the input after adding
   };
 
   const handleTextResource = () => {
-    // Assuming you want to clear the inputs after setting the state
+    if (
+      userToken &&
+      textResourceName.length > 0 &&
+      textResourceContent.length > 0
+    ) {
+      addTextResource(
+        studyId,
+        textResourceName,
+        textResourceContent,
+        userToken
+      );
+    }
+
     setTextResourceName("");
     setTextResourceContent("");
   };
