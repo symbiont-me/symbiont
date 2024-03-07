@@ -30,10 +30,11 @@ export function truncateFileName(fileName: string) {
     : fileName;
 }
 
-export async function getUserAuthToken() {
-  const authContext = UserAuth();
-  if (authContext?.user?.getIdToken) {
-    const token = await authContext.user.getIdToken();
-    return token;
-  }
-}
+// NOTE won't work because useContext is a hook and can't be used outside of a component
+// export async function getUserAuthToken() {
+//   const authContext = UserAuth();
+//   if (authContext?.user?.getIdToken) {
+//     const token = await authContext.user.getIdToken();
+//     return token;
+//   }
+// }
