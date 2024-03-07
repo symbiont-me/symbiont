@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import YouTube, { YouTubeProps } from "react-youtube";
 import { Study } from "@/types";
+import { useFetchResources } from "@/hooks/useFetchResources";
 
 type VideoViewerProps = {
   study: Study;
@@ -20,13 +21,14 @@ const VideoViewer = ({ study }: VideoViewerProps) => {
   );
   const [videos, setVideos] = useState<Resource[] | null>(null);
   const [videoIndex, setVideoIndex] = useState<number>(0);
+  console.log(study);
 
   function filterVideos() {
-    if (study.resources) {
+    if (study && study.resources) {
       const filteredVideos = study.resources.filter(
         (resource) => resource.category === "video"
       );
-      console.log("filteredVideos", filteredVideos);
+
       setVideos(filteredVideos);
     }
   }
