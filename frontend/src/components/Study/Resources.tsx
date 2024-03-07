@@ -1,3 +1,6 @@
+// TODO this component is used to add resources to a study and should be refactored to be a dialog box
+// TODO the Resources view should be a separate component that lists the resources being used
+
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
@@ -44,6 +47,22 @@ async function addTextResource(
   return response;
 }
 
+async function sendYtLink(studyId: string, link: string, userToken: string) {
+  const response = await axios.post(
+    `http://127.0.0.1:8000/process-youtube-video`,
+    {
+      studyId: studyId,
+      url: link,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+      },
+    }
+  );
+  return response;
+}
+
 // NOTE this component should not be part of the Study Nav as it is
 // TODO should be refactored to make a dialog box where users can add and remove resources
 // TODO add a separate component for the Study Navbar which lists the resources being used
@@ -61,6 +80,7 @@ const Resources = () => {
   const [textResourceContent, setTextResourceContent] = useState("");
   const studyId = usePathname().split("/")[2];
   const [userToken, setUserToken] = useState<string | undefined>(undefined);
+  const [ytLink, setYtLink] = useState("");
   const authContext = UserAuth();
 
   useEffect(() => {
@@ -82,16 +102,16 @@ const Resources = () => {
     }
   };
 
-  const handleWebLinks = () => {
+  function handleWebLinks() {
     const links = webLink.split("\n").filter(isValidURL);
     setWebResources(links);
     if (userToken && webLink.length > 0) {
       addWebResource(studyId, links, userToken);
     }
     setWebLink(""); // Clear the input after adding
-  };
+  }
 
-  const handleTextResource = () => {
+  function handleTextResource() {
     if (
       userToken &&
       textResourceName.length > 0 &&
@@ -107,7 +127,14 @@ const Resources = () => {
 
     setTextResourceName("");
     setTextResourceContent("");
-  };
+  }
+
+  async function handleYtLinkSubmission() {
+    if (userToken && ytLink.length > 0) {
+      sendYtLink(studyId, ytLink, userToken);
+    }
+    setYtLink("");
+  }
 
   return (
     <div className="flex flex-col justify-start items-start">
@@ -141,6 +168,21 @@ const Resources = () => {
           Add Text Resource
         </button>
       </div>
+
+      {/* YOUTUBE LINK */}
+      <input
+        type="text"
+        value={ytLink}
+        onChange={(e) => setYtLink(e.target.value)}
+        placeholder="Add Youtube Link"
+        className="input input-bordered w-full max-w-xs mb-4"
+      />
+      <button
+        className="btn btn-primary mb-10"
+        onClick={handleYtLinkSubmission}
+      >
+        Add Youtube Link
+      </button>
     </div>
   );
 };
