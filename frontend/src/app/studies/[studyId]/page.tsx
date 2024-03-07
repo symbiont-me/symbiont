@@ -58,6 +58,7 @@ export default function StudyPage() {
   );
 
   const [user, setUser] = useState<User | null>(null);
+  // TODO remove this as only the current study should be in state
   const { data, isLoading, isError, error } = useFetchUserStudies();
 
   useEffect(() => {
@@ -75,6 +76,8 @@ export default function StudyPage() {
   const path = usePathname();
   const studyId = path.split("/")[2];
   const SelectedViewComponent = viewComponents[viewSelected] || null;
+
+  // TODO fetch study here and then pass it down the tree
 
   useEffect(() => {
     if (data) {
