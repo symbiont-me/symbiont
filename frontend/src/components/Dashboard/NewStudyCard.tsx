@@ -7,10 +7,65 @@ import { useState } from "react";
 import { UserAuth } from "@/app/context/AuthContext";
 // TODO maybe separate the modal into a separate component
 
+const createStudy = async (
+  studyName: string,
+  description: string,
+  image: string,
+  userToken: string
+) => {
+  const response = await axios.post(
+    `http://127.0.0.1:8000/create-study`,
+    {
+      name: studyName,
+      description: description,
+      image: image,
+    },
+
+    {
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+      },
+    }
+  );
+  return response;
+};
+
 const NewStudyCard = () => {
   const router = useRouter();
+
   const [studyName, setStudyName] = useState("");
+  const [image, setImage] = useState("");
+  const [description, setDescription] = useState("");
   const authContext = UserAuth();
+  const [userToken, setUserToken] = useState<string | undefined>(undefined);
+
+  React.useEffect(() => {
+    const getUserAuthToken = async () => {
+      if (authContext?.user?.getIdToken) {
+        const token = await authContext.user.getIdToken();
+        setUserToken(token);
+      }
+    };
+    getUserAuthToken();
+  }, [authContext]);
+
+  function handleCreateStudy(studyName: string, userToken: string | undefined) {
+    if (!userToken) {
+      return;
+    }
+    createStudy(studyName, description, image, userToken)
+      .then((response) => {
+        if (response.status === HttpStatus.CREATED) {
+          const studyId = response.data.studyId;
+          router.push(`/studies/${studyId}`);
+        }
+      })
+      .catch((error) => {
+        // TODO add a toast notification
+        console.error("Failed to create study", error);
+        throw error;
+      });
+  }
 
   if (!authContext) {
     return null;
@@ -22,29 +77,19 @@ const NewStudyCard = () => {
     return null;
   }
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setStudyName(event.target.value);
-  };
-
-  const createStudyHandler = async () => {
-    try {
-      const response = await axios.post("/api/create-study", {
-        studyName: studyName,
-        userId: userId,
-      });
-      if (response.status === HttpStatus.CREATED) {
-        const studyId = response.data.studyId;
-        router.push(`/studies/${studyId}`);
-      }
-    } catch (error) {
-      // TODO add a toast notification
-      console.error("Failed to create study", error);
-      throw error;
+  function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const { name, value } = event.target;
+    if (name === "studyName") {
+      setStudyName(value);
+    } else if (name === "image") {
+      setImage(value);
+    } else if (name === "description") {
+      setDescription(value);
     }
-  };
+  }
 
   return (
-    <div className="  h-60 w-60 mt-2 rounded-xl flex flex-col items-center justify-center border">
+    <div className="  h-60 w-64 mt-4 rounded-xl flex flex-col items-center justify-center border border-gray-500">
       {/* Open the modal using document.getElementById('ID').showModal() method */}
       <button
         className="btn"
@@ -60,17 +105,36 @@ const NewStudyCard = () => {
       <p className="p-4">Create New Study</p>
 
       <dialog id="my_modal_2" className="modal">
-        <div className="modal-box">
+        <div className="modal-box flex flex-col items-center justify-center">
           <h3 className="font-bold text-lg mb-6">Create New Study</h3>
           <input
             type="text"
-            placeholder="Study Name"
-            className="input input-bordered input-primary w-full max-w-xs mr-4"
+            placeholder="Name"
+            className="input input-bordered input-primary w-full max-w-xs mr-4 mb-4"
             value={studyName}
+            name="studyName"
             onChange={handleInputChange}
-          />{" "}
-          {/* TODO wrap into a submit form to allow creating with Enter */}
-          <button className="btn btn-info" onClick={createStudyHandler}>
+          />
+          <input
+            type="text"
+            placeholder="Image URL"
+            className="input input-bordered input-primary w-full max-w-xs mr-4 mb-4"
+            value={image}
+            onChange={handleInputChange}
+            name="image"
+          />
+          <input
+            type="text"
+            placeholder="Description"
+            className="input input-bordered input-primary w-full max-w-xs mr-4 mb-4"
+            value={description}
+            onChange={handleInputChange}
+            name="description"
+          />
+          <button
+            className="btn btn-info"
+            onClick={() => handleCreateStudy(studyName, userToken)}
+          >
             Create Study
           </button>
         </div>
