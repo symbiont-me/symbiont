@@ -11,6 +11,8 @@ import ResourceSwitcher from "@/components/ResourceSwitcher";
 import "./chats.css";
 import { UserAuth } from "@/app/context/AuthContext";
 import { useFetchChatMessages } from "@/hooks/useFetchChatMessages";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 type ChatComponentProps = {
   studyId: string;
@@ -71,6 +73,23 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
     getUserAuthToken();
   }, [messages, selectedResource, input]);
 
+  async function deleteChat() {
+    if (!userToken) {
+      return;
+    }
+    const endpoint = `http://127.0.0.1:8000/delete-chat-messages?studyId=${studyId}`;
+    const response = await axios.delete(endpoint, {
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+      },
+    });
+
+    if (response.status === 200) {
+      console.log("Chat messages deleted");
+      // TODO update the chat messages state to be empty or trigger a refetch
+    }
+  }
+
   return (
     <>
       <div className="p-4">
@@ -78,6 +97,12 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
           studyId={studyId}
           onResourceChange={setSelectedResource}
         />
+      </div>
+      <div
+        className="flex flex-row justify-center items-center cursor-pointer p-2"
+        onClick={deleteChat}
+      >
+        <FontAwesomeIcon icon={faTrash} />
       </div>
       <div
         id="message-container"
