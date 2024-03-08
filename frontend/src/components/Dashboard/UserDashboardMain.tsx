@@ -8,7 +8,10 @@ import "@/app/styles.css";
 import LeftSideBar from "@/components/LeftSideBar/LeftSideBarMain";
 import StudyCard from "@/components/Study/StudyCard";
 import { useFetchUserStudies } from "@/hooks/useFetchStudies";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
+// NOTE without ContextApi one way to update studies when deleted would be here in the UserDashboard component
 const UserDashboard = () => {
   const [studies, setStudies] = useState<Study[]>([]);
   const { data, isLoading, isError, error } = useFetchUserStudies();
