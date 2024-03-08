@@ -1,3 +1,4 @@
+// ? where is this component used?
 import React from "react";
 import { Study } from "@/types";
 import Link from "next/link";
@@ -7,6 +8,7 @@ type StudyCardProps = Study;
 // TODO replace img with Image
 
 const StudyCard = ({ name, image, id }: StudyCardProps) => {
+  console.log(id);
   return (
     <div className="project-card">
       <div className="card lg:card-side bg-base-100 shadow-xl">
@@ -24,6 +26,6 @@ const StudyCard = ({ name, image, id }: StudyCardProps) => {
       </div>
     </div>
   );
-}
+};
 
 export default StudyCard;
