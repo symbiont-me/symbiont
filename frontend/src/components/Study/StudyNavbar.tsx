@@ -8,7 +8,7 @@ import { faSave, faShare } from "@fortawesome/free-solid-svg-icons";
 
 type NavigationProps = {
   setViewSelected: (view: ViewSelected) => void;
-  study: Study;
+  study: Study | undefined;
 };
 
 const Navigation = ({ setViewSelected, study }: NavigationProps) => {
