@@ -1,11 +1,9 @@
 // TODO move this to Study folder
 
 import { useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { StudyResource } from "@/types";
 import { truncateFileName } from "@/lib/utils";
-import { useFetchResources } from "@/hooks/useFetchResources";
+import { CurrentStudy } from "@/app/context/StudyContext";
 
 type ResourceSwitcherProps = {
   studyId: string;
@@ -18,19 +16,17 @@ const ResourceSwitcher = ({
   onResourceChange,
 }: ResourceSwitcherProps) => {
   const [resources, setResources] = useState<StudyResource[]>([]);
-  const {
-    data: resourcesData,
-    isLoading,
-    isError,
-    error,
-  } = useFetchResources(studyId);
+  const studyContext = CurrentStudy();
+
+  if (!studyContext) {
+    return null;
+  }
 
   useEffect(() => {
-    if (resourcesData) {
-      setResources(resourcesData.resources);
-      console.log("resourcesData", resourcesData);
+    if (studyContext?.study) {
+      setResources(studyContext.study[0].resources);
     }
-  }, [resourcesData]);
+  }, [studyContext]);
 
   const handleResourceChange = (
     event: React.ChangeEvent<HTMLSelectElement>
@@ -43,14 +39,6 @@ const ResourceSwitcher = ({
       onResourceChange(resource);
     }
   };
-
-  if (isLoading || !resources) {
-    return <div>Loading resources...</div>;
-  }
-
-  if (isError) {
-    return <div>Error loading resources: {error?.message}</div>;
-  }
 
   return (
     <div>
