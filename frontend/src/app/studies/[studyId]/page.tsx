@@ -1,8 +1,15 @@
 "use client";
-import React from "react";
-import TextEditor from "@/components/Study/TextEditor";
-import ChatComponent from "@/components/ChatComponent/ChatComponentMain";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
+import { User } from "firebase/auth";
+import { Study } from "@/types";
+import { ViewSelected } from "@/const";
+import { UserAuth } from "@/app/context/AuthContext";
+import { CurrentStudy } from "@/app/context/StudyContext";
+import LeftSideBarMain from "@/components/LeftSideBar/LeftSideBarMain";
 import StudyNavbar from "@/components/Study/StudyNavbar";
+import TextEditor from "@/components/Study/TextEditor";
 import PdfViewer from "@/components/Study/PdfViewer";
 import SciPapers from "@/components/Study/SciPapers";
 import VideoViewer from "@/components/Study/VideoViewer";
@@ -11,32 +18,14 @@ import TestKnowledge from "@/components/Study/TestKnowledge";
 import TextEvaluation from "@/components/Study/TextEvaluation";
 import Summaries from "@/components/Study/Summaries";
 import Resources from "@/components/Study/Resources";
-import { ViewSelected } from "@/const";
-import axios from "axios";
-import { useState } from "react";
-import { usePathname } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
-import { UserAuth } from "@/app/context/AuthContext";
-import { useRouter } from "next/navigation";
-import { User } from "firebase/auth";
-import LeftSideBarMain from "@/components/LeftSideBar/LeftSideBarMain";
-import { Study } from "@/types";
+import ChatComponent from "@/components/ChatComponent/ChatComponentMain";
+
 import "@/app/studies/studyStyles.css";
 import "@/app/globals.css";
-import { useFetchUserStudies } from "@/hooks/useFetchStudies";
 
 // an object that maps each ViewSelected enum value to a corresponding React component.
 // this allows the application to dynamically render different components based on the current view selection
-// TODO only pass Study to the components down the tree, studyId is available in the pathname
-const viewComponents: Record<
-  ViewSelected,
-  React.ComponentType<{
-    textWriterValue: string;
-    studyId: string;
-    study: Study;
-  }>
-> = {
+const viewComponents = {
   [ViewSelected.Writer]: TextEditor,
   [ViewSelected.PDFViewer]: PdfViewer,
   [ViewSelected.TestKnowledge]: TestKnowledge,
@@ -48,18 +37,23 @@ const viewComponents: Record<
   [ViewSelected.Resources]: Resources,
 };
 
-export default function StudyPage() {
+const StudyPage = () => {
   const authContext = UserAuth();
+  const currentStudyContext = CurrentStudy();
   const router = useRouter();
-  const [studies, setStudies] = useState<Study[]>([]);
+  const path = usePathname();
+  const [currentStudy, setCurrentStudy] = useState<Study | undefined>(
+    undefined
+  );
   const [loading, setLoading] = useState(true);
   const [viewSelected, setViewSelected] = useState<ViewSelected>(
     ViewSelected.Writer
   );
-
   const [user, setUser] = useState<User | null>(null);
-  // TODO remove this as only the current study should be in state
-  const { data, isLoading, isError, error } = useFetchUserStudies();
+  // TODO update the writer state in its own comaponent
+  const [textWriterValue, setTextWriterValue] = useState<string>("");
+  const studyId = path.split("/")[2];
+  const SelectedViewComponent = viewComponents[viewSelected] || null;
 
   useEffect(() => {
     if (!authContext) {
@@ -70,29 +64,22 @@ export default function StudyPage() {
     setLoading(false);
   }, [authContext, router]);
 
-  // TODO update the writer state in its own component
-  const [textWriterValue, setTextWriterValue] = useState<string>("");
-  const [currentStudy, setCurrentStudy] = useState<any>(null); // TODO set to type study
-  const path = usePathname();
-  const studyId = path.split("/")[2];
-  const SelectedViewComponent = viewComponents[viewSelected] || null;
-
-  // TODO fetch study here and then pass it down the tree
+  useEffect(() => {
+    if (currentStudyContext && currentStudyContext.study) {
+      setCurrentStudy(currentStudyContext.study);
+    }
+  }, [currentStudyContext]);
 
   useEffect(() => {
-    if (data) {
-      console.log(data.studies);
-      setStudies(data.studies);
+    if (currentStudy) {
+      setLoading(false);
     }
-  }, [data]);
+  }, [currentStudy]);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
+  if (loading) {
+    return <div></div>;
   }
 
-  if (isError) {
-    return <div>Error: {error?.message}</div>;
-  }
   return (
     <div className="layout">
       <div className="sidebar">
@@ -108,6 +95,7 @@ export default function StudyPage() {
           </div>
           <div className="viewer">
             {SelectedViewComponent && (
+              // TODO fix this type error
               <SelectedViewComponent
                 textWriterValue={textWriterValue}
                 studyId={studyId}
@@ -122,4 +110,6 @@ export default function StudyPage() {
       </div>
     </div>
   );
-}
+};
+
+export default StudyPage;
