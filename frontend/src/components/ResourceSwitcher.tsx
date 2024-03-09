@@ -24,7 +24,7 @@ const ResourceSwitcher = ({
 
   useEffect(() => {
     if (studyContext?.study) {
-      setResources(studyContext.study[0].resources);
+      setResources(studyContext.study.resources);
     }
   }, [studyContext]);
 
