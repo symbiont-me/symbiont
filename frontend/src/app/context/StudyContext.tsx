@@ -8,7 +8,9 @@ import { Study } from "@/types";
 
 type StudyContextType = {
   study: Study | undefined;
-  deleteChatMessages: (userToken: string, studyId: string) => void;
+  deleteChatMessages: (studyId: string) => void;
+  uploadFileResource: (resourceType: string) => void;
+  uploadYtResource: (studyId: string, link: string) => void;
 };
 
 export const StudyContext = createContext<StudyContextType | undefined>(
@@ -33,9 +35,19 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
   const studyId = usePathname().split("/")[2];
   const authContext = UserAuth();
   const userTokenPromise = authContext?.user?.getIdToken();
+  const [userToken, setUserToken] = useState<string | undefined>(undefined);
 
-  async function deleteChatMessages(userToken: string, studyId: string) {
+  useEffect(() => {
+    if (userTokenPromise) {
+      userTokenPromise.then((token) => {
+        setUserToken(token);
+      });
+    }
+  }, [userTokenPromise]);
+
+  async function deleteChatMessages(studyId: string) {
     const url = `http://127.0.0.1:8000/delete-chat-messages?studyId=${studyId}`;
+
     const headers = {
       Authorization: `Bearer ${userToken}`,
     };
@@ -48,22 +60,49 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }
 
+  async function uploadYtResource(studyId: string, link: string) {
+    const endpoint = `http://127.0.0.1:8000/process-youtube-video`;
+    const body = { studyId: studyId, url: link };
+    const headers = { Authorization: `Bearer ${userToken}` };
+    const response = await axios.post(endpoint, body, { headers });
+    if (response.status === 200) {
+      console.log("YouTube Video Uploaded");
+      fetchStudiesQuery.refetch();
+    }
+  }
+  async function uploadFileResource(resourceType: string) {
+    if (study && resourceType === "pdf") {
+      setStudy({
+        ...study,
+        resources: [...(study.resources ?? []), { category: "pdf" }],
+      });
+    }
+    if (study && resourceType === "web") {
+      setStudy({
+        ...study,
+        resources: [...(study.resources ?? []), { category: "web" }],
+      });
+    }
+    fetchStudiesQuery.refetch();
+  }
+
   const fetchStudiesQuery = useQuery({
     queryKey: ["get-studies", userTokenPromise],
     queryFn: () =>
-      userTokenPromise
-        ? userTokenPromise.then((token) => fetchUserStudies(token))
-        : Promise.reject("No token"),
-    enabled: !!userTokenPromise, // This will ensure the query does not run until the token is available
+      userToken ? fetchUserStudies(userToken) : Promise.reject("No token"),
+    enabled: !!userToken, // This will ensure the query does not run until the token is available
   });
 
   useEffect(() => {
     if (fetchStudiesQuery.data && studyId) {
-      const currentStudy = fetchStudiesQuery.data.studies.filter((study) => {
-        if (study.id === studyId) {
-          return study;
+      const currentStudy = fetchStudiesQuery.data.studies.filter(
+        (study: Study) => {
+          if (study.id === studyId) {
+            return study;
+          }
         }
-      });
+      );
+      console.log("Current Study", currentStudy);
       setStudy(currentStudy);
     }
   }, [fetchStudiesQuery.data, studyId]);
@@ -86,7 +125,14 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
   // TODO if authContext is available but userId is not, display the landing page
 
   return (
-    <StudyContext.Provider value={{ study, deleteChatMessages }}>
+    <StudyContext.Provider
+      value={{
+        study,
+        deleteChatMessages,
+        uploadFileResource,
+        uploadYtResource,
+      }}
+    >
       {children}
     </StudyContext.Provider>
   );
