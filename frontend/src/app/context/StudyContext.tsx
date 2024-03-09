@@ -103,7 +103,7 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
         }
       );
       console.log("Current Study", currentStudy);
-      setStudy(currentStudy);
+      setStudy(currentStudy[0]);
     }
   }, [fetchStudiesQuery.data, studyId]);
 
