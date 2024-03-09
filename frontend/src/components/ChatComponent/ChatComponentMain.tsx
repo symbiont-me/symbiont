@@ -24,17 +24,8 @@ type Chat = {
 const ChatComponent = ({ studyId }: ChatComponentProps) => {
   const authContext = UserAuth();
   const currentStudyContext = CurrentStudy();
-  const [chatMessages, setChatMessages] = useState<Message[]>([]);
   const [chatLoading, setChatLoading] = useState(true);
-
-  useEffect(() => {
-    if (currentStudyContext?.study) {
-      // TODO need to fix this indexing issue and Message Type issue
-      setChatMessages(currentStudyContext?.study[0].chatMessages);
-      setChatLoading(false);
-    }
-  }, [currentStudyContext]);
-
+  const [chatMessages, setChatMessages] = useState<Message[]>([]);
   const [userToken, setUserToken] = useState<string | undefined>(undefined);
 
   // NOTE this is used to switch the context for the chat
@@ -51,20 +42,32 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
     }
   }
 
-  const { messages, input, handleInputChange, handleSubmit, isLoading } =
-    useChat({
-      api: "http://127.0.0.1:8000/chat",
-      body: {
-        user_query: userQuery,
-        previous_message: previousMessage,
-        study_id: studyId,
-        resource_identifier: selectedResource?.identifier,
-      },
-      headers: {
-        Authorization: `Bearer ${userToken}`,
-      },
-      initialMessages: chatMessages,
-    });
+  useEffect(() => {
+    if (currentStudyContext?.study) {
+      setChatMessages(currentStudyContext.study[0].chatMessages);
+    }
+  }, [currentStudyContext]);
+
+  const {
+    messages,
+    input,
+    handleInputChange,
+    handleSubmit,
+    isLoading,
+    setMessages,
+  } = useChat({
+    api: "http://127.0.0.1:8000/chat",
+    body: {
+      user_query: userQuery,
+      previous_message: previousMessage,
+      study_id: studyId,
+      resource_identifier: selectedResource?.identifier,
+    },
+    headers: {
+      Authorization: `Bearer ${userToken}`,
+    },
+    initialMessages: chatMessages || [],
+  });
 
   useEffect(() => {
     const messageContainer = document.getElementById("message-container");
@@ -74,12 +77,16 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
     setUserQuery(input);
     setPreviousMessage(messages[messages.length - 1]?.content);
     getUserAuthToken();
+    setChatLoading(false);
   }, [messages, selectedResource, input]);
 
-  async function newDeleteFunction() {
-    if (currentStudyContext?.study && userToken) {
-      currentStudyContext.deleteChatMessages(userToken, studyId);
+  function deleteChat() {
+    if (!currentStudyContext?.study) {
+      return;
     }
+    currentStudyContext.deleteChatMessages(studyId);
+    // NOTE: this retriggers the useChat hook which is essential, otherwise it keeps using the old state
+    setMessages([]);
   }
 
   return (
@@ -92,7 +99,7 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
       </div>
       <div
         className="flex flex-row justify-center items-center cursor-pointer p-2"
-        onClick={newDeleteFunction}
+        onClick={deleteChat}
       >
         <FontAwesomeIcon icon={faTrash} />
       </div>
@@ -106,7 +113,11 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
             <span className="loading loading-spinner loading-md"></span>
           </div>
         ) : (
-          <MessageList messages={messages} isLoading={isLoading} />
+          <MessageList
+            key={chatMessages.length}
+            messages={messages}
+            isLoading={isLoading}
+          />
         )}
       </div>
       <div className=" h-20 flex flex-col justify-center items-center ">
