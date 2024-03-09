@@ -27,6 +27,7 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
   const [chatLoading, setChatLoading] = useState(true);
   const [chatMessages, setChatMessages] = useState<Message[]>([]);
   const [userToken, setUserToken] = useState<string | undefined>(undefined);
+  const [combineResources, setCombineResources] = useState(false);
 
   // NOTE this is used to switch the context for the chat
   const [selectedResource, setSelectedResource] = useState<
@@ -44,7 +45,7 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
 
   useEffect(() => {
     if (currentStudyContext?.study) {
-      setChatMessages(currentStudyContext.study[0].chatMessages);
+      setChatMessages(currentStudyContext.study.chatMessages);
     }
   }, [currentStudyContext]);
 
@@ -62,6 +63,7 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
       previous_message: previousMessage,
       study_id: studyId,
       resource_identifier: selectedResource?.identifier,
+      combined: combineResources,
     },
     headers: {
       Authorization: `Bearer ${userToken}`,
@@ -89,6 +91,11 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
     setMessages([]);
   }
 
+  function handleCombineResources() {
+    setCombineResources(!combineResources);
+    console.log(combineResources);
+  }
+
   return (
     <>
       <div className="p-4">
@@ -96,6 +103,14 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
           studyId={studyId}
           onResourceChange={setSelectedResource}
         />
+        <input
+          type="checkbox"
+          id="combineResources"
+          name="resourceType"
+          value="combine"
+          onChange={handleCombineResources}
+        />
+        <label htmlFor="combineResources">Combine Resources</label>
       </div>
       <div
         className="flex flex-row justify-center items-center cursor-pointer p-2"
