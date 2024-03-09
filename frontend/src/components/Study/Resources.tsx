@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import axios from "axios";
 import { UserAuth } from "@/app/context/AuthContext";
+import { CurrentStudy } from "@/app/context/StudyContext";
 
 // TODO use Hooks
 async function addWebResource(
@@ -47,22 +48,6 @@ async function addTextResource(
   return response;
 }
 
-async function sendYtLink(studyId: string, link: string, userToken: string) {
-  const response = await axios.post(
-    `http://127.0.0.1:8000/process-youtube-video`,
-    {
-      studyId: studyId,
-      url: link,
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${userToken}`,
-      },
-    }
-  );
-  return response;
-}
-
 // NOTE this component should not be part of the Study Nav as it is
 // TODO should be refactored to make a dialog box where users can add and remove resources
 // TODO add a separate component for the Study Navbar which lists the resources being used
@@ -74,6 +59,12 @@ type TextResource = {
   content: string;
 };
 const Resources = () => {
+  const currentStudyContext = CurrentStudy();
+  if (!currentStudyContext) {
+    return null;
+  }
+  const authContext = UserAuth();
+
   const [webResources, setWebResources] = useState<string[]>([]);
   const [webLink, setWebLink] = useState("");
   const [textResourceName, setTextResourceName] = useState("");
@@ -81,7 +72,6 @@ const Resources = () => {
   const studyId = usePathname().split("/")[2];
   const [userToken, setUserToken] = useState<string | undefined>(undefined);
   const [ytLink, setYtLink] = useState("");
-  const authContext = UserAuth();
 
   useEffect(() => {
     const getUserAuthToken = async () => {
@@ -131,7 +121,7 @@ const Resources = () => {
 
   async function handleYtLinkSubmission() {
     if (userToken && ytLink.length > 0) {
-      sendYtLink(studyId, ytLink, userToken);
+      currentStudyContext?.uploadYtResource(studyId, ytLink);
     }
     setYtLink("");
   }
