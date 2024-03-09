@@ -1,5 +1,11 @@
-"use client"
-import {ReactNode, useContext, createContext, useState, useEffect } from "react";
+"use client";
+import {
+  ReactNode,
+  useContext,
+  createContext,
+  useState,
+  useEffect,
+} from "react";
 import {
   signInWithPopup,
   signOut,
@@ -7,18 +13,17 @@ import {
   GoogleAuthProvider,
 } from "firebase/auth";
 import { auth } from "@/firebase/config";
-import {User} from "firebase/auth";
+import { User } from "firebase/auth";
 
-
-type AuthContextType  = {
+type AuthContextType = {
   user: User | null;
   googleSignIn: () => void;
   logOut: () => void;
-}
+};
 
 export const AuthContext = createContext<AuthContextType | null>(null);
 
-export const AuthContextProvider = ({ children }: {children: ReactNode}) => {
+export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
 
   const googleSignIn = () => {
