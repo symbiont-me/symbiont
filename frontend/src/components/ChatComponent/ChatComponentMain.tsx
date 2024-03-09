@@ -3,16 +3,13 @@ import { useChat, Message } from "ai/react";
 import MessageList from "@/components/ChatComponent/MessageList";
 import UserChatInput from "@/components/ChatComponent/UserChatInput";
 import { useState, useEffect } from "react";
-import { TextModels } from "@/const";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { StudyResource } from "@/types";
 import ResourceSwitcher from "@/components/ResourceSwitcher";
 import "./chats.css";
 import { UserAuth } from "@/app/context/AuthContext";
-import { useFetchChatMessages } from "@/hooks/useFetchChatMessages";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { CurrentStudy } from "@/app/context/StudyContext";
 
 type ChatComponentProps = {
   studyId: string;
@@ -26,12 +23,18 @@ type Chat = {
 // TODO Fix isLoading state in the message list
 const ChatComponent = ({ studyId }: ChatComponentProps) => {
   const authContext = UserAuth();
-  const {
-    data,
-    isLoading: chatLoading,
-    isError,
-    error,
-  } = useFetchChatMessages(studyId);
+  const currentStudyContext = CurrentStudy();
+  const [chatMessages, setChatMessages] = useState<Message[]>([]);
+  const [chatLoading, setChatLoading] = useState(true);
+
+  useEffect(() => {
+    if (currentStudyContext?.study) {
+      // TODO need to fix this indexing issue and Message Type issue
+      setChatMessages(currentStudyContext?.study[0].chatMessages);
+      setChatLoading(false);
+    }
+  }, [currentStudyContext]);
+
   const [userToken, setUserToken] = useState<string | undefined>(undefined);
 
   // NOTE this is used to switch the context for the chat
@@ -60,7 +63,7 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
       headers: {
         Authorization: `Bearer ${userToken}`,
       },
-      initialMessages: data?.chatMessages || [],
+      initialMessages: chatMessages,
     });
 
   useEffect(() => {
@@ -73,20 +76,9 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
     getUserAuthToken();
   }, [messages, selectedResource, input]);
 
-  async function deleteChat() {
-    if (!userToken) {
-      return;
-    }
-    const endpoint = `http://127.0.0.1:8000/delete-chat-messages?studyId=${studyId}`;
-    const response = await axios.delete(endpoint, {
-      headers: {
-        Authorization: `Bearer ${userToken}`,
-      },
-    });
-
-    if (response.status === 200) {
-      console.log("Chat messages deleted");
-      // TODO update the chat messages state to be empty or trigger a refetch
+  async function newDeleteFunction() {
+    if (currentStudyContext?.study && userToken) {
+      currentStudyContext.deleteChatMessages(userToken, studyId);
     }
   }
 
@@ -100,7 +92,7 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
       </div>
       <div
         className="flex flex-row justify-center items-center cursor-pointer p-2"
-        onClick={deleteChat}
+        onClick={newDeleteFunction}
       >
         <FontAwesomeIcon icon={faTrash} />
       </div>
