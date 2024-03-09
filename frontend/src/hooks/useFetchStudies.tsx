@@ -3,9 +3,9 @@ import axios from "axios";
 import { UserAuth } from "@/app/context/AuthContext";
 
 const fetchUserStudies = async (userToken: string) => {
-  const response = await axios.post(
+  const response = await axios.get(
     "http://127.0.0.1:8000/get-user-studies",
-    {},
+
     {
       headers: {
         Authorization: `Bearer ${userToken}`,
