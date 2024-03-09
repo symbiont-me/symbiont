@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import YouTube, { YouTubeProps } from "react-youtube";
 import { Study } from "@/types";
-import { useFetchResources } from "@/hooks/useFetchResources";
+import { CurrentStudy } from "@/app/context/StudyContext";
 
 type VideoViewerProps = {
-  study: Study;
+  study: Study | undefined;
 };
 
 type Resource = {
@@ -15,27 +15,35 @@ type Resource = {
   url: string;
 };
 
-const VideoViewer = ({ study }: VideoViewerProps) => {
+const VideoViewer = () => {
+  const currentStudyContext = CurrentStudy();
+  if (!currentStudyContext) {
+    return null;
+  }
   const [currentVideoId, setCurrentVideoId] = useState<string | undefined>(
     undefined
   );
   const [videos, setVideos] = useState<Resource[] | null>(null);
   const [videoIndex, setVideoIndex] = useState<number>(0);
-  console.log(study);
 
   function filterVideos() {
-    if (study && study.resources) {
-      const filteredVideos = study.resources.filter(
+    if (currentStudyContext?.study) {
+      const allResources = currentStudyContext.study[0].resources;
+      const filteredVideos = allResources.filter(
         (resource) => resource.category === "video"
       );
 
-      setVideos(filteredVideos);
+      setVideos(filteredVideos as Resource[]);
     }
   }
 
   useEffect(() => {
     filterVideos();
-  }, [study]);
+  }, [currentStudyContext]);
+
+  useEffect(() => {
+    console.log(videos);
+  }, [videos]);
 
   function createVideoId(url: string) {
     const videoId = new URL(url).searchParams.get("v");
