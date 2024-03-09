@@ -113,11 +113,7 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
             <span className="loading loading-spinner loading-md"></span>
           </div>
         ) : (
-          <MessageList
-            key={chatMessages.length}
-            messages={messages}
-            isLoading={isLoading}
-          />
+          <MessageList messages={messages} isLoading={isLoading} />
         )}
       </div>
       <div className=" h-20 flex flex-col justify-center items-center ">
