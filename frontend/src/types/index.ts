@@ -17,6 +17,12 @@ export enum StudyResourceCategory {
   Webpage = "webpage",
 }
 
+type ChatMessage = {
+  content: string;
+  createdAt: Date;
+  role: "user" | "bot";
+};
+
 export type Study = {
   id?: number | string;
   name: string;
@@ -25,6 +31,7 @@ export type Study = {
   userId?: string;
   description: string;
   resources: StudyResource[];
+  chatMessages: ChatMessage[];
 };
 
 export type UserAuthDetails = {
