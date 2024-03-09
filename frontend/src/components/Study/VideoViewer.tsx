@@ -28,7 +28,7 @@ const VideoViewer = () => {
 
   function filterVideos() {
     if (currentStudyContext?.study) {
-      const allResources = currentStudyContext.study[0].resources;
+      const allResources = currentStudyContext.study.resources;
       const filteredVideos = allResources.filter(
         (resource) => resource.category === "video"
       );
