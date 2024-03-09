@@ -27,7 +27,7 @@ const PdfViewer = () => {
 
   useEffect(() => {
     if (currentStudyContext?.study) {
-      const allResources = currentStudyContext.study[0].resources;
+      const allResources = currentStudyContext.study.resources;
       setPdfs(filterPdfs(allResources));
     }
   }, [currentStudyContext]);
