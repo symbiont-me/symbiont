@@ -3,33 +3,34 @@ import { StudyResource } from "../../types";
 import "../ui/uiStyles.css";
 import { truncateFileName } from "../../lib/utils";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
-import { useFetchResources } from "@/hooks/useFetchResources";
+import { Study } from "@/types";
+import { CurrentStudy } from "@/app/context/StudyContext";
 
 type PDFViewerProps = {
-  studyId: string;
+  study: Study | undefined;
 };
 
-const PdfViewer = ({ studyId }: PDFViewerProps) => {
+const PdfViewer = () => {
+  const currentStudyContext = CurrentStudy();
+  // make sure currentStudyContext is not undefined
+  if (!currentStudyContext) {
+    return null;
+  }
+
   const [pdfs, setPdfs] = useState<StudyResource[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [pdfUrl, setPdfUrl] = useState("");
 
-  const filterPdfs = (pdfs: StudyResource[]) => {
-    return pdfs.filter((pdf) => pdf.category === "pdf");
+  const filterPdfs = (allResources: StudyResource[]) => {
+    return allResources.filter((resource) => resource.category === "pdf");
   };
 
-  const {
-    data: resourcesData,
-    isLoading,
-    isError,
-    error,
-  } = useFetchResources(studyId);
-
   useEffect(() => {
-    if (resourcesData) {
-      setPdfs(filterPdfs(resourcesData.resources));
+    if (currentStudyContext?.study) {
+      const allResources = currentStudyContext.study[0].resources;
+      setPdfs(filterPdfs(allResources));
     }
-  }, [resourcesData]);
+  }, [currentStudyContext]);
 
   useEffect(() => {
     const loadPdf = async () => {
@@ -57,14 +58,6 @@ const PdfViewer = ({ studyId }: PDFViewerProps) => {
       }
     };
   }, [currentIndex, pdfs]);
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (isError) {
-    return <div>Error: {error?.message}</div>;
-  }
 
   const goToPreviousPdf = () => {
     setCurrentIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : prevIndex));
