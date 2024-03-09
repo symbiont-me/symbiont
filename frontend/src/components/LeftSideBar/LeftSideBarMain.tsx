@@ -12,15 +12,11 @@ import { usePathname } from "next/navigation";
 import "@/app/globals.css";
 
 const fetchUserStudies = async (userToken: string) => {
-  const response = await axios.post(
-    "http://127.0.0.1:8000/get-user-studies",
-    {},
-    {
-      headers: {
-        Authorization: `Bearer ${userToken}`,
-      },
-    }
-  );
+  const response = await axios.get("http://127.0.0.1:8000/get-user-studies", {
+    headers: {
+      Authorization: `Bearer ${userToken}`,
+    },
+  });
   return response.data;
 };
 
