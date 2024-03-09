@@ -66,7 +66,7 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
       });
       setStudy(currentStudy);
     }
-  }, [fetchStudiesQuery.data]);
+  }, [fetchStudiesQuery.data, studyId]);
 
   useEffect(() => {
     console.log("Study From Context", study);
