@@ -9,6 +9,7 @@ import { StudyResource, StudyResourceCategory } from "@/types";
 import { uploadToFirebaseStorage } from "@/firebase/uploadToStorage";
 import { UserAuth } from "@/app/context/AuthContext";
 import { useEffect } from "react";
+import { CurrentStudy } from "@/app/context/StudyContext";
 
 // TODO fix toast messages
 // TODO update to handle audio file uploads
@@ -47,6 +48,10 @@ const FileUpload = () => {
   // TODO use uploading state
   const [uploading, setUploading] = useState(false);
   const authContext = UserAuth();
+  const studyContext = CurrentStudy();
+  if (!studyContext) {
+    return null;
+  }
   const [userToken, setUserToken] = useState<string | undefined>(undefined);
   const [loading, setLoading] = useState(true);
 
@@ -90,6 +95,9 @@ const FileUpload = () => {
           );
           if (uploadResponse) {
             setUploading(false);
+          }
+          if (studyContext) {
+            studyContext?.uploadFileResource("pdf");
           }
         }
       } catch (error) {
