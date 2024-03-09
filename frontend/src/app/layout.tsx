@@ -3,6 +3,7 @@ import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import ReactQueryProvider from "../components/Providers";
 import { AuthContextProvider } from "./context/AuthContext";
+import { StudyProvider } from "./context/StudyContext";
 
 const inter = Inter({ subsets: ["latin"] });
 const plusJakartaSans = Plus_Jakarta_Sans({ subsets: ["latin"] });
@@ -20,7 +21,9 @@ export default function RootLayout({
     <html lang="en">
       <ReactQueryProvider>
         <body className={plusJakartaSans.className}>
-          <AuthContextProvider>{children}</AuthContextProvider>
+          <AuthContextProvider>
+            <StudyProvider>{children}</StudyProvider>
+          </AuthContextProvider>
         </body>
       </ReactQueryProvider>
     </html>
