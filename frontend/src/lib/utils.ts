@@ -25,6 +25,7 @@ export function removeNonAscii(inputString: string) {
 }
 
 export function truncateFileName(fileName: string) {
+  if (!fileName) return "";
   return fileName.length > 20
     ? fileName.substring(0, 20) + "..." + fileName.slice(-10)
     : fileName;
