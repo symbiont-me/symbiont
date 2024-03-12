@@ -1,80 +1,29 @@
 "use client";
-import React from "react";
-import axios from "axios";
+import React, { useEffect } from "react";
+
 import { useRouter } from "next/navigation";
 import { HttpStatus } from "@/const";
 import { useState } from "react";
-import { UserAuth } from "@/app/context/AuthContext";
+
+import { useStudyContext } from "@/app/context/StudyContext";
 // TODO maybe separate the modal into a separate component
-
-const createStudy = async (
-  studyName: string,
-  description: string,
-  image: string,
-  userToken: string
-) => {
-  const response = await axios.post(
-    `http://127.0.0.1:8000/create-study`,
-    {
-      name: studyName,
-      description: description,
-      image: image,
-    },
-
-    {
-      headers: {
-        Authorization: `Bearer ${userToken}`,
-      },
-    }
-  );
-  return response;
-};
 
 const NewStudyCard = () => {
   const router = useRouter();
-
+  const studyContext = useStudyContext();
   const [studyName, setStudyName] = useState("");
   const [image, setImage] = useState("");
   const [description, setDescription] = useState("");
-  const authContext = UserAuth();
-  const [userToken, setUserToken] = useState<string | undefined>(undefined);
 
-  React.useEffect(() => {
-    const getUserAuthToken = async () => {
-      if (authContext?.user?.getIdToken) {
-        const token = await authContext.user.getIdToken();
-        setUserToken(token);
-      }
-    };
-    getUserAuthToken();
-  }, [authContext]);
+  useEffect(() => {
+    console.log("studyContext", studyContext);
+  }, [studyContext]);
 
-  function handleCreateStudy(studyName: string, userToken: string | undefined) {
-    if (!userToken) {
+  async function handleCreateStudy() {
+    if (!studyContext) {
       return;
     }
-    createStudy(studyName, description, image, userToken)
-      .then((response) => {
-        if (response.status === HttpStatus.CREATED) {
-          const studyId = response.data.studyId;
-          router.push(`/studies/${studyId}`);
-        }
-      })
-      .catch((error) => {
-        // TODO add a toast notification
-        console.error("Failed to create study", error);
-        throw error;
-      });
-  }
-
-  if (!authContext) {
-    return null;
-  }
-
-  const userId = authContext?.user?.uid;
-  // TODO remove this check
-  if (typeof userId === "undefined") {
-    return null;
+    studyContext.createStudy(studyName, description, image);
   }
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -131,10 +80,7 @@ const NewStudyCard = () => {
             onChange={handleInputChange}
             name="description"
           />
-          <button
-            className="btn btn-info"
-            onClick={() => handleCreateStudy(studyName, userToken)}
-          >
+          <button className="btn btn-info" onClick={() => handleCreateStudy()}>
             Create Study
           </button>
         </div>

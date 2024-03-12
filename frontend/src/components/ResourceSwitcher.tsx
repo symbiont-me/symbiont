@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { StudyResource } from "@/types";
 import { truncateFileName } from "@/lib/utils";
-import { CurrentStudy } from "@/app/context/StudyContext";
+import { useStudyContext } from "@/app/context/StudyContext";
 
 type ResourceSwitcherProps = {
   studyId: string;
@@ -16,7 +16,7 @@ const ResourceSwitcher = ({
   onResourceChange,
 }: ResourceSwitcherProps) => {
   const [resources, setResources] = useState<StudyResource[]>([]);
-  const studyContext = CurrentStudy();
+  const studyContext = useStudyContext();
 
   if (!studyContext) {
     return null;

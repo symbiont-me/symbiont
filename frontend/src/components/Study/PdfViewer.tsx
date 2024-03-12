@@ -4,14 +4,14 @@ import "../ui/uiStyles.css";
 import { truncateFileName } from "../../lib/utils";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import { Study } from "@/types";
-import { CurrentStudy } from "@/app/context/StudyContext";
+import { useStudyContext } from "@/app/context/StudyContext";
 
 type PDFViewerProps = {
   study: Study | undefined;
 };
 
 const PdfViewer = () => {
-  const currentStudyContext = CurrentStudy();
+  const currentStudyContext = useStudyContext();
   // make sure currentStudyContext is not undefined
   if (!currentStudyContext) {
     return null;

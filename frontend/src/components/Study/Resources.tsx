@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import axios from "axios";
 import { UserAuth } from "@/app/context/AuthContext";
-import { CurrentStudy } from "@/app/context/StudyContext";
+import { useStudyContext } from "@/app/context/StudyContext";
 
 // TODO use Hooks
 async function addWebResource(
@@ -59,7 +59,7 @@ type TextResource = {
   content: string;
 };
 const Resources = () => {
-  const currentStudyContext = CurrentStudy();
+  const currentStudyContext = useStudyContext();
   if (!currentStudyContext) {
     return null;
   }
@@ -73,6 +73,7 @@ const Resources = () => {
   const [userToken, setUserToken] = useState<string | undefined>(undefined);
   const [ytLink, setYtLink] = useState("");
 
+  // TODO remove as not needed because of the useStudyContext hook
   useEffect(() => {
     const getUserAuthToken = async () => {
       if (authContext?.user?.getIdToken) {

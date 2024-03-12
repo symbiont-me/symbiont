@@ -7,6 +7,7 @@ export type StudyResource = {
   url: string;
   identifier: string;
   category: StudyResourceCategory;
+  summary?: string;
   createdAt?: Date;
 };
 
@@ -30,6 +31,7 @@ export type Study = {
   createdAt?: Date;
   userId?: string;
   description: string;
+  text: string;
   resources: StudyResource[];
   chatMessages: ChatMessage[];
 };

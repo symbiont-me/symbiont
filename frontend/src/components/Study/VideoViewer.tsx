@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import YouTube, { YouTubeProps } from "react-youtube";
 import { Study } from "@/types";
-import { CurrentStudy } from "@/app/context/StudyContext";
+import { useStudyContext } from "@/app/context/StudyContext";
 
 type VideoViewerProps = {
   study: Study | undefined;
@@ -16,7 +16,7 @@ type Resource = {
 };
 
 const VideoViewer = () => {
-  const currentStudyContext = CurrentStudy();
+  const currentStudyContext = useStudyContext();
   if (!currentStudyContext) {
     return null;
   }

@@ -1,50 +1,40 @@
 import React from "react";
-import { ViewSelected } from "@/const/index";
-import { useFetchSummaries } from "@/hooks/useFetchSummaries";
-import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Study } from "@/types";
+import { useStudyContext } from "@/app/context/StudyContext";
 
-// TODO call get-summaries route
-
-type Summary = {
-  name: string;
-  identifier: string;
-  url: string;
-  summary: string;
-};
-// TODO get Study from the parent component
 const Summaries = () => {
-  const studyId = usePathname().split("/")[2];
-  const [summaries, setSummaries] = useState<Summary[]>([]);
-  const { data, isLoading, isError, error } = useFetchSummaries(studyId);
+  const studyContext = useStudyContext();
+  const [study, setStudy] = useState<Study | undefined>(undefined);
+
   useEffect(() => {
-    if (data && data.summaries) {
-      setSummaries(data.summaries);
+    if (studyContext) {
+      setStudy(studyContext.study);
     }
-  }, [summaries, data]);
+  }, [studyContext]);
 
   return (
     <div>
       <h1>Summaries</h1>
-      {isLoading && <div>Loading...</div>}
-      {isError && <div>Error: {error?.message}</div>}
-
-      <ul>
-        {summaries.map((summary) => (
-          <div key={summary.identifier}>
-            <li>
-              <a
-                href={summary.url}
-                className="hover:underline text-symbiont-chatMessageUser"
-              >
-                {summary.name}
-              </a>
-            </li>
-            <p>{summary.summary}</p>
-          </div>
-        ))}
-      </ul>
+      {studyContext?.isStudyLoading ? (
+        <div>Loading...</div>
+      ) : (
+        <ul>
+          {study?.resources.map((resource) => (
+            <div key={resource.identifier}>
+              <li>
+                <a
+                  href={resource.url}
+                  className="hover:underline text-symbiont-chatMessageUser"
+                >
+                  {resource.name}
+                </a>
+              </li>
+              <p>{resource.summary}</p>
+            </div>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };
