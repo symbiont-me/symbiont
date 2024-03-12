@@ -5,6 +5,7 @@ import { useState } from "react";
 import "@/app/globals.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSave, faShare } from "@fortawesome/free-solid-svg-icons";
+import { Box, Tab, Tabs } from "@mui/material";
 
 type NavigationProps = {
   setViewSelected: (view: ViewSelected) => void;
@@ -24,25 +25,28 @@ const Navigation = ({ setViewSelected, study }: NavigationProps) => {
   return (
     <>
       <StudyInfo study={study} />
-      <nav className="flex justify-between items-center p-4 bg-symbiont-foreground rounded-2xl mb-2 mt-2">
+      <nav className="flex justify-between items-center p-4  mb-2 mt-2">
         <div className="flex gap-4 ">
-          {Object.values(ViewSelected).map((view) => (
-            <button
-              key={view}
-              onClick={() => handleViewSelection(view)}
-              className="capitalize text-xs h-full"
+          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+            <Tabs
+              value={selectedView} // Use the state to control the selected tab
+              onChange={(event, newValue) => handleViewSelection(newValue)} // Update the state when a new tab is selected
+              aria-label="basic tabs example"
+              variant="scrollable" // Optional: makes the tabs scrollable if they overflow their container
+              scrollButtons="auto" // Optional: adds scroll buttons if the tabs overflow their container
             >
-              {selectedView === view ? (
-                <div className="flex flex-col items-center justify-center">
-                  <p> {view} </p>
-
-                  <div className="w-full h-2 selected-gradient rounded-full"></div>
-                </div>
-              ) : (
-                <div>{view}</div>
-              )}
-            </button>
-          ))}
+              {Object.values(ViewSelected).map((view) => (
+                <Tab
+                  key={view}
+                  value={view} // Set the value of each tab to its corresponding view
+                  label={view} // Use the label prop to set the tab's text
+                  className={`capitalize text-xs h-full ${
+                    selectedView === view ? "selected-tab-class" : ""
+                  }`} // Apply conditional styling
+                />
+              ))}
+            </Tabs>
+          </Box>
         </div>
         <div className="flex gap-4  mr-6">
           <div className="flex flex-row">
