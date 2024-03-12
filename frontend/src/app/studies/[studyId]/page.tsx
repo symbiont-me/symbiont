@@ -6,7 +6,7 @@ import { User } from "firebase/auth";
 import { Study } from "@/types";
 import { ViewSelected } from "@/const";
 import { UserAuth } from "@/app/context/AuthContext";
-import { CurrentStudy } from "@/app/context/StudyContext";
+import { useStudyContext } from "@/app/context/StudyContext";
 import LeftSideBarMain from "@/components/LeftSideBar/LeftSideBarMain";
 import StudyNavbar from "@/components/Study/StudyNavbar";
 import TextEditor from "@/components/Study/TextEditor";
@@ -39,7 +39,7 @@ const viewComponents = {
 
 const StudyPage = () => {
   const authContext = UserAuth();
-  const currentStudyContext = CurrentStudy();
+  const currentStudyContext = useStudyContext();
   const router = useRouter();
   const path = usePathname();
   const [currentStudy, setCurrentStudy] = useState<Study | undefined>(
@@ -56,7 +56,7 @@ const StudyPage = () => {
   const SelectedViewComponent = viewComponents[viewSelected] || null;
 
   useEffect(() => {
-    if (!authContext) {
+    if (!authContext || !authContext.user) {
       router.push("/");
     } else {
       setUser(authContext.user);
