@@ -7,7 +7,9 @@ import { usePathname } from "next/navigation";
 import { Study } from "@/types";
 
 type StudyContextType = {
+  allStudies: Study[];
   study: Study | undefined;
+  deleteStudy: (studyId: string) => void;
   deleteChatMessages: (studyId: string) => void;
   uploadFileResource: (resourceType: string) => void;
   uploadYtResource: (studyId: string, link: string) => void;
@@ -31,6 +33,7 @@ const fetchUserStudies = async (userToken: string) => {
 export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
+  const [allStudies, setAllStudies] = useState<Study[]>([]);
   const [study, setStudy] = useState<Study | undefined>(undefined);
   const studyId = usePathname().split("/")[2];
   const authContext = UserAuth();
@@ -44,6 +47,45 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
       });
     }
   }, [userTokenPromise]);
+
+  // Set studies
+  const fetchStudiesQuery = useQuery({
+    queryKey: ["get-studies", userTokenPromise],
+    queryFn: () =>
+      userToken ? fetchUserStudies(userToken) : Promise.reject("No token"),
+    enabled: !!userToken, // This will ensure the query does not run until the token is available
+  });
+
+  useEffect(() => {
+    if (fetchStudiesQuery.data) {
+      setAllStudies(fetchStudiesQuery.data.studies);
+      const currentStudy = fetchStudiesQuery.data.studies.filter(
+        (study: Study) => {
+          if (studyId && study.id === studyId) {
+            return study;
+          }
+        }
+      );
+      console.log("Current Study", currentStudy);
+      setStudy(currentStudy[0]);
+    }
+  }, [fetchStudiesQuery.data, studyId]);
+
+  async function deleteStudy(studyId: string) {
+    const endpoint = `http://127.0.0.1:8000/delete-study?studyId=${studyId}`;
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${userToken}`,
+    };
+    try {
+      await axios.delete(endpoint, { headers });
+      console.log("Study Deleted");
+      console.log("Refetching Studies...");
+      fetchStudiesQuery.refetch();
+    } catch (error) {
+      console.error("Error deleting study:", error);
+    }
+  }
 
   async function deleteChatMessages(studyId: string) {
     const url = `http://127.0.0.1:8000/delete-chat-messages?studyId=${studyId}`;
@@ -86,27 +128,6 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
     fetchStudiesQuery.refetch();
   }
 
-  const fetchStudiesQuery = useQuery({
-    queryKey: ["get-studies", userTokenPromise],
-    queryFn: () =>
-      userToken ? fetchUserStudies(userToken) : Promise.reject("No token"),
-    enabled: !!userToken, // This will ensure the query does not run until the token is available
-  });
-
-  useEffect(() => {
-    if (fetchStudiesQuery.data && studyId) {
-      const currentStudy = fetchStudiesQuery.data.studies.filter(
-        (study: Study) => {
-          if (study.id === studyId) {
-            return study;
-          }
-        }
-      );
-      console.log("Current Study", currentStudy);
-      setStudy(currentStudy[0]);
-    }
-  }, [fetchStudiesQuery.data, studyId]);
-
   useEffect(() => {
     console.log("Study From Context", study);
   });
@@ -127,7 +148,9 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
   return (
     <StudyContext.Provider
       value={{
+        allStudies,
         study,
+        deleteStudy,
         deleteChatMessages,
         uploadFileResource,
         uploadYtResource,
@@ -138,6 +161,7 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 };
 
-export const CurrentStudy = () => {
+// TODO update name to StudyContext
+export const useStudyContext = () => {
   return useContext(StudyContext);
 };
