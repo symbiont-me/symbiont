@@ -10,6 +10,11 @@ import { UserAuth } from "@/app/context/AuthContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useStudyContext } from "@/app/context/StudyContext";
+import Button from "@mui/material/Button";
+import DeleteIcon from "@mui/icons-material/Delete";
+import Checkbox from "@mui/material/Checkbox";
+
+const label = { inputProps: { "aria-label": "Combine Resources" } };
 
 type ChatComponentProps = {
   studyId: string;
@@ -103,20 +108,17 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
           studyId={studyId}
           onResourceChange={setSelectedResource}
         />
-        <input
-          type="checkbox"
-          id="combineResources"
-          name="resourceType"
-          value="combine"
-          onChange={handleCombineResources}
-        />
+
+        <Checkbox {...label} onChange={handleCombineResources} />
         <label htmlFor="combineResources">Combine Resources</label>
       </div>
       <div
         className="flex flex-row justify-center items-center cursor-pointer p-2"
         onClick={deleteChat}
       >
-        <FontAwesomeIcon icon={faTrash} />
+        <Button variant="contained" endIcon={<DeleteIcon />}>
+          Clear Chat
+        </Button>
       </div>
       <div
         id="message-container"
@@ -131,7 +133,8 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
           <MessageList messages={messages} isLoading={isLoading} />
         )}
       </div>
-      <div className=" h-20 flex flex-col justify-center items-center ">
+      {/* TODO fix height of the input */}
+      <div>
         <UserChatInput
           input={input}
           handleInputChange={handleInputChange}
