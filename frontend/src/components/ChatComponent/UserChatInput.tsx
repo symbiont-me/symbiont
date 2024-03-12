@@ -1,6 +1,13 @@
-import { Input } from "../ui/Input";
-import { Button } from "../ui/Button";
-import { Send } from "lucide-react";
+import { TextField } from "@mui/material";
+import Button from "@mui/material/Button";
+import SendIcon from "@mui/icons-material/Send";
+import SpeedDial from "@mui/material/SpeedDial";
+import SpeedDialIcon from "@mui/material/SpeedDialIcon";
+import SpeedDialAction from "@mui/material/SpeedDialAction";
+import FileCopyIcon from "@mui/icons-material/FileCopyOutlined";
+import SaveIcon from "@mui/icons-material/Save";
+import PrintIcon from "@mui/icons-material/Print";
+import ShareIcon from "@mui/icons-material/Share";
 
 // TODO use styles from DaisyUI
 type UserChatInputProps = {
@@ -8,27 +15,49 @@ type UserChatInputProps = {
   handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
 };
+const actions = [
+  { icon: <FileCopyIcon />, name: "Copy" },
+  { icon: <SaveIcon />, name: "Save" },
+  { icon: <PrintIcon />, name: "Print" },
+  { icon: <ShareIcon />, name: "Share" },
+];
 
+// TODO implement SpeedDial actions
 const UserChatInput = ({
   input,
   handleInputChange,
   handleSubmit,
 }: UserChatInputProps) => {
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="flex">
-        <input
-          value={input}
-          onChange={handleInputChange}
-          placeholder="Ask any question..."
-          className="w-full h-10 px-4 rounded-xl bg-slate-800"
-        />
+    <>
+      <SpeedDial
+        ariaLabel="SpeedDial"
+        sx={{ position: "absolute", bottom: 16, right: 16 }}
+        icon={<SpeedDialIcon />}
+      >
+        {actions.map((action) => (
+          <SpeedDialAction
+            key={action.name}
+            icon={action.icon}
+            tooltipTitle={action.name}
+          />
+        ))}
+      </SpeedDial>
+      <form onSubmit={handleSubmit}>
+        <div className="flex flex-row">
+          <TextField
+            id="standard-basic"
+            variant="standard"
+            value={input}
+            onChange={handleInputChange}
+            placeholder="Ask any question..."
+            className="w-full px-4 "
+          />
 
-        <Button className="ml-2 rounded-xl bg-slate-800">
-          <Send className="h-4 w-4" />
-        </Button>
-      </div>
-    </form>
+          <Button variant="contained" endIcon={<SendIcon />} type="submit" />
+        </div>
+      </form>
+    </>
   );
 };
 
