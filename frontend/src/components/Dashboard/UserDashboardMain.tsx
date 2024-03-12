@@ -1,33 +1,21 @@
 "use client";
-import ProjectCard from "./StudyCard";
 import NewStudyCard from "./NewStudyCard";
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { Study } from "@/types";
 import "@/app/styles.css";
 import LeftSideBar from "@/components/LeftSideBar/LeftSideBarMain";
 import StudyCard from "@/components/Study/StudyCard";
-import { useFetchUserStudies } from "@/hooks/useFetchStudies";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
-
+import { useStudyContext } from "@/app/context/StudyContext";
 // NOTE without ContextApi one way to update studies when deleted would be here in the UserDashboard component
 const UserDashboard = () => {
+  const studyContext = useStudyContext();
   const [studies, setStudies] = useState<Study[]>([]);
-  const { data, isLoading, isError, error } = useFetchUserStudies();
+
   useEffect(() => {
-    if (data) {
-      setStudies(data.studies);
+    if (studyContext && studyContext.allStudies) {
+      setStudies(studyContext.allStudies);
     }
-  }, [data]);
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (isError) {
-    return <div>Error: {error?.message}</div>;
-  }
+  }, [studyContext]);
 
   return (
     <div className="layout">
