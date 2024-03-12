@@ -6,6 +6,10 @@ import "@/app/styles.css";
 import LeftSideBar from "@/components/LeftSideBar/LeftSideBarMain";
 import StudyCard from "@/components/Study/StudyCard";
 import { useStudyContext } from "@/app/context/StudyContext";
+import { Box } from "@mui/system";
+import { Container } from "@mui/material";
+import Grid from "@mui/material/Grid";
+import Item from "@mui/material/Grid";
 // NOTE without ContextApi one way to update studies when deleted would be here in the UserDashboard component
 const UserDashboard = () => {
   const studyContext = useStudyContext();
@@ -18,23 +22,19 @@ const UserDashboard = () => {
   }, [studyContext]);
 
   return (
-    <div className="layout">
-      <div className="sidebar">
-        <LeftSideBar />
-      </div>
-
-      {/*  Dashboard */}
-      <div className="main-window flex flex-row">
-        <>
+    <div className="">
+      <LeftSideBar />
+      <Grid container spacing={2}>
+        <div className="flex flex-row mt-20">
           <NewStudyCard />
-        </>
-
-        <div className="w-full h-full flex flex-row">
           {studies.map((study) => (
-            <StudyCard key={study.id} study={study} />
+            <Item className="m-2">
+              {" "}
+              <StudyCard key={study.id} study={study} />
+            </Item>
           ))}
         </div>
-      </div>
+      </Grid>
     </div>
   );
 };
