@@ -30,7 +30,7 @@ body {
   /* padding: 2px; */
   margin: 2px;
   /* background-color: #131619; */
-  background-color: #292927;
+  /* background-color: #292927; */
 }
 
 /* gradient for selected view */
@@ -43,8 +43,7 @@ body {
   );
 }
 
-/* Main Grid Layout */
-.layout {
+/* Main Grid Layout .layout {
   width: 1366px;
   height: px;
 
@@ -60,4 +59,4 @@ body {
 }
 .main-window {
   grid-area: main-window;
-}
+} */
