@@ -19,7 +19,8 @@ import TextEvaluation from "@/components/Study/TextEvaluation";
 import Summaries from "@/components/Study/Summaries";
 import Resources from "@/components/Study/Resources";
 import ChatComponent from "@/components/ChatComponent/ChatComponentMain";
-
+import { Container } from "@mui/material";
+import Box from "@mui/material/Box";
 import "@/app/studies/studyStyles.css";
 import "@/app/globals.css";
 
@@ -86,7 +87,7 @@ const StudyPage = () => {
   }
 
   return (
-    <div className="layout">
+    <div className="ml-80">
       <div className="sidebar">
         <LeftSideBarMain />
       </div>
@@ -98,16 +99,19 @@ const StudyPage = () => {
               study={currentStudy}
             />
           </div>
-          <div className="viewer">
-            {SelectedViewComponent && (
-              // TODO fix this type error
-              <SelectedViewComponent
-                textWriterValue={textWriterValue}
-                studyId={studyId}
-                study={currentStudy}
-              />
-            )}
-          </div>
+          <Container className="overflow-scroll">
+            <Box sx={{ height: "100vh" }}>
+              {SelectedViewComponent && (
+                // TODO fix this type error
+                <SelectedViewComponent
+                  textWriterValue={textWriterValue}
+                  studyId={studyId}
+                  study={currentStudy}
+                />
+              )}
+            </Box>
+          </Container>
+
           <div className="chat flex flex-col h-screen">
             <ChatComponent studyId={studyId} />
           </div>
