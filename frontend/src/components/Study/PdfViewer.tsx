@@ -5,6 +5,7 @@ import { truncateFileName } from "../../lib/utils";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import { Study } from "@/types";
 import { useStudyContext } from "@/app/context/StudyContext";
+import Button from "@mui/material/Button";
 
 type PDFViewerProps = {
   study: Study | undefined;
@@ -83,19 +84,22 @@ const PdfViewer = () => {
           ></iframe>
         </>
       )}
-      <div className="flex flex-row items-center justify-center mb-6">
-        <button
+      <div className="flex flex-row items-center justify-center mt-4 mb-6 space-x-6">
+        <Button
+          variant="contained"
           onClick={goToPreviousPdf}
-          className="p-4 text-xs rounded-xl m-2 w-20 text-symbiont-textUnSelected  "
+          disabled={currentIndex <= 0}
         >
           Previous
-        </button>
-        <button
+        </Button>
+
+        <Button
+          variant="contained"
           onClick={goToNextPdf}
-          className=" p-4 text-xs rounded-xl m-2 w-20 text-symbiont-textUnSelected"
+          disabled={currentIndex + 1 >= pdfs.length}
         >
           Next
-        </button>
+        </Button>
       </div>
     </div>
   );
