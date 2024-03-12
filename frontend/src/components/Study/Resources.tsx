@@ -1,13 +1,15 @@
 // TODO this component is used to add resources to a study and should be refactored to be a dialog box
 // TODO the Resources view should be a separate component that lists the resources being used
-
+// TODO use Context to handle the state of the resources
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import axios from "axios";
 import { UserAuth } from "@/app/context/AuthContext";
 import { useStudyContext } from "@/app/context/StudyContext";
-
+import { Container } from "@mui/material";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 // TODO use Hooks
 async function addWebResource(
   studyId: string,
@@ -103,6 +105,7 @@ const Resources = () => {
   }
 
   function handleTextResource() {
+    // TODO handle validation
     if (
       userToken &&
       textResourceName.length > 0 &&
@@ -128,53 +131,66 @@ const Resources = () => {
   }
 
   return (
-    <div className="flex flex-col justify-start items-start">
+    <Container maxWidth="sm">
       <div className="mb-10">
         <FileUpload />
       </div>
-      <textarea
-        value={webLink}
-        onChange={(e) => setWebLink(e.target.value)}
-        placeholder="Add Webpage Links separated by next line: https://www.google.com https://www.facebook.com"
-        className="input input-bordered w-full max-w-xs mb-4 px-2 py-1"
-      />
-      <button className="btn btn-primary mb-10" onClick={handleWebLinks}>
-        Add Webpages
-      </button>
-      <div className="flex flex-col">
-        <input
+      <div className="flex flex-col mb-4">
+        <TextField
+          id="outlined-textarea"
+          label="Add Web Resource"
+          placeholder="Webpages separated by newlines"
+          multiline
+          value={webLink}
+          onChange={(e) => setWebLink(e.target.value)}
+          className="mb-2"
+        />
+        <Button variant="contained" onClick={handleWebLinks}>
+          Add Webpages
+        </Button>
+      </div>
+      <div className="flex flex-col mb-4">
+        <TextField
+          id="outlined-textarea"
+          label="Add Text Resource"
+          placeholder="Multiline Text"
+          multiline
+          value={textResourceContent}
+          onChange={(e) => setTextResourceContent(e.target.value)}
+          className="mb-2"
+        />
+
+        <TextField
+          id="standard-basic"
+          label="Text Resource Name"
+          variant="standard"
           type="text"
           value={textResourceName}
           onChange={(e) => setTextResourceName(e.target.value)}
-          placeholder="Add Text Resource Name"
-          className="input input-bordered w-full max-w-xs mb-4"
+          className="mb-2"
         />
-        <textarea
-          value={textResourceContent}
-          onChange={(e) => setTextResourceContent(e.target.value)}
-          placeholder="Add Text Resource"
-          className="input input-bordered w-full max-w-xs mb-4 px-2 py-1"
-        />
-        <button className="btn btn-primary mb-10" onClick={handleTextResource}>
+
+        <Button variant="contained" onClick={handleTextResource}>
           Add Text Resource
-        </button>
+        </Button>
       </div>
 
       {/* YOUTUBE LINK */}
-      <input
-        type="text"
-        value={ytLink}
-        onChange={(e) => setYtLink(e.target.value)}
-        placeholder="Add Youtube Link"
-        className="input input-bordered w-full max-w-xs mb-4"
-      />
-      <button
-        className="btn btn-primary mb-10"
-        onClick={handleYtLinkSubmission}
-      >
-        Add Youtube Link
-      </button>
-    </div>
+      <div className="flex flex-col mb-4">
+        <TextField
+          id="standard-basic"
+          label="Add Youtube Link"
+          variant="standard"
+          type="text"
+          value={ytLink}
+          onChange={(e) => setYtLink(e.target.value)}
+          className="mb-2"
+        />
+        <Button variant="contained" onClick={handleYtLinkSubmission}>
+          Add Youtube Link
+        </Button>
+      </div>
+    </Container>
   );
 };
 
