@@ -9,7 +9,7 @@ import "./chats.css";
 import { UserAuth } from "@/app/context/AuthContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import { CurrentStudy } from "@/app/context/StudyContext";
+import { useStudyContext } from "@/app/context/StudyContext";
 
 type ChatComponentProps = {
   studyId: string;
@@ -23,7 +23,7 @@ type Chat = {
 // TODO Fix isLoading state in the message list
 const ChatComponent = ({ studyId }: ChatComponentProps) => {
   const authContext = UserAuth();
-  const currentStudyContext = CurrentStudy();
+  const currentStudyContext = useStudyContext();
   const [chatLoading, setChatLoading] = useState(true);
   const [chatMessages, setChatMessages] = useState<Message[]>([]);
   const [userToken, setUserToken] = useState<string | undefined>(undefined);
