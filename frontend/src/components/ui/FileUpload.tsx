@@ -10,6 +10,22 @@ import { uploadToFirebaseStorage } from "@/firebase/uploadToStorage";
 import { UserAuth } from "@/app/context/AuthContext";
 import { useEffect } from "react";
 import { useStudyContext } from "@/app/context/StudyContext";
+import { Button } from "@mui/material";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { styled } from "@mui/material/styles";
+import CircularProgress from "@mui/material/CircularProgress";
+
+const VisuallyHiddenInput = styled("input")({
+  clip: "rect(0 0 0 0)",
+  clipPath: "inset(50%)",
+  height: 1,
+  overflow: "hidden",
+  position: "absolute",
+  bottom: 0,
+  left: 0,
+  whiteSpace: "nowrap",
+  width: 1,
+});
 
 // TODO fix toast messages
 // TODO update to handle audio file uploads
@@ -109,14 +125,22 @@ const FileUpload = () => {
   return (
     <div className="flex justify-center items-start mr-4 mt-2">
       {uploading ? (
-        <span className="loading loading-dots loading-sm"></span>
+        <CircularProgress />
       ) : (
         <div {...getRootProps({ className: "dropzone" })}>
           <input {...getInputProps()} />
-          <input
-            type="file"
-            className="file-input file-input-bordered file-input-primary w-full max-w-xs"
-          />
+
+          <Button
+            component="label"
+            role={undefined}
+            variant="contained"
+            tabIndex={-1}
+            startIcon={<CloudUploadIcon />}
+          >
+            Upload file
+            {/* Input handles the upload */}
+            {/* <VisuallyHiddenInput {...getInputProps()} /> */}
+          </Button>
         </div>
       )}
     </div>
