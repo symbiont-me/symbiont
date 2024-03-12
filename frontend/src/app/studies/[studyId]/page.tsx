@@ -52,16 +52,21 @@ const StudyPage = () => {
   const [user, setUser] = useState<User | null>(null);
   // TODO update the writer state in its own comaponent
   const [textWriterValue, setTextWriterValue] = useState<string>("");
+  // TODO the best thing would be to delete this here as Context handles this
   const studyId = path.split("/")[2];
   const SelectedViewComponent = viewComponents[viewSelected] || null;
 
   useEffect(() => {
-    if (!authContext || !authContext.user) {
-      router.push("/");
-    } else {
-      setUser(authContext.user);
+    // Check if the authContext is not null and has finished loading the user's authentication status
+    if (authContext && !authContext.isAuthLoading) {
+      if (authContext.user === null) {
+        // No user is logged in, redirect to the landing page
+        router.push("/");
+      } else {
+        // User is logged in, we update the user state
+        setUser(authContext.user);
+      }
     }
-    setLoading(false);
   }, [authContext, router]);
 
   useEffect(() => {
