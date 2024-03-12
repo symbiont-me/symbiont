@@ -9,9 +9,11 @@ import { Study } from "@/types";
 type StudyContextType = {
   allStudies: Study[];
   study: Study | undefined;
+  isStudyLoading: boolean;
   createStudy: (studyName: string, description: string, image: string) => void;
   deleteStudy: (studyId: string) => void;
   deleteChatMessages: (studyId: string) => void;
+  updateWriterContent: (text: string) => void;
   uploadFileResource: (resourceType: string) => void;
   uploadYtResource: (studyId: string, link: string) => void;
 };
@@ -30,6 +32,7 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
   const authContext = UserAuth();
   const userTokenPromise = authContext?.user?.getIdToken();
   const [userToken, setUserToken] = useState<string | undefined>(undefined);
+  const [isStudyLoading, setIsStudyLoading] = useState(true);
 
   if (!authContext) {
     return <div>Loading...</div>;
@@ -68,6 +71,7 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
   });
 
   useEffect(() => {
+    setIsStudyLoading(true);
     if (fetchStudiesQuery.data) {
       setAllStudies(fetchStudiesQuery.data.studies);
       const currentStudy = fetchStudiesQuery.data.studies.filter(
@@ -79,6 +83,7 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
       );
       console.log("Current Study", currentStudy);
       setStudy(currentStudy[0]);
+      setIsStudyLoading(false);
     }
   }, [fetchStudiesQuery.data, studyId]);
 
@@ -116,6 +121,26 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
       fetchStudiesQuery.refetch();
     } catch (error) {
       console.error("Error deleting study:", error);
+    }
+  }
+
+  async function updateWriterContent(text: string) {
+    const endpoint = "http://127.0.0.1:8000/update-text";
+    const body = { studyId: studyId, text: text };
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${userToken}`,
+    };
+
+    try {
+      const response = await axios.post(endpoint, body, { headers });
+      if (response.status === 200) {
+        console.log("Text Updated");
+        // TODO refetch only the study that was updated
+        fetchStudiesQuery.refetch();
+      }
+    } catch (error) {
+      console.error("Error updating text:", error);
     }
   }
 
@@ -178,8 +203,10 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
       value={{
         allStudies,
         study,
+        isStudyLoading,
         createStudy,
         deleteStudy,
+        updateWriterContent,
         deleteChatMessages,
         uploadFileResource,
         uploadYtResource,
