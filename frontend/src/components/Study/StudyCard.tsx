@@ -1,20 +1,12 @@
-// TODO The dashboard component should rerender when a study is deleted
 import { Study } from "../../types";
 import Link from "next/link";
 import "./studyStyles.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import axios from "axios";
-import { UserAuth } from "@/app/context/AuthContext";
-import { useState, useEffect } from "react";
 import { useStudyContext } from "@/app/context/StudyContext";
 
 const StudyCard = ({ study }: { study: Study }) => {
   const studyContext = useStudyContext();
-
-  useEffect(() => {
-    console.log("UPDATING STUDIES");
-  }, [studyContext?.allStudies]);
 
   const handleDelete = () => {
     if (studyContext && study.id) {
