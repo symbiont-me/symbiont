@@ -45,7 +45,7 @@ const TextEditor = () => {
   }, [text]);
 
   return (
-    <div className="w-full bg-symbiont-foreground rounded-2xl h-full">
+    <div className="w-full h-screen">
       <ReactQuill
         className="ql-container q-snow"
         theme="snow"
