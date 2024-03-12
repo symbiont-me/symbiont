@@ -1,9 +1,12 @@
 import { cn } from "@/lib/utils";
 import { Message } from "ai/react";
-import React from "react";
+import React, { useState } from "react";
 import AiChatMessage from "@/components/ChatComponent/AiChatMessage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCopy } from "@fortawesome/free-solid-svg-icons";
+import { Typography } from "@mui/material";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import Alert from "@mui/material/Alert";
 
 type MessageListProps = {
   isLoading: boolean;
@@ -21,6 +24,7 @@ const MessageList = ({ messages, isLoading }: MessageListProps) => {
       .closest(".chat")
       ?.querySelector("p");
     const message = messageElement?.textContent || "";
+    <Alert severity="success">This is a success Alert.</Alert>;
     console.log(message);
     if (message) {
       navigator.clipboard.writeText(message);
@@ -38,9 +42,11 @@ const MessageList = ({ messages, isLoading }: MessageListProps) => {
           <div key={index} className="relative">
             {message.role === "user" ? (
               <div className="chat chat-end">
-                <p className="rounded-xl text-xs p-4 bg-symbiont-chatMessageUser text-symbiont-background">
-                  {message.content}
-                </p>
+                <div className=" p-4 bg-symbiont-chatMessageUser text-symbiont-background">
+                  <Typography variant="body1" component="p">
+                    {message.content}
+                  </Typography>
+                </div>
               </div>
             ) : (
               <div className="chat chat-start">
@@ -48,7 +54,7 @@ const MessageList = ({ messages, isLoading }: MessageListProps) => {
                   className="absolute top-0 right-0 p-2 mr-4 cursor-pointer"
                   onClick={copyMessage}
                 >
-                  <FontAwesomeIcon icon={faCopy} />
+                  <ContentCopyIcon />
                 </div>
 
                 {isLastMessage && isLoading ? (
@@ -56,7 +62,7 @@ const MessageList = ({ messages, isLoading }: MessageListProps) => {
                     <span className="loading loading-spinner loading-xs"></span>
                   </div>
                 ) : (
-                  <div className="text-xs p-6 bg-symbiont-chatMessageAi rounded-xl">
+                  <div className="p-10 bg-blue-100">
                     <AiChatMessage message={message.content} />
                   </div>
                 )}
