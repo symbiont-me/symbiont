@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import YouTube, { YouTubeProps } from "react-youtube";
 import { Study } from "@/types";
 import { useStudyContext } from "@/app/context/StudyContext";
-
+import Button from "@mui/material/Button";
 type VideoViewerProps = {
   study: Study | undefined;
 };
@@ -97,11 +97,17 @@ const VideoViewer = () => {
 
   return (
     <>
-      <div className="video-navigation">
-        <button onClick={handlePreviousVideo}>Previous</button>
-        <button onClick={handleNextVideo}>Next</button>
+      <div className="video-navigation flex justify-center space-x-4 mt-4">
+        <Button variant="contained" onClick={handlePreviousVideo}>
+          Previous
+        </Button>
+        <Button variant="contained" onClick={handleNextVideo}>
+          Next
+        </Button>
       </div>
-      <YouTube videoId={currentVideoId} opts={opts} onReady={onPlayerReady} />
+      <div className="flex justify-center items-center mt-4">
+        <YouTube videoId={currentVideoId} opts={opts} onReady={onPlayerReady} />
+      </div>
     </>
   );
 };
