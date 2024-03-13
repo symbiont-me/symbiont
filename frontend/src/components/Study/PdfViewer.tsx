@@ -72,18 +72,6 @@ const PdfViewer = () => {
 
   return (
     <div className="flex flex-col h-viewerheight">
-      {pdfUrl && (
-        <>
-          <h3 className="text-xs p-2 text-center">
-            {truncateFileName(pdfs[currentIndex].name)}
-          </h3>
-          <iframe
-            src={pdfUrl}
-            className="w-full h-full"
-            style={{ filter: "brightness(80%)" }}
-          ></iframe>
-        </>
-      )}
       <div className="flex flex-row items-center justify-center mt-4 mb-6 space-x-6">
         <Button
           variant="contained"
@@ -101,6 +89,18 @@ const PdfViewer = () => {
           Next
         </Button>
       </div>
+      {pdfUrl && (
+        <>
+          <h3 className="text-xs p-2 text-center">
+            {truncateFileName(pdfs[currentIndex].name)}
+          </h3>
+          <iframe
+            src={pdfUrl}
+            className="w-full h-full"
+            style={{ filter: "brightness(80%)" }}
+          ></iframe>
+        </>
+      )}
     </div>
   );
 };
