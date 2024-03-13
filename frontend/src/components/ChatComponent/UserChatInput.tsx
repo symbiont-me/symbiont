@@ -32,7 +32,7 @@ const UserChatInput = ({
     <>
       <SpeedDial
         ariaLabel="SpeedDial"
-        sx={{ position: "absolute", bottom: 16, right: 16 }}
+        sx={{ position: "absolute", bottom: 16, left: 265 }}
         icon={<SpeedDialIcon />}
       >
         {actions.map((action) => (
