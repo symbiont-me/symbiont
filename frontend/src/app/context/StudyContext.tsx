@@ -16,6 +16,7 @@ type StudyContextType = {
   updateWriterContent: (text: string) => void;
   uploadFileResource: (resourceType: string) => void;
   uploadYtResource: (studyId: string, link: string) => void;
+  deleteResource: (resourceIdentifier: string) => void;
 };
 
 export const StudyContext = createContext<StudyContextType | undefined>(
@@ -186,6 +187,20 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
     fetchStudiesQuery.refetch();
   }
 
+  function deleteResource(resourceIdentifier: string) {
+    const endpoint = `http://127.0.0.1:8000?identifier=${resourceIdentifier}`;
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${userToken}`,
+    };
+    try {
+      axios.post(endpoint, { headers });
+      fetchStudiesQuery.refetch();
+    } catch (error) {
+      console.error("Error deleting resource:", error);
+    }
+  }
+
   useEffect(() => {
     console.log("Study From Context", study);
   });
@@ -210,6 +225,7 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
         deleteChatMessages,
         uploadFileResource,
         uploadYtResource,
+        deleteResource,
       }}
     >
       {children}
