@@ -4,8 +4,17 @@ import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { HttpStatus } from "@/const";
 import { useState } from "react";
-
 import { useStudyContext } from "@/app/context/StudyContext";
+import NewStudyForm from "@/components/Dashboard/NewStudyForm";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+
 // TODO maybe separate the modal into a separate component
 
 const NewStudyCard = () => {
@@ -14,10 +23,15 @@ const NewStudyCard = () => {
   const [studyName, setStudyName] = useState("");
   const [image, setImage] = useState("");
   const [description, setDescription] = useState("");
+  const [open, setOpen] = React.useState(false);
 
-  useEffect(() => {
-    console.log("studyContext", studyContext);
-  }, [studyContext]);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   async function handleCreateStudy() {
     if (!studyContext) {
@@ -39,55 +53,85 @@ const NewStudyCard = () => {
 
   return (
     <div className="  h-60 w-64 mt-4 rounded-xl flex flex-col items-center justify-center border border-gray-500">
-      {/* Open the modal using document.getElementById('ID').showModal() method */}
-      <button
-        className="btn"
-        onClick={() => {
-          const modal = document.getElementById("my_modal_2");
-          if (modal !== null) {
-            (modal as HTMLDialogElement).showModal();
-          }
-        }}
-      >
-        +
-      </button>
-      <p className="p-4">Create New Study</p>
-
-      <dialog id="my_modal_2" className="modal">
-        <div className="modal-box flex flex-col items-center justify-center">
-          <h3 className="font-bold text-lg mb-6">Create New Study</h3>
-          <input
-            type="text"
-            placeholder="Name"
-            className="input input-bordered input-primary w-full max-w-xs mr-4 mb-4"
-            value={studyName}
-            name="studyName"
-            onChange={handleInputChange}
-          />
-          <input
-            type="text"
-            placeholder="Image URL"
-            className="input input-bordered input-primary w-full max-w-xs mr-4 mb-4"
-            value={image}
-            onChange={handleInputChange}
-            name="image"
-          />
-          <input
-            type="text"
-            placeholder="Description"
-            className="input input-bordered input-primary w-full max-w-xs mr-4 mb-4"
-            value={description}
-            onChange={handleInputChange}
-            name="description"
-          />
-          <button className="btn btn-info" onClick={() => handleCreateStudy()}>
-            Create Study
-          </button>
-        </div>
-        <form method="dialog" className="modal-backdrop">
-          <button>close</button>
-        </form>
-      </dialog>
+      <React.Fragment>
+        <Button variant="outlined" onClick={handleClickOpen}>
+          +
+        </Button>
+        <Typography
+          variant="subtitle1"
+          component="h5"
+          style={{ marginTop: "25px" }}
+        >
+          New Study
+        </Typography>
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          PaperProps={{
+            component: "form",
+            onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
+              event.preventDefault();
+              const formData = new FormData(event.currentTarget);
+              const formJson = Object.fromEntries((formData as any).entries());
+              const email = formJson.email;
+              console.log(email);
+              handleClose();
+            },
+          }}
+        >
+          <DialogTitle>Create Study</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Create a new study and begin collecting data and writing your
+              paper.
+            </DialogContentText>
+            <TextField
+              autoFocus
+              required
+              margin="dense"
+              id="studyName"
+              name="studyName"
+              label="Study Name"
+              type="text"
+              fullWidth
+              variant="standard"
+              value={studyName}
+              onChange={handleInputChange}
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              id="image"
+              name="image"
+              label="Image"
+              type="text"
+              fullWidth
+              variant="standard"
+              value={image}
+              onChange={handleInputChange}
+            />
+            <TextField
+              autoFocus
+              required
+              margin="dense"
+              id="description"
+              name="description"
+              label="Description"
+              type="text"
+              fullWidth
+              variant="standard"
+              value={description}
+              onChange={handleInputChange}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button type="submit" onClick={handleCreateStudy}>
+              Create Study
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </React.Fragment>{" "}
     </div>
   );
 };
