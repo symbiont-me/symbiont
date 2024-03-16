@@ -31,7 +31,7 @@ const ResourceSwitcher = ({
     if (studyContext?.study) {
       setResources(studyContext.study.resources);
       // set the first resource as selected by default if needed
-      if (studyContext.study.resources.length > 0 && !selectedResource) {
+      if (studyContext.study.resources && !selectedResource) {
         const firstResource = studyContext.study.resources[0];
         setSelectedResource(firstResource);
         onResourceChange(firstResource);
@@ -60,11 +60,12 @@ const ResourceSwitcher = ({
             label="Resource"
             onChange={handleResourceChange}
           >
-            {resources.map((resource) => (
-              <MenuItem key={resource.identifier} value={resource.identifier}>
-                {truncateFileName(resource.name)}
-              </MenuItem>
-            ))}
+            {resources &&
+              resources.map((resource) => (
+                <MenuItem key={resource.identifier} value={resource.identifier}>
+                  {truncateFileName(resource.name)}
+                </MenuItem>
+              ))}
           </Select>
         </FormControl>
       </Box>
