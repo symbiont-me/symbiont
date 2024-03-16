@@ -34,19 +34,25 @@ type FullScreenSettingsDialogProps = {
   handleSettingsClose: () => void;
 };
 
-async function setModelSettings(
+async function updateModelSettings(
   model: string,
   apiKey: string,
   userToken: string
 ) {
+  console.log("Setting LLM Model to: ", model);
+  console.log("Setting API Key to: ", apiKey);
+
   const endpoint = "http://127.0.0.1:8000/set-llm-settings";
-  const body = JSON.stringify({ model, apiKey });
+  const body = {
+    llm_name: model,
+    api_key: apiKey,
+  };
   const headers = {
     "Content-Type": "application/json",
     Authorization: `Bearer ${userToken}`,
   };
   try {
-    await axios.post(endpoint, body, { headers });
+    await axios.post(endpoint, JSON.stringify(body), { headers });
   } catch (error) {
     console.error(error);
   }
@@ -75,13 +81,18 @@ export default function FullScreenSettingsDialog({
     if (!authContext || !authContext.user || !userToken) {
       return;
     }
-    await setModelSettings(model, apiKey, userToken);
+
+    await updateModelSettings(model, apiKey, userToken);
     handleSettingsClose();
   }
 
   const handleChange = (event: SelectChangeEvent) => {
     setModel(event.target.value as string);
   };
+
+  function handleApiKey(event: React.ChangeEvent<HTMLInputElement>) {
+    setApiKey(event.target.value);
+  }
 
   return (
     <React.Fragment>
@@ -127,7 +138,11 @@ export default function FullScreenSettingsDialog({
             </Select>
           </FormControl>
           <Divider />
-          <Input placeholder="API Key" sx={{ marginTop: "16px" }} />
+          <Input
+            placeholder="API Key"
+            sx={{ marginTop: "16px" }}
+            onChange={handleApiKey}
+          />
         </List>
       </Dialog>
     </React.Fragment>
