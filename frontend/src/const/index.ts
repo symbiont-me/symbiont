@@ -5,6 +5,7 @@ export enum TextModels {
 // TODO move to types
 export enum ViewSelected {
   Writer = "writer",
+  WebSearch = "web search",
   PDFViewer = "PDF viewer",
   TestKnowledge = "test knowledge",
   SciencePapers = "sci papers",
@@ -12,7 +13,7 @@ export enum ViewSelected {
   VideoViewer = "video viewer",
   AudioPlayer = "audio player",
   Summaries = "summaries",
-  Resources = "resources",
+  Resources = "add resources",
 }
 
 // TODO use these wherever possible
