@@ -10,7 +10,8 @@ import { Box } from "@mui/system";
 import { Container } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import Item from "@mui/material/Grid";
-// NOTE without ContextApi one way to update studies when deleted would be here in the UserDashboard component
+import CircularProgress from "@mui/material/CircularProgress";
+
 const UserDashboard = () => {
   const studyContext = useStudyContext();
   const [studies, setStudies] = useState<Study[]>([]);
@@ -19,18 +20,22 @@ const UserDashboard = () => {
     if (studyContext && studyContext.allStudies) {
       setStudies(studyContext.allStudies);
     }
-  }, [studyContext]);
+  }, [studyContext, studies]);
 
+  const fetchStudies = () => {
+    if (studyContext && studyContext.allStudies) {
+      setStudies(studyContext.allStudies);
+    }
+  };
   return (
     <div className="">
       <LeftSideBar />
-      <Grid container spacing={2}>
+      <Grid container spacing={2} justifyContent="center" alignItems="center">
         <div className="flex flex-row mt-20">
-          <NewStudyCard />
+          <NewStudyCard onNewStudyCreated={fetchStudies} />
           {studies.map((study) => (
-            <Item className="m-2">
-              {" "}
-              <StudyCard key={study.id} study={study} />
+            <Item className="m-2" key={study.id}>
+              <StudyCard study={study} />
             </Item>
           ))}
         </div>
