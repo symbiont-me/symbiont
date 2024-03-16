@@ -1,11 +1,9 @@
 "use client";
 import React, { useEffect } from "react";
-
 import { useRouter } from "next/navigation";
 import { HttpStatus } from "@/const";
 import { useState } from "react";
 import { useStudyContext } from "@/app/context/StudyContext";
-import NewStudyForm from "@/components/Dashboard/NewStudyForm";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -67,6 +65,7 @@ const NewStudyCard = () => {
         <Dialog
           open={open}
           onClose={handleClose}
+          // TODO remove if not needed
           PaperProps={{
             component: "form",
             onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
