@@ -19,6 +19,7 @@ import { InputLabel } from "@mui/material";
 import { LLMModels } from "@/types";
 import { UserAuth } from "@/app/context/AuthContext";
 import axios from "axios";
+import Cookie from "js-cookie";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -28,6 +29,15 @@ const Transition = React.forwardRef(function Transition(
 ) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
+
+function setCookie(key: string, value: string) {
+  if (typeof window !== "undefined") {
+    Cookie.set(key, value, {
+      expires: 1,
+      path: "/",
+    });
+  }
+}
 
 type FullScreenSettingsDialogProps = {
   settingsOpen: boolean;
@@ -64,8 +74,12 @@ export default function FullScreenSettingsDialog({
 }: FullScreenSettingsDialogProps) {
   const authContext = UserAuth();
   const [userToken, setUserToken] = React.useState("");
-  const [model, setModel] = React.useState(LLMModels.GPT_3_5_TURBO);
-  const [apiKey, setApiKey] = React.useState("");
+  const modelCookie = Cookie.get("llm_model");
+  const apiKeyCookie = Cookie.get("api_key");
+  const [model, setModel] = React.useState<string>(
+    modelCookie || LLMModels.GPT_3_5_TURBO
+  );
+  const [apiKey, setApiKey] = React.useState<string>(apiKeyCookie || "");
   const [open, setOpen] = React.useState(true);
 
   React.useEffect(() => {
@@ -81,6 +95,9 @@ export default function FullScreenSettingsDialog({
     if (!authContext || !authContext.user || !userToken) {
       return;
     }
+
+    setCookie("llm_model", model);
+    setCookie("api_key", apiKey);
 
     await updateModelSettings(model, apiKey, userToken);
     handleSettingsClose();
@@ -142,6 +159,7 @@ export default function FullScreenSettingsDialog({
             placeholder="API Key"
             sx={{ marginTop: "16px" }}
             onChange={handleApiKey}
+            value={apiKey}
           />
         </List>
       </Dialog>
