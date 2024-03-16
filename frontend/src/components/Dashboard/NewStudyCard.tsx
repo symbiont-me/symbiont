@@ -15,7 +15,11 @@ import Typography from "@mui/material/Typography";
 
 // TODO maybe separate the modal into a separate component
 
-const NewStudyCard = () => {
+type NewStudyCardProps = {
+  onNewStudyCreated: () => void;
+};
+
+const NewStudyCard = ({ onNewStudyCreated }: NewStudyCardProps) => {
   const router = useRouter();
   const studyContext = useStudyContext();
   const [studyName, setStudyName] = useState("");
@@ -36,6 +40,7 @@ const NewStudyCard = () => {
       return;
     }
     studyContext.createStudy(studyName, description, image);
+    onNewStudyCreated();
   }
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
