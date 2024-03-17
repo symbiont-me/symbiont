@@ -45,20 +45,18 @@ const PdfViewer = () => {
           setPdfUrl("");
         }
       }
+      // Cleanup function to revoke the object URL to avoid memory leaks
+      return () => {
+        if (pdfUrl) {
+          URL.revokeObjectURL(pdfUrl);
+        }
+      };
     };
 
-    // make sure currentStudyContext is not undefined
     if (!currentStudyContext) {
-      return null;
+      return; // Changed from 'return null;' to 'return;'
     }
     loadPdf();
-
-    // Cleanup function to revoke the object URL to avoid memory leaks
-    return () => {
-      if (pdfUrl) {
-        URL.revokeObjectURL(pdfUrl);
-      }
-    };
   }, [currentIndex, pdfs]);
 
   const goToPreviousPdf = () => {
