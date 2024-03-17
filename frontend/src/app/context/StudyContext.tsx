@@ -46,14 +46,9 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }, [userTokenPromise]);
 
-  useEffect(() => {
-    if (authContext) console.log("User Token", authContext.user);
-  }, [authContext]);
-
   // TODO update to filter studies by studyId on the backend
   const fetchUserStudies = async (userToken: string) => {
     const url = `${BASE_URL}/get-user-studies`;
-
     const headers = {
       Authorization: `Bearer ${userToken}`,
     };
@@ -85,10 +80,6 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
       setIsStudyLoading(false);
     }
   }, [fetchStudiesQuery.data, studyId]);
-
-  if (!authContext) {
-    return <div>Loading...</div>;
-  }
 
   const createStudy = async (
     studyName: string,
@@ -203,10 +194,9 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }
 
-  useEffect(() => {
-    console.log("Study From Context", study);
-  });
-
+  if (!authContext) {
+    return <div>Loading...</div>;
+  }
   if (fetchStudiesQuery.isLoading) {
     return <div>Loading...</div>;
   }

@@ -84,10 +84,6 @@ const FileUpload = () => {
     fetchToken();
   }, []);
 
-  if (!studyContext) {
-    return null;
-  }
-
   // useDropzone is a hook that manages file dropping functionality
   const { getRootProps, getInputProps } = useDropzone({
     // TODO accept and handle PDF and audio files
@@ -123,6 +119,10 @@ const FileUpload = () => {
       }
     },
   });
+
+  if (!studyContext) {
+    return null;
+  }
   // Render the dropzone UI
   return (
     <div className="flex justify-center items-start mr-4 mt-2">
