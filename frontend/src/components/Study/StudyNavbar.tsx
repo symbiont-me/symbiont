@@ -9,7 +9,7 @@ import { Box, Tab, Tabs } from "@mui/material";
 
 type NavigationProps = {
   setViewSelected: (view: ViewSelected) => void;
-  study: Study | undefined;
+  study: Study;
 };
 
 const Navigation = ({ setViewSelected, study }: NavigationProps) => {
