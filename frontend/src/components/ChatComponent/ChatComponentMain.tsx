@@ -50,6 +50,7 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
 
   useEffect(() => {
     if (currentStudyContext?.study) {
+      //@ts-ignore
       setChatMessages(currentStudyContext.study.chatMessages);
     }
   }, [currentStudyContext]);
