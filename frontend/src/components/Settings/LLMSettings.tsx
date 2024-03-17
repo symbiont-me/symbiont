@@ -18,6 +18,7 @@ import { FormControl } from "@mui/material";
 import { InputLabel } from "@mui/material";
 import { LLMModels } from "@/types";
 import { UserAuth } from "@/app/context/AuthContext";
+import { SelectChangeEvent } from "@mui/material/Select";
 import axios from "axios";
 import Cookie from "js-cookie";
 
