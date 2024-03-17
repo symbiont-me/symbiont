@@ -6,7 +6,7 @@ import axios from "axios";
 import { usePathname } from "next/navigation";
 import { UserAuth } from "@/app/context/AuthContext";
 import { HttpStatus } from "@/const";
-import { useFetchWriterText } from "@/hooks/useFetchWriterText";
+
 import { useStudyContext } from "@/app/context/StudyContext";
 // TODO on render, fetch text from db and set value to that text
 
