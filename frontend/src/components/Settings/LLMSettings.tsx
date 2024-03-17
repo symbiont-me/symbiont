@@ -52,7 +52,7 @@ async function updateModelSettings(
   console.log("Setting LLM Model to: ", model);
   console.log("Setting API Key to: ", apiKey);
 
-  const endpoint = "http://127.0.0.1:8000/set-llm-settings";
+  const endpoint = `${process.env.NEXT_PUBLIC_BASE_URL}/set-llm-settings`;
   const body = {
     llm_name: model,
     api_key: apiKey,
