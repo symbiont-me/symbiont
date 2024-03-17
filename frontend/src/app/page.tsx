@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import Button from "@/components/ui/Button";
+import Button from "@mui/material/Button";
 import { LogIn } from "lucide-react";
 import UserDashboard from "@/components/Dashboard/UserDashboardMain";
 import { UserAuth } from "@/app/context/AuthContext";
@@ -38,7 +38,7 @@ export default function Home() {
           <div className="w-full mt-4">
             {
               <Link href="/sign-in">
-                <Button onClick={handleSignIn}>
+                <Button onClick={handleSignIn} variant="contained">
                   {" "}
                   Login to get started
                   <LogIn className="w-4 h-4 ml-2 " />
