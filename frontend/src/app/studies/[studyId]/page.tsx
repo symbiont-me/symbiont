@@ -26,7 +26,7 @@ import "@/app/globals.css";
 
 // an object that maps each ViewSelected enum value to a corresponding React component.
 // this allows the application to dynamically render different components based on the current view selection
-const viewComponents = {
+const viewComponents: { [key in ViewSelected]?: React.ComponentType<any> } = {
   [ViewSelected.Writer]: TextEditor,
   [ViewSelected.PDFViewer]: PdfViewer,
   [ViewSelected.TestKnowledge]: TestKnowledge,
@@ -36,6 +36,7 @@ const viewComponents = {
   [ViewSelected.AudioPlayer]: AudioPlayer,
   [ViewSelected.Summaries]: Summaries,
   [ViewSelected.Resources]: Resources,
+  // Add any other enum values that are missing
 };
 
 const StudyPage = () => {
