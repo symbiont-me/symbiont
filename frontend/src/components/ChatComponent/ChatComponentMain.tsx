@@ -62,7 +62,7 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
     isLoading,
     setMessages,
   } = useChat({
-    api: "http://127.0.0.1:8000/chat",
+    api: `${process.env.NEXT_PUBLIC_BASE_URL}/chat`,
     body: {
       user_query: userQuery,
       previous_message: previousMessage,
