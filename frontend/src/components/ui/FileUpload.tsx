@@ -43,7 +43,7 @@ async function sendFileUploadRequest(
   studyId: string,
   userToken: string
 ): Promise<FileUploadData> {
-  const endpoint = `http://127.0.0.1:8000/upload-resource?studyId=${studyId}`;
+  const endpoint = `${process.env.NEXT_PUBLIC_BASE_URL}/upload-resource?studyId=${studyId}`;
   const formData = new FormData();
   formData.append("file", file);
   const body = formData;
