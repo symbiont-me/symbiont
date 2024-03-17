@@ -23,10 +23,6 @@ const ResourceSwitcher = ({
     useState<StudyResource | null>(null);
   const studyContext = useStudyContext();
 
-  if (!studyContext) {
-    return null;
-  }
-
   useEffect(() => {
     if (studyContext?.study) {
       setResources(studyContext.study.resources);
@@ -38,6 +34,10 @@ const ResourceSwitcher = ({
       }
     }
   }, [studyContext]);
+
+  if (!studyContext) {
+    return null;
+  }
 
   const handleResourceChange = (event: SelectChangeEvent<string>) => {
     const resourceIdentifier = event.target.value;

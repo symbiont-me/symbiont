@@ -62,9 +62,7 @@ type TextResource = {
 };
 const Resources = () => {
   const currentStudyContext = useStudyContext();
-  if (!currentStudyContext) {
-    return null;
-  }
+
   const authContext = UserAuth();
 
   const [webResources, setWebResources] = useState<string[]>([]);
@@ -86,6 +84,9 @@ const Resources = () => {
     getUserAuthToken();
   }, [authContext]);
 
+  if (!currentStudyContext) {
+    return null;
+  }
   const isValidURL = (url: string) => {
     try {
       new URL(url);

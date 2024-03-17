@@ -2,6 +2,7 @@
 import React from "react";
 import { Study } from "@/types";
 import Link from "next/link";
+import Image from "next/image";
 
 type StudyCardProps = Study;
 
@@ -13,6 +14,7 @@ const StudyCard = ({ name, image, id }: StudyCardProps) => {
     <div className="project-card">
       <div className="card lg:card-side bg-base-100 shadow-xl">
         <figure>
+          {/* TODO replace with Image */}
           <img src={image} alt={name} />
         </figure>
         <div className="card-body">

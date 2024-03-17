@@ -85,7 +85,7 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
     setPreviousMessage(messages[messages.length - 1]?.content);
     getUserAuthToken();
     setChatLoading(false);
-  }, [messages, selectedResource, input]);
+  }, [messages, selectedResource, input]); // TODO include getUserAuthToken if there is an error
 
   function deleteChat() {
     if (!currentStudyContext?.study) {

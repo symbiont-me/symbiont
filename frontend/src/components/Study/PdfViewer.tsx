@@ -14,10 +14,6 @@ type PDFViewerProps = {
 
 const PdfViewer = () => {
   const currentStudyContext = useStudyContext();
-  // make sure currentStudyContext is not undefined
-  if (!currentStudyContext) {
-    return null;
-  }
 
   const [pdfs, setPdfs] = useState<StudyResource[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -51,6 +47,10 @@ const PdfViewer = () => {
       }
     };
 
+    // make sure currentStudyContext is not undefined
+    if (!currentStudyContext) {
+      return null;
+    }
     loadPdf();
 
     // Cleanup function to revoke the object URL to avoid memory leaks

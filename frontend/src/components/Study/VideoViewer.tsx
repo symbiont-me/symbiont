@@ -17,9 +17,7 @@ type Resource = {
 
 const VideoViewer = () => {
   const currentStudyContext = useStudyContext();
-  if (!currentStudyContext) {
-    return null;
-  }
+
   const [currentVideoId, setCurrentVideoId] = useState<string | undefined>(
     undefined
   );
@@ -56,6 +54,10 @@ const VideoViewer = () => {
       createVideoId(videos[videoIndex].url);
     }
   }, [videos, videoIndex]);
+
+  if (!currentStudyContext) {
+    return null;
+  }
 
   const handleNextVideo = () => {
     if (videos && videoIndex < videos.length - 1) {

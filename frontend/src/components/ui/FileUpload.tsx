@@ -65,9 +65,7 @@ const FileUpload = () => {
   const [uploading, setUploading] = useState(false);
   const authContext = UserAuth();
   const studyContext = useStudyContext();
-  if (!studyContext) {
-    return null;
-  }
+
   const [userToken, setUserToken] = useState<string | undefined>(undefined);
   const [loading, setLoading] = useState(true);
 
@@ -85,6 +83,10 @@ const FileUpload = () => {
     };
     fetchToken();
   }, []);
+
+  if (!studyContext) {
+    return null;
+  }
 
   // useDropzone is a hook that manages file dropping functionality
   const { getRootProps, getInputProps } = useDropzone({

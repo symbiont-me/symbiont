@@ -36,9 +36,6 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
   const [userToken, setUserToken] = useState<string | undefined>(undefined);
   const [isStudyLoading, setIsStudyLoading] = useState(true);
 
-  if (!authContext) {
-    return <div>Loading...</div>;
-  }
   // TODO if authContext is available but userId is not, display the landing page
 
   useEffect(() => {
@@ -88,6 +85,10 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
       setIsStudyLoading(false);
     }
   }, [fetchStudiesQuery.data, studyId]);
+
+  if (!authContext) {
+    return <div>Loading...</div>;
+  }
 
   const createStudy = async (
     studyName: string,
