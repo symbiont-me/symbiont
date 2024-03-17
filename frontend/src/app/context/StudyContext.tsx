@@ -26,6 +26,7 @@ export const StudyContext = createContext<StudyContextType | undefined>(
 export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
+  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
   const [allStudies, setAllStudies] = useState<Study[]>([]);
   // TODO update name to currentStudy
   const [study, setStudy] = useState<Study | undefined>(undefined);
@@ -54,7 +55,7 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
 
   // TODO update to filter studies by studyId on the backend
   const fetchUserStudies = async (userToken: string) => {
-    const url = "http://127.0.0.1:8000/get-user-studies";
+    const url = `${BASE_URL}/get-user-studies`;
 
     const headers = {
       Authorization: `Bearer ${userToken}`,
@@ -93,7 +94,7 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
     description: string,
     image: string
   ) => {
-    const endpoint = `http://127.0.0.1:8000/create-study`;
+    const endpoint = `${BASE_URL}/create-study`;
     const body = { name: studyName, description: description, image: image };
     const headers = {
       "Content-Type": "application/json",
@@ -112,7 +113,7 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   async function deleteStudy(studyId: string) {
-    const endpoint = `http://127.0.0.1:8000/delete-study?studyId=${studyId}`;
+    const endpoint = `${BASE_URL}/delete-study?studyId=${studyId}`;
     const headers = {
       "Content-Type": "application/json",
       Authorization: `Bearer ${userToken}`,
@@ -126,7 +127,7 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
   }
 
   async function updateWriterContent(text: string) {
-    const endpoint = "http://127.0.0.1:8000/update-text";
+    const endpoint = `${BASE_URL}/update-text`;
     const body = { studyId: studyId, text: text };
     const headers = {
       "Content-Type": "application/json",
@@ -146,7 +147,7 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
   }
 
   async function deleteChatMessages(studyId: string) {
-    const url = `http://127.0.0.1:8000/delete-chat-messages?studyId=${studyId}`;
+    const url = `${BASE_URL}/delete-chat-messages?studyId=${studyId}`;
 
     const headers = {
       Authorization: `Bearer ${userToken}`,
@@ -161,7 +162,7 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
   }
 
   async function uploadYtResource(studyId: string, link: string) {
-    const endpoint = `http://127.0.0.1:8000/process-youtube-video`;
+    const endpoint = `${BASE_URL}/process-youtube-video`;
     const body = { studyId: studyId, url: link };
     const headers = { Authorization: `Bearer ${userToken}` };
     const response = await axios.post(endpoint, body, { headers });
@@ -188,7 +189,7 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
   }
 
   function deleteResource(resourceIdentifier: string) {
-    const endpoint = `http://127.0.0.1:8000?identifier=${resourceIdentifier}`;
+    const endpoint = `${BASE_URL}?identifier=${resourceIdentifier}`;
     const headers = {
       "Content-Type": "application/json",
       Authorization: `Bearer ${userToken}`,
