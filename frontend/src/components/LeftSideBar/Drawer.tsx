@@ -17,15 +17,8 @@ import HomeIcon from "@mui/icons-material/Home";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import Image from "next/image";
 import Link from "next/link";
-import LLMSettings from "../Settings/LLMSettings";
-import Dialog from "@mui/material/Dialog";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import CloseIcon from "@mui/icons-material/Close";
 import Slide from "@mui/material/Slide";
 import { TransitionProps } from "@mui/material/transitions";
-import { Button } from "@mui/material";
-import Typography from "@mui/material/Typography";
 
 const drawerWidth = 240;
 
@@ -95,7 +88,7 @@ type FullScreenDrawerDialogProps = {
   handleSettingsOpen: () => void;
 };
 
-const Drawer = ({
+const DrawerComponent = ({
   drawerOpen,
   handleDrawerClose,
   handleSettingsOpen,
@@ -107,17 +100,13 @@ const Drawer = ({
       <DrawerHeader>
         {drawerOpen ? (
           <IconButton onClick={handleDrawerClose}>
-            {theme.direction === "rtl" ? (
-              <ChevronRightIcon />
-            ) : (
-              <ChevronLeftIcon />
-            )}
+            <ChevronRightIcon />
           </IconButton>
         ) : (
           <IconButton
             color="inherit"
             aria-label="open drawer"
-            onClick={handleDrawerOpen}
+            // onClick={handleDrawerOpen}
             edge="start"
             sx={{
               marginRight: "4px",
@@ -247,4 +236,4 @@ const Drawer = ({
   </Box>;
 };
 
-export default Drawer;
+export default DrawerComponent;
