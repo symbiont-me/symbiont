@@ -1,8 +1,15 @@
-"use client"
-import React from 'react';
-import {UserAuth} from "@/app/context/AuthContext";
+"use client";
+import React, { useEffect } from "react";
+import { UserAuth } from "@/app/context/AuthContext";
+import { useRouter } from "next/navigation";
 function SignInPage() {
   const authContext = UserAuth();
+  const router = useRouter();
+  useEffect(() => {
+    if (authContext?.user) {
+      router.push("/");
+    }
+  }, [authContext]);
   return (
     <div>
       <h1>Sign In</h1>
@@ -12,4 +19,3 @@ function SignInPage() {
 }
 
 export default SignInPage;
-
