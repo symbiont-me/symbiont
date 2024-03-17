@@ -168,12 +168,14 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
       setStudy({
         ...study,
         // TODO fix the type of resources
+        // @ts-ignore
         resources: [...(study.resources ?? []), { category: "pdf" }],
       });
     }
     if (study && resourceType === "web") {
       setStudy({
         ...study,
+        // @ts-ignore
         resources: [...(study.resources ?? []), { category: "web" }],
       });
     }
