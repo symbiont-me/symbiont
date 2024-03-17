@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useState } from "react";
 import { StudyResource } from "../../types";
 import "../ui/uiStyles.css";
