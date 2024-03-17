@@ -4,13 +4,15 @@ import { getAuth } from "firebase/auth";
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 
 const firebaseConfig = {
-  apiKey: process.env.FIREBASE_API_KEY,
-  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.FIREBASE_PROJECT_ID,
-  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.FIREBASE_APP_ID,
-  measurementId: process.env.FIREBASE_MEASUREMENT_ID,
+  apiKey: "AIzaSyDDHYKgG7mAfyvWA3Tg-TrCECmlNIsu_DM",
+  authDomain: "symbiont-e7f06.firebaseapp.com",
+  databaseURL:
+    "https://symbiont-e7f06-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "symbiont-e7f06",
+  storageBucket: "symbiont-e7f06.appspot.com",
+  messagingSenderId: "1038513118003",
+  appId: "1:1038513118003:web:8afee261b6a25481c1fc46",
+  measurementId: "G-8DB5QX6KE7",
 };
 
 // Initialize Firebase
