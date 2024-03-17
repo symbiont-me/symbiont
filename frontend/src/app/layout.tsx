@@ -5,7 +5,6 @@ import ReactQueryProvider from "../components/Providers";
 import { AuthContextProvider } from "./context/AuthContext";
 import { StudyProvider } from "./context/StudyContext";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
-import { ThemeProvider } from "../theme";
 const inter = Inter({ subsets: ["latin"] });
 const plusJakartaSans = Plus_Jakarta_Sans({ subsets: ["latin"] });
 export const metadata: Metadata = {
