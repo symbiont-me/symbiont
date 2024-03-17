@@ -2,10 +2,6 @@
 import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import "react-quill/dist/quill.snow.css";
-import axios from "axios";
-import { usePathname } from "next/navigation";
-import { UserAuth } from "@/app/context/AuthContext";
-import { HttpStatus } from "@/const";
 
 import { useStudyContext } from "@/app/context/StudyContext";
 // TODO on render, fetch text from db and set value to that text
