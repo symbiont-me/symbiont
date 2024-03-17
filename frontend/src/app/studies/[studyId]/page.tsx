@@ -97,7 +97,7 @@ const StudyPage = () => {
           <div className="header">
             <StudyNavbar
               setViewSelected={setViewSelected}
-              study={currentStudy}
+              study={currentStudy as Study}
             />
           </div>
           <Container className="overflow-scroll">
