@@ -17,7 +17,7 @@ async function addWebResource(
   userToken: string
 ) {
   const response = await axios.post(
-    `http://127.0.0.1:8000/add-webpage-resource`,
+    `${process.env.NEXT_PUBLIC_BASE_URL}/add-webpage-resource`,
     {
       studyId: studyId,
       urls: urls,
@@ -39,7 +39,7 @@ async function addTextResource(
   userToken: string
 ) {
   const response = await axios.post(
-    `http://127.0.0.1:8000/add-plain-text-resource`,
+    `${process.env.NEXT_PUBLIC_BASE_URL}/add-plain-text-resource`,
     { studyId: studyId, name: name, content: content },
     {
       headers: {
