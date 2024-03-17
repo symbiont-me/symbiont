@@ -1,6 +1,6 @@
 // TODO remove as not needed anymore
 import Link from "next/link";
-import { Button } from "../ui/Button";
+import { Button } from "@/components/ui/Button";
 import { PlusCircle } from "lucide-react";
 import { DrizzleChat } from "@/lib/db/schema";
 
