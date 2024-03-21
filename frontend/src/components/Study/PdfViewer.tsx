@@ -7,6 +7,7 @@ import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import { Study } from "@/types";
 import { useStudyContext } from "@/app/context/StudyContext";
 import Button from "@mui/material/Button";
+import { UserAuth } from "@/app/context/AuthContext";
 
 type PDFViewerProps = {
   study: Study | undefined;
@@ -14,10 +15,14 @@ type PDFViewerProps = {
 
 const PdfViewer = () => {
   const currentStudyContext = useStudyContext();
+  const authContext = UserAuth();
+  const [userUid, setUserUid] = useState<string>("");
 
   const [pdfs, setPdfs] = useState<StudyResource[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [pdfUrl, setPdfUrl] = useState("");
+
+  const pdfBaseUrl = `userFiles/${userUid}/`;
 
   const filterPdfs = (allResources: StudyResource[]) => {
     return allResources.filter((resource) => resource.category === "pdf");
@@ -31,9 +36,15 @@ const PdfViewer = () => {
   }, [currentStudyContext]);
 
   useEffect(() => {
+    if (authContext && authContext.user) {
+      setUserUid(authContext.user.uid);
+    }
+  }, [authContext]);
+
+  useEffect(() => {
     const loadPdf = async () => {
       if (pdfs.length > 0 && pdfs[currentIndex]) {
-        const currentPdfUrl = pdfs[currentIndex].identifier;
+        const currentPdfUrl = pdfBaseUrl + pdfs[currentIndex].identifier;
 
         try {
           const storage = getStorage();
