@@ -121,11 +121,7 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
           Clear Chat
         </Button>
       </div>
-      <div
-        id="message-container"
-        className=" h-80 flex-1 overflow-scroll p-4"
-        style={{ height: "500px" }}
-      >
+      <div id="message-container" className="flex-1 overflow-y-auto p-4">
         {chatLoading ? (
           <div className="flex justify-center items-center">
             <span className="loading loading-spinner loading-md"></span>
