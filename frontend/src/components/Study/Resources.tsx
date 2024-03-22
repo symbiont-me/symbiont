@@ -81,14 +81,13 @@ const Resources = () => {
     }
   };
 
-  function handleWebLinks() {
+  async function handleWebLinks() {
     setIsWebResourceLoading(true);
     const links = webLink.split("\n").filter(isValidURL);
     setWebResources(links);
     if (userToken && webLink.length > 0) {
-      currentStudyContext?.uploadWebResource(studyId, links).then(() => {
-        setIsWebResourceLoading(false);
-      });
+      await currentStudyContext?.uploadWebResource(studyId, links);
+      setIsWebResourceLoading(false);
     } else {
       setIsWebResourceLoading(false);
     }
