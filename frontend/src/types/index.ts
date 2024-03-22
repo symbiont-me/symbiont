@@ -43,7 +43,6 @@ export type UserAuthDetails = {
 
 export enum LLMModels {
   GPT_3_5_TURBO = "gpt-3.5-turbo",
-  GPT_3_5_TURBO_INSTRUCT = "gpt-3.5-turbo-instruct",
   GPT_3_5_TURBO_16K = "gpt-3.5-turbo-16k",
   GPT_3_5_Turbo_0125 = "gpt-3.5-turbo-0125",
   GPT_3_5_Turbo_1106 = "gpt-3.5-turbo-1106",
