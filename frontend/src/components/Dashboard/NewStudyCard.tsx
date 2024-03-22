@@ -58,7 +58,10 @@ const NewStudyCard = ({ onNewStudyCreated }: NewStudyCardProps) => {
   }
 
   return (
-    <div className="  h-60 w-64 mt-4 rounded-xl flex flex-col items-center justify-center border border-gray-500">
+    <div
+      className="  mt-2 ml-2 mr-2 rounded-xl flex flex-col items-center justify-center border border-gray-500"
+      style={{ width: 345, height: 388 }}
+    >
       <React.Fragment>
         <Button variant="outlined" onClick={handleClickOpen}>
           +

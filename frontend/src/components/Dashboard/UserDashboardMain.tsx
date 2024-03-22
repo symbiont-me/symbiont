@@ -28,19 +28,22 @@ const UserDashboard = () => {
     }
   };
   return (
-    <div className="">
-      <LeftSideBar />
-      <Grid container spacing={2} justifyContent="center" alignItems="center">
-        <div className="flex flex-row mt-20">
-          <NewStudyCard onNewStudyCreated={fetchStudies} />
-          {studies.map((study) => (
-            <Item className="m-2" key={study.id}>
-              <StudyCard study={study} />
-            </Item>
-          ))}
+    <>
+      <div>
+        <div className="ml-80 h-full flex flex-row">
+          <div className="flex flex-wrap">
+            <NewStudyCard onNewStudyCreated={fetchStudies} />
+
+            {studies.map((study) => (
+              <Item className="m-2" key={study.id}>
+                <StudyCard study={study} />
+              </Item>
+            ))}
+          </div>
         </div>
-      </Grid>
-    </div>
+      </div>
+      <LeftSideBar />
+    </>
   );
 };
 
