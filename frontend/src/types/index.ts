@@ -56,6 +56,10 @@ export enum LLMModels {
   CLAUDE_2_1 = "claude-2.1",
   CLAUDE_2_0 = "claude-2.0",
   CLAUDE_INSTANT_1_2 = "claude-instant-1.2",
+  GEMINI_PRO = "gemini-pro",
+  GEMINI_1_PRO = "gemini-1.0-pro",
+  GEMINI_1_PRO_001 = "gemini-1.0-pro-001",
+  GEMINI_1_PRO_LATEST = "gemini-1.0-pro-latest",
 }
 
 type LLMSettings = {
