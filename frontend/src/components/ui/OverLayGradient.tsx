@@ -1,4 +1,3 @@
-import "../ui/uiStyles.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGear } from "@fortawesome/free-solid-svg-icons";
 import { UserAuth } from "@/app/context/AuthContext";
