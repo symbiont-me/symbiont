@@ -39,6 +39,9 @@ const NewStudyCard = ({ onNewStudyCreated }: NewStudyCardProps) => {
     if (!studyContext) {
       return;
     }
+    if (!studyName || !description) {
+      return;
+    }
     studyContext.createStudy(studyName, description, image);
     onNewStudyCreated();
   }
@@ -77,8 +80,8 @@ const NewStudyCard = ({ onNewStudyCreated }: NewStudyCardProps) => {
               event.preventDefault();
               const formData = new FormData(event.currentTarget);
               const formJson = Object.fromEntries((formData as any).entries());
-              const email = formJson.email;
-              console.log(email);
+              // const email = formJson.email;
+              // console.log(email);
               handleClose();
             },
           }}
