@@ -95,9 +95,10 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
 
     try {
       const response = await axios.post(endpoint, body, { headers });
-      if (response.status === 201) {
+      if (response.status === 200) {
         console.log("Study Created");
         fetchStudiesQuery.refetch();
+        console.log("Refetching Studies...");
       }
     } catch (error) {
       console.error("Error creating study:", error);
