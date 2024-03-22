@@ -21,7 +21,11 @@ export default function Home() {
 
   if (authContext.user && authContext.user.uid) {
     console.log(authContext.user.uid);
-    return <UserDashboard />;
+    return (
+      <div className="flex flex-col h-full">
+        <UserDashboard />
+      </div>
+    );
   }
 
   return (
@@ -34,7 +38,11 @@ export default function Home() {
           </div>
           <div className="flex mt-2"></div>
           <div className="w-full mt-4">
-            {
+            {authContext.user && authContext.user.uid ? (
+              <div className="flex flex-col h-full">
+                <UserDashboard />
+              </div>
+            ) : (
               <Link href="/sign-in">
                 <Button onClick={handleSignIn} variant="contained">
                   {" "}
@@ -42,7 +50,7 @@ export default function Home() {
                   <LogIn className="w-4 h-4 ml-2 " />
                 </Button>
               </Link>
-            }
+            )}
           </div>
         </div>
       </div>
