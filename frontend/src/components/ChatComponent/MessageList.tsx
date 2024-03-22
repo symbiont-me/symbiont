@@ -14,6 +14,7 @@ type MessageListProps = {
 };
 
 // TODO use cn function from utils to conditionally render classes
+// TODO add loader if the stream is delayed. NOTE: using isLoading is not going to work as it waits for the entire response to be received
 const MessageList = ({ messages, isLoading }: MessageListProps) => {
   if (!messages) return <></>;
 

@@ -127,7 +127,7 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
             <span className="loading loading-spinner loading-md"></span>
           </div>
         ) : (
-          <MessageList messages={messages} isLoading={isLoading} />
+          <MessageList messages={messages} />
         )}
       </div>
       {/* TODO fix height of the input */}
