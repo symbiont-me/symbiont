@@ -2,3 +2,7 @@
 .ql-container.ql-snow {
   border: none !important;
 }
+
+body {
+  height: 100vh;
+}
