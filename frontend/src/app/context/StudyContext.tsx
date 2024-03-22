@@ -10,12 +10,14 @@ type StudyContextType = {
   allStudies: Study[];
   study: Study | undefined;
   isStudyLoading: boolean;
+  isSuccess: boolean;
   createStudy: (studyName: string, description: string, image: string) => void;
   deleteStudy: (studyId: string) => void;
   deleteChatMessages: (studyId: string) => void;
   updateWriterContent: (text: string) => void;
   uploadFileResource: (resourceType: string) => void;
   uploadYtResource: (studyId: string, link: string) => void;
+  uploadWebResource: (studyId: string, urls: string[]) => void;
   deleteResource: (resourceIdentifier: string) => void;
 };
 
@@ -35,6 +37,8 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
   const userTokenPromise = authContext?.user?.getIdToken();
   const [userToken, setUserToken] = useState<string | undefined>(undefined);
   const [isStudyLoading, setIsStudyLoading] = useState(true);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   // TODO if authContext is available but userId is not, display the landing page
 
@@ -158,12 +162,37 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
     const endpoint = `${BASE_URL}/process-youtube-video`;
     const body = { studyId: studyId, url: link };
     const headers = { Authorization: `Bearer ${userToken}` };
+    setIsStudyLoading(true);
     const response = await axios.post(endpoint, body, { headers });
     if (response.status === 200) {
       console.log("YouTube Video Uploaded");
       fetchStudiesQuery.refetch();
+      setIsStudyLoading(false);
+      setIsSuccess(true);
     }
   }
+
+  async function uploadWebResource(studyId: string, urls: string[]) {
+    const endpoint = `${BASE_URL}/add-webpage-resource`;
+    const body = { studyId: studyId, urls: urls };
+    const headers = {
+      Authorization: `Bearer ${userToken}`,
+    };
+    try {
+      setIsStudyLoading(true);
+      const response = await axios.post(endpoint, body, { headers });
+      if (response.status === 200) {
+        console.log("Web Resource Uploaded");
+        fetchStudiesQuery.refetch();
+        setIsStudyLoading(false);
+      }
+    } catch (error) {
+      console.error("Error uploading web resource:", error);
+    } finally {
+      setIsStudyLoading(false);
+    }
+  }
+
   async function uploadFileResource(resourceType: string) {
     if (study && resourceType === "pdf") {
       setStudy({
@@ -214,12 +243,14 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
         allStudies,
         study,
         isStudyLoading,
+        isSuccess,
         createStudy,
         deleteStudy,
         updateWriterContent,
         deleteChatMessages,
         uploadFileResource,
         uploadYtResource,
+        uploadWebResource,
         deleteResource,
       }}
     >
