@@ -131,7 +131,7 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
         )}
       </div>
       {/* TODO fix height of the input */}
-      <div>
+      <div className="m-4">
         <UserChatInput
           input={input}
           handleInputChange={handleInputChange}

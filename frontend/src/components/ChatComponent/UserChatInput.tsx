@@ -51,10 +51,15 @@ const UserChatInput = ({
             value={input}
             onChange={handleInputChange}
             placeholder="Ask any question..."
-            className="w-full px-4 "
+            className="w-full px-4"
           />
 
-          <Button variant="contained" endIcon={<SendIcon />} type="submit" />
+          <Button
+            variant="contained"
+            endIcon={<SendIcon />}
+            type="submit"
+            sx={{ marginLeft: "6px" }}
+          />
         </div>
       </form>
     </>
