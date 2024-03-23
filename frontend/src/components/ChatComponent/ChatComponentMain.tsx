@@ -13,6 +13,7 @@ import { useStudyContext } from "@/app/context/StudyContext";
 import Button from "@mui/material/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Checkbox from "@mui/material/Checkbox";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const label = { inputProps: { "aria-label": "Combine Resources" } };
 
@@ -121,13 +122,16 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
           Clear Chat
         </Button>
       </div>
-      <div id="message-container" className="flex-1 overflow-y-auto p-4">
+      <div
+        id="message-container"
+        className="flex h-screen flex-col overflow-y-auto p-4"
+      >
         {chatLoading ? (
           <div className="flex justify-center items-center">
-            <span className="loading loading-spinner loading-md"></span>
+            <CircularProgress />
           </div>
         ) : (
-          <MessageList messages={messages} />
+          <MessageList messages={messages} isLoading={isLoading} />
         )}
       </div>
       {/* TODO fix height of the input */}

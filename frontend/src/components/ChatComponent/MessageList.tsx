@@ -1,35 +1,37 @@
-import { cn } from "@/lib/utils";
 import { Message } from "ai/react";
 import React, { useState } from "react";
 import AiChatMessage from "@/components/ChatComponent/AiChatMessage";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCopy } from "@fortawesome/free-solid-svg-icons";
 import { Typography } from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import Alert from "@mui/material/Alert";
-import CircularProgress from "@mui/material/CircularProgress";
 
+import CircularProgress from "@mui/material/CircularProgress";
+import CheckIcon from "@mui/icons-material/Check";
 type MessageListProps = {
+  isLoading: boolean;
   messages: Message[];
 };
 
 // TODO use cn function from utils to conditionally render classes
 // TODO add loader if the stream is delayed. NOTE: using isLoading is not going to work as it waits for the entire response to be received
-const MessageList = ({ messages }: MessageListProps) => {
+const MessageList = ({ messages, isLoading }: MessageListProps) => {
+  const [copied, setCopied] = useState(false);
   if (!messages) return <></>;
 
   // TODO add tooltip to copy icon
-  // TODO toast message on copy
+
   const copyMessage = (e: React.MouseEvent) => {
+    // NOTE: ai-response is a dummy class to get the parent element
     const messageElement = (e.currentTarget as HTMLElement)
-      .closest(".chat")
+      .closest(".ai-response")
       ?.querySelector("p");
     const message = messageElement?.textContent || "";
-    <Alert severity="success">This is a success Alert.</Alert>;
-    console.log(message);
     if (message) {
       navigator.clipboard.writeText(message);
     }
+    setCopied(true);
+    setTimeout(() => {
+      setCopied(false);
+    }, 2000);
   };
 
   if (!Array.isArray(messages)) return null;
@@ -42,28 +44,34 @@ const MessageList = ({ messages }: MessageListProps) => {
         return (
           <div key={index} className="relative">
             {message.role === "user" ? (
-              <div className="chat chat-end">
-                <div className=" p-4 bg-symbiont-chatMessageUser text-symbiont-background">
+              <>
+                <div className="m-2 w-1/2 self-start rounded bg-green-200 p-4 ml-auto">
                   <Typography variant="body1" component="p">
                     {message.content}
                   </Typography>
                 </div>
-              </div>
+              </>
             ) : (
-              <div className="chat chat-start">
+              <div className="ai-response m-2 self-end rounded bg-yellow-50 p-10 mr-auto w-3/4">
                 <div
-                  className="absolute top-0 right-0 p-2 mr-4 cursor-pointer"
+                  className="absolute top-4 right-40 p-2 mr-4 cursor-pointer flex justify-end w-full mb-4"
                   onClick={copyMessage}
                 >
-                  <ContentCopyIcon />
+                  {copied ? (
+                    <span className="text-sm text-slate-800 font-semibold italic">
+                      copied <CheckIcon />
+                    </span>
+                  ) : (
+                    <ContentCopyIcon />
+                  )}
                 </div>
 
                 {isLastMessage && !message.content ? (
-                  <div className="flex justify-center items-center p-6">
+                  <div className="flex justify-center items-center p-6 w-full">
                     <CircularProgress />
                   </div>
                 ) : (
-                  <div className="p-10 bg-blue-100">
+                  <div>
                     <AiChatMessage message={message.content} />
                   </div>
                 )}
