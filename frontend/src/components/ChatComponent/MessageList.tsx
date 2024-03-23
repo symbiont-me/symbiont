@@ -20,7 +20,7 @@ const MessageList = ({ messages, isLoading }: MessageListProps) => {
   // TODO add tooltip to copy icon
 
   const copyMessage = (e: React.MouseEvent) => {
-    // NOTE: ai-response is a dummy class to get the parent element
+    // NOTE: ai-response is a dummy class to get the required element for copying the text
     const messageElement = (e.currentTarget as HTMLElement)
       .closest(".ai-response")
       ?.querySelector("p");
