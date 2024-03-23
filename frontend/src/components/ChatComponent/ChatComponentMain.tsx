@@ -127,7 +127,6 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
             <span className="loading loading-spinner loading-md"></span>
           </div>
         ) : (
-          // @ts-ignore
           <MessageList messages={messages} />
         )}
       </div>

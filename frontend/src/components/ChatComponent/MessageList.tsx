@@ -7,15 +7,15 @@ import { faCopy } from "@fortawesome/free-solid-svg-icons";
 import { Typography } from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import Alert from "@mui/material/Alert";
+import CircularProgress from "@mui/material/CircularProgress";
 
 type MessageListProps = {
-  isLoading: boolean;
   messages: Message[];
 };
 
 // TODO use cn function from utils to conditionally render classes
 // TODO add loader if the stream is delayed. NOTE: using isLoading is not going to work as it waits for the entire response to be received
-const MessageList = ({ messages, isLoading }: MessageListProps) => {
+const MessageList = ({ messages }: MessageListProps) => {
   if (!messages) return <></>;
 
   // TODO add tooltip to copy icon
@@ -58,9 +58,9 @@ const MessageList = ({ messages, isLoading }: MessageListProps) => {
                   <ContentCopyIcon />
                 </div>
 
-                {isLastMessage && isLoading ? (
+                {isLastMessage && !message.content ? (
                   <div className="flex justify-center items-center p-6">
-                    <span className="loading loading-spinner loading-xs"></span>
+                    <CircularProgress />
                   </div>
                 ) : (
                   <div className="p-10 bg-blue-100">
