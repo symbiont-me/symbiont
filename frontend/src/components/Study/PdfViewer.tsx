@@ -107,7 +107,7 @@ const PdfViewer = () => {
           <iframe
             src={pdfUrl}
             className="w-full h-full"
-            style={{ filter: "brightness(80%)" }}
+            // style={{ filter: "brightness(90%)" }}
           ></iframe>
         </>
       )}
