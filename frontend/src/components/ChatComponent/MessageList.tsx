@@ -36,7 +36,6 @@ const MessageList = ({ messages, isLoading }: MessageListProps) => {
   };
 
   if (!Array.isArray(messages)) return null;
-  console.log(error);
 
   return (
     <>
