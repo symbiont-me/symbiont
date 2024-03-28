@@ -6,9 +6,10 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 import CircularProgress from "@mui/material/CircularProgress";
 import CheckIcon from "@mui/icons-material/Check";
+
 type MessageListProps = {
-  isLoading: boolean;
   messages: Message[];
+  isLoading: boolean;
 };
 
 // TODO use cn function from utils to conditionally render classes
@@ -35,6 +36,7 @@ const MessageList = ({ messages, isLoading }: MessageListProps) => {
   };
 
   if (!Array.isArray(messages)) return null;
+  console.log(error);
 
   return (
     <>
