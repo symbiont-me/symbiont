@@ -14,6 +14,7 @@ import Button from "@mui/material/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Checkbox from "@mui/material/Checkbox";
 import CircularProgress from "@mui/material/CircularProgress";
+import { Alert } from "@mui/material";
 
 const label = { inputProps: { "aria-label": "Combine Resources" } };
 
@@ -63,6 +64,7 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
     handleSubmit,
     isLoading,
     setMessages,
+    error,
   } = useChat({
     api: `${process.env.NEXT_PUBLIC_BASE_URL}/chat`,
     body: {
@@ -136,6 +138,7 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
       </div>
       {/* TODO fix height of the input */}
       <div className="m-4">
+        {error && <Alert severity="error">{error?.message}</Alert>}
         <UserChatInput
           input={input}
           handleInputChange={handleInputChange}
