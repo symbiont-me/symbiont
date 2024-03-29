@@ -20,6 +20,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -47,17 +48,20 @@ export default function StudyCard({ study }: { study: Study }) {
   };
 
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card sx={{ maxWidth: 245, maxHeight: 345 }}>
       <Link href={`studies/${study.id}`}>
         <CardHeader
-          // action={
-          //   <IconButton aria-label="settings">
-          //     <MoreVertIcon />
-          //   </IconButton>
-          // }
-
-          title={study.name}
-          subheader={study?.createdAt?.toString()}
+          title={
+            <Typography variant="h6" style={{ fontSize: 14 }}>
+              {study.name}
+            </Typography>
+          }
+          subheader={
+            <Typography variant="subtitle2" style={{ fontSize: 8 }}>
+              {study?.createdAt?.toString()}
+            </Typography>
+          }
+          sx={{ cursor: "pointer" }}
         />
       </Link>
       <CardMedia
@@ -83,8 +87,9 @@ export default function StudyCard({ study }: { study: Study }) {
           onClick={() =>
             study.id && studyContext?.deleteStudy(study.id.toString())
           }
+          sx={{ marginLeft: "auto", height: 20, width: 20 }}
         >
-          <FontAwesomeIcon icon={faTrash} />
+          <DeleteIcon />
         </IconButton>
       </CardActions>
     </Card>
