@@ -52,17 +52,24 @@ const ResourceSwitcher = ({
     <div>
       <Box sx={{ minWidth: 120 }}>
         <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">Resource</InputLabel>
+          <InputLabel id="demo-simple-select-label">
+            <span className="text-xs">Resource</span>
+          </InputLabel>
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
             value={selectedResource?.identifier || ""}
             label="Resource"
             onChange={handleResourceChange}
+            sx={{ fontSize: "0.65rem", height: "30px" }}
           >
             {resources &&
               resources.map((resource) => (
-                <MenuItem key={resource.identifier} value={resource.identifier}>
+                <MenuItem
+                  key={resource.identifier}
+                  value={resource.identifier}
+                  sx={{ fontSize: "0.65rem" }}
+                >
                   {truncateFileName(resource.name)}
                 </MenuItem>
               ))}
