@@ -53,7 +53,11 @@ const ResourceSwitcher = ({
       <Box sx={{ minWidth: 120 }}>
         <FormControl fullWidth>
           <InputLabel id="demo-simple-select-label">
-            <span className="text-xs">Resource</span>
+            {resources.length > 0 ? (
+              <span className="text-xs">Resources</span>
+            ) : (
+              ""
+            )}
           </InputLabel>
           <Select
             labelId="demo-simple-select-label"
@@ -61,7 +65,7 @@ const ResourceSwitcher = ({
             value={selectedResource?.identifier || ""}
             label="Resource"
             onChange={handleResourceChange}
-            sx={{ fontSize: "0.65rem", height: "30px" }}
+            sx={{ fontSize: "0.65rem", height: "35px" }}
           >
             {resources &&
               resources.map((resource) => (
