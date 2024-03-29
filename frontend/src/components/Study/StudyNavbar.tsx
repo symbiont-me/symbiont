@@ -40,9 +40,16 @@ const Navigation = ({ setViewSelected, study }: NavigationProps) => {
                   key={view}
                   value={view} // Set the value of each tab to its corresponding view
                   label={view} // Use the label prop to set the tab's text
-                  className={`capitalize text-xs h-full ${
+                  className={`  ${
                     selectedView === view ? "selected-tab-class" : ""
                   }`} // Apply conditional styling
+                  sx={{
+                    minWidth: "auto",
+                    height: "20px",
+                    fontSize: 10,
+                    textTransform: "uppercase",
+                    padding: "0 10px",
+                  }}
                 />
               ))}
             </Tabs>
