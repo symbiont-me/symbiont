@@ -14,24 +14,6 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { Alert } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 
-async function addTextResource(
-  studyId: string,
-  name: string,
-  content: string,
-  userToken: string
-) {
-  const response = await axios.post(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/add-plain-text-resource`,
-    { studyId: studyId, name: name, content: content },
-    {
-      headers: {
-        Authorization: `Bearer ${userToken}`,
-      },
-    }
-  );
-  return response;
-}
-
 // NOTE this component should not be part of the Study Nav as it is
 // TODO should be refactored to make a dialog box where users can add and remove resources
 // TODO add a separate component for the Study Navbar which lists the resources being used
@@ -94,26 +76,21 @@ const Resources = () => {
     setWebLink(""); // Clear the input after adding
   }
 
-  function handleTextResource() {
+  async function handleTextResource() {
     setIsTextResourceLoading(true);
-    // TODO handle validation
+
     if (
       userToken &&
       textResourceName.length > 0 &&
       textResourceContent.length > 0
     ) {
-      addTextResource(
+      await currentStudyContext?.uploadTextResource(
         studyId,
         textResourceName,
-        textResourceContent,
-        userToken
-      ).then(() => {
-        setIsTextResourceLoading(false);
-      });
-    } else {
-      setIsTextResourceLoading(false);
+        textResourceContent
+      );
     }
-
+    setIsTextResourceLoading(false);
     setTextResourceName("");
     setTextResourceContent("");
   }
