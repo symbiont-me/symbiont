@@ -4,13 +4,9 @@ import { Typography } from "@mui/material";
 const AiChatMessage = ({ message }: { message: string }) => {
   return (
     <>
-      <Typography
-        variant="body1"
-        component="p"
-        style={{ textAlign: "justify" }}
-      >
+      <p className="text-2xs">
         <Markdown gfm={true} breaks={true} value={message} />
-      </Typography>
+      </p>
     </>
   );
 };

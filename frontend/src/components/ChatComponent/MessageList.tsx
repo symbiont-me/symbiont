@@ -47,23 +47,21 @@ const MessageList = ({ messages, isLoading }: MessageListProps) => {
             {message.role === "user" ? (
               <>
                 <div className="m-2 w-1/2 self-start rounded bg-green-200 p-4 ml-auto">
-                  <Typography variant="body1" component="p">
-                    {message.content}
-                  </Typography>
+                  <p className="text-2xs">{message.content}</p>
                 </div>
               </>
             ) : (
-              <div className="ai-response m-2 self-end rounded bg-yellow-50 p-10 mr-auto w-3/4">
+              <div className="ai-response m-2 self-end rounded bg-yellow-50 p-6 mr-auto w-3/4">
                 <div
-                  className="absolute top-4 right-40 p-2 mr-4 cursor-pointer flex justify-end w-full mb-4"
+                  className="absolute top-2 right-16 p-2 mr-4 cursor-pointer flex justify-end mb-4"
                   onClick={copyMessage}
                 >
                   {copied ? (
-                    <span className="text-sm text-slate-800 font-semibold italic">
-                      copied <CheckIcon />
+                    <span className="text-2xs text-slate-800 font-semibold italic">
+                      copied! <CheckIcon sx={{ height: "10px" }} />
                     </span>
                   ) : (
-                    <ContentCopyIcon />
+                    <ContentCopyIcon sx={{ height: "14px" }} />
                   )}
                 </div>
 

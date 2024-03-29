@@ -32,7 +32,11 @@ const UserChatInput = ({
     <>
       <SpeedDial
         ariaLabel="SpeedDial"
-        sx={{ position: "absolute", bottom: 16, left: 265 }}
+        sx={{
+          position: "absolute",
+          bottom: 16,
+          left: 265,
+        }}
         icon={<SpeedDialIcon />}
       >
         {actions.map((action) => (
@@ -51,14 +55,15 @@ const UserChatInput = ({
             value={input}
             onChange={handleInputChange}
             placeholder="Ask any question..."
-            className="w-full px-4"
+            className="w-full"
+            InputProps={{ style: { fontSize: 12 } }} // Set the font size of input text
+            InputLabelProps={{ style: { fontSize: 12 } }} // Set the font size of the label when it's shrunk
           />
-
           <Button
-            variant="contained"
+            variant="text"
             endIcon={<SendIcon />}
             type="submit"
-            sx={{ marginLeft: "6px" }}
+            sx={{ width: "10px" }}
           />
         </div>
       </form>

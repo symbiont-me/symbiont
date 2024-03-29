@@ -106,29 +106,42 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
 
   return (
     <>
-      <div className="p-4">
+      <div className="p-2">
         <ResourceSwitcher
           studyId={studyId}
           onResourceChange={setSelectedResource}
         />
+        <div className="flex flex-row justify-between items-center">
+          <Checkbox
+            {...label}
+            onChange={handleCombineResources}
+            sx={{ height: "10px" }}
+          />
+          <label htmlFor="combineResources" className="text-2xs">
+            Combine Resources
+          </label>
+          <div
+            className="flex flex-row justify-center items-center cursor-pointer p-2"
+            onClick={deleteChat}
+          >
+            <Button
+              variant="contained"
+              endIcon={<DeleteIcon />}
+              size="small"
+              style={{ minWidth: "auto", height: "24px" }}
+            >
+              <span className="text-2xs">Clear Chat</span>
+            </Button>
+          </div>
+        </div>
+      </div>
 
-        <Checkbox {...label} onChange={handleCombineResources} />
-        <label htmlFor="combineResources">Combine Resources</label>
-      </div>
-      <div
-        className="flex flex-row justify-center items-center cursor-pointer p-2"
-        onClick={deleteChat}
-      >
-        <Button variant="contained" endIcon={<DeleteIcon />}>
-          Clear Chat
-        </Button>
-      </div>
       <div
         id="message-container"
-        className="flex h-screen flex-col overflow-y-auto p-4"
+        className="flex h-screen flex-col overflow-y-auto"
       >
         {chatLoading ? (
-          <div className="flex justify-center items-center">
+          <div className="flex justify-cent er items-center">
             <CircularProgress />
           </div>
         ) : (
@@ -140,7 +153,7 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
         {error && <Alert severity="error">{error?.message}</Alert>}
         {isLoading && (
           <>
-            <p className="mb-2 text-sm">
+            <p className="mb-2 text-2xs">
               LLM generated responses can have mistakes.{" "}
               <span className="italic">Doveryai, No Proveryai</span>.
             </p>
