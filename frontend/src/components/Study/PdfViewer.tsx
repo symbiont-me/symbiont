@@ -8,6 +8,8 @@ import { Study } from "@/types";
 import { useStudyContext } from "@/app/context/StudyContext";
 import Button from "@mui/material/Button";
 import { UserAuth } from "@/app/context/AuthContext";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 type PDFViewerProps = {
   study: Study | undefined;
@@ -81,32 +83,48 @@ const PdfViewer = () => {
   };
 
   return (
-    <div className="flex flex-col h-viewerheight">
-      <div className="flex flex-row items-center justify-center mt-4 mb-6 space-x-6">
-        <Button
-          variant="contained"
-          onClick={goToPreviousPdf}
-          disabled={currentIndex <= 0}
-        >
-          Previous
-        </Button>
+    <div className="flex flex-col">
+      <div
+        className="flex flex-col"
+        style={{
+          position: "sticky",
+          top: 0,
+          zIndex: 1000,
+          backgroundColor: "white",
+        }}
+      >
+        <div className="flex flex-row items-center justify-center space-x-6">
+          <ArrowBackIcon
+            onClick={goToPreviousPdf}
+            sx={{
+              cursor: currentIndex > 0 ? "pointer" : "auto",
+              opacity: currentIndex <= 0 ? "0.3" : "1",
+            }}
+          >
+            Previous
+          </ArrowBackIcon>
 
-        <Button
-          variant="contained"
-          onClick={goToNextPdf}
-          disabled={currentIndex + 1 >= pdfs.length}
-        >
-          Next
-        </Button>
+          <ArrowForwardIcon
+            onClick={goToNextPdf}
+            sx={{
+              cursor: currentIndex < pdfs.length - 1 ? "pointer" : "auto",
+              opacity: currentIndex >= pdfs.length - 1 ? "0.3" : "1",
+            }}
+          >
+            Next
+          </ArrowForwardIcon>
+        </div>
+        <h3 className="text-xs p-2 text-center">
+          {pdfs[currentIndex]
+            ? truncateFileName(pdfs[currentIndex].name)
+            : "No PDF available"}
+        </h3>
       </div>
       {pdfUrl && (
         <>
-          <h3 className="text-xs p-2 text-center">
-            {truncateFileName(pdfs[currentIndex].name)}
-          </h3>
           <iframe
             src={pdfUrl}
-            className="w-full h-full"
+            style={{ width: "100%", height: "100vh" }}
             // style={{ filter: "brightness(90%)" }}
           ></iframe>
         </>
