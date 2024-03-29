@@ -12,9 +12,9 @@ const StudyInfo = ({ study }: { study: Study }) => {
     "https://images.unsplash.com/photo-1455390582262-044cdead277a";
 
   return (
-    <div className="w-full h-20  mt-2 mb-10 p-2 pl-4 flex flex-row justify-between">
+    <div className="w-full h-10  mt-2 mb-10 p-2 pl-4 flex flex-row justify-between">
       <div className="flex flex-col items-start space-y-2">
-        <Typography variant="h3">{study?.name}</Typography>
+        <Typography variant="h5">{study?.name}</Typography>
         <Typography variant="body2">{study?.description}</Typography>
         <div className="flex flex-row justify-center items-center">
           <Typography variant="caption" className="pr-2">
@@ -24,8 +24,8 @@ const StudyInfo = ({ study }: { study: Study }) => {
       </div>
       <div className="flex flex-col mr-8 items-center justify-center rounded-full">
         <Image
-          height={80}
-          width={80}
+          height={40}
+          width={40}
           alt={study?.name}
           src={study?.image ? study.image : placeholder}
         />
