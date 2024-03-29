@@ -60,7 +60,7 @@ const NewStudyCard = ({ onNewStudyCreated }: NewStudyCardProps) => {
   return (
     <div
       className="  mt-2 ml-2 mr-2 rounded-xl flex flex-col items-center justify-center border border-gray-500"
-      style={{ width: 345, height: 388 }}
+      style={{ width: 245, height: 290 }}
     >
       <React.Fragment>
         <Button variant="outlined" onClick={handleClickOpen}>
@@ -69,7 +69,7 @@ const NewStudyCard = ({ onNewStudyCreated }: NewStudyCardProps) => {
         <Typography
           variant="subtitle1"
           component="h5"
-          style={{ marginTop: "25px" }}
+          style={{ marginTop: "25px", fontSize: 12 }}
         >
           New Study
         </Typography>
