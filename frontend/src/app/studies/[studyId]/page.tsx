@@ -88,15 +88,12 @@ const StudyPage = () => {
   }
 
   return (
-    <div className="ml-80">
+    <div className="ml-60">
       <div className="sidebar">
         <LeftSideBarMain />
       </div>
       <div className="main-window">
-        <div
-          className="viewer-container"
-          style={{ height: "calc(100vh - 217px)" }}
-        >
+        <div className="viewer-container" style={{ height: "100vh" }}>
           <div className="header">
             <StudyNavbar
               setViewSelected={setViewSelected}
@@ -106,12 +103,12 @@ const StudyPage = () => {
           <Container
             className="overflow-y-auto"
             style={{
-              height: "calc(100vh - 250px)",
+              height: "calc(100vh - 190px)",
               scrollbarWidth: "none",
               msOverflowStyle: "none",
             }}
           >
-            <Box sx={{ height: "100vh" }}>
+            <Box sx={{ height: "100%" }}>
               {SelectedViewComponent && (
                 // TODO fix this type error
                 <SelectedViewComponent
@@ -125,7 +122,7 @@ const StudyPage = () => {
 
           <div
             className="chat flex flex-col"
-            style={{ height: "calc(100vh - 225px)" }}
+            style={{ height: "calc(100vh - 180px)" }}
           >
             <ChatComponent studyId={studyId} />
           </div>
