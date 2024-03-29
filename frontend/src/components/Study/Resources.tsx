@@ -136,6 +136,10 @@ const Resources = () => {
           <CheckIcon />
           Resource Uploaded Successfully
         </Alert>
+      ) : currentStudyContext.studyError ? (
+        <Alert severity="error">
+          Error Uploading Resource. Please try again
+        </Alert>
       ) : null}
       <div className="mb-10">
         <FileUpload />

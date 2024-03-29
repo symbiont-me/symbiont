@@ -11,6 +11,8 @@ type StudyContextType = {
   study: Study | undefined;
   isStudyLoading: boolean;
   isSuccess: boolean;
+  isError: boolean;
+  studyError: Error | undefined;
   createStudy: (studyName: string, description: string, image: string) => void;
   deleteStudy: (studyId: string) => void;
   deleteChatMessages: (studyId: string) => void;
@@ -39,6 +41,7 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
   const [isStudyLoading, setIsStudyLoading] = useState(true);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [studyError, setStudyError] = useState<Error | undefined>(undefined);
 
   // TODO if authContext is available but userId is not, display the landing page
 
@@ -158,17 +161,24 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }
 
+  // TODO copy this error modelling in the other functions
   async function uploadYtResource(studyId: string, link: string) {
     const endpoint = `${BASE_URL}/process-youtube-video`;
     const body = { studyId: studyId, url: link };
     const headers = { Authorization: `Bearer ${userToken}` };
     setIsStudyLoading(true);
-    const response = await axios.post(endpoint, body, { headers });
-    if (response.status === 200) {
-      console.log("YouTube Video Uploaded");
-      fetchStudiesQuery.refetch();
+    try {
+      const response = await axios.post(endpoint, body, { headers });
+      if (response.status === 200) {
+        console.log("YouTube Video Uploaded");
+        fetchStudiesQuery.refetch();
+        setIsSuccess(true);
+      }
+    } catch (error) {
+      console.error("Error uploading YouTube video:", error);
+      setStudyError(error as Error);
+    } finally {
       setIsStudyLoading(false);
-      setIsSuccess(true);
     }
   }
 
@@ -244,6 +254,8 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
         study,
         isStudyLoading,
         isSuccess,
+        isError,
+        studyError,
         createStudy,
         deleteStudy,
         updateWriterContent,
