@@ -7,14 +7,13 @@ import { StudyResource } from "@/types";
 import ResourceSwitcher from "@/components/ResourceSwitcher";
 import "./chats.css";
 import { UserAuth } from "@/app/context/AuthContext";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useStudyContext } from "@/app/context/StudyContext";
 import Button from "@mui/material/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Checkbox from "@mui/material/Checkbox";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Alert } from "@mui/material";
+import LinearProgress from "@mui/material/LinearProgress";
 
 const label = { inputProps: { "aria-label": "Combine Resources" } };
 
@@ -139,6 +138,15 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
       {/* TODO fix height of the input */}
       <div className="m-4">
         {error && <Alert severity="error">{error?.message}</Alert>}
+        {isLoading && (
+          <>
+            <p className="mb-2 text-sm">
+              LLM generated responses can have mistakes.{" "}
+              <span className="italic">Doveryai, No Proveryai</span>.
+            </p>
+            <LinearProgress color="secondary" />
+          </>
+        )}
         <UserChatInput
           input={input}
           handleInputChange={handleInputChange}
