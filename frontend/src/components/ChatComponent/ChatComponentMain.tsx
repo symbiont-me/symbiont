@@ -144,7 +144,7 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
               LLM generated responses can have mistakes.{" "}
               <span className="italic">Doveryai, No Proveryai</span>.
             </p>
-            <LinearProgress color="secondary" />
+            <LinearProgress color="secondary" className="mb-2" />
           </>
         )}
         <UserChatInput
