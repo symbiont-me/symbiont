@@ -13,6 +13,7 @@ import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Alert } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
+import LinearProgress from "@mui/material/LinearProgress";
 
 // NOTE this component should not be part of the Study Nav as it is
 // TODO should be refactored to make a dialog box where users can add and remove resources
@@ -126,7 +127,7 @@ const Resources = () => {
       {/* WEB RESOURCE */}
       <div className="flex flex-col mb-4">
         {isWebResourceLoading ? (
-          <CircularProgress />
+          <LinearProgress color="secondary" className="mb-2" />
         ) : (
           <>
             <TextField
@@ -152,7 +153,7 @@ const Resources = () => {
       {/* TEXT RESOURCE */}
       <div className="flex flex-col mb-4">
         {isTextResourceLoading ? (
-          <CircularProgress />
+          <LinearProgress color="secondary" className="mb-2" />
         ) : (
           <>
             <TextField
@@ -189,7 +190,7 @@ const Resources = () => {
       {/* YOUTUBE LINK */}
       <div className="flex flex-col mb-4">
         {isYtResourceLoading ? (
-          <CircularProgress />
+          <LinearProgress color="secondary" className="mb-2" />
         ) : (
           <>
             <TextField
