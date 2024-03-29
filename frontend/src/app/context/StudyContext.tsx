@@ -20,6 +20,7 @@ type StudyContextType = {
   uploadFileResource: (resourceType: string) => void;
   uploadYtResource: (studyId: string, link: string) => void;
   uploadWebResource: (studyId: string, urls: string[]) => void;
+  uploadTextResource: (studyId: string, name: string, content: string) => void;
   deleteResource: (resourceIdentifier: string) => void;
 };
 
@@ -188,38 +189,79 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
     const headers = {
       Authorization: `Bearer ${userToken}`,
     };
+    setIsStudyLoading(true);
     try {
-      setIsStudyLoading(true);
       const response = await axios.post(endpoint, body, { headers });
       if (response.status === 200) {
         console.log("Web Resource Uploaded");
         fetchStudiesQuery.refetch();
-        setIsStudyLoading(false);
+        setIsSuccess(true);
       }
     } catch (error) {
       console.error("Error uploading web resource:", error);
+      setStudyError(error as Error);
     } finally {
       setIsStudyLoading(false);
     }
   }
 
+  async function uploadTextResource(
+    studyId: string,
+    name: string,
+    content: string
+  ) {
+    const endpoint = `${BASE_URL}/add-plain-text-resource`;
+    const body = { studyId: studyId, name: name, content: content };
+    const headers = {
+      Authorization: `Bearer ${userToken}`,
+    };
+    setIsStudyLoading(true);
+    try {
+      const response = await axios.post(endpoint, body, { headers });
+      if (response.status === 200) {
+        console.log("Text Resource Uploaded");
+        fetchStudiesQuery.refetch();
+        setIsSuccess(true);
+      }
+      return response;
+    } catch (error) {
+      console.error("Error uploading text resource:", error);
+      setStudyError(error as Error);
+      setIsError(true);
+    }
+  }
+
   async function uploadFileResource(resourceType: string) {
-    if (study && resourceType === "pdf") {
-      setStudy({
-        ...study,
-        // TODO fix the type of resources
-        // @ts-ignore
-        resources: [...(study.resources ?? []), { category: "pdf" }],
-      });
+    setIsStudyLoading(true);
+    try {
+      if (study && resourceType === "pdf") {
+        setStudy({
+          ...study,
+          resources: [
+            ...(study.resources ?? []),
+            // @ts-ignore
+            { type: "pdf", category: "file" },
+          ],
+        });
+      } else if (study && resourceType === "web") {
+        setStudy({
+          ...study,
+          resources: [
+            ...(study.resources ?? []),
+            // @ts-ignore
+            { type: "web", category: "file" },
+          ],
+        });
+      }
+      await fetchStudiesQuery.refetch();
+      setIsSuccess(true);
+    } catch (error) {
+      console.error("Error uploading file resource:", error);
+      setStudyError(error as Error);
+      setIsError(true);
+    } finally {
+      setIsStudyLoading(false);
     }
-    if (study && resourceType === "web") {
-      setStudy({
-        ...study,
-        // @ts-ignore
-        resources: [...(study.resources ?? []), { category: "web" }],
-      });
-    }
-    fetchStudiesQuery.refetch();
   }
 
   function deleteResource(resourceIdentifier: string) {
@@ -263,6 +305,7 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
         uploadFileResource,
         uploadYtResource,
         uploadWebResource,
+        uploadTextResource,
         deleteResource,
       }}
     >
