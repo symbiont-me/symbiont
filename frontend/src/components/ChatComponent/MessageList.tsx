@@ -57,7 +57,7 @@ const MessageList = ({ messages, isLoading }: MessageListProps) => {
                   onClick={copyMessage}
                 >
                   {copied ? (
-                    <span className="text-xs text-slate-800 font-semibold italic">
+                    <span className="text-2xs text-slate-800 font-semibold italic">
                       copied! <CheckIcon sx={{ height: "10px" }} />
                     </span>
                   ) : (
