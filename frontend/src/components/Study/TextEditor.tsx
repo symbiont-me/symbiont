@@ -19,24 +19,26 @@ const ReactQuill = dynamic(() => import("react-quill"), {
 });
 
 const TextEditor = () => {
-  const studyContext = useStudyContext();
+  const currentStudyContext = useStudyContext();
   const [text, setText] = useState("");
+  const [textSaved, setTextSaved] = useState(false);
 
   useEffect(() => {
-    if (studyContext) {
-      setText(studyContext.study?.text || "");
+    if (currentStudyContext && currentStudyContext.study?.text) {
+      setText(currentStudyContext.study?.text);
     }
-  }, [studyContext]);
+  }, [currentStudyContext?.study?.text]);
 
   useEffect(() => {
     const saveText = async () => {
-      studyContext?.updateWriterContent(text);
+      currentStudyContext?.updateWriterContent(text);
     };
 
     const timer = setTimeout(() => {
       saveText();
+      setTextSaved(true);
     }, 10000);
-
+    setTextSaved(false);
     return () => clearTimeout(timer);
   }, [text]);
 
