@@ -8,6 +8,9 @@ import FileCopyIcon from "@mui/icons-material/FileCopyOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import PrintIcon from "@mui/icons-material/Print";
 import ShareIcon from "@mui/icons-material/Share";
+import { useStudyContext } from "@/app/context/StudyContext";
+import { useEffect, useState } from "react";
+import { Alert } from "@mui/material";
 
 // TODO use styles from DaisyUI
 type UserChatInputProps = {
@@ -29,6 +32,28 @@ const UserChatInput = ({
   handleInputChange,
   handleSubmit,
 }: UserChatInputProps) => {
+  const currentStudyContext = useStudyContext();
+  const [alert, setAlert] = useState(false);
+
+  useEffect(() => {
+    if (
+      currentStudyContext?.study &&
+      currentStudyContext.study.resources.length === 0
+    ) {
+      setAlert(true);
+    }
+  }, [currentStudyContext]);
+
+  function validateInput(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault(); // Prevent the default form submission
+
+    if (input.trim() === "") {
+      return;
+    }
+
+    handleSubmit(event);
+  }
+
   return (
     <>
       <SpeedDial
@@ -48,7 +73,12 @@ const UserChatInput = ({
           />
         ))}
       </SpeedDial>
-      <form onSubmit={handleSubmit}>
+      {alert && (
+        <Alert severity="info" sx={{ fontSize: 12, marginBottom: "10px" }}>
+          Please add resources before start the chat
+        </Alert>
+      )}
+      <form onSubmit={validateInput}>
         <div className="flex flex-row">
           <TextField
             id="standard-basic"
