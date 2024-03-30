@@ -265,13 +265,14 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
   }
 
   function deleteResource(resourceIdentifier: string) {
-    const endpoint = `${BASE_URL}?identifier=${resourceIdentifier}`;
+    const endpoint = `${BASE_URL}/delete-resource?identifier=${resourceIdentifier}`;
+    const body = {};
     const headers = {
       "Content-Type": "application/json",
       Authorization: `Bearer ${userToken}`,
     };
     try {
-      axios.post(endpoint, { headers });
+      axios.post(endpoint, body, { headers });
       fetchStudiesQuery.refetch();
     } catch (error) {
       console.error("Error deleting resource:", error);
