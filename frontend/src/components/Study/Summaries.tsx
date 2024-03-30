@@ -31,7 +31,9 @@ const Summaries = () => {
   return (
     <div>
       <div>
-        <Typography variant="h3">Summaries</Typography>
+        <Typography variant="h3" sx={{ fontSize: 22 }}>
+          Current Resources in the Study
+        </Typography>
       </div>
 
       {studyContext?.isStudyLoading ? (
