@@ -11,6 +11,7 @@ import { Container } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import Item from "@mui/material/Grid";
 import CircularProgress from "@mui/material/CircularProgress";
+import Alert from "@mui/material/Alert";
 
 const UserDashboard = () => {
   const studyContext = useStudyContext();
@@ -30,6 +31,29 @@ const UserDashboard = () => {
   return (
     <>
       <div>
+        <Alert
+          variant="outlined"
+          severity="warning"
+          sx={{
+            width: "55%",
+            margin: "auto",
+            marginTop: "20px",
+            marginBottom: "20px",
+          }}
+        >
+          <ul>
+            <li>This app is currently in development and test mode.</li>
+            <li>
+              Please don't upload sensitive data, expect bugs and unfinished
+              features.
+            </li>
+            <li>Expect data to be deleted without warning.</li>
+            <li>
+              <strong>Note:</strong> Other than that feel free to use the app
+              and give feedback.
+            </li>
+          </ul>
+        </Alert>
         <div className="ml-80 h-full flex flex-row">
           <div className="flex flex-wrap">
             <NewStudyCard onNewStudyCreated={fetchStudies} />
