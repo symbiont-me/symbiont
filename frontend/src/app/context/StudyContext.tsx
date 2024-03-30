@@ -5,6 +5,7 @@ import { UserAuth } from "@/app/context/AuthContext";
 import { useQuery } from "@tanstack/react-query";
 import { usePathname } from "next/navigation";
 import { Study } from "@/types";
+import CircularProgress from "@mui/material/CircularProgress";
 
 type StudyContextType = {
   allStudies: Study[];
@@ -290,8 +291,92 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
   if (!authContext) {
     return <div>Loading...</div>;
   }
+
+  // TODO REMOVE THIS BLOCK WHEN DEPLOYING TO PRODUCTION OR MOVING TO GOOGLE CLOUD
+  const [timer, setTimer] = useState(90);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimer((prevTimer) => prevTimer - 1);
+    }, 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (timer === 0) {
+      // Timer has reached 0, do something
+      // For example, display a message or trigger an action
+    }
+  }, [timer]);
+
+  const jokes = [
+    "Will glass coffins be a success? Remains to be seen.",
+    "The man who invented knock-knock jokes should get a no bell prize.",
+    "The problem isn’t that obesity runs in your family. It’s that no one runs in your family.",
+    "If I got 50 cents for every failed math exam, I’d have $6.30 now.",
+    "I went to buy some camo pants but couldn’t find any.",
+    "When life gives you melons, you might be dyslexic.",
+    "What's the difference between ignorance and apathy? I don’t know and I don’t care.",
+    "I hate Russian dolls, they're so full of themselves.",
+    "Don't you hate it when someone answers their own questions? I do.",
+    "How do you make holy water? You boil the hell out of it.",
+    "Most people are shocked when they find out how bad I am as an electrician.",
+    "I spent a lot of time, money, and effort childproofing my house… But the kids still get in.",
+    "Geology rocks, but geography’s where it’s at.",
+    "The problem with kleptomaniacs is that they always take things literally.",
+    "The man who survived both mustard gas and pepper spray is a seasoned veteran now.",
+    "Maybe if we start telling people their brain is an app, they’ll want to use it.",
+    "I was wondering why the frisbee kept getting bigger and bigger, but then it hit me.",
+    "Is your bottom jealous of the amount of crap that comes out of your mouth?",
+    "The rotation of Earth really makes my day.",
+    "What’s the difference between an outlaw and an in-law? Outlaws are wanted.",
+    "So what if I don't know what 'Armageddon' means? It's not the end of the world.",
+    "My wife told me to stop impersonating a flamingo. I had to put my foot down.",
+    "A blind man walked into a bar… And a table… And a chair…",
+    "The last thing I want to do is hurt you; but it’s still on the list.",
+    "The future, the present, and the past walk into a bar. Things got a little tense.",
+    "I have a few jokes about unemployed people, but none of them work.",
+    "People who take care of chickens are literally chicken tenders.",
+    "Just got fired from my job as a set designer. I left without making a scene.",
+    "Despite the high cost of living, it remains popular.",
+    "'You’ll never be as lazy as whoever named the fireplace.'",
+    "I used to think I was indecisive. But now I’m not so sure.",
+    "I always take life with a grain of salt. And a slice of lemon. And a shot of tequila.",
+    "Two fish are in a tank. One says, ‘How do you drive this thing?’",
+    "Communist jokes aren’t funny unless everyone gets them.",
+    "I can’t believe I got fired from the calendar factory. All I did was take a day off.",
+    "I've just written a song about tortillas; actually, it’s more of a rap.",
+    "A perfectionist walked into a bar... Apparently, the bar wasn’t set high enough.",
+    "'The four most beautiful words in our common language: I told you so.'",
+  ];
+  const [currentJoke, setCurrentJoke] = useState(jokes[0]);
+
+  useEffect(() => {
+    const jokeInterval = setInterval(() => {
+      setCurrentJoke((prevJoke) => {
+        let newIndex = jokes.indexOf(prevJoke) + 1;
+        return jokes[newIndex % jokes.length];
+      });
+    }, 8000);
+
+    return () => clearInterval(jokeInterval);
+  }, []);
+
+  // TODO REPLACE THIS BLOCK WHEN DEPLOYING TO PRODUCTION OR MOVING TO GOOGLE CLOUD
   if (fetchStudiesQuery.isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="h-screen w-full flex flex-col items-center justify-center overflow-hidden">
+        <h1 className="mb-2">It takes time to load Dev Server</h1>
+        <CircularProgress color="secondary" />
+
+        <p className="mb-10 mt-2">Meanwhile...</p>
+        <div className="mb-10">{currentJoke}</div>
+        <h1>{timer}</h1>
+      </div>
+    );
   }
 
   if (fetchStudiesQuery.isError) {
