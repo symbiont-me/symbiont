@@ -288,10 +288,6 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }
 
-  if (!authContext) {
-    return <div>Loading...</div>;
-  }
-
   // TODO REMOVE THIS BLOCK WHEN DEPLOYING TO PRODUCTION OR MOVING TO GOOGLE CLOUD
   const [timer, setTimer] = useState(90);
 
@@ -307,10 +303,24 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     if (timer === 0) {
-      // Timer has reached 0, do something
-      // For example, display a message or trigger an action
+      setTimer(90);
     }
   }, [timer]);
+  useEffect(() => {
+    const jokeInterval = setInterval(() => {
+      setCurrentJoke((prevJoke) => {
+        let newIndex = jokes.indexOf(prevJoke) + 1;
+        return jokes[newIndex % jokes.length];
+      });
+    }, 8000);
+
+    return () => clearInterval(jokeInterval);
+  }, []);
+
+  // NOTE Note this part, just update the loader
+  if (!authContext) {
+    return <div>Loading...</div>;
+  }
 
   const jokes = [
     "Will glass coffins be a success? Remains to be seen.",
@@ -353,17 +363,6 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
     "'The four most beautiful words in our common language: I told you so.'",
   ];
   const [currentJoke, setCurrentJoke] = useState(jokes[0]);
-
-  useEffect(() => {
-    const jokeInterval = setInterval(() => {
-      setCurrentJoke((prevJoke) => {
-        let newIndex = jokes.indexOf(prevJoke) + 1;
-        return jokes[newIndex % jokes.length];
-      });
-    }, 8000);
-
-    return () => clearInterval(jokeInterval);
-  }, []);
 
   // TODO REPLACE THIS BLOCK WHEN DEPLOYING TO PRODUCTION OR MOVING TO GOOGLE CLOUD
   if (fetchStudiesQuery.isLoading) {
