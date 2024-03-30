@@ -13,7 +13,7 @@ import { useStudyContext } from "@/app/context/StudyContext";
 import { Button } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { styled } from "@mui/material/styles";
-import LinearProgress from "@mui/material/LinearProgress";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -125,9 +125,9 @@ const FileUpload = () => {
   }
   // Render the dropzone UI
   return (
-    <div className="flex justify-center items-start mr-4 mt-2">
+    <div className="flex justify-center items-center mr-4 mt-12">
       {uploading ? (
-        <LinearProgress color="secondary" className="mb-2" />
+        <CircularProgress />
       ) : (
         <div {...getRootProps({ className: "dropzone" })}>
           <input {...getInputProps()} />
