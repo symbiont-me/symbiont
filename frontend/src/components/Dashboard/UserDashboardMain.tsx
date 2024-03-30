@@ -44,7 +44,7 @@ const UserDashboard = () => {
           <ul>
             <li>This app is currently in development and test mode.</li>
             <li>
-              Please don&apos;t upload sensitive data, expect bugs and
+              Please don&apos;t upload sensitive data - expect bugs and
               unfinished features.
             </li>
             <li>Expect data to be deleted without warning.</li>
