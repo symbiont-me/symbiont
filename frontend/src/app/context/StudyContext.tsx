@@ -264,18 +264,26 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }
 
-  function deleteResource(resourceIdentifier: string) {
+  async function deleteResource(resourceIdentifier: string) {
     const endpoint = `${BASE_URL}/delete-resource?identifier=${resourceIdentifier}`;
-    const body = {};
     const headers = {
       "Content-Type": "application/json",
       Authorization: `Bearer ${userToken}`,
     };
+    setIsStudyLoading(true);
     try {
-      axios.post(endpoint, body, { headers });
+      const response = await axios.post(endpoint, {}, { headers });
+      if (response.status === 200) {
+        console.log("Resource Deleted");
+        setIsSuccess(true);
+      }
       fetchStudiesQuery.refetch();
     } catch (error) {
       console.error("Error deleting resource:", error);
+      setStudyError(error as Error);
+      setIsError(true);
+    } finally {
+      setIsStudyLoading(false);
     }
   }
 
