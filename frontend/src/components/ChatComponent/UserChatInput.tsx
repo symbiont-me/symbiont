@@ -23,6 +23,7 @@ const actions = [
 ];
 
 // TODO implement SpeedDial actions
+// TODO remove SpeedDial from this component
 const UserChatInput = ({
   input,
   handleInputChange,
