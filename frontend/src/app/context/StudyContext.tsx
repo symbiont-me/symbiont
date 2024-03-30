@@ -44,6 +44,7 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
   const [isSuccess, setIsSuccess] = useState(false);
   const [isError, setIsError] = useState(false);
   const [studyError, setStudyError] = useState<Error | undefined>(undefined);
+  const [currentJoke, setCurrentJoke] = useState(jokes[0]);
 
   // TODO if authContext is available but userId is not, display the landing page
 
@@ -362,7 +363,6 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
     "A perfectionist walked into a bar... Apparently, the bar wasn’t set high enough.",
     "'The four most beautiful words in our common language: I told you so.'",
   ];
-  const [currentJoke, setCurrentJoke] = useState(jokes[0]);
 
   // TODO REPLACE THIS BLOCK WHEN DEPLOYING TO PRODUCTION OR MOVING TO GOOGLE CLOUD
   if (fetchStudiesQuery.isLoading) {
