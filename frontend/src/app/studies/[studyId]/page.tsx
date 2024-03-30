@@ -29,13 +29,13 @@ import "@/app/globals.css";
 const viewComponents: { [key in ViewSelected]?: React.ComponentType<any> } = {
   [ViewSelected.Writer]: TextEditor,
   [ViewSelected.PDFViewer]: PdfViewer,
-  [ViewSelected.TestKnowledge]: TestKnowledge,
-  [ViewSelected.SciencePapers]: SciPapers,
-  [ViewSelected.Evaluation]: TextEvaluation,
+  // [ViewSelected.TestKnowledge]: TestKnowledge,
+  // [ViewSelected.SciencePapers]: SciPapers,
+  // [ViewSelected.Evaluation]: TextEvaluation,
   [ViewSelected.VideoViewer]: VideoViewer,
-  [ViewSelected.AudioPlayer]: AudioPlayer,
+  // [ViewSelected.AudioPlayer]: AudioPlayer,
   [ViewSelected.Summaries]: Summaries,
-  [ViewSelected.Resources]: Resources,
+  [ViewSelected.Resources]: Resources, // TODO name this properly or replace with the correct component
   // Add any other enum values that are missing
 };
 

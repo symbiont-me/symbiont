@@ -5,13 +5,13 @@ export enum TextModels {
 // TODO move to types
 export enum ViewSelected {
   Writer = "writer",
-  WebSearch = "web search",
+  // WebSearch = "web search",
   PDFViewer = "PDF viewer",
-  TestKnowledge = "test knowledge",
-  SciencePapers = "sci papers",
-  Evaluation = "evaluation",
+  // TestKnowledge = "test knowledge",
+  // SciencePapers = "sci papers",
+  // Evaluation = "evaluation",
   VideoViewer = "video viewer",
-  AudioPlayer = "audio player",
+  // AudioPlayer = "audio player",
   Summaries = "summaries",
   Resources = "add resources",
 }
