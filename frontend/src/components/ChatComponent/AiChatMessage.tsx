@@ -4,9 +4,17 @@ import { Typography } from "@mui/material";
 const AiChatMessage = ({ message }: { message: string }) => {
   return (
     <>
-      <p className="text-xs">
+      <Typography
+        className="text-xs"
+        sx={{
+          fontSize: "0.85rem",
+          overflowWrap: "break-word",
+          hyphens: "auto",
+          lineHeight: "1.5", // Add line spacing here
+        }}
+      >
         <Markdown gfm={true} breaks={true} value={message} />
-      </p>
+      </Typography>
     </>
   );
 };
