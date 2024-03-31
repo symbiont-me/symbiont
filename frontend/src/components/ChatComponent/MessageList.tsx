@@ -12,6 +12,15 @@ type MessageListProps = {
   isLoading: boolean;
 };
 
+// TODO use this function to display a menu that can then be added to chat input and call handle submit
+// Example:  Copy | Translate | Reword | Explain
+const handleTextSelect = (event) => {
+  const selection = window.getSelection();
+  if (selection.toString().length > 0) {
+    console.log(selection.toString());
+  }
+};
+
 // TODO use cn function from utils to conditionally render classes
 // TODO add loader if the stream is delayed. NOTE: using isLoading is not going to work as it waits for the entire response to be received
 const MessageList = ({ messages, isLoading }: MessageListProps) => {
@@ -51,9 +60,12 @@ const MessageList = ({ messages, isLoading }: MessageListProps) => {
                 </div>
               </>
             ) : (
-              <div className="ai-response m-2 self-end rounded bg-yellow-50 p-6 mr-auto w-3/4">
+              <div
+                className="ai-response m-2 self-end rounded bg-yellow-50 p-6 mr-auto w-3/4"
+                onClick={handleTextSelect}
+              >
                 <div
-                  className="absolute top-2 right-16 p-2 mr-4 cursor-pointer flex justify-end mb-4"
+                  className="relative cursor-pointer flex justify-end "
                   onClick={copyMessage}
                 >
                   {copied ? (
