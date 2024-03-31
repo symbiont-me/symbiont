@@ -53,8 +53,9 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
     if (currentStudyContext?.study) {
       //@ts-ignore
       setChatMessages(currentStudyContext.study.chatMessages);
+      console.log("chat messages", currentStudyContext.study.chatMessages);
     }
-  }, [currentStudyContext]);
+  }, [currentStudyContext?.study?.chatMessages]);
 
   const {
     messages,
