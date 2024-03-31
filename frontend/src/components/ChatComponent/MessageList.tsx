@@ -14,9 +14,9 @@ type MessageListProps = {
 
 // TODO use this function to display a menu that can then be added to chat input and call handle submit
 // Example:  Copy | Translate | Reword | Explain
-const handleTextSelect = (event) => {
+const handleTextSelect = (event: React.MouseEvent) => {
   const selection = window.getSelection();
-  if (selection.toString().length > 0) {
+  if (selection && selection.toString().length > 0) {
     console.log(selection.toString());
   }
 };
