@@ -24,24 +24,25 @@ const handleTextSelect = (event) => {
 // TODO use cn function from utils to conditionally render classes
 // TODO add loader if the stream is delayed. NOTE: using isLoading is not going to work as it waits for the entire response to be received
 const MessageList = ({ messages, isLoading }: MessageListProps) => {
-  const [copied, setCopied] = useState(false);
+  const [aiMessageCopied, setAiMessageCopied] = useState(false);
+  const [userMessageCopied, setUserMessageCopied] = useState(false);
   if (!messages) return <></>;
 
-  // TODO add tooltip to copy icon
+  const copyMessage = (e: React.MouseEvent, role: "ai" | "user") => {
+    const messageClass = role === "ai" ? ".ai-response" : ".user-message";
+    const setCopied = role === "ai" ? setAiMessageCopied : setUserMessageCopied;
 
-  const copyMessage = (e: React.MouseEvent) => {
-    // NOTE: ai-response is a dummy class to get the required element for copying the text
     const messageElement = (e.currentTarget as HTMLElement)
-      .closest(".ai-response")
+      .closest(messageClass)
       ?.querySelector("p");
     const message = messageElement?.textContent || "";
     if (message) {
       navigator.clipboard.writeText(message);
+      setCopied(true);
+      setTimeout(() => {
+        setCopied(false);
+      }, 2000);
     }
-    setCopied(true);
-    setTimeout(() => {
-      setCopied(false);
-    }, 2000);
   };
 
   if (!Array.isArray(messages)) return null;
@@ -55,7 +56,19 @@ const MessageList = ({ messages, isLoading }: MessageListProps) => {
           <div key={index} className="relative">
             {message.role === "user" ? (
               <>
-                <div className="m-2 w-1/2 self-start rounded bg-green-200 p-4 ml-auto">
+                <div className="user-message m-2 w-1/2 self-start rounded bg-green-200 p-2 ml-auto pb-4 pl-4 pr-4">
+                  <div
+                    className="relative cursor-pointer flex justify-end "
+                    onClick={(e) => copyMessage(e, "user")}
+                  >
+                    {userMessageCopied ? (
+                      <span className="text-2xs text-slate-800 font-semibold italic">
+                        copied! <CheckIcon sx={{ height: "10px" }} />
+                      </span>
+                    ) : (
+                      <ContentCopyIcon sx={{ height: "14px" }} />
+                    )}
+                  </div>
                   <p className="text-xs">{message.content}</p>
                 </div>
               </>
@@ -66,9 +79,9 @@ const MessageList = ({ messages, isLoading }: MessageListProps) => {
               >
                 <div
                   className="relative cursor-pointer flex justify-end "
-                  onClick={copyMessage}
+                  onClick={(e) => copyMessage(e, "ai")}
                 >
-                  {copied ? (
+                  {aiMessageCopied ? (
                     <span className="text-2xs text-slate-800 font-semibold italic">
                       copied! <CheckIcon sx={{ height: "10px" }} />
                     </span>
