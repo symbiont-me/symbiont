@@ -12,8 +12,6 @@ import IconButton from "@mui/material/IconButton";
 import AccordionActions from "@mui/material/AccordionActions";
 import Button from "@mui/material/Button";
 
-// TODO Implement Delete Resource functionality
-
 const Summaries = () => {
   const studyContext = useStudyContext();
   const [study, setStudy] = useState<Study | undefined>(undefined);
