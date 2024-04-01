@@ -22,7 +22,7 @@ const Summaries = () => {
     if (studyContext) {
       setStudy(studyContext.study);
     }
-  }, [studyContext]);
+  }, [studyContext?.study?.resources]);
 
   function deleteResource(resourceIdentifier: string) {
     studyContext?.deleteResource(resourceIdentifier);
