@@ -313,7 +313,7 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
       "Content-Type": "application/json",
       Authorization: `Bearer ${userToken}`,
     };
-    setIsStudyLoading(true);
+
     try {
       const response = await axios.post(endpoint, {}, { headers });
       if (response.status === 200) {
@@ -325,8 +325,6 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
       console.error("Error deleting resource:", error);
       setStudyError(error as Error);
       setIsError(true);
-    } finally {
-      setIsStudyLoading(false);
     }
   }
 
