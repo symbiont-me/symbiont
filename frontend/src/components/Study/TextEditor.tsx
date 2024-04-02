@@ -37,7 +37,7 @@ const TextEditor = () => {
     const timer = setTimeout(() => {
       saveText();
       setTextSaved(true);
-    }, 10000);
+    }, 3000);
     setTextSaved(false);
     return () => clearTimeout(timer);
   }, [text]);
