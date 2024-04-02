@@ -120,10 +120,7 @@ const StudyPage = () => {
             </Box>
           </Container>
 
-          <div
-            className="chat flex flex-col"
-            style={{ height: "calc(100vh - 180px)" }}
-          >
+          <div className="chat flex flex-col  m-4">
             <ChatComponent studyId={studyId} />
           </div>
         </div>
