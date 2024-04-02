@@ -28,6 +28,12 @@ const MessageList = ({ messages, isLoading }: MessageListProps) => {
   const [userMessageCopied, setUserMessageCopied] = useState(false);
   if (!messages) return <></>;
 
+  /**
+   * Copies the text content of a message element to the clipboard.
+   *
+   * @param e - The mouse event that triggered the copy action.
+   * @param role - The role of the message ("ai" or "user").
+   */
   const copyMessage = (e: React.MouseEvent, role: "ai" | "user") => {
     const messageClass = role === "ai" ? ".ai-response" : ".user-message";
     const setCopied = role === "ai" ? setAiMessageCopied : setUserMessageCopied;
@@ -35,13 +41,24 @@ const MessageList = ({ messages, isLoading }: MessageListProps) => {
     const messageElement = (e.currentTarget as HTMLElement)
       .closest(messageClass)
       ?.querySelector("p");
-    const message = messageElement?.textContent || "";
-    if (message) {
-      navigator.clipboard.writeText(message);
-      setCopied(true);
-      setTimeout(() => {
-        setCopied(false);
-      }, 2000);
+    if (messageElement) {
+      const range = document.createRange();
+      range.selectNodeContents(messageElement);
+      const selection = window.getSelection();
+      selection?.removeAllRanges();
+      selection?.addRange(range);
+
+      try {
+        document.execCommand("copy");
+        setCopied(true);
+        setTimeout(() => {
+          setCopied(false);
+        }, 2000);
+      } catch (err) {
+        console.error("Unable to copy formatting", err);
+      }
+
+      selection?.removeAllRanges();
     }
   };
 
