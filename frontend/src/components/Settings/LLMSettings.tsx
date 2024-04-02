@@ -63,7 +63,10 @@ async function updateModelSettings(
     Authorization: `Bearer ${userToken}`,
   };
   try {
-    await axios.post(endpoint, JSON.stringify(body), { headers });
+    await axios.post(endpoint, JSON.stringify(body), {
+      headers,
+      withCredentials: true,
+    });
   } catch (error) {
     console.error(error);
   }
