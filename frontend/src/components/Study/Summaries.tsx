@@ -11,6 +11,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import IconButton from "@mui/material/IconButton";
 import AccordionActions from "@mui/material/AccordionActions";
 import Button from "@mui/material/Button";
+import LinearProgress from "@mui/material/LinearProgress";
 
 const Summaries = () => {
   const studyContext = useStudyContext();
@@ -35,7 +36,7 @@ const Summaries = () => {
       </div>
 
       {studyContext?.isStudyLoading ? (
-        <div>Loading...</div>
+        <LinearProgress color="secondary" />
       ) : (
         <ul>
           {study?.resources.map((resource) => (
