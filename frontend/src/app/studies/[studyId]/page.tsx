@@ -23,6 +23,7 @@ import { Container } from "@mui/material";
 import Box from "@mui/material/Box";
 import "@/app/studies/studyStyles.css";
 import "@/app/globals.css";
+import StudyInfo from "@/components/Study/StudyInfo";
 
 // an object that maps each ViewSelected enum value to a corresponding React component.
 // this allows the application to dynamically render different components based on the current view selection
@@ -54,6 +55,7 @@ const StudyPage = () => {
   const [user, setUser] = useState<User | null>(null);
   // TODO update the writer state in its own comaponent
   const [textWriterValue, setTextWriterValue] = useState<string>("");
+
   // TODO the best thing would be to delete this here as Context handles this
   const studyId = path.split("/")[2];
   const SelectedViewComponent = viewComponents[viewSelected] || null;
@@ -75,7 +77,7 @@ const StudyPage = () => {
     if (currentStudyContext && currentStudyContext.study) {
       setCurrentStudy(currentStudyContext.study);
     }
-  }, [currentStudyContext]);
+  }, [currentStudyContext?.study]);
 
   useEffect(() => {
     if (currentStudy) {
@@ -88,41 +90,46 @@ const StudyPage = () => {
   }
 
   return (
-    <div className="ml-60">
+    // @note the top class is used to set the distance from the left side bar
+    <div className="ml-40">
       <div className="sidebar">
         <LeftSideBarMain />
       </div>
-      <div className="main-window">
-        <div className="viewer-container" style={{ height: "100vh" }}>
-          <div className="header">
-            <StudyNavbar
-              setViewSelected={setViewSelected}
-              study={currentStudy as Study}
-            />
-          </div>
-          <Container
-            className="overflow-y-auto"
-            style={{
-              height: "calc(100vh - 190px)",
-              scrollbarWidth: "none",
-              msOverflowStyle: "none",
-            }}
-          >
-            <Box sx={{ height: "100%" }}>
-              {SelectedViewComponent && (
-                // TODO fix this type error
-                <SelectedViewComponent
-                  textWriterValue={textWriterValue}
-                  studyId={studyId}
-                  study={currentStudy}
-                />
-              )}
-            </Box>
-          </Container>
 
-          <div className="chat flex flex-col  m-4 mb-0">
-            <ChatComponent studyId={studyId} />
-          </div>
+      <div className="viewer-container" style={{ height: "100vh" }}>
+        {/* TODO add it some place else as it takes space from the top */}
+        {/* <div className="header">
+            <StudyInfo study={currentStudy} />
+          </div> */}
+        <div className="study-navv">
+          <StudyNavbar
+            setViewSelected={setViewSelected}
+            study={currentStudy as Study}
+          />
+        </div>
+        <Container
+          className="overflow-y-auto"
+          style={{
+            height: "calc(100vh - 190px)",
+            scrollbarWidth: "none",
+            msOverflowStyle: "none",
+            padding: "0px",
+          }}
+        >
+          <Box sx={{ height: "100%" }}>
+            {SelectedViewComponent && (
+              // TODO fix this type error
+              <SelectedViewComponent
+                textWriterValue={textWriterValue}
+                studyId={studyId}
+                study={currentStudy}
+              />
+            )}
+          </Box>
+        </Container>
+
+        <div className="chat flex flex-col  m-4 mb-0">
+          <ChatComponent studyId={studyId} />
         </div>
       </div>
     </div>
