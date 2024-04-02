@@ -1,22 +1,27 @@
 .viewer-container {
   display: grid;
-  grid-template-columns: 0.9fr 0.7fr;
-  grid-template-rows: 0.3fr 2.5fr;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 0.2fr 0.2fr 2.6fr;
   gap: 0px 0px;
   grid-auto-flow: row;
   grid-template-areas:
     "header chat"
+    "study-nav chat"
     "viewer chat";
-}
-
-.viewer {
-  grid-area: viewer;
 }
 
 .chat {
   grid-area: chat;
 }
 
+.viewer {
+  grid-area: viewer;
+}
+
 .header {
   grid-area: header;
+}
+
+.study-nav {
+  grid-area: study-nav;
 }
