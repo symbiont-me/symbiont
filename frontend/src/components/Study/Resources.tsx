@@ -106,7 +106,7 @@ const Resources = () => {
   }
 
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="sm" className="overflow-hidden">
       {currentStudyContext.isStudyLoading ? (
         <Alert severity="info">Uploading Resource</Alert>
       ) : currentStudyContext.isSuccess ? (
