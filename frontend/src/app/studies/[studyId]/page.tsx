@@ -110,7 +110,7 @@ const StudyPage = () => {
         <Container
           className="overflow-y-auto"
           style={{
-            height: "calc(100vh - 190px)",
+            height: "calc(100vh - 80px)",
             scrollbarWidth: "none",
             msOverflowStyle: "none",
             padding: "0px",
