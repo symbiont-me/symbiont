@@ -24,8 +24,7 @@ const Navigation = ({ setViewSelected, study }: NavigationProps) => {
 
   return (
     <>
-      <StudyInfo study={study} />
-      <nav className="flex justify-between items-center p-4  mb-2 mt-2">
+      <nav className="mb-2">
         <div className="flex gap-4 ">
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <Tabs
@@ -48,14 +47,14 @@ const Navigation = ({ setViewSelected, study }: NavigationProps) => {
                     height: "20px",
                     fontSize: 10,
                     textTransform: "uppercase",
-                    padding: "0 10px",
                   }}
                 />
               ))}
             </Tabs>
           </Box>
         </div>
-        <div className="flex gap-4  mr-6">
+        {/* TODO add these function some place else */}
+        {/* <div className="flex gap-4  mr-6">
           <div className="flex flex-row">
             <button className="text-xs">
               <FontAwesomeIcon icon={faSave} />
@@ -64,7 +63,7 @@ const Navigation = ({ setViewSelected, study }: NavigationProps) => {
           <button className="text-xs">
             <FontAwesomeIcon icon={faShare} />
           </button>
-        </div>
+        </div> */}
       </nav>
     </>
   );

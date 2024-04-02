@@ -7,12 +7,16 @@ import Image from "next/image";
 
 // TODO replace time with actual time
 
-const StudyInfo = ({ study }: { study: Study }) => {
+type StudyInfoProps = {
+  study: Study | undefined;
+};
+
+const StudyInfo = ({ study }: StudyInfoProps) => {
   const placeholder =
     "https://images.unsplash.com/photo-1455390582262-044cdead277a";
 
   return (
-    <div className="w-full h-10  mt-2 mb-10 p-2 pl-4 flex flex-row justify-between">
+    <div className="w-full  mt-2 mb-2 p-2 pl-4 flex flex-row justify-between">
       <div className="flex flex-col items-start space-y-2">
         <Typography variant="h5">{study?.name}</Typography>
         <Typography variant="body2">{study?.description}</Typography>
@@ -26,8 +30,8 @@ const StudyInfo = ({ study }: { study: Study }) => {
         <Image
           height={40}
           width={40}
-          alt={study?.name}
-          src={study.image || placeholder}
+          alt={study?.name || "study image"}
+          src={study?.image || placeholder}
         />
       </div>
     </div>
