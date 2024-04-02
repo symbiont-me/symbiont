@@ -120,7 +120,7 @@ const StudyPage = () => {
             </Box>
           </Container>
 
-          <div className="chat flex flex-col  m-4">
+          <div className="chat flex flex-col  m-4 mb-0">
             <ChatComponent studyId={studyId} />
           </div>
         </div>
