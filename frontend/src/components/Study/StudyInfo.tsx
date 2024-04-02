@@ -27,7 +27,7 @@ const StudyInfo = ({ study }: { study: Study }) => {
           height={40}
           width={40}
           alt={study?.name}
-          src={study?.image ? study.image : placeholder}
+          src={study.image || placeholder}
         />
       </div>
     </div>
