@@ -43,12 +43,13 @@ const TextEditor = () => {
   }, [text]);
 
   return (
-    <div className="w-full h-screen">
+    <div className="w-full ">
       <ReactQuill
         className="ql-container q-snow"
         theme="snow"
         value={text}
         onChange={setText}
+        style={{ height: "calc(100vh - 125px)", borderRadius: "5px" }}
       />
     </div>
   );
