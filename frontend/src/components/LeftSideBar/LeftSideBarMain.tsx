@@ -135,44 +135,38 @@ const LeftSideBar = () => {
         <Divider />
         <List>
           {["Home", "Library"].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: "block" }}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: drawerOpen ? "initial" : "center",
-                  px: 2,
-                  "& .MuiListItemText-primary": {
-                    fontSize: "0.85rem", // Update font size of the text in the list item
-                  },
-                }}
-              >
-                <ListItemIcon
+            <Link href={index % 2 === 0 ? "/" : "/library"} passHref>
+              <ListItem key={text} disablePadding sx={{ display: "block" }}>
+                <ListItemButton
                   sx={{
-                    minWidth: 0,
-                    mr: drawerOpen ? 3 : "auto",
-                    justifyContent: "center",
-                    "& svg": {
-                      width: 20,
-                      height: 20,
+                    minHeight: 48,
+                    justifyContent: drawerOpen ? "initial" : "center",
+                    px: 2,
+                    "& .MuiListItemText-primary": {
+                      fontSize: "0.85rem", // Update font size of the text in the list item
                     },
                   }}
                 >
-                  {index % 2 === 0 ? (
-                    <Link href="/">
-                      <HomeIcon />
-                    </Link>
-                  ) : (
-                    <Link href="/library">
-                      <LibraryBooksIcon />
-                    </Link>
-                  )}
-                </ListItemIcon>
-                <ListItemText
-                  primary={text}
-                  sx={{ opacity: drawerOpen ? 1 : 0 }}
-                />
-              </ListItemButton>
-            </ListItem>
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: drawerOpen ? 3 : "auto",
+                      justifyContent: "center",
+                      "& svg": {
+                        width: 20,
+                        height: 20,
+                      },
+                    }}
+                  >
+                    {index % 2 === 0 ? <HomeIcon /> : <LibraryBooksIcon />}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={text}
+                    sx={{ opacity: drawerOpen ? 1 : 0 }}
+                  />
+                </ListItemButton>
+              </ListItem>
+            </Link>
           ))}
         </List>
         <Divider />
