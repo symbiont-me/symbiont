@@ -1,6 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGear } from "@fortawesome/free-solid-svg-icons";
 import { UserAuth } from "@/app/context/AuthContext";
+import Image from "next/image";
 
 // TODO modify this component doesn't need to be this complicated
 // TODO add onClick to handle LLM settings
@@ -22,9 +23,12 @@ const OverLayGradient = ({
     >
       <div className="ml-2 flex flex-row items-center h-2">
         {authContext?.user && (
-          <img
+          <Image
             src={authContext.user.photoURL || ""}
             className="rounded-full h-10 m-2"
+            width={20}
+            height={20}
+            alt="profile-image"
           />
         )}
         <p className="text-xs">

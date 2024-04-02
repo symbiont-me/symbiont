@@ -15,7 +15,7 @@ const StudyCard = ({ name, image, id }: StudyCardProps) => {
       <div className="card lg:card-side bg-base-100 shadow-xl">
         <figure>
           {/* TODO replace with Image */}
-          <img src={image} alt={name} />
+          <Image src={image || ""} alt={name} />
         </figure>
         <div className="card-body">
           <h2 className="card-title">{name}</h2>
