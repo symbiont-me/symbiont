@@ -56,7 +56,7 @@ const UserChatInput = ({
 
   return (
     <>
-      <SpeedDial
+      {/* <SpeedDial
         ariaLabel="SpeedDial"
         sx={{
           position: "absolute",
@@ -72,7 +72,7 @@ const UserChatInput = ({
             tooltipTitle={action.name}
           />
         ))}
-      </SpeedDial>
+      </SpeedDial> */}
       {alert && (
         <Alert severity="info" sx={{ fontSize: 12, marginBottom: "10px" }}>
           Please add resources before start the chat
