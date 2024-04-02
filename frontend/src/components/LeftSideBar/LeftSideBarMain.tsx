@@ -21,7 +21,7 @@ import LLMSettings from "../Settings/LLMSettings";
 
 // TODO separate the Drawer component into its own file
 
-const drawerWidth = 240;
+const drawerWidth = 150;
 
 function openedMixin(theme: Theme): CSSObject {
   return {
@@ -140,7 +140,10 @@ const LeftSideBar = () => {
                 sx={{
                   minHeight: 48,
                   justifyContent: drawerOpen ? "initial" : "center",
-                  px: 2.5,
+                  px: 2,
+                  "& .MuiListItemText-primary": {
+                    fontSize: "0.85rem", // Update font size of the text in the list item
+                  },
                 }}
               >
                 <ListItemIcon
@@ -148,6 +151,10 @@ const LeftSideBar = () => {
                     minWidth: 0,
                     mr: drawerOpen ? 3 : "auto",
                     justifyContent: "center",
+                    "& svg": {
+                      width: 20,
+                      height: 20,
+                    },
                   }}
                 >
                   {index % 2 === 0 ? (
@@ -170,13 +177,13 @@ const LeftSideBar = () => {
         </List>
         <Divider />
         <List sx={{ flexGrow: 1 }}>
-          {["Chrome Extension", "Discord"].map((text, index) => (
+          {["Extension", "Discord"].map((text, index) => (
             <ListItem key={text} disablePadding sx={{ display: "block" }}>
               <ListItemButton
                 sx={{
                   minHeight: 48,
                   justifyContent: drawerOpen ? "initial" : "center",
-                  px: 2.5,
+                  px: 2,
                 }}
               >
                 <ListItemIcon
@@ -186,26 +193,32 @@ const LeftSideBar = () => {
                     justifyContent: "center",
                   }}
                 >
-                  {text === "Chrome Extension" && (
+                  {text === "Extension" && (
                     <Image
                       src="https://www.svgrepo.com/show/475640/chrome-color.svg"
-                      width={24}
-                      height={24}
+                      width={20}
+                      height={20}
                       alt="chrome"
                     />
                   )}
                   {text === "Discord" && (
                     <Image
                       src="https://www.svgrepo.com/show/353655/discord-icon.svg"
-                      width={24}
-                      height={24}
+                      width={20}
+                      height={20}
                       alt="discord"
                     />
                   )}
                 </ListItemIcon>
                 <ListItemText
                   primary={text}
-                  sx={{ opacity: drawerOpen ? 1 : 0 }}
+                  sx={{
+                    opacity: drawerOpen ? 1 : 0,
+
+                    "& .MuiListItemText-primary": {
+                      fontSize: "0.75rem", // Updated font size
+                    },
+                  }}
                 />
               </ListItemButton>
             </ListItem>
@@ -220,7 +233,10 @@ const LeftSideBar = () => {
                 sx={{
                   minHeight: 48,
                   justifyContent: drawerOpen ? "initial" : "center",
-                  px: 2.5,
+                  px: 2,
+                  "& .MuiListItemText-primary": {
+                    fontSize: "0.75rem", // Updated font size
+                  },
                 }}
                 onClick={handleSettingsOpen}
               >
@@ -234,8 +250,8 @@ const LeftSideBar = () => {
                   {text === "Settings" && (
                     <Image
                       src="https://www.svgrepo.com/show/491639/gear.svg"
-                      width={24}
-                      height={24}
+                      width={20}
+                      height={20}
                       alt="settings"
                     />
                   )}
