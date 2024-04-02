@@ -142,7 +142,7 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
         className="flex h-screen flex-col overflow-y-auto"
       >
         {chatLoading ? (
-          <div className="flex justify-cent er items-center">
+          <div className="flex justify-cent  items-center">
             <CircularProgress />
           </div>
         ) : (
