@@ -31,7 +31,7 @@ const userGuide = [
   "/userGuide/carousel-6.jpg",
 ];
 
-const MyComponent = () => (
+const UserGuideSwipe = () => (
   <div className="flex justify-center w-1/3" style={{ marginLeft: "470px" }}>
     <SwipeableViews enableMouseEvents style={{}}>
       <div style={Object.assign({}, styles.slide, styles.slide1)}>
@@ -48,4 +48,4 @@ const MyComponent = () => (
   </div>
 );
 
-export default MyComponent;
+export default UserGuideSwipe;
