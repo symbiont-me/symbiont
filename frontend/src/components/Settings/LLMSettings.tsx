@@ -1,5 +1,6 @@
 "use client";
 import * as React from "react";
+import { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import List from "@mui/material/List";
@@ -35,7 +36,7 @@ type FullScreenSettingsDialogProps = {
   handleSettingsClose: () => void;
 };
 
-async function updateModelSettings(
+async function updateLlmSettings(
   model: string,
   apiKey: string,
   userToken: string
@@ -88,7 +89,7 @@ export default function FullScreenSettingsDialog({
   const [apiKey, setApiKey] = useState<string>("");
   const [open, setOpen] = useState(true);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!authContext || !authContext.user) {
       return;
     }
@@ -111,7 +112,7 @@ export default function FullScreenSettingsDialog({
     if (!authContext || !authContext.user || !userToken) {
       return;
     }
-    await updateModelSettings(model, apiKey, userToken);
+    await updateLlmSettings(model, apiKey, userToken);
     handleSettingsClose();
   }
 
