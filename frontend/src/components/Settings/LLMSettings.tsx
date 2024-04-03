@@ -59,6 +59,24 @@ async function updateModelSettings(
   }
 }
 
+async function getLlmSettings(userToken: string) {
+  const endpoint = `${process.env.NEXT_PUBLIC_BASE_URL}/get-llm-settings`;
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${userToken}`,
+  };
+  try {
+    const response = await axios.get(endpoint, {
+      headers,
+      withCredentials: true,
+    });
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
 export default function FullScreenSettingsDialog({
   settingsOpen,
   handleSettingsClose,
@@ -78,6 +96,16 @@ export default function FullScreenSettingsDialog({
       setUserToken(token);
     });
   }, [authContext]);
+
+  useEffect(() => {
+    if (!userToken) {
+      return;
+    }
+    getLlmSettings(userToken).then((res) => {
+      setModel(res.llm_name);
+      setApiKey(res.api_key);
+    });
+  }, [userToken]);
 
   async function saveSettings() {
     if (!authContext || !authContext.user || !userToken) {
