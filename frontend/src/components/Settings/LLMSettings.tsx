@@ -20,7 +20,6 @@ import { LLMModels } from "@/types";
 import { UserAuth } from "@/app/context/AuthContext";
 import { SelectChangeEvent } from "@mui/material/Select";
 import axios from "axios";
-import { useCookies } from "next-client-cookies";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -66,14 +65,7 @@ export default function FullScreenSettingsDialog({
 }: FullScreenSettingsDialogProps) {
   const authContext = UserAuth();
   const [userToken, setUserToken] = React.useState("");
-  const cookies = useCookies();
 
-  const [model, setModel] = React.useState<string>(
-    cookies.get("llm_model") || LLMModels.GPT_3_5_TURBO
-  );
-  const [apiKey, setApiKey] = React.useState<string>(
-    cookies.get("api_key") || ""
-  );
   const [open, setOpen] = React.useState(true);
 
   React.useEffect(() => {
