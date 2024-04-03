@@ -20,7 +20,6 @@ export default function Home() {
   };
 
   if (authContext.user && authContext.user.uid) {
-    console.log(authContext.user.uid);
     return (
       <div className="flex flex-col h-full">
         <UserDashboard />
