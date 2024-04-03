@@ -26,7 +26,7 @@ const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
     children: React.ReactElement;
   },
-  ref: React.Ref<unknown>
+  ref: React.Ref<unknown>,
 ) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -39,7 +39,7 @@ type FullScreenSettingsDialogProps = {
 async function updateLlmSettings(
   model: string,
   apiKey: string,
-  userToken: string
+  userToken: string,
 ) {
   const endpoint = `${process.env.NEXT_PUBLIC_BASE_URL}/set-llm-settings`;
   const body = {
