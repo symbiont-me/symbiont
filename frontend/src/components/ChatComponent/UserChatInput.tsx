@@ -38,7 +38,7 @@ const UserChatInput = ({
   useEffect(() => {
     if (
       currentStudyContext?.study &&
-      currentStudyContext.study.resources.length === 0
+      currentStudyContext.study.resources?.length === 0
     ) {
       setAlert(true);
     }
