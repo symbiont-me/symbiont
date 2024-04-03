@@ -39,7 +39,7 @@ const Summaries = () => {
         <LinearProgress color="secondary" />
       ) : (
         <ul>
-          {study?.resources.map((resource) => (
+          {study?.resources?.map((resource) => (
             <Accordion key={resource.identifier}>
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
