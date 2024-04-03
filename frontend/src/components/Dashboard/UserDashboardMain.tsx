@@ -12,7 +12,7 @@ import Grid from "@mui/material/Grid";
 import Item from "@mui/material/Grid";
 import CircularProgress from "@mui/material/CircularProgress";
 import Alert from "@mui/material/Alert";
-
+import UserGuideSwipe from "@/components/ui/UserGuideSwipe";
 const UserDashboard = () => {
   const studyContext = useStudyContext();
   const [studies, setStudies] = useState<Study[]>([]);
@@ -43,17 +43,15 @@ const UserDashboard = () => {
         >
           <ul>
             <li>This app is currently in development and test mode.</li>
-            <li>
-              Please don&apos;t upload sensitive data - expect bugs and
-              unfinished features.
-            </li>
+            <li>Please don&apos;t upload sensitive data - expect bugs and unfinished features.</li>
             <li>Expect data to be deleted without warning.</li>
             <li>
-              <strong>Note:</strong> Other than that feel free to use the app
-              and give feedback.
+              <strong>Note:</strong> Other than that feel free to use the app and give feedback.
             </li>
           </ul>
         </Alert>
+
+        <UserGuideSwipe />
         <div className="ml-80 h-full flex flex-row">
           <div className="flex flex-wrap">
             <NewStudyCard onNewStudyCreated={fetchStudies} />
