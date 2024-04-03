@@ -64,9 +64,11 @@ export default function FullScreenSettingsDialog({
   handleSettingsClose,
 }: FullScreenSettingsDialogProps) {
   const authContext = UserAuth();
-  const [userToken, setUserToken] = React.useState("");
+  const [userToken, setUserToken] = useState("");
 
-  const [open, setOpen] = React.useState(true);
+  const [model, setModel] = useState<string>(LLMModels.GPT_3_5_TURBO);
+  const [apiKey, setApiKey] = useState<string>("");
+  const [open, setOpen] = useState(true);
 
   React.useEffect(() => {
     if (!authContext || !authContext.user) {
