@@ -20,7 +20,7 @@ import { LLMModels } from "@/types";
 import { UserAuth } from "@/app/context/AuthContext";
 import { SelectChangeEvent } from "@mui/material/Select";
 import axios from "axios";
-import Cookie from "js-cookie";
+import { useCookies } from "next-client-cookies";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -30,15 +30,6 @@ const Transition = React.forwardRef(function Transition(
 ) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
-
-function setCookie(key: string, value: string) {
-  if (typeof window !== "undefined") {
-    Cookie.set(key, value, {
-      expires: 1,
-      path: "/",
-    });
-  }
-}
 
 type FullScreenSettingsDialogProps = {
   settingsOpen: boolean;
@@ -50,9 +41,6 @@ async function updateModelSettings(
   apiKey: string,
   userToken: string
 ) {
-  console.log("Setting LLM Model to: ", model);
-  console.log("Setting API Key to: ", apiKey);
-
   const endpoint = `${process.env.NEXT_PUBLIC_BASE_URL}/set-llm-settings`;
   const body = {
     llm_name: model,
@@ -63,7 +51,10 @@ async function updateModelSettings(
     Authorization: `Bearer ${userToken}`,
   };
   try {
-    await axios.post(endpoint, JSON.stringify(body), { headers });
+    await axios.post(endpoint, JSON.stringify(body), {
+      headers,
+      withCredentials: true,
+    });
   } catch (error) {
     console.error(error);
   }
@@ -75,12 +66,14 @@ export default function FullScreenSettingsDialog({
 }: FullScreenSettingsDialogProps) {
   const authContext = UserAuth();
   const [userToken, setUserToken] = React.useState("");
-  const modelCookie = Cookie.get("llm_model");
-  const apiKeyCookie = Cookie.get("api_key");
+  const cookies = useCookies();
+
   const [model, setModel] = React.useState<string>(
-    modelCookie || LLMModels.GPT_3_5_TURBO
+    cookies.get("llm_model") || LLMModels.GPT_3_5_TURBO
   );
-  const [apiKey, setApiKey] = React.useState<string>(apiKeyCookie || "");
+  const [apiKey, setApiKey] = React.useState<string>(
+    cookies.get("api_key") || ""
+  );
   const [open, setOpen] = React.useState(true);
 
   React.useEffect(() => {
@@ -96,10 +89,6 @@ export default function FullScreenSettingsDialog({
     if (!authContext || !authContext.user || !userToken) {
       return;
     }
-
-    setCookie("llm_model", model);
-    setCookie("api_key", apiKey);
-
     await updateModelSettings(model, apiKey, userToken);
     handleSettingsClose();
   }

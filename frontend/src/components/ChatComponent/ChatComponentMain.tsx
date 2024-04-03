@@ -74,6 +74,7 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
       resource_identifier: selectedResource?.identifier,
       combined: combineResources,
     },
+    credentials: "include",
     headers: {
       Authorization: `Bearer ${userToken}`,
     },
