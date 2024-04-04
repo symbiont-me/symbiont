@@ -18,6 +18,8 @@ import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import Image from "next/image";
 import Link from "next/link";
 import LLMSettings from "../Settings/LLMSettings";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { UserAuth } from "@/app/context/AuthContext";
 
 // TODO separate the Drawer component into its own file
 
@@ -78,6 +80,7 @@ const LeftSideBar = () => {
   const theme = useTheme();
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const [settingsOpen, setSettingsOpen] = React.useState(false);
+  const authContext = UserAuth();
 
   const handleDrawerOpen = () => {
     setDrawerOpen(true);
@@ -102,6 +105,12 @@ const LeftSideBar = () => {
         handleSettingsClose={handleSettingsClose}
       />
     );
+  }
+
+  function handleSignOut() {
+    if (authContext && authContext.googleSignOut) {
+      authContext.googleSignOut();
+    }
   }
 
   return (
@@ -221,7 +230,7 @@ const LeftSideBar = () => {
         <Divider />
 
         <List>
-          {["Settings"].map((text, index) => (
+          {["Settings", "Logout"].map((text, index) => (
             <ListItem key={text} disablePadding sx={{ display: "block" }}>
               <ListItemButton
                 sx={{
@@ -232,7 +241,13 @@ const LeftSideBar = () => {
                     fontSize: "0.75rem", // Updated font size
                   },
                 }}
-                onClick={handleSettingsOpen}
+                onClick={
+                  text === "Settings"
+                    ? handleSettingsOpen
+                    : text === "Logout"
+                    ? handleSignOut
+                    : () => {}
+                }
               >
                 <ListItemIcon
                   sx={{
@@ -249,6 +264,7 @@ const LeftSideBar = () => {
                       alt="settings"
                     />
                   )}
+                  {text === "Logout" && <LogoutIcon />}
                 </ListItemIcon>
                 <ListItemText
                   primary={text}
