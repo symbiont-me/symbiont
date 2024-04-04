@@ -18,7 +18,7 @@ import { User } from "firebase/auth";
 type AuthContextType = {
   user: User | null;
   googleSignIn: () => void;
-  logOut: () => void;
+  googleSignOut: () => void;
   isAuthLoading: boolean;
 };
 
@@ -33,7 +33,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     signInWithPopup(auth, provider);
   };
 
-  const logOut = () => {
+  const googleSignOut = () => {
     signOut(auth);
   };
 
@@ -46,7 +46,9 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   }, [user]);
 
   return (
-    <AuthContext.Provider value={{ user, googleSignIn, logOut, isAuthLoading }}>
+    <AuthContext.Provider
+      value={{ user, googleSignIn, googleSignOut, isAuthLoading }}
+    >
       {children}
     </AuthContext.Provider>
   );
