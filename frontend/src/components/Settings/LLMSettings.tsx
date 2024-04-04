@@ -1,5 +1,6 @@
 "use client";
 import * as React from "react";
+import { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import List from "@mui/material/List";
@@ -20,13 +21,12 @@ import { LLMModels } from "@/types";
 import { UserAuth } from "@/app/context/AuthContext";
 import { SelectChangeEvent } from "@mui/material/Select";
 import axios from "axios";
-import { useCookies } from "next-client-cookies";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
     children: React.ReactElement;
   },
-  ref: React.Ref<unknown>
+  ref: React.Ref<unknown>,
 ) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -36,10 +36,10 @@ type FullScreenSettingsDialogProps = {
   handleSettingsClose: () => void;
 };
 
-async function updateModelSettings(
+async function updateLlmSettings(
   model: string,
   apiKey: string,
-  userToken: string
+  userToken: string,
 ) {
   const endpoint = `${process.env.NEXT_PUBLIC_BASE_URL}/set-llm-settings`;
   const body = {
@@ -60,23 +60,36 @@ async function updateModelSettings(
   }
 }
 
+async function getLlmSettings(userToken: string) {
+  const endpoint = `${process.env.NEXT_PUBLIC_BASE_URL}/get-llm-settings`;
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${userToken}`,
+  };
+  try {
+    const response = await axios.get(endpoint, {
+      headers,
+      withCredentials: true,
+    });
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
 export default function FullScreenSettingsDialog({
   settingsOpen,
   handleSettingsClose,
 }: FullScreenSettingsDialogProps) {
   const authContext = UserAuth();
-  const [userToken, setUserToken] = React.useState("");
-  const cookies = useCookies();
+  const [userToken, setUserToken] = useState("");
 
-  const [model, setModel] = React.useState<string>(
-    cookies.get("llm_model") || LLMModels.GPT_3_5_TURBO
-  );
-  const [apiKey, setApiKey] = React.useState<string>(
-    cookies.get("api_key") || ""
-  );
-  const [open, setOpen] = React.useState(true);
+  const [model, setModel] = useState<string>(LLMModels.GPT_3_5_TURBO);
+  const [apiKey, setApiKey] = useState<string>("");
+  const [open, setOpen] = useState(true);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!authContext || !authContext.user) {
       return;
     }
@@ -85,11 +98,21 @@ export default function FullScreenSettingsDialog({
     });
   }, [authContext]);
 
+  useEffect(() => {
+    if (!userToken) {
+      return;
+    }
+    getLlmSettings(userToken).then((res) => {
+      setModel(res.llm_name);
+      setApiKey(res.api_key);
+    });
+  }, [userToken]);
+
   async function saveSettings() {
     if (!authContext || !authContext.user || !userToken) {
       return;
     }
-    await updateModelSettings(model, apiKey, userToken);
+    await updateLlmSettings(model, apiKey, userToken);
     handleSettingsClose();
   }
 
