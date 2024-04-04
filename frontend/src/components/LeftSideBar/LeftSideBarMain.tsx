@@ -135,7 +135,7 @@ const LeftSideBar = () => {
         <Divider />
         <List>
           {["Home", "Library"].map((text, index) => (
-            <Link href={index % 2 === 0 ? "/" : "/library"} passHref>
+            <Link key={text} href={index % 2 === 0 ? "/" : "/library"} passHref>
               <ListItem key={text} disablePadding sx={{ display: "block" }}>
                 <ListItemButton
                   sx={{
