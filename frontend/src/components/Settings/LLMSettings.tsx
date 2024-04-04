@@ -26,7 +26,7 @@ const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
     children: React.ReactElement;
   },
-  ref: React.Ref<unknown>,
+  ref: React.Ref<unknown>
 ) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -39,7 +39,7 @@ type FullScreenSettingsDialogProps = {
 async function updateLlmSettings(
   model: string,
   apiKey: string,
-  userToken: string,
+  userToken: string
 ) {
   const endpoint = `${process.env.NEXT_PUBLIC_BASE_URL}/set-llm-settings`;
   const body = {
@@ -159,6 +159,7 @@ export default function FullScreenSettingsDialog({
               value={model}
               label="llm-models"
               onChange={handleChange}
+              sx={{ width: "70%" }}
             >
               {Object.entries(LLMModels).map(([key, value]) => (
                 <MenuItem key={key} value={value}>
@@ -167,13 +168,23 @@ export default function FullScreenSettingsDialog({
               ))}
             </Select>
           </FormControl>
-          <Divider />
+
           <Input
             placeholder="API Key"
-            sx={{ marginTop: "16px" }}
+            sx={{ marginTop: "16px", width: "70%" }}
             onChange={handleApiKey}
             value={apiKey}
           />
+          <Typography
+            sx={{
+              marginTop: "8px",
+              color: "gray",
+              fontSize: 12,
+              fontStyle: "italic",
+            }}
+          >
+            we do not store your api keys
+          </Typography>
         </List>
       </Dialog>
     </React.Fragment>
