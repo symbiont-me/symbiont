@@ -373,6 +373,7 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
       return response.data.resource;
     } catch (error) {
       setStudyError(error as Error);
+      setIsSuccess(false);
       throw error;
     } finally {
       setIsStudyLoading(false);
