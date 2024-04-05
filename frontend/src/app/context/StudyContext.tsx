@@ -86,6 +86,9 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
   const [isError, setIsError] = useState(false);
   const [studyError, setStudyError] = useState<Error | undefined>(undefined);
   const [currentJoke, setCurrentJoke] = useState(jokes[0]);
+  const [currentlyOpenedStudy, setCurrentlyOpenedStudy] = useState<
+    Study | undefined
+  >(undefined);
 
   // TODO if authContext is available but userId is not, display the landing page
 
@@ -115,22 +118,34 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
     enabled: !!userToken, // This will ensure the query does not run until the token is available
   });
 
+  async function fetchCurrentStudy(studyId: string) {
+    const endpoint = `${BASE_URL}/get-current-study?studyId=${studyId}`;
+    const headers = {
+      Authorization: `Bearer ${userToken}`,
+    };
+    const response = await axios.get(endpoint, { headers });
+
+    return response.data;
+  }
+  const fetchCurrentStudyQuery = useQuery({
+    queryKey: ["get-study", userTokenPromise, studyId],
+    queryFn: () =>
+      userToken && studyId
+        ? fetchCurrentStudy(studyId)
+        : Promise.reject("No token or studyId"),
+    enabled: !!userToken && !!studyId,
+  });
+
   useEffect(() => {
     setIsStudyLoading(true);
     if (fetchStudiesQuery.data) {
       setAllStudies(fetchStudiesQuery.data.studies);
-      const currentStudy = fetchStudiesQuery.data.studies.filter(
-        (study: Study) => {
-          if (studyId && study.id === studyId) {
-            return study;
-          }
-        }
-      );
-      console.log("Current Study", currentStudy);
-      setStudy(currentStudy[0]);
+    }
+    if (fetchCurrentStudyQuery.data) {
+      setStudy(fetchCurrentStudyQuery.data.study);
       setIsStudyLoading(false);
     }
-  }, [fetchStudiesQuery.data, studyId]);
+  }, [fetchStudiesQuery.data, fetchCurrentStudyQuery.data, studyId]);
 
   const createStudy = async (
     studyName: string,
@@ -182,14 +197,15 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
       const response = await axios.post(endpoint, body, { headers });
       if (response.status === 200) {
         console.log("Text Updated");
-        // TODO refetch only the study that was updated
-        fetchStudiesQuery.refetch();
+        console.log("Refetching Updated Study...");
+        fetchCurrentStudyQuery.refetch();
       }
     } catch (error) {
       console.error("Error updating text:", error);
     }
   }
 
+  // TODO wrap this in a try catch block
   async function deleteChatMessages(studyId: string) {
     const url = `${BASE_URL}/delete-chat-messages?studyId=${studyId}`;
 
@@ -200,8 +216,8 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
     if (response.status === 200 && study) {
       console.log("Chat Messages Deleted");
       setStudy({ ...study, chatMessages: [] });
-      console.log("Refetching Studies...");
-      fetchStudiesQuery.refetch();
+      console.log("Refetching Updated Study...");
+      fetchCurrentStudyQuery.refetch();
     }
   }
 
@@ -215,7 +231,8 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
       const response = await axios.post(endpoint, body, { headers });
       if (response.status === 200) {
         console.log("YouTube Video Uploaded");
-        fetchStudiesQuery.refetch();
+        console.log("Refetching Updated Study...");
+        fetchCurrentStudyQuery.refetch();
         setIsSuccess(true);
       }
     } catch (error) {
@@ -237,7 +254,8 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
       const response = await axios.post(endpoint, body, { headers });
       if (response.status === 200) {
         console.log("Web Resource Uploaded");
-        fetchStudiesQuery.refetch();
+        console.log("Refetching Updated Study...");
+        fetchCurrentStudyQuery.refetch();
         setIsSuccess(true);
       }
     } catch (error) {
@@ -262,8 +280,8 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
     try {
       const response = await axios.post(endpoint, body, { headers });
       if (response.status === 200) {
-        console.log("Text Resource Uploaded");
-        fetchStudiesQuery.refetch();
+        console.log("Refetching Updated Study...");
+        fetchCurrentStudyQuery.refetch();
         setIsSuccess(true);
       }
       return response;
@@ -296,7 +314,8 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
           ],
         });
       }
-      await fetchStudiesQuery.refetch();
+      console.log("Refetching Updated Study...");
+      fetchCurrentStudyQuery.refetch();
       setIsSuccess(true);
     } catch (error) {
       console.error("Error uploading file resource:", error);
@@ -320,7 +339,9 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
         console.log("Resource Deleted");
         setIsSuccess(true);
       }
-      fetchStudiesQuery.refetch();
+
+      console.log("Refetching Updated Study...");
+      fetchCurrentStudyQuery.refetch();
     } catch (error) {
       console.error("Error deleting resource:", error);
       setStudyError(error as Error);
