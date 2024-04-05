@@ -30,33 +30,6 @@ const VisuallyHiddenInput = styled("input")({
 // TODO fix toast messages
 // TODO update to handle audio file uploads
 
-type FileUploadData = {
-  study_id: string;
-  identifier: string;
-  name: string;
-  url: string;
-  category: string;
-};
-
-async function sendFileUploadRequest(
-  file: File,
-  studyId: string,
-  userToken: string
-): Promise<FileUploadData> {
-  const endpoint = `${process.env.NEXT_PUBLIC_BASE_URL}/upload-resource?studyId=${studyId}`;
-  const formData = new FormData();
-  formData.append("file", file);
-  const body = formData;
-
-  console.log(userToken);
-  const headers = {
-    "Content-Type": "multipart/form-data",
-    Authorization: `Bearer ${userToken}`,
-  };
-  const response = await axios.post(endpoint, body, { headers });
-  return response.data.resource;
-}
-
 // The FileUpload component allows users to upload PDF files
 const FileUpload = () => {
   const path = usePathname();
@@ -101,21 +74,16 @@ const FileUpload = () => {
       }
       try {
         setUploading(true);
-        if (userToken) {
-          const uploadResponse = await sendFileUploadRequest(
-            file,
-            studyId,
-            userToken
-          );
-          if (uploadResponse) {
+        if (userToken && studyContext) {
+          await studyContext?.uploadFileResource(file, studyId);
+          if (studyContext?.isStudyLoading) {
             setUploading(false);
-          }
-          if (studyContext) {
-            studyContext?.uploadFileResource("pdf");
           }
         }
       } catch (error) {
         console.log(error);
+      } finally {
+        setUploading(false);
       }
     },
   });
