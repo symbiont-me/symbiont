@@ -68,9 +68,9 @@ const ResourceSwitcher = ({
             sx={{ fontSize: "0.65rem", height: "35px" }}
           >
             {resources &&
-              resources.map((resource) => (
+              resources.map((resource, index) => (
                 <MenuItem
-                  key={resource?.identifier}
+                  key={index}
                   value={resource?.identifier}
                   sx={{ fontSize: "0.65rem" }}
                 >
