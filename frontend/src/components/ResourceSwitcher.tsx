@@ -70,11 +70,11 @@ const ResourceSwitcher = ({
             {resources &&
               resources.map((resource) => (
                 <MenuItem
-                  key={resource.identifier}
-                  value={resource.identifier}
+                  key={resource?.identifier}
+                  value={resource?.identifier}
                   sx={{ fontSize: "0.65rem" }}
                 >
-                  {truncateFileName(resource.name)}
+                  {truncateFileName(resource?.name)}
                 </MenuItem>
               ))}
           </Select>
