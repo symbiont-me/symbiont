@@ -156,6 +156,32 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
     description: string,
     image: string
   ) => {
+    /*  @note this is a bit of unnecessary optimization
+     *   we are updating the UI immediately
+     *   the backend will update the UI again after the study is created or if there is an error
+     */
+    function createAlphaNumericId() {
+      const alphaNumeric =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      let result = "";
+      for (let i = 0; i < 6; i++) {
+        result += alphaNumeric.charAt(
+          Math.floor(Math.random() * alphaNumeric.length)
+        );
+      }
+      return result;
+    }
+
+    const tempStudy = {
+      id: createAlphaNumericId(),
+      name: studyName,
+      description: description,
+      image: image,
+      resources: [],
+      chatMessages: [],
+      text: "",
+    };
+    setAllStudies([...allStudies, tempStudy]);
     const endpoint = `${BASE_URL}/create-study`;
     const body = { name: studyName, description: description, image: image };
     const headers = {
@@ -164,12 +190,13 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
     };
 
     try {
-      await axios.post(endpoint, body, { headers });
-      console.log("Study Created");
-      fetchStudiesQuery.refetch();
-      console.log("Refetching Studies...");
+      const response = await axios.post(endpoint, body, { headers });
+      console.log("Updated Studies in the State using response...");
+      setAllStudies([...allStudies, response.data.studies[0]]);
     } catch (error) {
       console.error("Error creating study:", error);
+      console.log("Refetching Studies...");
+      fetchStudiesQuery.refetch();
     }
   };
 
