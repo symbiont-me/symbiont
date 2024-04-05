@@ -23,7 +23,7 @@ const Summaries = () => {
     }
   }, [studyContext?.study?.resources]);
 
-  function deleteResource(resourceIdentifier: string) {
+  function handleDeleteResource(resourceIdentifier: string) {
     studyContext?.deleteResource(resourceIdentifier);
   }
 
@@ -58,7 +58,9 @@ const Summaries = () => {
                 <Typography variant="body1">{resource.summary}</Typography>
               </AccordionDetails>
               <AccordionActions>
-                <Button onClick={() => deleteResource(resource.identifier)}>
+                <Button
+                  onClick={() => handleDeleteResource(resource.identifier)}
+                >
                   Delete Resource
                 </Button>
               </AccordionActions>
