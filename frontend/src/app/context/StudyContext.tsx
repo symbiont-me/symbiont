@@ -346,14 +346,6 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }
 
-  type FileUploadData = {
-    study_id: string;
-    identifier: string;
-    name: string;
-    url: string;
-    category: string;
-  };
-
   async function uploadFileResource(file: File, studyId: string) {
     setIsStudyLoading(true);
     const endpoint = `${process.env.NEXT_PUBLIC_BASE_URL}/upload-resource?studyId=${studyId}`;
