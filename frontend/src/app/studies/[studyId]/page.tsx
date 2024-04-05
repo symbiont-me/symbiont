@@ -19,11 +19,14 @@ import TextEvaluation from "@/components/Study/TextEvaluation";
 import Summaries from "@/components/Study/Summaries";
 import Resources from "@/components/Study/Resources";
 import ChatComponent from "@/components/ChatComponent/ChatComponentMain";
-import { Container } from "@mui/material";
+import { Container, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import "@/app/studies/studyStyles.css";
 import "@/app/globals.css";
 import StudyInfo from "@/components/Study/StudyInfo";
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
+import CircularProgress from "@mui/material/CircularProgress";
 
 // an object that maps each ViewSelected enum value to a corresponding React component.
 // this allows the application to dynamically render different components based on the current view selection
@@ -85,8 +88,26 @@ const StudyPage = () => {
     }
   }, [currentStudy]);
 
+  if (currentStudyContext?.isError) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Alert severity="error">
+          <AlertTitle>Error Loading the Study</AlertTitle>
+          This shouldn't be happening. What did you do?
+        </Alert>
+      </div>
+    );
+  }
+
   if (loading) {
-    return <div></div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="flex flex-col items-center justify-center">
+          <CircularProgress color="secondary" />
+          <h3 className="mt-10">Loading Study ...</h3>
+        </div>
+      </div>
+    );
   }
 
   return (
