@@ -349,6 +349,7 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
   async function uploadFileResource(file: File, studyId: string) {
     setIsStudyLoading(true);
     const endpoint = `${process.env.NEXT_PUBLIC_BASE_URL}/upload-resource?studyId=${studyId}`;
+    // const test_endpoint = `${process.env.NEXT_PUBLIC_BASE_URL}/doc-size-exceeded`;
     const formData = new FormData();
     formData.append("file", file);
     const body = formData;
