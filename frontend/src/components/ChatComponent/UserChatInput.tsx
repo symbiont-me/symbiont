@@ -74,7 +74,7 @@ const UserChatInput = ({
       </SpeedDial> */}
       {noResourceAlert && (
         <Alert severity="info" sx={{ fontSize: 12, marginBottom: "10px" }}>
-          Please add resources before start the chat
+          Please add resources before chat
         </Alert>
       )}
       <form onSubmit={validateInput}>
