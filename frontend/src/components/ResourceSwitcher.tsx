@@ -24,9 +24,10 @@ const ResourceSwitcher = ({
   const studyContext = useStudyContext();
 
   useEffect(() => {
-    if (studyContext?.study && studyContext.study.resources?.length > 0) {
+    if (studyContext?.study) {
+      console.log("Run context switcher", studyContext.study.resources);
       setResources(studyContext.study.resources);
-      const firstResource = studyContext.study.resources[0];
+      const firstResource = studyContext?.study?.resources[0];
       setSelectedResource(firstResource);
       onResourceChange(firstResource);
     }
