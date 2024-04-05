@@ -122,11 +122,12 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
     // we are updating the UI immediately with the selected study
     // the backend will update the UI again after the study is updated
     // if there is an it should display the error and not load the study
-    console.log("Updating Study in the State...");
-    const selectedStudy = allStudies.find((study) => study.id === studyId);
-    if (selectedStudy) {
-      setStudy(selectedStudy);
-    }
+    // NOTE this complicates logic, will have to tolerate the delay in updating the UI
+    // console.log("Updating Study in the State...");
+    // const selectedStudy = allStudies.find((study) => study.id === studyId);
+    // if (selectedStudy) {
+    //   setStudy(selectedStudy);
+    // }
 
     const endpoint = `${BASE_URL}/get-current-study?studyId=${studyId}`;
     const headers = {
@@ -257,6 +258,10 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
   }
 
   async function deleteChatMessages(studyId: string) {
+    console.log("Chat Messages Deleted. Updating State...");
+    if (study) {
+      setStudy({ ...study, chatMessages: [] });
+    }
     const url = `${BASE_URL}/delete-chat-messages?studyId=${studyId}`;
     const headers = {
       Authorization: `Bearer ${userToken}`,
@@ -264,11 +269,6 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
 
     try {
       await axios.delete(url, { headers });
-      console.log("Chat Messages Deleted. Updating State...");
-      if (study) {
-        setStudy({ ...study, chatMessages: [] });
-      }
-
       console.log("Refetching Updated Study...");
       fetchCurrentStudyQuery.refetch();
     } catch (error) {
