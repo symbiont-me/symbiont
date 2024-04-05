@@ -7,6 +7,8 @@ import { usePathname } from "next/navigation";
 import { Study } from "@/types";
 import CircularProgress from "@mui/material/CircularProgress";
 
+// TODO remove if response.status === 200 statements from try-catch blocks
+
 type StudyContextType = {
   allStudies: Study[];
   study: Study | undefined;
@@ -18,7 +20,7 @@ type StudyContextType = {
   deleteStudy: (studyId: string) => void;
   deleteChatMessages: (studyId: string) => void;
   updateWriterContent: (text: string) => void;
-  uploadFileResource: (resourceType: string) => void;
+  uploadFileResource: (file: File, studyId: string) => void;
   uploadYtResource: (studyId: string, link: string) => void;
   uploadWebResource: (studyId: string, urls: string[]) => void;
   uploadTextResource: (studyId: string, name: string, content: string) => void;
@@ -294,8 +296,9 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
     setIsStudyLoading(true);
     try {
       const response = await axios.post(endpoint, body, { headers });
-      console.log("Updating Study Resources in State...");
+
       if (response.status === 200) {
+        console.log("Updating Study Resources in State...");
         if (study) {
           setStudy({
             ...study,
@@ -314,36 +317,41 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }
 
-  async function uploadFileResource(resourceType: string) {
+  type FileUploadData = {
+    study_id: string;
+    identifier: string;
+    name: string;
+    url: string;
+    category: string;
+  };
+
+  async function uploadFileResource(file: File, studyId: string) {
     setIsStudyLoading(true);
+    const endpoint = `${process.env.NEXT_PUBLIC_BASE_URL}/upload-resource?studyId=${studyId}`;
+    const formData = new FormData();
+    formData.append("file", file);
+    const body = formData;
+    const headers = {
+      "Content-Type": "multipart/form-data",
+      Authorization: `Bearer ${userToken}`,
+    };
+
     try {
-      if (study && resourceType === "pdf") {
+      const response = await axios.post(endpoint, body, { headers });
+      console.log("Updating Study Resources in State...");
+      if (study) {
         setStudy({
           ...study,
-          resources: [
-            ...(study.resources ?? []),
-            // @ts-ignore
-            { type: "pdf", category: "file" },
-          ],
-        });
-      } else if (study && resourceType === "web") {
-        setStudy({
-          ...study,
-          resources: [
-            ...(study.resources ?? []),
-            // @ts-ignore
-            { type: "web", category: "file" },
-          ],
+          resources: [...(study.resources ?? []), response.data.resource],
         });
       }
       console.log("Refetching Updated Study...");
-
       fetchCurrentStudyQuery.refetch();
       setIsSuccess(true);
+      return response.data.resource;
     } catch (error) {
-      console.error("Error uploading file resource:", error);
       setStudyError(error as Error);
-      setIsError(true);
+      throw error;
     } finally {
       setIsStudyLoading(false);
     }
