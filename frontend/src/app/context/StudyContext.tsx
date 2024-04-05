@@ -230,7 +230,7 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
     const body = { studyId: studyId, url: link };
     const headers = { Authorization: `Bearer ${userToken}` };
     try {
-      await axios.post(endpoint, body, { headers });
+      const response = await axios.post(endpoint, body, { headers });
       console.log("YouTube Video Uploaded");
       console.log("Updating Study Resources in State...");
       if (study) {
@@ -258,7 +258,7 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
       Authorization: `Bearer ${userToken}`,
     };
     try {
-      await axios.post(endpoint, body, { headers });
+      const response = await axios.post(endpoint, body, { headers });
       console.log("Web Resource Uploaded");
       console.log("Updating Study Resources in State...");
       if (study) {
