@@ -27,13 +27,11 @@ const ResourceSwitcher = ({
     if (studyContext?.study) {
       setResources(studyContext.study.resources);
       // set the first resource as selected by default if needed
-      if (studyContext.study.resources && !selectedResource) {
-        const firstResource = studyContext.study.resources[0];
-        setSelectedResource(firstResource);
-        onResourceChange(firstResource);
-      }
+      const firstResource = studyContext.study.resources[0];
+      setSelectedResource(firstResource);
+      onResourceChange(firstResource);
     }
-  }, [studyContext?.study?.resources, resources]);
+  }, [studyContext?.study]);
 
   if (!studyContext) {
     return null;
