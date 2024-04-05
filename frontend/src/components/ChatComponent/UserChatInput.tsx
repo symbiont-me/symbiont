@@ -50,6 +50,11 @@ const UserChatInput = ({
       return;
     }
 
+    if (studyContext?.study?.resources?.length === 0) {
+      setNoResourceAlert(true);
+      return;
+    }
+
     handleSubmit(event);
   }
 
