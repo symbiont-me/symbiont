@@ -201,6 +201,10 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   async function deleteStudy(studyId: string) {
+    // @note we can update the UI immediately in this case
+    // if there is an error the backend will still update the UI again
+    console.log("Updating Studies in the State...");
+    setAllStudies(allStudies.filter((study) => study.id !== studyId));
     const endpoint = `${BASE_URL}/delete-study?studyId=${studyId}`;
     const headers = {
       "Content-Type": "application/json",
@@ -208,6 +212,7 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
     };
     try {
       await axios.delete(endpoint, { headers });
+      console.log("Refetching Studies...");
       fetchStudiesQuery.refetch();
     } catch (error) {
       console.error("Error deleting study:", error);
