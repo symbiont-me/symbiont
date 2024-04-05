@@ -362,11 +362,19 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
       const response = await axios.post(endpoint, body, { headers });
       if (response.status === 200) {
         console.log("Resource Deleted");
+        console.log("Updating Study Resources in State...");
+        if (study) {
+          setStudy({
+            ...study,
+            resources: study.resources?.filter(
+              (resource) => resource.identifier !== resourceIdentifier
+            ),
+          });
+        }
         setIsSuccess(true);
+        console.log("Refetching Updated Study...");
+        fetchCurrentStudyQuery.refetch();
       }
-
-      console.log("Refetching Updated Study...");
-      fetchCurrentStudyQuery.refetch();
     } catch (error) {
       console.error("Error deleting resource:", error);
       setStudyError(error as Error);
