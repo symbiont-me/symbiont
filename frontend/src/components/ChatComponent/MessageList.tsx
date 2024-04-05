@@ -73,7 +73,7 @@ const MessageList = ({ messages, isLoading }: MessageListProps) => {
           <div key={index} className="relative">
             {message.role === "user" ? (
               <>
-                <div className="user-message m-2 w-1/2 self-start rounded bg-green-200 p-2 ml-auto pb-4 pl-4 pr-4">
+                <div className="user-message m-2 w-2/3 self-start rounded bg-green-200 p-2 ml-auto pb-4 pl-4 pr-4">
                   <div
                     className="relative cursor-pointer flex justify-end "
                     onClick={(e) => copyMessage(e, "user")}
@@ -86,7 +86,7 @@ const MessageList = ({ messages, isLoading }: MessageListProps) => {
                       <ContentCopyIcon sx={{ height: "14px" }} />
                     )}
                   </div>
-                  <p className="text-xs">{message.content}</p>
+                  <p className="text-sm">{message.content}</p>
                 </div>
               </>
             ) : (
