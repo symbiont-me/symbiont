@@ -138,6 +138,7 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     setIsStudyLoading(true);
     if (fetchStudiesQuery.data) {
+      console.log("Setting all studies...", fetchStudiesQuery.data.studies);
       setAllStudies(fetchStudiesQuery.data.studies);
     }
     if (fetchCurrentStudyQuery.data) {
