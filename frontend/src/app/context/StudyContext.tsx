@@ -88,9 +88,6 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
   const [isError, setIsError] = useState(false);
   const [studyError, setStudyError] = useState<Error | undefined>(undefined);
   const [currentJoke, setCurrentJoke] = useState(jokes[0]);
-  const [currentlyOpenedStudy, setCurrentlyOpenedStudy] = useState<
-    Study | undefined
-  >(undefined);
 
   // TODO if authContext is available but userId is not, display the landing page
 
