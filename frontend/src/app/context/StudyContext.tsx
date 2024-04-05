@@ -231,6 +231,14 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
       const response = await axios.post(endpoint, body, { headers });
       if (response.status === 200) {
         console.log("YouTube Video Uploaded");
+
+        console.log("Updating Study Resources in State...");
+        if (study) {
+          setStudy({
+            ...study,
+            resources: [...(study.resources || []), ...response.data.resources],
+          });
+        }
         console.log("Refetching Updated Study...");
         fetchCurrentStudyQuery.refetch();
         setIsSuccess(true);
@@ -254,6 +262,13 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
       const response = await axios.post(endpoint, body, { headers });
       if (response.status === 200) {
         console.log("Web Resource Uploaded");
+        console.log("Updating Study Resources in State...");
+        if (study) {
+          setStudy({
+            ...study,
+            resources: [...(study.resources || []), ...response.data.resources],
+          });
+        }
         console.log("Refetching Updated Study...");
         fetchCurrentStudyQuery.refetch();
         setIsSuccess(true);
@@ -279,7 +294,14 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
     setIsStudyLoading(true);
     try {
       const response = await axios.post(endpoint, body, { headers });
+      console.log("Updating Study Resources in State...");
       if (response.status === 200) {
+        if (study) {
+          setStudy({
+            ...study,
+            resources: [...(study.resources || []), ...response.data.resources],
+          });
+        }
         console.log("Refetching Updated Study...");
         fetchCurrentStudyQuery.refetch();
         setIsSuccess(true);
@@ -315,6 +337,7 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
         });
       }
       console.log("Refetching Updated Study...");
+
       fetchCurrentStudyQuery.refetch();
       setIsSuccess(true);
     } catch (error) {
