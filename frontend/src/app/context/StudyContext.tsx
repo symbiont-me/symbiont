@@ -118,13 +118,32 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
   });
 
   async function fetchCurrentStudy(studyId: string) {
+    // @note optimisation
+    // we are updating the UI immediately with the selected study
+    // the backend will update the UI again after the study is updated
+    // if there is an it should display the error and not load the study
+    console.log("Updating Study in the State...");
+    const selectedStudy = allStudies.find((study) => study.id === studyId);
+    if (selectedStudy) {
+      setStudy(selectedStudy);
+    }
+
     const endpoint = `${BASE_URL}/get-current-study?studyId=${studyId}`;
     const headers = {
       Authorization: `Bearer ${userToken}`,
     };
-    const response = await axios.get(endpoint, { headers });
-
-    return response.data;
+    try {
+      const response = await axios.get(endpoint, { headers });
+      return response.data;
+    } catch (error) {
+      console.log("Error Fetching the Current Study", error);
+      // @note we update the relevant states here to show the error in relevant components
+      setStudy(undefined);
+      setStudyError(fetchCurrentStudyQuery.error as Error);
+      setIsError(true);
+      setIsStudyLoading(false);
+      throw error;
+    }
   }
   const fetchCurrentStudyQuery = useQuery({
     queryKey: ["get-study", userTokenPromise, studyId],
