@@ -353,7 +353,16 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
   }
 
   async function deleteResource(resourceIdentifier: string) {
-    console.log("Deleting Resource...");
+    console.log("Updating Study Resources in State...");
+    if (study) {
+      setStudy({
+        ...study,
+        resources: study.resources?.filter(
+          (resource) => resource.identifier !== resourceIdentifier
+        ),
+      });
+    }
+    console.log("Resource Deleted");
     const endpoint = `${BASE_URL}/delete-resource`;
     const body = { identifier: resourceIdentifier };
     const headers = {
@@ -364,19 +373,9 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
     try {
       await axios.post(endpoint, body, { headers });
 
-      console.log("Resource Deleted");
-      console.log("Updating Study Resources in State...");
-      if (study) {
-        setStudy({
-          ...study,
-          resources: study.resources?.filter(
-            (resource) => resource.identifier !== resourceIdentifier
-          ),
-        });
-      }
-      setIsSuccess(true);
       console.log("Refetching Updated Study...");
       fetchCurrentStudyQuery.refetch();
+      setIsSuccess(true);
     } catch (error) {
       console.error("Error deleting resource:", error);
       setStudyError(error as Error);
