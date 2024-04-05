@@ -73,9 +73,9 @@ const MessageList = ({ messages, isLoading }: MessageListProps) => {
           <div key={index} className="relative">
             {message.role === "user" ? (
               <>
-                <div className="user-message m-2 w-2/3 self-start rounded bg-green-200 p-2 ml-auto pb-4 pl-4 pr-4">
+                <div className="user-message w-2/3 self-start rounded bg-green-200 ml-auto p-4">
                   <div
-                    className="relative cursor-pointer flex justify-end "
+                    className="absolute top-0 right-0 cursor-pointer"
                     onClick={(e) => copyMessage(e, "user")}
                   >
                     {userMessageCopied ? (
@@ -95,7 +95,8 @@ const MessageList = ({ messages, isLoading }: MessageListProps) => {
                 onClick={handleTextSelect}
               >
                 <div
-                  className="relative cursor-pointer flex justify-end "
+                  className="absolute top-2  cursor-pointer"
+                  style={{ right: "152px" }}
                   onClick={(e) => copyMessage(e, "ai")}
                 >
                   {aiMessageCopied ? (
