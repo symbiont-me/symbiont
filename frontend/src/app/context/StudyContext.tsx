@@ -354,6 +354,8 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
 
   async function deleteResource(resourceIdentifier: string) {
     console.log("Updating Study Resources in State...");
+    // @note keep this line here, so that it updates the UI immediately
+    // if there are any issues with the backend, the UI will still be updated again from the backend
     if (study) {
       setStudy({
         ...study,
