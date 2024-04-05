@@ -162,12 +162,10 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
     };
 
     try {
-      const response = await axios.post(endpoint, body, { headers });
-      if (response.status === 200) {
-        console.log("Study Created");
-        fetchStudiesQuery.refetch();
-        console.log("Refetching Studies...");
-      }
+      await axios.post(endpoint, body, { headers });
+      console.log("Study Created");
+      fetchStudiesQuery.refetch();
+      console.log("Refetching Studies...");
     } catch (error) {
       console.error("Error creating study:", error);
     }
@@ -196,55 +194,54 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
     };
 
     try {
-      const response = await axios.post(endpoint, body, { headers });
-      if (response.status === 200) {
-        console.log("Text Updated");
-        console.log("Refetching Updated Study...");
-        fetchCurrentStudyQuery.refetch();
-      }
+      await axios.post(endpoint, body, { headers });
+      console.log("Text Updated");
+      console.log("Refetching Updated Study...");
+      fetchCurrentStudyQuery.refetch();
     } catch (error) {
       console.error("Error updating text:", error);
     }
   }
 
-  // TODO wrap this in a try catch block
   async function deleteChatMessages(studyId: string) {
     const url = `${BASE_URL}/delete-chat-messages?studyId=${studyId}`;
-
     const headers = {
       Authorization: `Bearer ${userToken}`,
     };
-    const response = await axios.delete(url, { headers });
-    if (response.status === 200 && study) {
-      console.log("Chat Messages Deleted");
-      setStudy({ ...study, chatMessages: [] });
+
+    try {
+      await axios.delete(url, { headers });
+      console.log("Chat Messages Deleted. Updating State...");
+      if (study) {
+        setStudy({ ...study, chatMessages: [] });
+      }
+
       console.log("Refetching Updated Study...");
       fetchCurrentStudyQuery.refetch();
+    } catch (error) {
+      console.error("Error deleting chat messages:", error);
     }
   }
 
   // TODO copy this error modelling in the other functions
   async function uploadYtResource(studyId: string, link: string) {
+    setIsStudyLoading(true);
     const endpoint = `${BASE_URL}/process-youtube-video`;
     const body = { studyId: studyId, url: link };
     const headers = { Authorization: `Bearer ${userToken}` };
-    setIsStudyLoading(true);
     try {
-      const response = await axios.post(endpoint, body, { headers });
-      if (response.status === 200) {
-        console.log("YouTube Video Uploaded");
-
-        console.log("Updating Study Resources in State...");
-        if (study) {
-          setStudy({
-            ...study,
-            resources: [...(study.resources || []), ...response.data.resources],
-          });
-        }
-        console.log("Refetching Updated Study...");
-        fetchCurrentStudyQuery.refetch();
-        setIsSuccess(true);
+      await axios.post(endpoint, body, { headers });
+      console.log("YouTube Video Uploaded");
+      console.log("Updating Study Resources in State...");
+      if (study) {
+        setStudy({
+          ...study,
+          resources: [...(study.resources || []), ...response.data.resources],
+        });
       }
+      console.log("Refetching Updated Study...");
+      fetchCurrentStudyQuery.refetch();
+      setIsSuccess(true);
     } catch (error) {
       console.error("Error uploading YouTube video:", error);
       setStudyError(error as Error);
@@ -254,27 +251,25 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
   }
 
   async function uploadWebResource(studyId: string, urls: string[]) {
+    setIsStudyLoading(true);
     const endpoint = `${BASE_URL}/add-webpage-resource`;
     const body = { studyId: studyId, urls: urls };
     const headers = {
       Authorization: `Bearer ${userToken}`,
     };
-    setIsStudyLoading(true);
     try {
-      const response = await axios.post(endpoint, body, { headers });
-      if (response.status === 200) {
-        console.log("Web Resource Uploaded");
-        console.log("Updating Study Resources in State...");
-        if (study) {
-          setStudy({
-            ...study,
-            resources: [...(study.resources || []), ...response.data.resources],
-          });
-        }
-        console.log("Refetching Updated Study...");
-        fetchCurrentStudyQuery.refetch();
-        setIsSuccess(true);
+      await axios.post(endpoint, body, { headers });
+      console.log("Web Resource Uploaded");
+      console.log("Updating Study Resources in State...");
+      if (study) {
+        setStudy({
+          ...study,
+          resources: [...(study.resources || []), ...response.data.resources],
+        });
       }
+      console.log("Refetching Updated Study...");
+      fetchCurrentStudyQuery.refetch();
+      setIsSuccess(true);
     } catch (error) {
       console.error("Error uploading web resource:", error);
       setStudyError(error as Error);
@@ -288,32 +283,32 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
     name: string,
     content: string
   ) {
+    setIsStudyLoading(true);
     const endpoint = `${BASE_URL}/add-plain-text-resource`;
     const body = { studyId: studyId, name: name, content: content };
     const headers = {
       Authorization: `Bearer ${userToken}`,
     };
-    setIsStudyLoading(true);
+
     try {
       const response = await axios.post(endpoint, body, { headers });
 
-      if (response.status === 200) {
-        console.log("Updating Study Resources in State...");
-        if (study) {
-          setStudy({
-            ...study,
-            resources: [...(study.resources || []), ...response.data.resources],
-          });
-        }
-        console.log("Refetching Updated Study...");
-        fetchCurrentStudyQuery.refetch();
-        setIsSuccess(true);
+      console.log("Updating Study Resources in State...");
+      if (study) {
+        setStudy({
+          ...study,
+          resources: [...(study.resources || []), ...response.data.resources],
+        });
       }
-      return response;
+      console.log("Refetching Updated Study...");
+      fetchCurrentStudyQuery.refetch();
+      setIsSuccess(true);
     } catch (error) {
       console.error("Error uploading text resource:", error);
       setStudyError(error as Error);
       setIsError(true);
+    } finally {
+      setIsStudyLoading(false);
     }
   }
 
@@ -367,22 +362,21 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
     };
 
     try {
-      const response = await axios.post(endpoint, body, { headers });
-      if (response.status === 200) {
-        console.log("Resource Deleted");
-        console.log("Updating Study Resources in State...");
-        if (study) {
-          setStudy({
-            ...study,
-            resources: study.resources?.filter(
-              (resource) => resource.identifier !== resourceIdentifier
-            ),
-          });
-        }
-        setIsSuccess(true);
-        console.log("Refetching Updated Study...");
-        fetchCurrentStudyQuery.refetch();
+      await axios.post(endpoint, body, { headers });
+
+      console.log("Resource Deleted");
+      console.log("Updating Study Resources in State...");
+      if (study) {
+        setStudy({
+          ...study,
+          resources: study.resources?.filter(
+            (resource) => resource.identifier !== resourceIdentifier
+          ),
+        });
       }
+      setIsSuccess(true);
+      console.log("Refetching Updated Study...");
+      fetchCurrentStudyQuery.refetch();
     } catch (error) {
       console.error("Error deleting resource:", error);
       setStudyError(error as Error);
