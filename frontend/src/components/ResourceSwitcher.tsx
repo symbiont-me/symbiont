@@ -24,9 +24,8 @@ const ResourceSwitcher = ({
   const studyContext = useStudyContext();
 
   useEffect(() => {
-    if (studyContext?.study) {
+    if (studyContext?.study && studyContext.study.resources?.length > 0) {
       setResources(studyContext.study.resources);
-      // set the first resource as selected by default if needed
       const firstResource = studyContext.study.resources[0];
       setSelectedResource(firstResource);
       onResourceChange(firstResource);
