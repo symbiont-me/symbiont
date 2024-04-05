@@ -350,14 +350,16 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
   }
 
   async function deleteResource(resourceIdentifier: string) {
-    const endpoint = `${BASE_URL}/delete-resource?identifier=${resourceIdentifier}`;
+    console.log("Deleting Resource...");
+    const endpoint = `${BASE_URL}/delete-resource`;
+    const body = { identifier: resourceIdentifier };
     const headers = {
       "Content-Type": "application/json",
       Authorization: `Bearer ${userToken}`,
     };
 
     try {
-      const response = await axios.post(endpoint, {}, { headers });
+      const response = await axios.post(endpoint, body, { headers });
       if (response.status === 200) {
         console.log("Resource Deleted");
         setIsSuccess(true);
