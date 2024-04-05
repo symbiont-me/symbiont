@@ -74,14 +74,14 @@ const FileUpload = () => {
       }
       try {
         setUploading(true);
-        if (userToken && studyContext) {
+        if (studyContext) {
           await studyContext?.uploadFileResource(file, studyId);
           if (studyContext?.isStudyLoading) {
             setUploading(false);
           }
         }
       } catch (error) {
-        console.log(error);
+        console.log(studyContext?.studyError?.message);
       } finally {
         setUploading(false);
       }
