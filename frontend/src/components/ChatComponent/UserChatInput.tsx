@@ -32,17 +32,16 @@ const UserChatInput = ({
   handleInputChange,
   handleSubmit,
 }: UserChatInputProps) => {
-  const currentStudyContext = useStudyContext();
-  const [alert, setAlert] = useState(false);
+  const studyContext = useStudyContext();
+  const [noResourceAlert, setNoResourceAlert] = useState(false);
 
   useEffect(() => {
-    if (
-      currentStudyContext?.study &&
-      currentStudyContext.study.resources?.length === 0
-    ) {
-      setAlert(true);
+    if (studyContext?.study && studyContext.study.resources?.length === 0) {
+      setNoResourceAlert(true);
+      return;
     }
-  }, [currentStudyContext]);
+    setNoResourceAlert(false);
+  }, [studyContext?.study]);
 
   function validateInput(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault(); // Prevent the default form submission
@@ -73,7 +72,7 @@ const UserChatInput = ({
           />
         ))}
       </SpeedDial> */}
-      {alert && (
+      {noResourceAlert && (
         <Alert severity="info" sx={{ fontSize: 12, marginBottom: "10px" }}>
           Please add resources before start the chat
         </Alert>
