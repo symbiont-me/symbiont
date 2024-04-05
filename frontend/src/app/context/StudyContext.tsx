@@ -142,7 +142,11 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
       setAllStudies(fetchStudiesQuery.data.studies);
     }
     if (fetchCurrentStudyQuery.data) {
-      setStudy(fetchCurrentStudyQuery.data.study);
+      console.log(
+        "Setting current study...",
+        fetchCurrentStudyQuery.data.studies
+      );
+      setStudy(fetchCurrentStudyQuery.data.studies[0]); // @note all study routes return an array
       setIsStudyLoading(false);
     }
   }, [fetchStudiesQuery.data, fetchCurrentStudyQuery.data, studyId]);
