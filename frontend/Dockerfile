@@ -1,15 +1,15 @@
-FROM node
+FROM node:20.12.1-alpine3.19
 
 WORKDIR /app
 
-COPY package.json ./
+COPY package.json pnpm-lock.yaml ./
 
-RUN npm install -g bun
+RUN npm install -g pnpm
 
-RUN bun install
+RUN pnpm install
 
 COPY . .
 
 EXPOSE 3000
 
-CMD ["bun", "dev"]
+CMD ["pnpm", "dev"]
