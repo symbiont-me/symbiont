@@ -6,6 +6,7 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 import CircularProgress from "@mui/material/CircularProgress";
 import CheckIcon from "@mui/icons-material/Check";
+import { useCopyToClipboard } from "@/app/hooks/useCopyToClipboard";
 
 type MessageListProps = {
   messages: Message[];
@@ -24,43 +25,14 @@ const handleTextSelect = (event: React.MouseEvent) => {
 // TODO use cn function from utils to conditionally render classes
 // TODO add loader if the stream is delayed. NOTE: using isLoading is not going to work as it waits for the entire response to be received
 const MessageList = ({ messages, isLoading }: MessageListProps) => {
-  const [aiMessageCopied, setAiMessageCopied] = useState(false);
-  const [userMessageCopied, setUserMessageCopied] = useState(false);
+  const { isCopied, copyToClipboard } = useCopyToClipboard({ timeout: 2000 });
+
+  function onCopy(content: string) {
+    if (isCopied) return;
+    copyToClipboard(content);
+  }
+
   if (!messages) return <></>;
-
-  /**
-   * Copies the text content of a message element to the clipboard.
-   *
-   * @param e - The mouse event that triggered the copy action.
-   * @param role - The role of the message ("ai" or "user").
-   */
-  const copyMessage = (e: React.MouseEvent, role: "ai" | "user") => {
-    const messageClass = role === "ai" ? ".ai-response" : ".user-message";
-    const setCopied = role === "ai" ? setAiMessageCopied : setUserMessageCopied;
-
-    const messageElement = (e.currentTarget as HTMLElement)
-      .closest(messageClass)
-      ?.querySelector("p");
-    if (messageElement) {
-      const range = document.createRange();
-      range.selectNodeContents(messageElement);
-      const selection = window.getSelection();
-      selection?.removeAllRanges();
-      selection?.addRange(range);
-
-      try {
-        document.execCommand("copy");
-        setCopied(true);
-        setTimeout(() => {
-          setCopied(false);
-        }, 2000);
-      } catch (err) {
-        console.error("Unable to copy formatting", err);
-      }
-
-      selection?.removeAllRanges();
-    }
-  };
 
   if (!Array.isArray(messages)) return null;
 
@@ -76,9 +48,9 @@ const MessageList = ({ messages, isLoading }: MessageListProps) => {
                 <div className="user-message w-2/3 self-start rounded bg-green-200 ml-auto p-4">
                   <div
                     className="absolute top-0 right-0 cursor-pointer"
-                    onClick={(e) => copyMessage(e, "user")}
+                    onClick={() => onCopy(message.content)}
                   >
-                    {userMessageCopied ? (
+                    {isCopied ? (
                       <span className="text-2xs text-slate-800 font-semibold italic">
                         copied! <CheckIcon sx={{ height: "10px" }} />
                       </span>
@@ -97,9 +69,9 @@ const MessageList = ({ messages, isLoading }: MessageListProps) => {
                 <div
                   className="absolute top-2  cursor-pointer"
                   style={{ right: "152px" }}
-                  onClick={(e) => copyMessage(e, "ai")}
+                  onClick={() => onCopy(message.content)}
                 >
-                  {aiMessageCopied ? (
+                  {isCopied ? (
                     <span className="text-2xs text-slate-800 font-semibold italic">
                       copied! <CheckIcon sx={{ height: "10px" }} />
                     </span>
