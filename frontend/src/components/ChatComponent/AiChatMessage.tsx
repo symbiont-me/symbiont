@@ -9,9 +9,9 @@ const AiChatMessage = React.memo(({ message }: { message: string }) => {
   // Define custom renderers for react-markdown
   const renderers = {
     h2: ({ node, children }) => <h2 className="mt-4 mb-4">{children}</h2>,
-    // Custom renderer for paragraphs
+
     p: ({ node, children }) => <p className="mb-2 mt-2">{children}</p>,
-    // Custom renderer for images
+
     img: ({ node, ...props }) => <img {...props} style={{ maxWidth: "67%" }} />,
     // Custom renderer for code blocks
     code: ({ node, inline, className, children, ...props }) => {
@@ -23,6 +23,7 @@ const AiChatMessage = React.memo(({ message }: { message: string }) => {
         );
       }
       const match = /language-(\w+)/.exec(className || "");
+      // if there's a match, render the code block with syntax highlighting
       return match ? (
         <MessageCodeBlock
           language={match[1]}
@@ -38,7 +39,6 @@ const AiChatMessage = React.memo(({ message }: { message: string }) => {
         </code>
       );
     },
-    // Add other custom renderers as needed
   };
 
   return (
