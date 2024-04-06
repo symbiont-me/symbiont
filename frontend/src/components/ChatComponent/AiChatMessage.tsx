@@ -50,6 +50,7 @@ const AiChatMessage = React.memo(({ message }: { message: string }) => {
       ) : (
         <code
           className={`${className} bg-slate-100 text-red-500 rounded pr-1 pl-1 font-semibold`}
+          style={{ whiteSpace: "pre-wrap" }}
           {...props}
         >
           {children}
