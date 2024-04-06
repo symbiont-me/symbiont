@@ -1,5 +1,5 @@
 // https://github.com/mckaywrigley/chatbot-ui
-import React from "react";
+import React, { ReactNode } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Typography } from "@mui/material";
@@ -8,13 +8,30 @@ import { MessageCodeBlock } from "./MessageCodeBlock"; // Adjust the import path
 const AiChatMessage = React.memo(({ message }: { message: string }) => {
   // Define custom renderers for react-markdown
   const renderers = {
-    h2: ({ node, children }) => <h2 className="mt-4 mb-4">{children}</h2>,
+    h2: ({ node, children }: { node: ReactNode; children: ReactNode }) => (
+      <h2 className="mt-4 mb-4">{children}</h2>
+    ),
 
-    p: ({ node, children }) => <p className="mb-2 mt-2">{children}</p>,
+    p: ({ node, children }: { node: ReactNode; children: ReactNode }) => (
+      <p className="mb-2 mt-2">{children}</p>
+    ),
 
-    img: ({ node, ...props }) => <img {...props} style={{ maxWidth: "67%" }} />,
+    img: ({ node, ...props }: { node: ReactNode }) => (
+      <img {...props} style={{ maxWidth: "67%" }} />
+    ),
     // Custom renderer for code blocks
-    code: ({ node, inline, className, children, ...props }) => {
+    code: ({
+      node,
+      inline,
+      className,
+      children,
+      ...props
+    }: {
+      node: ReactNode;
+      inline: boolean;
+      className: string;
+      children: ReactNode;
+    }) => {
       if (inline) {
         return (
           <code className={className} {...props}>
@@ -45,7 +62,7 @@ const AiChatMessage = React.memo(({ message }: { message: string }) => {
     <ReactMarkdown
       className="break-words leading-6 text-sm"
       remarkPlugins={[remarkGfm]}
-      components={renderers}
+      components={renderers as any}
     >
       {message}
     </ReactMarkdown>
