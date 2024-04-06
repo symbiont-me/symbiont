@@ -66,16 +66,13 @@ async function getLlmSettings(userToken: string) {
     "Content-Type": "application/json",
     Authorization: `Bearer ${userToken}`,
   };
-  try {
-    const response = await axios.get(endpoint, {
-      headers,
-      withCredentials: true,
-    });
-    return response.data;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
+
+  const response = await axios.get(endpoint, {
+    headers,
+    withCredentials: true,
+  });
+
+  return response.data;
 }
 
 export default function FullScreenSettingsDialog({
@@ -103,6 +100,9 @@ export default function FullScreenSettingsDialog({
       return;
     }
     getLlmSettings(userToken).then((res) => {
+      if (!res) {
+        return;
+      }
       setModel(res.llm_name);
       setApiKey(res.api_key);
     });
