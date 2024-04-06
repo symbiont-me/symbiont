@@ -114,14 +114,16 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
           onResourceChange={setSelectedResource}
         />
         <div className="flex flex-row justify-between items-center">
-          <Checkbox
-            {...label}
-            onChange={handleCombineResources}
-            sx={{ height: "10px" }}
-          />
-          <label htmlFor="combineResources" className="text-2xs">
-            Combine Resources
-          </label>
+          <div className="flex flex-row items-center justify-center">
+            <Checkbox
+              {...label}
+              onChange={handleCombineResources}
+              sx={{ height: "10px" }}
+            />
+            <label htmlFor="combineResources" className="text-xs">
+              Combine Resources
+            </label>
+          </div>
           <div
             className="flex flex-row justify-center items-center cursor-pointer p-2"
             onClick={deleteChat}
