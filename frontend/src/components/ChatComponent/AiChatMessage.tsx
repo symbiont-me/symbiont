@@ -30,7 +30,10 @@ const AiChatMessage = React.memo(({ message }: { message: string }) => {
           {...props}
         />
       ) : (
-        <code className={`${className} bg-slate-200 text-red-500`} {...props}>
+        <code
+          className={`${className} bg-slate-100 text-red-500 rounded p-1 font-semibold`}
+          {...props}
+        >
           {children}
         </code>
       );
