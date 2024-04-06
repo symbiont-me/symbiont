@@ -96,23 +96,16 @@ export const MessageCodeBlock: FC<MessageCodeBlockProps> = memo(
         <div className="flex w-full items-center justify-between bg-zinc-700 px-4 text-white">
           <span className="text-xs lowercase">{language}</span>
           <div className="flex items-center space-x-1">
-            {/* <Button
-              variant="ghost"
-              size="icon"
-              className="hover:bg-zinc-800 focus-visible:ring-1 focus-visible:ring-slate-700 focus-visible:ring-offset-0"
-              onClick={downloadAsFile}
-            >
-              <IconDownload size={16} />
-            </Button>
-
-            <Button
-              variant="ghost"
-              size="icon"
-              className="text-xs hover:bg-zinc-800 focus-visible:ring-1 focus-visible:ring-slate-700 focus-visible:ring-offset-0"
+            <div
+              className="text-xs p-2 hover:bg-zinc-800 focus-visible:ring-1 focus-visible:ring-slate-700 focus-visible:ring-offset-0"
               onClick={onCopy}
             >
-              {isCopied ? <IconCheck size={16} /> : <IconCopy size={16} />}
-            </Button> */}
+              {isCopied ? (
+                <CheckIcon sx={{ height: "20px" }} />
+              ) : (
+                <ContentCopyIcon sx={{ height: "20px", cursor: "pointer" }} />
+              )}
+            </div>
           </div>
         </div>
         <SyntaxHighlighter
