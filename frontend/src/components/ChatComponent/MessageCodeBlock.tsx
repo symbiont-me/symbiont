@@ -101,9 +101,9 @@ export const MessageCodeBlock: FC<MessageCodeBlockProps> = memo(
               onClick={onCopy}
             >
               {isCopied ? (
-                <CheckIcon sx={{ height: "20px" }} />
+                <CheckIcon sx={{ height: "12px" }} />
               ) : (
-                <ContentCopyIcon sx={{ height: "20px", cursor: "pointer" }} />
+                <ContentCopyIcon sx={{ height: "12px", cursor: "pointer" }} />
               )}
             </div>
           </div>
