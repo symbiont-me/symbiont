@@ -28,6 +28,7 @@
     "@types/js-cookie": "^3.0.6",
     "@types/md5": "^2.3.5",
     "@types/pdf-viewer-reactjs": "^2.2.5",
+    "@types/react-syntax-highlighter": "^15.5.11",
     "ai": "^2.2.31",
     "aws-sdk": "^2.1526.0",
     "axios": "^1.6.3",
@@ -59,8 +60,10 @@
     "react-markdown": "^9.0.1",
     "react-quill": "^2.0.0",
     "react-swipeable-views": "^0.14.0",
+    "react-syntax-highlighter": "^15.5.0",
     "react-youtube": "^10.1.0",
     "remark": "^15.0.1",
+    "remark-gfm": "^4.0.0",
     "remark-html": "^16.0.1",
     "tailwind-merge": "^2.2.0",
     "tailwindcss-animate": "^1.0.7"
