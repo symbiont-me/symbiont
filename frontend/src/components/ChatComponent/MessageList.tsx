@@ -25,22 +25,22 @@ const handleTextSelect = (event: React.MouseEvent) => {
 // TODO use cn function from utils to conditionally render classes
 // TODO add loader if the stream is delayed. NOTE: using isLoading is not going to work as it waits for the entire response to be received
 const MessageList = ({ messages, isLoading }: MessageListProps) => {
-  const { isCopied, copyToClipboard } = useCopyToClipboard({ timeout: 2000 });
-
-  function onCopy(content: string) {
-    if (isCopied) return;
-    copyToClipboard(content);
-  }
+  const { isCopied, copyToClipboard } = useCopyToClipboard({ timeout: 1000 });
+  const [copyMessageId, setCopyMessageId] = useState<number | null>(null);
 
   if (!messages) return <></>;
 
   if (!Array.isArray(messages)) return null;
 
+  function onCopy(content: string, messageID: number) {
+    if (isCopied) return;
+    copyToClipboard(content);
+    setCopyMessageId(messageID);
+  }
+
   return (
     <>
       {messages.map((message, index) => {
-        // we want to display a loader on the upcoming message if the response is delayed
-        const isLastMessage = index === messages.length - 1;
         return (
           <div key={index} className="relative">
             {message.role === "user" ? (
@@ -48,9 +48,9 @@ const MessageList = ({ messages, isLoading }: MessageListProps) => {
                 <div className="user-message w-2/3 self-start rounded bg-green-200 ml-auto p-4">
                   <div
                     className="absolute top-0 right-0 cursor-pointer"
-                    onClick={() => onCopy(message.content)}
+                    onClick={() => onCopy(message.content, index)}
                   >
-                    {isCopied ? (
+                    {isCopied && copyMessageId === index ? (
                       <span className="text-2xs text-slate-800 font-semibold italic">
                         copied! <CheckIcon sx={{ height: "10px" }} />
                       </span>
@@ -69,9 +69,9 @@ const MessageList = ({ messages, isLoading }: MessageListProps) => {
                 <div
                   className="absolute top-2  cursor-pointer"
                   style={{ right: "152px" }}
-                  onClick={() => onCopy(message.content)}
+                  onClick={() => onCopy(message.content, index)}
                 >
-                  {isCopied ? (
+                  {isCopied && copyMessageId === index ? (
                     <span className="text-2xs text-slate-800 font-semibold italic">
                       copied! <CheckIcon sx={{ height: "10px" }} />
                     </span>
@@ -80,11 +80,7 @@ const MessageList = ({ messages, isLoading }: MessageListProps) => {
                   )}
                 </div>
 
-                {isLastMessage && !message.content ? (
-                  <div className="flex justify-center items-center p-6 w-full">
-                    <CircularProgress />
-                  </div>
-                ) : (
+                {message.content && (
                   <div>
                     <AiChatMessage message={message.content} />
                   </div>
