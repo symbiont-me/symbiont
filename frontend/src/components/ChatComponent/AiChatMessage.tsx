@@ -6,6 +6,7 @@ import { Typography } from "@mui/material";
 import { MessageCodeBlock } from "./MessageCodeBlock"; // Adjust the import path as necessary
 
 const AiChatMessage = React.memo(({ message }: { message: string }) => {
+  AiChatMessage.displayName = "AiChatMessage";
   // Define custom renderers for react-markdown
   const renderers = {
     h2: ({ node, children }: { node: ReactNode; children: ReactNode }) => (
