@@ -412,8 +412,8 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
       });
     }
     console.log("Resource Deleted");
-    const endpoint = `${BASE_URL}/delete-resource`;
-    const body = { identifier: resourceIdentifier };
+    const endpoint = `${BASE_URL}/delete-resource-from-study`;
+    const body = { study_id: studyId, identifier: resourceIdentifier };
     const headers = {
       "Content-Type": "application/json",
       Authorization: `Bearer ${userToken}`,
