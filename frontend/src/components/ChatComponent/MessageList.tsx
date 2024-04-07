@@ -47,7 +47,7 @@ const MessageList = ({ messages, isLoading }: MessageListProps) => {
               <>
                 <div className="user-message w-2/3 self-start rounded bg-teal-200 ml-auto p-4">
                   <div
-                    className="absolute top-0 right-0 cursor-pointer"
+                    className="absolute top-1 right-2 cursor-pointer"
                     onClick={() => onCopy(message.content, index)}
                   >
                     {isCopied && copyMessageId === index ? (
@@ -63,12 +63,11 @@ const MessageList = ({ messages, isLoading }: MessageListProps) => {
               </>
             ) : (
               <div
-                className="ai-response m-2 self-end rounded bg-amber-100 p-6 mr-auto w-3/4"
+                className="ai-response m-2 self-end rounded bg-amber-100 mr-auto w-3/4 p-6"
                 onClick={handleTextSelect}
               >
                 <div
-                  className="absolute top-2  cursor-pointer"
-                  style={{ right: "232px" }}
+                  className="absolute cursor-pointer top-3 left-4"
                   onClick={() => onCopy(message.content, index)}
                 >
                   {isCopied && copyMessageId === index ? (
