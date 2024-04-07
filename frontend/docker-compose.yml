@@ -7,5 +7,5 @@ services:
     volumes:
       - ./src:/app/src
     env_file:
-      - ./.env
-    command: sh -c "bun install && bun run dev"
+      - .env.${ENV}
+    command: sh -c "pnpm install && pnpm dev"
