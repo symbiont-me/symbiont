@@ -93,7 +93,7 @@ const StudyPage = () => {
       <div className="flex justify-center items-center h-screen">
         <Alert severity="error">
           <AlertTitle>Error Loading the Study</AlertTitle>
-          This shouldn't be happening. What did you do?
+          This shouldn&apos;t be happening. What did you do?
         </Alert>
       </div>
     );
