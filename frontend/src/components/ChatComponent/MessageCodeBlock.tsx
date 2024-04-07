@@ -114,8 +114,9 @@ export const MessageCodeBlock: FC<MessageCodeBlockProps> = memo(
           // showLineNumbers
           customStyle={{
             margin: 0,
-            width: "100%",
+            width: "80%",
             background: "transparent",
+            maxWidth: "80%",
           }}
           codeTagProps={{
             style: {
