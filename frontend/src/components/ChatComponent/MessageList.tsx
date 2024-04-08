@@ -93,7 +93,7 @@ const MessageList = ({ messages, isLoading }: MessageListProps) => {
                       <AiChatMessage message={message.content} />
                     </div>
                     {
-                      <div className=" h-18">
+                      <div className="min-h-20">
                         <Divider />
                         <p className="text-sm font-semibold mb-2 mt-4">
                           Resources
