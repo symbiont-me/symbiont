@@ -105,6 +105,7 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
     if (!currentStudyContext?.study) {
       return;
     }
+    if (isLoading) return;
     try {
       const res = await currentStudyContext.fetchCurrentStudy(studyId);
       if (res) {
