@@ -96,7 +96,7 @@ const MessageList = ({ messages, isLoading }: MessageListProps) => {
                       <div className="min-h-20">
                         <Divider />
                         <p className="text-sm font-semibold mb-2 mt-4">
-                          Resources
+                          Citations
                         </p>
                         <div className="flex flex-row">
                           {message.citations &&
