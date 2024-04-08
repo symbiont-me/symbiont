@@ -116,11 +116,12 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
   }
 
   useEffect(() => {
+    setIsMessageComplete(isLoading);
+
     if (currentStudyContext?.study) {
       updateChat();
     }
-    setIsMessageComplete(isLoading);
-  }, [isMessageComplete, isLoading]);
+  }, [isLoading]);
 
   function handleCombineResources() {
     setCombineResources(!combineResources);
