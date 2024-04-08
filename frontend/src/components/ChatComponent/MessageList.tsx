@@ -1,16 +1,11 @@
 import { Message } from "ai/react";
 import React, { useState } from "react";
 import AiChatMessage from "@/components/ChatComponent/AiChatMessage";
-import { Typography } from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import CheckIcon from "@mui/icons-material/Check";
 import { useCopyToClipboard } from "@/app/hooks/useCopyToClipboard";
-
-type Citation = {
-  page: number;
-  source: string;
-  text: string;
-};
+import { Citation } from "@/types";
+import CitationModal from "@/components/ChatComponent/CitationModal";
 
 interface ChatMessage extends Message {
   citations?: Citation[];
@@ -96,17 +91,21 @@ const MessageList = ({ messages, isLoading }: MessageListProps) => {
                     <div>
                       <AiChatMessage message={message.content} />
                     </div>
-                    <p className="text-sm font-semibold mb-4">Resources</p>
-                    <div className="flex flex-row">
-                      {message.citations &&
-                        message.citations.map((citation, index) => (
-                          <div key={index} className="citation">
+                    {message.citations && (
+                      <>
+                        <p className="text-sm font-semibold mb-4">Resources</p>
+                        <div className="flex flex-row" key={index}>
+                          {message.citations.map((citation, index) => (
                             <p className="text-xs text-blue-800 font-semibold mr-2 cursor-pointer">
-                              [{index + 1}]
+                              <CitationModal
+                                index={index}
+                                citation={citation}
+                              />{" "}
                             </p>
-                          </div>
-                        ))}
-                    </div>
+                          ))}
+                        </div>
+                      </>
+                    )}
                   </>
                 )}
               </div>
