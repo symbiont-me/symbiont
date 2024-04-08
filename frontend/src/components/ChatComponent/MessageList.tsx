@@ -94,9 +94,12 @@ const MessageList = ({ messages, isLoading }: MessageListProps) => {
                     {message.citations && (
                       <>
                         <p className="text-sm font-semibold mb-4">Resources</p>
-                        <div className="flex flex-row" key={index}>
+                        <div className="flex flex-row">
                           {message.citations.map((citation, index) => (
-                            <p className="text-xs text-blue-800 font-semibold mr-2 cursor-pointer">
+                            <p
+                              className="text-xs text-blue-800 font-semibold mr-2 cursor-pointer"
+                              key={index}
+                            >
                               <CitationModal
                                 index={index}
                                 citation={citation}
