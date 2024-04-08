@@ -51,7 +51,7 @@ const CitationModal = ({ index, citation }: CitationLabelProps) => {
             {removeTimeStampFromResourceName(citation.source)}
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            {citation.page > 0 ? `Page: ${citation.page}` : ""}
+            {`Page: ${citation.page + 1}`}
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             {citation.text}
