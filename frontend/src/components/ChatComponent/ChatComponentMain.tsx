@@ -34,7 +34,7 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
   const [chatMessages, setChatMessages] = useState<Message[]>([]);
   const [userToken, setUserToken] = useState<string | undefined>(undefined);
   const [combineResources, setCombineResources] = useState(false);
-
+  const [isMessageComplete, setIsMessageComplete] = useState(false);
   // NOTE this is used to switch the context for the chat
   const [selectedResource, setSelectedResource] = useState<
     StudyResource | undefined
@@ -100,6 +100,27 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
     // NOTE: this retriggers the useChat hook which is essential, otherwise it keeps using the old state
     setMessages([]);
   }
+
+  async function updateChat() {
+    if (!currentStudyContext?.study) {
+      return;
+    }
+    try {
+      const res = await currentStudyContext.fetchCurrentStudy(studyId);
+      if (res) {
+        setMessages(res.studies[0].chatMessages);
+      }
+    } catch (error) {
+      console.error("Error updating chat:", error);
+    }
+  }
+
+  useEffect(() => {
+    if (currentStudyContext?.study) {
+      updateChat();
+    }
+    setIsMessageComplete(isLoading);
+  }, [isMessageComplete, isLoading]);
 
   function handleCombineResources() {
     setCombineResources(!combineResources);
