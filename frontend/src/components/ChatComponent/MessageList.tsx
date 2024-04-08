@@ -3,8 +3,6 @@ import React, { useState } from "react";
 import AiChatMessage from "@/components/ChatComponent/AiChatMessage";
 import { Typography } from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-
-import CircularProgress from "@mui/material/CircularProgress";
 import CheckIcon from "@mui/icons-material/Check";
 import { useCopyToClipboard } from "@/app/hooks/useCopyToClipboard";
 
