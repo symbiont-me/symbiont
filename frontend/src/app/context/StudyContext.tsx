@@ -16,6 +16,7 @@ type StudyContextType = {
   isSuccess: boolean;
   isError: boolean;
   studyError: Error | undefined;
+  fetchCurrentStudy: (studyId: string) => Promise<any>;
   createStudy: (studyName: string, description: string, image: string) => void;
   deleteStudy: (studyId: string) => void;
   deleteChatMessages: (studyId: string) => void;
@@ -69,7 +70,7 @@ const jokes = [
 ];
 
 export const StudyContext = createContext<StudyContextType | undefined>(
-  undefined,
+  undefined
 );
 
 export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
@@ -117,7 +118,7 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
     enabled: !!userToken, // This will ensure the query does not run until the token is available
   });
 
-  async function fetchCurrentStudy(studyId: string) {
+  async function fetchCurrentStudy(studyId: string): Promise<any> {
     // @note optimisation
     // we are updating the UI immediately with the selected study
     // the backend will update the UI again after the study is updated
@@ -164,7 +165,7 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
     if (fetchCurrentStudyQuery.data) {
       console.log(
         "Setting current study...",
-        fetchCurrentStudyQuery.data.studies,
+        fetchCurrentStudyQuery.data.studies
       );
       setStudy(fetchCurrentStudyQuery.data.studies[0]); // @note all study routes return an array
       setIsStudyLoading(false);
@@ -174,7 +175,7 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
   const createStudy = async (
     studyName: string,
     description: string,
-    image: string,
+    image: string
   ) => {
     /*  @note this is a bit of unnecessary optimization
      *   we are updating the UI immediately
@@ -186,7 +187,7 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
       let result = "";
       for (let i = 0; i < 6; i++) {
         result += alphaNumeric.charAt(
-          Math.floor(Math.random() * alphaNumeric.length),
+          Math.floor(Math.random() * alphaNumeric.length)
         );
       }
       return result;
@@ -334,7 +335,7 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
   async function uploadTextResource(
     studyId: string,
     name: string,
-    content: string,
+    content: string
   ) {
     setIsStudyLoading(true);
     const endpoint = `${BASE_URL}/add-plain-text-resource`;
@@ -407,7 +408,7 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
       setStudy({
         ...study,
         resources: study.resources?.filter(
-          (resource) => resource.identifier !== resourceIdentifier,
+          (resource) => resource.identifier !== resourceIdentifier
         ),
       });
     }
@@ -502,6 +503,7 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
         uploadWebResource,
         uploadTextResource,
         deleteResource,
+        fetchCurrentStudy,
       }}
     >
       {children}
