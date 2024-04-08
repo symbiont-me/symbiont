@@ -6,6 +6,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import { useCopyToClipboard } from "@/app/hooks/useCopyToClipboard";
 import { Citation } from "@/types";
 import CitationModal from "@/components/ChatComponent/CitationModal";
+import Divider from "@mui/material/Divider";
 
 interface ChatMessage extends Message {
   citations?: Citation[];
@@ -91,24 +92,28 @@ const MessageList = ({ messages, isLoading }: MessageListProps) => {
                     <div>
                       <AiChatMessage message={message.content} />
                     </div>
-                    {message.citations && (
-                      <div className="p-2 h-16">
-                        <p className="text-sm font-semibold mb-4">Resources</p>
+                    {
+                      <div className=" h-18">
+                        <Divider />
+                        <p className="text-sm font-semibold mb-2 mt-4">
+                          Resources
+                        </p>
                         <div className="flex flex-row">
-                          {message.citations.map((citation, index) => (
-                            <p
-                              className="text-xs text-blue-800 font-semibold mr-2 cursor-pointer"
-                              key={message.id}
-                            >
-                              <CitationModal
-                                index={index}
-                                citation={citation}
-                              />{" "}
-                            </p>
-                          ))}
+                          {message.citations &&
+                            message.citations.map((citation, index) => (
+                              <p
+                                className="text-xs text-blue-800 font-semibold mr-2 cursor-pointer"
+                                key={message.id}
+                              >
+                                <CitationModal
+                                  index={index}
+                                  citation={citation}
+                                />{" "}
+                              </p>
+                            ))}
                         </div>
                       </div>
-                    )}
+                    }
                   </>
                 )}
               </div>
