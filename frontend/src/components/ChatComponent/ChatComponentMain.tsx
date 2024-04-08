@@ -177,7 +177,13 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
       </div>
       {/* TODO fix height of the input */}
       <div className="m-4">
-        {error && <Alert severity="error">{error?.message}</Alert>}
+        {error && (
+          <Alert severity="error">
+            {error?.message === "network error"
+              ? "Error: Check your Api Key"
+              : error?.message}
+          </Alert>
+        )}
         {isLoading && (
           <>
             <p className="mb-2 text-2xs">
