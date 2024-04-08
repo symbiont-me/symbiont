@@ -94,9 +94,22 @@ const MessageList = ({ messages, isLoading }: MessageListProps) => {
                 </div>
 
                 {message.content && (
-                  <div>
-                    <AiChatMessage message={message.content} />
-                  </div>
+                  <>
+                    <div>
+                      <AiChatMessage message={message.content} />
+                    </div>
+                    <p className="text-sm font-semibold mb-4">Resources</p>
+                    <div className="flex flex-row">
+                      {message.citations &&
+                        message.citations.map((citation, index) => (
+                          <div key={index} className="citation">
+                            <p className="text-xs text-blue-800 font-semibold mr-2 cursor-pointer">
+                              [{index + 1}]
+                            </p>
+                          </div>
+                        ))}
+                    </div>
+                  </>
                 )}
               </div>
             )}
