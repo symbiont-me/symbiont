@@ -24,6 +24,12 @@ type ChatMessage = {
   role: "user" | "bot";
 };
 
+export type Citation = {
+  page: number;
+  source: string;
+  text: string;
+};
+
 export type Study = {
   id?: number | string;
   name: string;
