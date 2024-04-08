@@ -8,8 +8,18 @@ import CircularProgress from "@mui/material/CircularProgress";
 import CheckIcon from "@mui/icons-material/Check";
 import { useCopyToClipboard } from "@/app/hooks/useCopyToClipboard";
 
+type Citation = {
+  page: number;
+  source: string;
+  text: string;
+};
+
+interface ChatMessage extends Message {
+  citations?: Citation[];
+}
+
 type MessageListProps = {
-  messages: Message[];
+  messages: ChatMessage[];
   isLoading: boolean;
 };
 
