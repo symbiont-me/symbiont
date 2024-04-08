@@ -92,13 +92,13 @@ const MessageList = ({ messages, isLoading }: MessageListProps) => {
                       <AiChatMessage message={message.content} />
                     </div>
                     {message.citations && (
-                      <>
+                      <div className="p-2 h-16">
                         <p className="text-sm font-semibold mb-4">Resources</p>
                         <div className="flex flex-row">
                           {message.citations.map((citation, index) => (
                             <p
                               className="text-xs text-blue-800 font-semibold mr-2 cursor-pointer"
-                              key={index}
+                              key={message.id}
                             >
                               <CitationModal
                                 index={index}
@@ -107,7 +107,7 @@ const MessageList = ({ messages, isLoading }: MessageListProps) => {
                             </p>
                           ))}
                         </div>
-                      </>
+                      </div>
                     )}
                   </>
                 )}
