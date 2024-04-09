@@ -31,7 +31,7 @@ const ResourceSwitcher = ({
       setSelectedResource(firstResource);
       onResourceChange(firstResource);
     }
-  }, [studyContext?.study]);
+  }, [studyContext?.study?.resources]);
 
   if (!studyContext) {
     return null;
