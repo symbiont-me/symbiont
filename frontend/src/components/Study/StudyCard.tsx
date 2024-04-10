@@ -1,8 +1,6 @@
 import { Study } from "../../types";
 import Link from "next/link";
 import "./studyStyles.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useStudyContext } from "@/app/context/StudyContext";
 import * as React from "react";
 import { styled } from "@mui/material/styles";
@@ -11,15 +9,8 @@ import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
-import Collapse from "@mui/material/Collapse";
-import Avatar from "@mui/material/Avatar";
 import IconButton, { IconButtonProps } from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import { red } from "@mui/material/colors";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import ShareIcon from "@mui/icons-material/Share";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 interface ExpandMoreProps extends IconButtonProps {
@@ -37,7 +28,8 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   }),
 }));
 
-const placeholderImage = "https://mui.com/static/images/cards/paella.jpg";
+const placeholderImage =
+  "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8";
 
 export default function StudyCard({ study }: { study: Study }) {
   const [expanded, setExpanded] = React.useState(false);
