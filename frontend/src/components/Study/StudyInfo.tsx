@@ -13,7 +13,7 @@ type StudyInfoProps = {
 
 const StudyInfo = ({ study }: StudyInfoProps) => {
   const placeholder =
-    "https://images.unsplash.com/photo-1455390582262-044cdead277a";
+    "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8";
 
   return (
     <div className="w-full  mt-2 mb-2 p-2 pl-4 flex flex-row justify-between">
