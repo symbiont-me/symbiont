@@ -4,6 +4,7 @@ import Button from "@mui/material/Button";
 import { LogIn } from "lucide-react";
 import UserDashboard from "@/components/Dashboard/UserDashboardMain";
 import { UserAuth } from "@/app/context/AuthContext";
+import LandingPage from "@/components/LandingPage/LandingPageMain";
 
 export default function Home() {
   const authContext = UserAuth();
@@ -29,30 +30,8 @@ export default function Home() {
 
   return (
     // TODO Create LandingPage component
-    <div className="w-screen min-h-screen">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-        <div className="flex flex-col items-center text-center">
-          <div className="flex items-center">
-            <h1 className="mr-3 text-5xl font-semibold">Symbiont</h1>
-          </div>
-          <div className="flex mt-2"></div>
-          <div className="w-full mt-4">
-            {authContext.user && authContext.user.uid ? (
-              <div className="flex flex-col h-full">
-                <UserDashboard />
-              </div>
-            ) : (
-              <Link href="/sign-in">
-                <Button onClick={handleSignIn} variant="contained">
-                  {" "}
-                  Login to get started
-                  <LogIn className="w-4 h-4 ml-2 " />
-                </Button>
-              </Link>
-            )}
-          </div>
-        </div>
-      </div>
-    </div>
+    <>
+      <LandingPage />
+    </>
   );
 }
