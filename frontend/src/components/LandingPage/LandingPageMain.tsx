@@ -4,7 +4,7 @@ import Hero from "./Hero";
 
 const LandingPageMain = () => {
   return (
-    <div className="w-screen h-screen min-h-screen flex flex-col sm:h-full">
+    <div className="w-screen h-screen min-h-screen flex flex-col sm:h-full overflow-x-hidden">
       <Navbar />
       <Hero />
     </div>
