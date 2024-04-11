@@ -40,15 +40,5 @@ export default function Home() {
     );
   }
 
-  return (
-    <>
-      {authContext?.user ? (
-        <div className="flex flex-col h-full">
-          <UserDashboard />
-        </div>
-      ) : (
-        <LandingPage />
-      )}
-    </>
-  );
+  return <>{authContext?.user ? <UserDashboard /> : <LandingPage />}</>;
 }
