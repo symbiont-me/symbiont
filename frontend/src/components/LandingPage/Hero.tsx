@@ -20,7 +20,7 @@ const features = [
 ];
 
 const Hero = () => {
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const authContext = UserAuth();
   const handleSignIn = () => {
     if (!authContext) {
@@ -34,8 +34,8 @@ const Hero = () => {
   };
   useEffect(() => {
     const intervalId = setInterval(() => {
-      setCurrentSlide((prevSlide) =>
-        prevSlide === slides.length - 1 ? 0 : prevSlide + 1,
+      setCurrentSlideIndex((prevSlideIndex) =>
+        prevSlideIndex === slides.length - 1 ? 0 : prevSlideIndex + 1,
       );
     }, 3000);
 
@@ -80,7 +80,7 @@ const Hero = () => {
           {slides.map((slide, index) => (
             <div
               key={index}
-              className={`fade ${index === currentSlide ? "active" : ""}`}
+              className={`fade ${index === currentSlideIndex ? "active" : ""}`}
               style={{ position: "absolute", width: "100%", height: "100%" }}
             >
               <Image src={slide.src} alt={slide.alt} layout="fill" />
