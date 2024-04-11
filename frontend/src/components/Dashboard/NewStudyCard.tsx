@@ -68,10 +68,10 @@ const NewStudyCard = ({ onNewStudyCreated }: NewStudyCardProps) => {
         </Button>
         <Typography
           variant="subtitle1"
-          component="h2"
-          sx={{ marginTop: "25px" }}
+          component="h5"
+          sx={{ marginTop: "18px", fontSize: 14 }}
         >
-          New Study
+          Add Study
         </Typography>
         <Dialog
           open={open}
