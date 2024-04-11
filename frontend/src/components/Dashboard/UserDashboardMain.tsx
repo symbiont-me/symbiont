@@ -13,6 +13,8 @@ import Item from "@mui/material/Grid";
 import CircularProgress from "@mui/material/CircularProgress";
 import Alert from "@mui/material/Alert";
 import UserGuideSwipe from "@/components/ui/UserGuideSwipe";
+import "./styles.css";
+
 const UserDashboard = () => {
   const studyContext = useStudyContext();
   const [studies, setStudies] = useState<Study[]>([]);
@@ -29,8 +31,11 @@ const UserDashboard = () => {
     }
   };
   return (
-    <>
-      <div>
+    <div className="dashboard-container overflow-hidden h-screen ">
+      <div className="left-sidebar">
+        <LeftSideBar />
+      </div>
+      <div className="dashboard  overflow-hidden flex flex-col justify-center items-center">
         <Alert
           variant="outlined"
           severity="warning"
@@ -54,22 +59,24 @@ const UserDashboard = () => {
             </li>
           </ul>
         </Alert>
-
-        <UserGuideSwipe />
-        <div className="ml-80 h-full flex flex-row">
-          <div className="flex flex-wrap">
+        <div
+          className="h-full flex flex-row mb-20"
+          style={{ maxWidth: "1024px", minWidth: "1024px" }}
+        >
+          <div className=" flex flex-col justify-center items-center mr-24">
             <NewStudyCard onNewStudyCreated={fetchStudies} />
-
+          </div>
+          <div className="flex flex-row items-center  overflow-x-scroll max-w-full">
             {studies.map((study) => (
-              <Item className="m-2" key={study.id}>
+              <Item className="m-2" key={study.id} sx={{ minWidth: "250px" }}>
                 <StudyCard study={study} />
               </Item>
             ))}
           </div>
         </div>
+        <UserGuideSwipe />
       </div>
-      <LeftSideBar />
-    </>
+    </div>
   );
 };
 
