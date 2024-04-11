@@ -60,13 +60,10 @@ const UserDashboard = () => {
           </ul>
         </Alert>
         <div
-          className="h-full flex flex-row mb-20"
+          className="h-full flex flex-row mb-4"
           style={{ maxWidth: "1024px", minWidth: "1024px" }}
         >
-          <div className=" flex flex-col justify-center items-center mr-24">
-            <NewStudyCard onNewStudyCreated={fetchStudies} />
-          </div>
-          <div className="flex flex-row items-center  overflow-x-scroll max-w-full">
+          <div className="flex flex-row items-center overflow-x-scroll max-w-full">
             {studies.map((study) => (
               <Item className="m-2" key={study.id} sx={{ minWidth: "250px" }}>
                 <StudyCard study={study} />
@@ -74,6 +71,8 @@ const UserDashboard = () => {
             ))}
           </div>
         </div>
+        <NewStudyCard onNewStudyCreated={fetchStudies} />
+
         <UserGuideSwipe />
       </div>
     </div>
