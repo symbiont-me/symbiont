@@ -56,7 +56,15 @@ const Navbar = () => {
                 href={item.link}
                 className="p-2 font-semibold hover:text-blue-500"
               >
-                <Button variant="text" sx={{ color: "black" }}>
+                <Button
+                  variant="text"
+                  sx={{
+                    color: "black",
+                    textTransform: "capitalize",
+                    fontSize: 18,
+                    fontWeight: 400,
+                  }}
+                >
                   {" "}
                   {item.title}
                 </Button>
