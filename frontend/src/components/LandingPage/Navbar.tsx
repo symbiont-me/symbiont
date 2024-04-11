@@ -3,7 +3,20 @@ import Image from "next/image";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import LoginIcon from "@mui/icons-material/Login";
+import { UserAuth } from "@/app/context/AuthContext";
 const Navbar = () => {
+  const authContext = UserAuth();
+
+  const handleSignIn = () => {
+    if (!authContext) {
+      return;
+    }
+    try {
+      authContext.googleSignIn();
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <>
       <div className="flex flex-row h-20 w-screen">
@@ -25,9 +38,8 @@ const Navbar = () => {
 
         <div className="w-1/3 flex flex-row items-center justify-center">
           <Button onClick={handleSignIn} variant="contained">
-            {" "}
-            Login to get started
-            <LogIn className="w-4 h-4 ml-2 " />
+            Sign Up
+            <LoginIcon sx={{ marginLeft: "4px" }} />
           </Button>
         </div>
       </div>
