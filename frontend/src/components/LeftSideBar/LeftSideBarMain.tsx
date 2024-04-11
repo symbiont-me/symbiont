@@ -238,7 +238,7 @@ const LeftSideBar = () => {
                   justifyContent: drawerOpen ? "initial" : "center",
                   px: 2,
                   "& .MuiListItemText-primary": {
-                    fontSize: "0.75rem", // Updated font size
+                    fontSize: "0.75rem",
                   },
                 }}
                 onClick={
