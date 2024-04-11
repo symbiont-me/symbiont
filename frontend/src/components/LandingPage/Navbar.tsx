@@ -51,9 +51,8 @@ const Navbar = () => {
         </div>
         <div className="w-full flex flex-row justify-evenly items-center">
           {navItems.map((item) => (
-            <React.Fragment>
+            <React.Fragment key={item.title}>
               <Link
-                key={item.title}
                 href={item.link}
                 className="p-2 font-semibold hover:text-blue-500"
               >
