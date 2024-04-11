@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Button from "@mui/material/Button";
-// import SlideShow from "./Carousel";
 import "./styles.css";
+import { UserAuth } from "@/app/context/AuthContext";
+import CheckIcon from "@mui/icons-material/Check";
 const slides = [
   { src: "/slides/slide1.jpg", alt: "symbiont writer" },
   { src: "/slides/slide2.jpg", alt: "symbiont pdf viewer" },
@@ -10,13 +11,30 @@ const slides = [
   { src: "/slides/slide4.jpg", alt: "symbiont add resources" },
 ];
 
+const features = [
+  "Free to use with API Key",
+  "Large number of LLMs available including Open Source ones",
+  "Search through text, video and audio files",
+  "Verify information quickly and easily",
+];
+
 const Hero = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-
+  const authContext = UserAuth();
+  const handleSignIn = () => {
+    if (!authContext) {
+      return;
+    }
+    try {
+      authContext.googleSignIn();
+    } catch (error) {
+      console.error(error);
+    }
+  };
   useEffect(() => {
     const intervalId = setInterval(() => {
       setCurrentSlide((prevSlide) =>
-        prevSlide === slides.length - 1 ? 0 : prevSlide + 1
+        prevSlide === slides.length - 1 ? 0 : prevSlide + 1,
       );
     }, 3000);
 
@@ -25,17 +43,22 @@ const Hero = () => {
 
   return (
     <div className="w-full  h-full flex flex-row">
-      <div className="w-1/2 h-full flex flex-col  items-center mt-20">
+      <div className="w-1/2 h-full flex flex-col  items-center mt-4 ml-12">
         <div className="p-20">
-          <h1 className="text-black font-extrabold text-4xl mb-2">
+          <h1 className="text-black font-extrabold text-5xl mb-8 leading-snug">
             Open Source AI-Powered Research Tool
           </h1>
-          <h4 className="mb-4 mt-4">Free to use with API Key</h4>
-
+          {features.map((feature, index) => (
+            <div key={index} className="flex items-center mb-2">
+              <CheckIcon sx={{ color: "green" }} />
+              <span className="ml-2">{feature}</span>
+            </div>
+          ))}
           <Button
             variant="outlined"
-            sx={{ width: "220px" }}
+            sx={{ width: "220px", marginTop: "30px" }}
             className="flex justify-between items-center"
+            onClick={handleSignIn}
           >
             <div className="border-r-2 border-slate-400 pr-2">
               <Image
