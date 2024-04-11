@@ -9,6 +9,7 @@ const slides = [
   { src: "/slides/slide2.jpg", alt: "symbiont pdf viewer" },
   { src: "/slides/slide3.jpg", alt: "symbiont video viewer" },
   { src: "/slides/slide4.jpg", alt: "symbiont add resources" },
+  { src: "/slides/slide5.jpg", alt: "symbiont settings" },
 ];
 
 const features = [
