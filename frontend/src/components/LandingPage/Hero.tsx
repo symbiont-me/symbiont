@@ -16,7 +16,7 @@ const features = [
   "Free to use with API Key",
   "Large number of LLMs available including Open Source ones",
   "Search through text, video and audio files",
-  "Verify information quickly and easily",
+  "Verify information quickly and easily across multiple sources",
 ];
 
 const Hero = () => {
