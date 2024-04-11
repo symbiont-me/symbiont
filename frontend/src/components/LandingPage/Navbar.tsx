@@ -24,9 +24,10 @@ const Navbar = () => {
         </div>
 
         <div className="w-1/3 flex flex-row items-center justify-center">
-          <Button variant="contained">
-            Sign In
-            <LoginIcon />
+          <Button onClick={handleSignIn} variant="contained">
+            {" "}
+            Login to get started
+            <LogIn className="w-4 h-4 ml-2 " />
           </Button>
         </div>
       </div>
