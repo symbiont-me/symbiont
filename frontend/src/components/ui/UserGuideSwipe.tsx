@@ -32,11 +32,11 @@ const userGuide = [
 ];
 
 const UserGuideSwipe = () => (
-  <div className="flex justify-center w-1/3" style={{ marginLeft: "470px" }}>
+  <div className="flex justify-center w-1/3">
     <SwipeableViews enableMouseEvents style={{}}>
       <div style={Object.assign({}, styles.slide, styles.slide1)}>
         <p className="text-black">
-          swip left to see how to use <strong>symbiont</strong>
+          swipe left to see how to use <strong>symbiont</strong>
         </p>
       </div>
       {userGuide.map((image, index) => (
