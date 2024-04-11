@@ -35,7 +35,7 @@ const Hero = () => {
   useEffect(() => {
     const intervalId = setInterval(() => {
       setCurrentSlideIndex((prevSlideIndex) =>
-        prevSlideIndex === slides.length - 1 ? 0 : prevSlideIndex + 1,
+        prevSlideIndex === slides.length - 1 ? 0 : prevSlideIndex + 1
       );
     }, 3000);
 
@@ -43,7 +43,8 @@ const Hero = () => {
   }, []);
 
   return (
-    <div className="w-full  h-full flex flex-row">
+    <div className="w-full flex flex-col md:flex-row md:h-full">
+      {" "}
       <div className="w-1/2 h-full flex flex-col  items-center mt-4 ml-12">
         <div className="p-20">
           <h1 className="text-black font-extrabold text-5xl mb-8 leading-snug">
@@ -74,9 +75,14 @@ const Hero = () => {
           </Button>
         </div>
       </div>
-
-      <div className="w-full h-full p-10 flex flex-col justify-center items-center">
-        <div style={{ position: "relative", width: "100%", height: "80%" }}>
+      <div className="w-full min-h-[80%] p-10 flex flex-col justify-center items-center">
+        <div
+          style={{
+            position: "relative",
+            width: "100%",
+            height: "80%",
+          }}
+        >
           {slides.map((slide, index) => (
             <div
               key={index}
