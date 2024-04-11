@@ -4,6 +4,26 @@ import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import LoginIcon from "@mui/icons-material/Login";
 import { UserAuth } from "@/app/context/AuthContext";
+import Link from "next/link";
+const navItems = [
+  {
+    title: "Docs",
+    link: "/#",
+  },
+  {
+    title: "About",
+    link: "/#",
+  },
+  {
+    title: "Blog",
+    link: "/#",
+  },
+  {
+    title: "Contact",
+    link: "/#",
+  },
+];
+
 const Navbar = () => {
   const authContext = UserAuth();
 
@@ -30,10 +50,20 @@ const Navbar = () => {
           <h3 className="font-semibold pl-8">Symbiont</h3>
         </div>
         <div className="w-full flex flex-row justify-evenly items-center">
-          <h3> Docs</h3>
-          <h3> About</h3>
-          <h3> Blog</h3>
-          <h3> Contact</h3>
+          {navItems.map((item) => (
+            <React.Fragment>
+              <Link
+                key={item.title}
+                href={item.link}
+                className="p-2 font-semibold hover:text-blue-500"
+              >
+                <Button variant="text" sx={{ color: "black" }}>
+                  {" "}
+                  {item.title}
+                </Button>
+              </Link>
+            </React.Fragment>
+          ))}
         </div>
 
         <div className="w-1/3 flex flex-row items-center justify-center">
