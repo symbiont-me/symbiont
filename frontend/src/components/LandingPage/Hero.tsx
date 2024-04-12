@@ -35,7 +35,7 @@ const Hero = () => {
   useEffect(() => {
     const intervalId = setInterval(() => {
       setCurrentSlideIndex((prevSlideIndex) =>
-        prevSlideIndex === slides.length - 1 ? 0 : prevSlideIndex + 1
+        prevSlideIndex === slides.length - 1 ? 0 : prevSlideIndex + 1,
       );
     }, 3000);
 
@@ -79,8 +79,8 @@ const Hero = () => {
         <div
           style={{
             position: "relative",
-            width: "100%",
-            height: "80%",
+            width: "95%",
+            height: "100%",
           }}
         >
           {slides.map((slide, index) => (
