@@ -43,7 +43,7 @@ const Hero = () => {
   }, []);
 
   return (
-    <div className="flex h-full flex-col md:flex-row">
+    <>
       <div className="max-h-full  md:min-h-full p-12 w-full ">
         <h1 className="text-black font-extrabold text-5xl mb-8 leading-snug">
           Open Source AI-Powered Research Tool
@@ -86,7 +86,7 @@ const Hero = () => {
           ))}
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

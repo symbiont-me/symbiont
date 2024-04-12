@@ -9,7 +9,10 @@ const LandingPageMain = () => {
     <div className="flex md-screen flex-col overflow-x-hidden">
       <Navbar />
       <Divider />
-      <Hero />
+
+      <div className="flex h-full flex-col md:flex-row">
+        <Hero />
+      </div>
       <Divider />
       <div className="flex min-h-full w-full flex-col ">
         <FAQ />
