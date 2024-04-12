@@ -3,7 +3,6 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-
 import Divider from "@mui/material/Divider";
 
 type FAQ = {
@@ -14,14 +13,10 @@ type FAQ = {
 const faqs: FAQ[] = [
   {
     question: "What is Symbiont?",
-    answer: "Symbiont is an AI powered research tool.",
+    answer:
+      "Symbiont is an AI powered research tool. It can find information in a large corpus and answer specific questions.",
   },
 
-  {
-    question: "What can I use Symbiont for?",
-    answer:
-      "Symbiont is essentially a search engine. It can find information in a large corpus and answer specific questions.",
-  },
   {
     question: "How is Symbiont different from LLMs?",
     answer:
@@ -40,7 +35,7 @@ const faqs: FAQ[] = [
   {
     question: "What will my API key be used for?",
     answer:
-      "The API key will be used for accessing an LLM like GPT. If you provide an OpenAI key and use GPT models, your API key will also be used for the default Embeddings model. The embeddings model is extremely cheap. So it shoudn't be too much of a worry. If you use different models than OpenAI then a free embeddings model will be used. Bear in mind that this can also effect the search results",
+      "The API key will be used for accessing an LLM like GPT. If you provide an OpenAI key and use GPT models, your API key will also be used for the default Embeddings model. The embeddings model is extremely cheap. So it shoudn't be too much of a worry. If you use different models than OpenAI then a free embeddings model will be used. Bear in mind that using different embeddings model can also effect the search results",
   },
 
   {
@@ -52,12 +47,13 @@ const faqs: FAQ[] = [
 
 const FAQ = () => {
   return (
-    <div className="flex flex-col items-center">
-      <h2 className="font-bold text-2xl mb-4"> FAQs </h2>
-      {faqs.map((faq) => {
+    <>
+      <h2 className="font-bold text-2xl mb-4 text-center pt-4"> FAQs </h2>
+
+      {faqs.map((faq, index) => {
         return (
-          <>
-            <Accordion className="w-full pl-10 pr-10">
+          <div className="h-full ml-2 mr-2" key={index}>
+            <Accordion>
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel1-content"
@@ -71,10 +67,10 @@ const FAQ = () => {
                 {faq.answer}
               </AccordionDetails>
             </Accordion>
-          </>
+          </div>
         );
       })}
-    </div>
+    </>
   );
 };
 
