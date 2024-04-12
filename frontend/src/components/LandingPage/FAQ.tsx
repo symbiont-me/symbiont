@@ -4,6 +4,8 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
+import Divider from "@mui/material/Divider";
+
 type FAQ = {
   question: string;
   answer: string;
@@ -51,7 +53,7 @@ const faqs: FAQ[] = [
 const FAQ = () => {
   return (
     <div className="flex flex-col items-center">
-      <h2 className="font-bold text-2xl"> FAQs </h2>
+      <h2 className="font-bold text-2xl mb-4"> FAQs </h2>
       {faqs.map((faq) => {
         return (
           <>
@@ -60,11 +62,13 @@ const FAQ = () => {
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel1-content"
                 id="panel1-header"
+                sx={{ fontWeight: 800 }}
               >
-                <p className="font-bold">{faq.question}</p>
+                {faq.question}
               </AccordionSummary>
+              <Divider />
               <AccordionDetails sx={{ fontWeight: 100 }}>
-                <p className="">{faq.answer}</p>
+                {faq.answer}
               </AccordionDetails>
             </Accordion>
           </>
