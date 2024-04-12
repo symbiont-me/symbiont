@@ -43,54 +43,46 @@ const Hero = () => {
   }, []);
 
   return (
-    <div className="w-full flex flex-col md:flex-row md:h-full">
-      {" "}
-      <div className="w-1/2 h-full flex flex-col  items-center mt-4 ml-12">
-        <div className="p-20">
-          <h1 className="text-black font-extrabold text-5xl mb-8 leading-snug">
-            Open Source AI-Powered Research Tool
-          </h1>
-          {features.map((feature, index) => (
-            <div key={index} className="flex items-center mb-2">
-              <CheckIcon sx={{ color: "green" }} />
-              <span className="ml-2">{feature}</span>
-            </div>
-          ))}
-          <Button
-            variant="outlined"
-            sx={{ width: "220px", marginTop: "30px" }}
-            className="flex justify-between items-center"
-            onClick={handleSignIn}
-          >
-            <div className="border-r-2 border-slate-400 pr-2">
-              <Image
-                src="/logos/google-logo.svg"
-                width={20}
-                height={20}
-                alt="google-sign-in"
-              />
-            </div>
-            <span className="mx-auto ml-12">Log in</span>
-            <div className="mr-8"></div>
-          </Button>
-        </div>
-      </div>
-      <div className="w-full min-h-[80%] p-10 flex flex-col justify-center items-center">
-        <div
-          style={{
-            position: "relative",
-            width: "95%",
-            height: "100%",
-          }}
+    <div className="flex h-full flex-col md:flex-row">
+      <div className="max-h-full  md:min-h-full p-12 w-full ">
+        <h1 className="text-black font-extrabold text-5xl mb-8 leading-snug">
+          Open Source AI-Powered Research Tool
+        </h1>
+        {features.map((feature, index) => (
+          <div key={index} className="flex items-center mb-2">
+            <CheckIcon sx={{ color: "green" }} />
+            <span className="ml-2">{feature}</span>
+          </div>
+        ))}
+        <Button
+          variant="outlined"
+          sx={{ width: "220px", marginTop: "30px" }}
+          className="flex justify-between items-center"
+          onClick={handleSignIn}
         >
+          <div className="border-r-2 border-slate-400 pr-2">
+            <Image
+              src="/logos/google-logo.svg"
+              width={20}
+              height={20}
+              alt="google-sign-in"
+            />
+          </div>
+          <span className="mx-auto ml-12">Log in</span>
+          <div className="mr-8"></div>
+        </Button>
+      </div>
+      <div className="md:min-w-[60%] w-full  ">
+        <div className="relative w-full h-96 md:w-full md:h-full">
           {slides.map((slide, index) => (
-            <div
+            <Image
               key={index}
+              src={slide.src}
+              alt={slide.alt}
+              fill
+              objectFit="contain"
               className={`fade ${index === currentSlideIndex ? "active" : ""}`}
-              style={{ position: "absolute", width: "100%", height: "100%" }}
-            >
-              <Image src={slide.src} alt={slide.alt} layout="fill" />
-            </div>
+            />
           ))}
         </div>
       </div>
