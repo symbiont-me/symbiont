@@ -12,7 +12,18 @@ type FAQ = {
 const faqs: FAQ[] = [
   {
     question: "What is Symbiont?",
-    answer: "Sym",
+    answer: "Symbiont is an AI powered research tool.",
+  },
+
+  {
+    question: "What can I use Symbiont for?",
+    answer:
+      "Symbiont is essentially a search engine. It can find information in a large corpus and answer specific questions.",
+  },
+  {
+    question: "How is Symbiont different from LLMs?",
+    answer:
+      "Symbiont is designed to answer questions based on the resources provided. It is much less likely to hallucinate information (i.e. make up things)",
   },
   {
     question: "What is the price of Symbiont?",
@@ -25,15 +36,16 @@ const faqs: FAQ[] = [
       "API Keys for various LLMs and models can be gotten from a provider like OpenAI, Anthropic or Google. \n OpenAI: https://platform.openai.com/api-keys \n Anthropic: https://docs.anthropic.com/claude/reference/getting-started-with-the-api",
   },
   {
-    question: "What can I use Symbiont for?",
-    answer: "",
+    question: "What will my API key be used for?",
+    answer:
+      "The API key will be used for accessing an LLM like GPT. If you provide an OpenAI key and use GPT models, your API key will also be used for the default Embeddings model. The embeddings model is extremely cheap. So it shoudn't be too much of a worry. If you use different models than OpenAI then a free embeddings model will be used. Bear in mind that this can also effect the search results",
   },
 
   {
-    question: "What is the price of Symbiont?",
-    answer: "",
+    question: "How can I request new features ?",
+    answer:
+      "To request new features and report bugs, you can reach us at symbiont-me@gmail.com",
   },
-  { question: "How can I request new features ?", answer: "" },
 ];
 
 const FAQ = () => {
@@ -49,9 +61,11 @@ const FAQ = () => {
                 aria-controls="panel1-content"
                 id="panel1-header"
               >
-                {faq.question}
+                <p className="font-bold">{faq.question}</p>
               </AccordionSummary>
-              <AccordionDetails>{faq.answer}</AccordionDetails>
+              <AccordionDetails sx={{ fontWeight: 100 }}>
+                <p className="">{faq.answer}</p>
+              </AccordionDetails>
             </Accordion>
           </>
         );
