@@ -30,6 +30,14 @@ const UserDashboard = () => {
       setStudies(studyContext.allStudies);
     }
   };
+
+  const alerts = [
+    "This app is currently in development and test mode.",
+    "Please don't upload sensitive data - expect bugs and unfinished features.",
+    "Expect data to be deleted without warning.",
+    "Note: Other than that feel free to use the app and give feedback.",
+  ];
+
   return (
     <div className="dashboard-container overflow-hidden h-screen ">
       <div className="left-sidebar">
@@ -41,26 +49,25 @@ const UserDashboard = () => {
           severity="warning"
           sx={{
             width: "55%",
-            margin: "auto",
-            marginTop: "20px",
-            marginBottom: "20px",
+            marginTop: "5px",
+            marginBottom: "5px",
+            padding: 2,
+            paddingTop: 0,
+            paddingBottom: 0,
           }}
         >
           <ul>
-            <li>This app is currently in development and test mode.</li>
-            <li>
-              Please don&apos;t upload sensitive data - expect bugs and
-              unfinished features.
-            </li>
-            <li>Expect data to be deleted without warning.</li>
-            <li>
-              <strong>Note:</strong> Other than that feel free to use the app
-              and give feedback.
-            </li>
+            {alerts.map((alert, index) => {
+              return (
+                <li key={index} className="text-xs">
+                  {alert}
+                </li>
+              );
+            })}
           </ul>
         </Alert>
         <div
-          className="h-full flex flex-row mb-4"
+          className="h-full flex flex-row mb-2"
           style={{ maxWidth: "1024px", minWidth: "1024px" }}
         >
           <div className="flex flex-row items-center overflow-x-scroll max-w-full">
