@@ -9,3 +9,11 @@
 .fade.active {
   opacity: 1;
 }
+
+.flex-grow {
+  flex-grow: 1;
+}
+
+.min-h-screen {
+  min-height: 100vh;
+}
