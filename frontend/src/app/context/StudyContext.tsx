@@ -17,6 +17,7 @@ type StudyContextType = {
   isError: boolean;
   studyError: Error | undefined;
   fetchCurrentStudy: (studyId: string) => Promise<any>;
+  updateResourcesInStudy: (updatedResources: any[]) => void;
   createStudy: (studyName: string, description: string, image: string) => void;
   deleteStudy: (studyId: string) => void;
   deleteChatMessages: (studyId: string) => void;
@@ -117,6 +118,15 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
       userToken ? fetchUserStudies(userToken) : Promise.reject("No token"),
     enabled: !!userToken, // This will ensure the query does not run until the token is available
   });
+
+  const updateResourcesInStudy = (updatedResources: any[]) => {
+    if (study) {
+      setStudy({
+        ...study,
+        resources: [...(study.resources || []), ...updatedResources],
+      });
+    }
+  };
 
   async function fetchCurrentStudy(studyId: string): Promise<any> {
     // @note optimisation
@@ -332,6 +342,15 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }
 
+  function optimisticStateUpdate(resource: any) {
+    if (study) {
+      setStudy({
+        ...study,
+        resources: [...(study.resources || []), resource],
+      });
+    }
+  }
+
   async function uploadTextResource(
     studyId: string,
     name: string,
@@ -495,6 +514,7 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
         isError,
         studyError,
         createStudy,
+        updateResourcesInStudy,
         deleteStudy,
         updateWriterContent,
         deleteChatMessages,
