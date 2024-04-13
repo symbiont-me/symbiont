@@ -41,19 +41,18 @@ const FileUpload = () => {
 
   const [userToken, setUserToken] = useState<string | undefined>(undefined);
 
-  async function getUserAuthToken() {
-    if (authContext?.user?.getIdToken) {
-      const token = await authContext.user.getIdToken();
-      setUserToken(token);
-    }
-  }
-
   useEffect(() => {
+    async function getUserAuthToken() {
+      if (authContext?.user?.getIdToken) {
+        const token = await authContext.user.getIdToken();
+        setUserToken(token);
+      }
+    }
     const fetchToken = async () => {
       await getUserAuthToken();
     };
     fetchToken();
-  }, []);
+  }, [authContext?.user]);
 
   const { resourceType, resourceStatus, mutation } = useAddResourceRequest();
 
