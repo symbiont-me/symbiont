@@ -6,14 +6,16 @@ import {
 import axios from "axios";
 import { useState } from "react";
 import { useStudyContext } from "@/app/context/StudyContext";
+
+type FileUploadResourceBody = {
+  file: File;
+  studyId: string;
+  fileType: string;
+};
+
 type WebResourceBody = {
   studyId: string;
   urls: string[];
-};
-type YTResourceBody = WebResourceBody;
-
-type AuthHeaders = {
-  Authorization: `Bearer ${string}`;
 };
 
 type TextResourceBody = {
@@ -22,10 +24,17 @@ type TextResourceBody = {
   content: string;
 };
 
+type YTResourceBody = WebResourceBody;
+
+type Headers = {
+  "Content-type": string;
+  Authorization: `Bearer ${string}`;
+};
+
 type MutationArgs = {
   endpoint: string;
-  body: WebResourceBody | YTResourceBody | TextResourceBody;
-  headers: AuthHeaders;
+  body: WebResourceBody | YTResourceBody | TextResourceBody | FormData;
+  headers: Headers;
   resourceType?: string;
 };
 
