@@ -23,9 +23,6 @@ type StudyContextType = {
   deleteChatMessages: (studyId: string) => void;
   updateWriterContent: (text: string) => void;
   uploadFileResource: (file: File, studyId: string) => void;
-  uploadYtResource: (studyId: string, link: string) => void;
-  uploadWebResource: (studyId: string, urls: string[]) => void;
-  uploadTextResource: (studyId: string, name: string, content: string) => void;
   deleteResource: (resourceIdentifier: string) => void;
 };
 
@@ -71,7 +68,7 @@ const jokes = [
 ];
 
 export const StudyContext = createContext<StudyContextType | undefined>(
-  undefined
+  undefined,
 );
 
 export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
@@ -175,7 +172,7 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
     if (fetchCurrentStudyQuery.data) {
       console.log(
         "Setting current study...",
-        fetchCurrentStudyQuery.data.studies
+        fetchCurrentStudyQuery.data.studies,
       );
       setStudy(fetchCurrentStudyQuery.data.studies[0]); // @note all study routes return an array
       setIsStudyLoading(false);
@@ -185,7 +182,7 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
   const createStudy = async (
     studyName: string,
     description: string,
-    image: string
+    image: string,
   ) => {
     /*  @note this is a bit of unnecessary optimization
      *   we are updating the UI immediately
@@ -197,7 +194,7 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
       let result = "";
       for (let i = 0; i < 6; i++) {
         result += alphaNumeric.charAt(
-          Math.floor(Math.random() * alphaNumeric.length)
+          Math.floor(Math.random() * alphaNumeric.length),
         );
       }
       return result;
@@ -287,104 +284,6 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }
 
-  // TODO copy this error modelling in the other functions
-  async function uploadYtResource(studyId: string, link: string) {
-    setIsStudyLoading(true);
-    const endpoint = `${BASE_URL}/process-youtube-video`;
-    const body = { studyId: studyId, url: link };
-    const headers = { Authorization: `Bearer ${userToken}` };
-    try {
-      const response = await axios.post(endpoint, body, { headers });
-      console.log("YouTube Video Uploaded");
-      console.log("Updating Study Resources in State...");
-      if (study) {
-        setStudy({
-          ...study,
-          resources: [...(study.resources || []), ...response.data.resources],
-        });
-      }
-      console.log("Refetching Updated Study...");
-      fetchCurrentStudyQuery.refetch();
-      setIsSuccess(true);
-    } catch (error) {
-      console.error("Error uploading YouTube video:", error);
-      setStudyError(error as Error);
-    } finally {
-      setIsStudyLoading(false);
-    }
-  }
-
-  async function uploadWebResource(studyId: string, urls: string[]) {
-    setIsStudyLoading(true);
-    const endpoint = `${BASE_URL}/add-webpage-resource`;
-    const body = { studyId: studyId, urls: urls };
-    const headers = {
-      Authorization: `Bearer ${userToken}`,
-    };
-    try {
-      const response = await axios.post(endpoint, body, { headers });
-      console.log("Web Resource Uploaded");
-      console.log("Updating Study Resources in State...");
-      if (study) {
-        setStudy({
-          ...study,
-          resources: [...(study.resources || []), ...response.data.resources],
-        });
-      }
-      console.log("Refetching Updated Study...");
-      fetchCurrentStudyQuery.refetch();
-      setIsSuccess(true);
-    } catch (error) {
-      console.error("Error uploading web resource:", error);
-      setStudyError(error as Error);
-    } finally {
-      setIsStudyLoading(false);
-    }
-  }
-
-  function optimisticStateUpdate(resource: any) {
-    if (study) {
-      setStudy({
-        ...study,
-        resources: [...(study.resources || []), resource],
-      });
-    }
-  }
-
-  async function uploadTextResource(
-    studyId: string,
-    name: string,
-    content: string
-  ) {
-    setIsStudyLoading(true);
-    const endpoint = `${BASE_URL}/add-plain-text-resource`;
-    const body = { studyId: studyId, name: name, content: content };
-    const headers = {
-      Authorization: `Bearer ${userToken}`,
-    };
-
-    try {
-      const response = await axios.post(endpoint, body, { headers });
-
-      console.log("Updating Study Resources in State...");
-      if (study) {
-        setStudy({
-          ...study,
-          resources: [...(study.resources || []), ...response.data.resources],
-        });
-      }
-      console.log("Refetching Updated Study...");
-      fetchCurrentStudyQuery.refetch();
-      setIsSuccess(true);
-    } catch (error) {
-      console.error("Error uploading text resource:", error);
-      setStudyError(error as Error);
-      setIsError(true);
-    } finally {
-      setIsStudyLoading(false);
-    }
-  }
-
   async function uploadFileResource(file: File, studyId: string) {
     setIsStudyLoading(true);
     const endpoint = `${process.env.NEXT_PUBLIC_BASE_URL}/upload-resource?studyId=${studyId}`;
@@ -427,7 +326,7 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
       setStudy({
         ...study,
         resources: study.resources?.filter(
-          (resource) => resource.identifier !== resourceIdentifier
+          (resource) => resource.identifier !== resourceIdentifier,
         ),
       });
     }
@@ -519,9 +418,6 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
         updateWriterContent,
         deleteChatMessages,
         uploadFileResource,
-        uploadYtResource,
-        uploadWebResource,
-        uploadTextResource,
         deleteResource,
         fetchCurrentStudy,
       }}
