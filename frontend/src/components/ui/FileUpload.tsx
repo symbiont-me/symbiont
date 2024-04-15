@@ -15,7 +15,7 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { styled } from "@mui/material/styles";
 import CircularProgress from "@mui/material/CircularProgress";
 
-import useAddResourceRequest from "@/hooks/useAddResourceRequest";
+import useAddResourceRequest, { Headers } from "@/hooks/useAddResourceRequest";
 import Alert from "@mui/material/Alert";
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -59,7 +59,7 @@ const FileUpload = () => {
   const uploadFileResource = (file: File, studyId: string) => {
     const endpoint = `${process.env.NEXT_PUBLIC_BASE_URL}/upload-resource?studyId=${studyId}`;
     const body = new FormData();
-    const headers = {
+    const headers: Headers = {
       "Content-Type": "multipart/form-data",
       Authorization: `Bearer ${userToken}`,
     };

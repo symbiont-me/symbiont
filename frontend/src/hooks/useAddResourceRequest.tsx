@@ -26,9 +26,9 @@ type TextResourceBody = {
 
 type YTResourceBody = WebResourceBody;
 
-type Headers = {
-  "Content-type"?: string;
-  Authorization: `Bearer ${string}`;
+export type Headers = Record<string, string | undefined> & {
+  "Content-Type": string;
+  Authorization: string;
 };
 
 type MutationArgs = {
