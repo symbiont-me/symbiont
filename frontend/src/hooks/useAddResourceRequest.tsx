@@ -26,8 +26,9 @@ type TextResourceBody = {
 
 type YTResourceBody = WebResourceBody;
 
-export type Headers = Record<string, string | undefined> & {
+export type Headers = {
   Authorization: string;
+  [key: string]: string;
 };
 
 type MutationArgs = {
