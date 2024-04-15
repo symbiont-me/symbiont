@@ -27,7 +27,7 @@ type TextResourceBody = {
 type YTResourceBody = WebResourceBody;
 
 type Headers = {
-  "Content-type": string;
+  "Content-type"?: string;
   Authorization: `Bearer ${string}`;
 };
 
