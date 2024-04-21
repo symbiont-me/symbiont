@@ -4,16 +4,15 @@
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
-import axios from "axios";
 import { UserAuth } from "@/app/context/AuthContext";
 import { useStudyContext } from "@/app/context/StudyContext";
 import { Container } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import CircularProgress from "@mui/material/CircularProgress";
 import { Alert } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import LinearProgress from "@mui/material/LinearProgress";
+import useAddResourceRequest from "@/hooks/useAddResourceRequest";
 
 // NOTE this component should not be part of the Study Nav as it is
 // TODO should be refactored to make a dialog box where users can add and remove resources
@@ -21,13 +20,12 @@ import LinearProgress from "@mui/material/LinearProgress";
 import FileUpload from "@/components/ui/FileUpload";
 // TODO handle audio file uploads using the FileUpload component
 // TODO refactor to loop over an array of resources
-type TextResource = {
-  name: string;
-  content: string;
+
+type AuthHeaders = {
+  Authorization: `Bearer ${string}`;
 };
 const Resources = () => {
   const currentStudyContext = useStudyContext();
-
   const authContext = UserAuth();
 
   const [webResources, setWebResources] = useState<string[]>([]);
@@ -37,11 +35,9 @@ const Resources = () => {
   const studyId = usePathname().split("/")[2];
   const [userToken, setUserToken] = useState<string | undefined>(undefined);
   const [ytLink, setYtLink] = useState("");
-  const [isWebResourceLoading, setIsWebResourceLoading] = useState(false);
-  const [isTextResourceLoading, setIsTextResourceLoading] = useState(false);
-  const [isYtResourceLoading, setIsYtResourceLoading] = useState(false);
 
-  // TODO remove as not needed because of the useStudyContext hook
+  const { resourceType, resourceStatus, mutation } = useAddResourceRequest();
+
   useEffect(() => {
     const getUserAuthToken = async () => {
       if (authContext?.user?.getIdToken) {
@@ -51,6 +47,11 @@ const Resources = () => {
     };
     getUserAuthToken();
   }, [authContext]);
+  const authHeadersForRequests: AuthHeaders = {
+    Authorization: `Bearer ${userToken}`,
+  };
+
+  const addResourceRequest = useAddResourceRequest();
 
   if (!currentStudyContext) {
     return null;
@@ -65,68 +66,106 @@ const Resources = () => {
   };
 
   async function handleWebLinks() {
-    setIsWebResourceLoading(true);
     const links = webLink.split("\n").filter(isValidURL);
     setWebResources(links);
     if (userToken && webLink.length > 0) {
-      await currentStudyContext?.uploadWebResource(studyId, links);
-      setIsWebResourceLoading(false);
-    } else {
-      setIsWebResourceLoading(false);
+      const endpoint = `${process.env.NEXT_PUBLIC_BASE_URL}/add-webpage-resource`;
+      const body = {
+        studyId,
+        urls: links,
+      };
+      mutation.mutate({
+        endpoint,
+        body,
+        headers: authHeadersForRequests,
+        resourceType: "web",
+      });
     }
+
     setWebLink(""); // Clear the input after adding
   }
 
-  async function handleTextResource() {
-    setIsTextResourceLoading(true);
+  async function handleYtLinkSubmission() {
+    if (userToken && ytLink.length > 0) {
+      const endpoint = `${process.env.NEXT_PUBLIC_BASE_URL}/add_yt_resource`;
+      const body = {
+        studyId,
+        urls: [ytLink],
+      };
+      mutation.mutate({
+        endpoint,
+        body,
+        headers: authHeadersForRequests,
+        resourceType: "youtube",
+      });
+    }
+    setYtLink(""); // Clear the input after adding
+  }
 
+  async function handleTextResource() {
     if (
       userToken &&
       textResourceName.length > 0 &&
       textResourceContent.length > 0
     ) {
-      await currentStudyContext?.uploadTextResource(
+      const endpoint = `${process.env.NEXT_PUBLIC_BASE_URL}/add-plain-text-resource`;
+      const body = {
         studyId,
-        textResourceName,
-        textResourceContent
-      );
+        name: textResourceName,
+        content: textResourceContent,
+      };
+
+      mutation.mutate({
+        endpoint,
+        body,
+        headers: authHeadersForRequests,
+        resourceType: "text",
+      });
     }
-    setIsTextResourceLoading(false);
+
+    // reset the form
     setTextResourceName("");
     setTextResourceContent("");
   }
 
-  async function handleYtLinkSubmission() {
-    setIsYtResourceLoading(true);
-    if (userToken && ytLink.length > 0) {
-      await currentStudyContext?.uploadYtResource(studyId, ytLink);
-    }
-    setIsYtResourceLoading(false);
-    setYtLink("");
-  }
-
   return (
     <Container maxWidth="sm" className="overflow-hidden">
-      {currentStudyContext.isStudyLoading ? (
-        <Alert severity="info">Uploading Resource</Alert>
-      ) : currentStudyContext.isSuccess ? (
+      {resourceType === "web" && resourceStatus.error ? (
+        <Alert severity="error">
+          {resourceStatus.error.message}: Failed to upload Web Resource
+        </Alert>
+      ) : resourceType === "web" && mutation.isSuccess ? (
         <Alert severity="success">
           <CheckIcon />
-          Resource Uploaded Successfully
+          Web Resource Uploaded Successfully
         </Alert>
-      ) : currentStudyContext.studyError ? (
+      ) : resourceType === "youtube" && resourceStatus.error ? (
         <Alert severity="error">
-          Error Uploading Resource. Please try again
+          {resourceStatus.error.message}: Failed to upload Youtube Resource
+        </Alert>
+      ) : resourceType === "youtube" && mutation.isSuccess ? (
+        <Alert severity="success">
+          <CheckIcon />
+          Youtube Resource Uploaded Successfully
+        </Alert>
+      ) : resourceType === "text" && resourceStatus.error ? (
+        <Alert severity="error">
+          {resourceStatus.error.message}: Failed to upload Text Resource
+        </Alert>
+      ) : resourceType === "text" && mutation.isSuccess ? (
+        <Alert severity="success">
+          <CheckIcon />
+          Text Resource Uploaded Successfully
         </Alert>
       ) : null}
+
       <div className="mb-10">
         <FileUpload />
       </div>
-      {/* WEB RESOURCE */}
 
       {/* WEB RESOURCE */}
       <div className="flex flex-col mb-4">
-        {isWebResourceLoading ? (
+        {resourceType == "web" && mutation.isPending ? (
           <LinearProgress color="secondary" className="mb-2" />
         ) : (
           <>
@@ -139,11 +178,7 @@ const Resources = () => {
               onChange={(e) => setWebLink(e.target.value)}
               className="mb-2"
             />
-            <Button
-              variant="contained"
-              onClick={handleWebLinks}
-              disabled={isWebResourceLoading}
-            >
+            <Button variant="contained" onClick={handleWebLinks}>
               Add Webpages
             </Button>
           </>
@@ -152,7 +187,7 @@ const Resources = () => {
 
       {/* TEXT RESOURCE */}
       <div className="flex flex-col mb-4">
-        {isTextResourceLoading ? (
+        {resourceType == "text" && mutation.isPending ? (
           <LinearProgress color="secondary" className="mb-2" />
         ) : (
           <>
@@ -176,11 +211,7 @@ const Resources = () => {
               className="mb-2"
             />
 
-            <Button
-              variant="contained"
-              onClick={handleTextResource}
-              disabled={isTextResourceLoading}
-            >
+            <Button variant="contained" onClick={handleTextResource}>
               Add Text Resource
             </Button>
           </>
@@ -189,7 +220,7 @@ const Resources = () => {
 
       {/* YOUTUBE LINK */}
       <div className="flex flex-col mb-4">
-        {isYtResourceLoading ? (
+        {resourceType == "youtube" && mutation.isPending ? (
           <LinearProgress color="secondary" className="mb-2" />
         ) : (
           <>
@@ -202,11 +233,7 @@ const Resources = () => {
               onChange={(e) => setYtLink(e.target.value)}
               className="mb-2"
             />
-            <Button
-              variant="contained"
-              onClick={handleYtLinkSubmission}
-              disabled={isYtResourceLoading}
-            >
+            <Button variant="contained" onClick={handleYtLinkSubmission}>
               Add Youtube Link
             </Button>
           </>

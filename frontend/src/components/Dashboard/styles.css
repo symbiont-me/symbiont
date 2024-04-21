@@ -1,0 +1,16 @@
+.dashboard-container {
+  display: grid;
+  grid-template-columns: 0.1fr 1.1 fr;
+  grid-template-rows: 1fr;
+  gap: 0px 0px;
+  grid-auto-flow: row;
+  grid-template-areas: "left-sidebar dashboard";
+}
+
+.left-sidebar {
+  grid-area: left-sidebar;
+}
+
+.dashboard {
+  grid-area: dashboard;
+}

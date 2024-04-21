@@ -15,6 +15,8 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { styled } from "@mui/material/styles";
 import CircularProgress from "@mui/material/CircularProgress";
 
+import useAddResourceRequest, { Headers } from "@/hooks/useAddResourceRequest";
+import Alert from "@mui/material/Alert";
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
   clipPath: "inset(50%)",
@@ -34,28 +36,43 @@ const VisuallyHiddenInput = styled("input")({
 const FileUpload = () => {
   const path = usePathname();
   const studyId = path.split("/")[2];
-  // TODO use uploading state
-  const [uploading, setUploading] = useState(false);
   const authContext = UserAuth();
   const studyContext = useStudyContext();
 
   const [userToken, setUserToken] = useState<string | undefined>(undefined);
-  const [loading, setLoading] = useState(true);
-
-  async function getUserAuthToken() {
-    if (authContext?.user?.getIdToken) {
-      const token = await authContext.user.getIdToken();
-      setUserToken(token);
-    }
-  }
 
   useEffect(() => {
+    async function getUserAuthToken() {
+      if (authContext?.user?.getIdToken) {
+        const token = await authContext.user.getIdToken();
+        setUserToken(token);
+      }
+    }
     const fetchToken = async () => {
       await getUserAuthToken();
-      setLoading(false);
     };
     fetchToken();
-  }, []);
+  }, [authContext?.user]);
+
+  const { resourceType, resourceStatus, mutation } = useAddResourceRequest();
+
+  const uploadFileResource = (file: File, studyId: string) => {
+    const endpoint = `${process.env.NEXT_PUBLIC_BASE_URL}/upload-resource?studyId=${studyId}`;
+    const body = new FormData();
+    const headers: Headers = {
+      "Content-Type": "multipart/form-data",
+      Authorization: `Bearer ${userToken}`,
+    };
+    body.append("file", file);
+    const fileType = file.type;
+
+    mutation.mutate({
+      endpoint,
+      body,
+      headers,
+      resourceType: fileType,
+    });
+  };
 
   // useDropzone is a hook that manages file dropping functionality
   const { getRootProps, getInputProps } = useDropzone({
@@ -72,18 +89,8 @@ const FileUpload = () => {
         alert("File is too big!");
         return;
       }
-      try {
-        setUploading(true);
-        if (studyContext) {
-          await studyContext?.uploadFileResource(file, studyId);
-          if (studyContext?.isStudyLoading) {
-            setUploading(false);
-          }
-        }
-      } catch (error) {
-        console.log(studyContext?.studyError?.message);
-      } finally {
-        setUploading(false);
+      if (studyContext) {
+        uploadFileResource(file, studyId);
       }
     },
   });
@@ -93,8 +100,18 @@ const FileUpload = () => {
   }
   // Render the dropzone UI
   return (
-    <div className="flex justify-center items-center mr-4 mt-12">
-      {uploading ? (
+    <div className="flex flex-col justify-center items-center mr-4 mt-12">
+      {mutation.isError && (
+        <Alert severity="error">{resourceStatus.error?.message}</Alert>
+      )}
+      {mutation.isSuccess && (
+        <Alert severity="success">
+          {resourceType === "application/pdf"
+            ? `PDF file was succesfully uploaded!`
+            : `Audio file was succesfully uploaded!`}
+        </Alert>
+      )}
+      {mutation.isPending ? (
         <CircularProgress />
       ) : (
         <div {...getRootProps({ className: "dropzone" })}>
@@ -106,6 +123,7 @@ const FileUpload = () => {
             variant="contained"
             tabIndex={-1}
             startIcon={<CloudUploadIcon />}
+            sx={{ marginTop: "1rem" }}
           >
             Upload file
             {/* Input handles the upload */}

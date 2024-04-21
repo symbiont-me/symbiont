@@ -1,58 +1,42 @@
 "use client";
-import Link from "next/link";
-import Button from "@mui/material/Button";
-import { LogIn } from "lucide-react";
+
 import UserDashboard from "@/components/Dashboard/UserDashboardMain";
 import { UserAuth } from "@/app/context/AuthContext";
-
+import LandingPage from "@/components/LandingPage/LandingPageMain";
+import { useEffect, useState } from "react";
+import { CircularProgress } from "@mui/material";
 export default function Home() {
   const authContext = UserAuth();
+  const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    // Assuming `UserAuth` provides a way to check if the auth status is being resolved
+    const checkAuthStatus = async () => {
+      try {
+        if (!authContext) {
+          return;
+        }
+        setLoading(false);
+      } catch (error) {
+        console.error(error);
+        setLoading(false);
+      }
+    };
+
+    checkAuthStatus();
+  }, [authContext, authContext?.user, authContext?.user?.uid]);
   if (!authContext) {
-    throw new Error("AuthContext is not available");
+    <div className="h-screen w-screen flex flex-col justify-center items-center">
+      <CircularProgress />
+    </div>;
   }
-  const handleSignIn = () => {
-    try {
-      authContext.googleSignIn();
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  if (authContext.user && authContext.user.uid) {
+  if (loading) {
     return (
-      <div className="flex flex-col h-full">
-        <UserDashboard />
+      <div className="h-screen w-screen flex flex-col justify-center items-center">
+        <CircularProgress />
       </div>
     );
   }
 
-  return (
-    // TODO Create LandingPage component
-    <div className="w-screen min-h-screen">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-        <div className="flex flex-col items-center text-center">
-          <div className="flex items-center">
-            <h1 className="mr-3 text-5xl font-semibold">Symbiont</h1>
-          </div>
-          <div className="flex mt-2"></div>
-          <div className="w-full mt-4">
-            {authContext.user && authContext.user.uid ? (
-              <div className="flex flex-col h-full">
-                <UserDashboard />
-              </div>
-            ) : (
-              <Link href="/sign-in">
-                <Button onClick={handleSignIn} variant="contained">
-                  {" "}
-                  Login to get started
-                  <LogIn className="w-4 h-4 ml-2 " />
-                </Button>
-              </Link>
-            )}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+  return <>{authContext?.user ? <UserDashboard /> : <LandingPage />}</>;
 }

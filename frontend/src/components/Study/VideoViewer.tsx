@@ -3,6 +3,9 @@ import YouTube, { YouTubeProps } from "react-youtube";
 import { Study } from "@/types";
 import { useStudyContext } from "@/app/context/StudyContext";
 import Button from "@mui/material/Button";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+
 type VideoViewerProps = {
   study: Study | undefined;
 };
@@ -19,7 +22,7 @@ const VideoViewer = () => {
   const currentStudyContext = useStudyContext();
 
   const [currentVideoId, setCurrentVideoId] = useState<string | undefined>(
-    undefined
+    undefined,
   );
   const [videos, setVideos] = useState<Resource[] | null>(null);
   const [videoIndex, setVideoIndex] = useState<number>(0);
@@ -28,7 +31,7 @@ const VideoViewer = () => {
     if (currentStudyContext?.study) {
       const allResources = currentStudyContext.study.resources;
       const filteredVideos = allResources.filter(
-        (resource) => resource.category === "video"
+        (resource) => resource.category === "video",
       );
 
       setVideos(filteredVideos as Resource[]);
@@ -100,12 +103,8 @@ const VideoViewer = () => {
   return (
     <>
       <div className="video-navigation flex justify-center space-x-4 mt-4">
-        <Button variant="contained" onClick={handlePreviousVideo}>
-          Previous
-        </Button>
-        <Button variant="contained" onClick={handleNextVideo}>
-          Next
-        </Button>
+        <ArrowBackIcon onClick={handlePreviousVideo}>Previous</ArrowBackIcon>
+        <ArrowForwardIcon onClick={handleNextVideo}>Next</ArrowForwardIcon>
       </div>
       <div className="flex justify-center items-center mt-4">
         <YouTube videoId={currentVideoId} opts={opts} onReady={onPlayerReady} />
