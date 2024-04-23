@@ -70,8 +70,7 @@ const MessageList = ({ messages, isLoading }: MessageListProps) => {
               </>
             ) : (
               <div
-                className="ai-response m-2 self-end rounded bg-amber-100 mr-auto w-3/4 p-6"
-                style={{ maxWidth: "80%" }}
+                className="ai-response m-2 self-end rounded bg-amber-100 mr-auto w-3/4 p-6 max-w-screen-sm	"
                 onClick={handleTextSelect}
               >
                 <div
@@ -89,7 +88,7 @@ const MessageList = ({ messages, isLoading }: MessageListProps) => {
 
                 {message.content && (
                   <>
-                    <div>
+                    <div className="max-w-screen-sm	">
                       <AiChatMessage message={message.content} />
                     </div>
                     {
