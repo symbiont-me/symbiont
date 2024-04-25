@@ -5,6 +5,7 @@ import { UserAuth } from "@/app/context/AuthContext";
 import LandingPage from "@/components/LandingPage/LandingPageMain";
 import { useEffect, useState } from "react";
 import { CircularProgress } from "@mui/material";
+import axios from "axios";
 export default function Home() {
   const authContext = UserAuth();
   const [loading, setLoading] = useState(true);
@@ -25,6 +26,27 @@ export default function Home() {
 
     checkAuthStatus();
   }, [authContext, authContext?.user, authContext?.user?.uid]);
+
+  async function logIn() {
+    const userToken = await authContext?.user?.getIdToken();
+
+    if (!userToken) {
+      return;
+    }
+    const endpoint = `${process.env.NEXT_PUBLIC_BASE_URL}/login`;
+    const body = {};
+    const headers = {
+      Authorization: `Bearer ${userToken}`,
+    };
+
+    try {
+      const res = await axios.post(endpoint, body, { headers });
+      console.log(res);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   if (!authContext) {
     <div className="h-screen w-screen flex flex-col justify-center items-center">
       <CircularProgress />
@@ -36,6 +58,10 @@ export default function Home() {
         <CircularProgress />
       </div>
     );
+  }
+
+  {
+    authContext?.user && logIn();
   }
 
   return <>{authContext?.user ? <UserDashboard /> : <LandingPage />}</>;

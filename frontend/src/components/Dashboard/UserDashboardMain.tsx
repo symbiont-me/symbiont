@@ -25,11 +25,12 @@ const UserDashboard = () => {
     }
   }, [studyContext, studies]);
 
-  const fetchStudies = () => {
+  function fetchStudies() {
     if (studyContext && studyContext.allStudies) {
       setStudies(studyContext.allStudies);
+      return studyContext.allStudies;
     }
-  };
+  }
 
   const alerts = [
     "This app is currently in development and test mode.",
@@ -72,7 +73,7 @@ const UserDashboard = () => {
         >
           <div className="flex flex-row items-center overflow-x-scroll max-w-full">
             {studies.map((study) => (
-              <Item className="m-2" key={study.id} sx={{ minWidth: "250px" }}>
+              <Item className="m-2" key={study._id} sx={{ minWidth: "250px" }}>
                 <StudyCard study={study} />
               </Item>
             ))}

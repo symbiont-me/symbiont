@@ -41,7 +41,7 @@ export default function StudyCard({ study }: { study: Study }) {
 
   return (
     <Card sx={{ maxWidth: 245, maxHeight: 345 }}>
-      <Link href={`studies/${study.id}`}>
+      <Link href={`studies/${study._id}`}>
         <CardHeader
           title={
             <Typography variant="h6" style={{ fontSize: 14 }}>
@@ -77,7 +77,7 @@ export default function StudyCard({ study }: { study: Study }) {
         <IconButton
           aria-label="delete"
           onClick={() =>
-            study.id && studyContext?.deleteStudy(study.id.toString())
+            study._id && studyContext?.deleteStudy(study._id.toString())
           }
           sx={{ marginLeft: "auto", height: 20, width: 20 }}
         >

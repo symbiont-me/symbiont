@@ -31,7 +31,7 @@ export type Citation = {
 };
 
 export type Study = {
-  id?: number | string;
+  _id?: number | string;
   name: string;
   image: string | undefined;
   createdAt?: Date;

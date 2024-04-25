@@ -232,7 +232,7 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
     // @note we can update the UI immediately in this case
     // if there is an error the backend will still update the UI again
     console.log("Updating Studies in the State...");
-    setAllStudies(allStudies.filter((study) => study.id !== studyId));
+    setAllStudies(allStudies.filter((study) => study._id !== studyId));
     const endpoint = `${BASE_URL}/delete-study?studyId=${studyId}`;
     const headers = {
       "Content-Type": "application/json",
