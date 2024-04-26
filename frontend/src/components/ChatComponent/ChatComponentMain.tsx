@@ -52,10 +52,9 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
   useEffect(() => {
     if (currentStudyContext?.study) {
       //@ts-ignore
-      setChatMessages(currentStudyContext.study.chatMessages);
-      console.log("chat messages", currentStudyContext.study.chatMessages);
+      setChatMessages(currentStudyContext.study.chat);
     }
-  }, [currentStudyContext?.study?.chatMessages]);
+  }, [currentStudyContext?.study?.chat]);
 
   const {
     messages,
@@ -109,7 +108,7 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
     try {
       const res = await currentStudyContext.fetchCurrentStudy(studyId);
       if (res) {
-        setMessages(res.studies[0].chatMessages);
+        setMessages(res.studies[0].chat);
       }
     } catch (error) {
       console.error("Error updating chat:", error);
