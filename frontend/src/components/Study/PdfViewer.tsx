@@ -3,14 +3,15 @@ import { useEffect, useState } from "react";
 import { StudyResource } from "../../types";
 
 import { truncateFileName } from "../../lib/utils";
-import { getStorage, ref, getDownloadURL } from "firebase/storage";
+
 import { Study } from "@/types";
 import { useStudyContext } from "@/app/context/StudyContext";
 import Button from "@mui/material/Button";
 import { UserAuth } from "@/app/context/AuthContext";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 type PDFViewerProps = {
   study: Study | undefined;
 };
@@ -18,13 +19,9 @@ type PDFViewerProps = {
 const PdfViewer = () => {
   const currentStudyContext = useStudyContext();
   const authContext = UserAuth();
-  const [userUid, setUserUid] = useState<string>("");
-
   const [pdfs, setPdfs] = useState<StudyResource[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [pdfUrl, setPdfUrl] = useState("");
-
-  const pdfBaseUrl = `userFiles/${userUid}/`;
+  const [pdfUrl, setPdfUrl] = useState<string>("");
 
   const filterPdfs = (allResources: StudyResource[]) => {
     return allResources.filter((resource) => resource.category === "pdf");
@@ -35,42 +32,38 @@ const PdfViewer = () => {
       const allResources = currentStudyContext.study.resources;
       setPdfs(filterPdfs(allResources));
     }
-  }, [currentStudyContext]);
+  }, [currentStudyContext?.study]);
 
-  useEffect(() => {
-    if (authContext && authContext.user) {
-      setUserUid(authContext.user.uid);
+  async function getFileFromStorage(storageRef: string) {
+    const endpoint = `${process.env.NEXT_PUBLIC_BASE_URL}/get-file-from-storage?storage_ref=${storageRef}`;
+    const userToken = await authContext?.user?.getIdToken();
+    if (!userToken) {
+      return;
     }
-  }, [authContext]);
-
-  useEffect(() => {
-    const loadPdf = async () => {
-      if (pdfs.length > 0 && pdfs[currentIndex]) {
-        const currentPdfUrl = pdfBaseUrl + pdfs[currentIndex].identifier;
-
-        try {
-          const storage = getStorage();
-          const storageRef = ref(storage, currentPdfUrl);
-          const url = await getDownloadURL(storageRef);
-          setPdfUrl(url);
-        } catch (error) {
-          console.error("Error loading PDF", error);
-          setPdfUrl("");
-        }
-      }
-      // Cleanup function to revoke the object URL to avoid memory leaks
-      return () => {
-        if (pdfUrl) {
-          URL.revokeObjectURL(pdfUrl);
-        }
-      };
+    const headers = {
+      Authorization: `Bearer ${userToken}`,
     };
+    const res = await axios.get(endpoint, {
+      headers,
+      responseType: "arraybuffer",
+    });
+    return res.data;
+  }
 
-    if (!currentStudyContext) {
-      return; // Changed from 'return null;' to 'return;'
+  const fileQuery = useQuery({
+    queryKey: ["get-file", { storageRef: pdfs[currentIndex]?.storage_ref }],
+    queryFn: async ({ queryKey }) => {
+      const [_, { storageRef }] = queryKey;
+      return getFileFromStorage(storageRef);
+    },
+  });
+
+  useEffect(() => {
+    if (fileQuery.data) {
+      const rawPdf = new Blob([fileQuery.data], { type: "application/pdf" });
+      setPdfUrl(URL.createObjectURL(rawPdf));
     }
-    loadPdf();
-  }, [currentIndex, pdfs]);
+  }, [fileQuery.data]);
 
   const goToPreviousPdf = () => {
     setCurrentIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : prevIndex));
