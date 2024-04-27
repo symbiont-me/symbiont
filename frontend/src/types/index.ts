@@ -9,6 +9,7 @@ export type StudyResource = {
   category: StudyResourceCategory;
   summary?: string;
   createdAt?: Date;
+  storage_ref?: string;
 };
 
 export enum StudyResourceCategory {
