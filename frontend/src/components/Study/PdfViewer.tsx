@@ -32,7 +32,7 @@ const PdfViewer = () => {
       const allResources = currentStudyContext.study.resources;
       setPdfs(filterPdfs(allResources));
     }
-  }, [currentStudyContext?.study]);
+  }, [currentStudyContext?.study?.resources]);
 
   async function getFileFromStorage(storageRef: string) {
     const endpoint = `${process.env.NEXT_PUBLIC_BASE_URL}/get-file-from-storage?storage_ref=${storageRef}`;
@@ -71,7 +71,7 @@ const PdfViewer = () => {
 
   const goToNextPdf = () => {
     setCurrentIndex((prevIndex) =>
-      prevIndex < pdfs.length - 1 ? prevIndex + 1 : prevIndex
+      prevIndex < pdfs.length - 1 ? prevIndex + 1 : prevIndex,
     );
   };
 
