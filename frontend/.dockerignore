@@ -1,3 +1,11 @@
-node_modules/
-.env
+# .dockerignore
+node_modules
+npm-debug.log
+.dockerignore
+Dockerfile
 README.md
+LICENSE
+.vscode
+*.md
+*.log
+.env*
