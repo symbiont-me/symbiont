@@ -72,7 +72,7 @@ const PdfViewer = () => {
 
   const goToNextPdf = () => {
     setCurrentIndex((prevIndex) =>
-      prevIndex < pdfs.length - 1 ? prevIndex + 1 : prevIndex,
+      prevIndex < pdfs.length - 1 ? prevIndex + 1 : prevIndex
     );
   };
 
