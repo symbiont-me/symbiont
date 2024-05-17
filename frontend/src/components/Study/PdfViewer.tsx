@@ -53,7 +53,8 @@ const PdfViewer = () => {
   const fileQuery = useQuery({
     queryKey: ["get-file", { storageRef: pdfs[currentIndex]?.storage_ref }],
     queryFn: async ({ queryKey }) => {
-      const [_, { storageRef }] = queryKey;
+      const [_, queryValue] = queryKey;
+      const { storageRef } = queryValue as { storageRef: string };
       return getFileFromStorage(storageRef);
     },
   });
