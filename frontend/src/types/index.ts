@@ -31,6 +31,7 @@ export type Citation = {
   text: string;
 };
 
+// TODO this needs to be updated according to the actual schema
 export type Study = {
   _id?: number | string;
   name: string;
@@ -41,6 +42,7 @@ export type Study = {
   text: string;
   resources: StudyResource[];
   chatMessages: ChatMessage[];
+  chat?: ChatMessage[];
 };
 
 export type UserAuthDetails = {
