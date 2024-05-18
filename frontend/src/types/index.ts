@@ -69,6 +69,9 @@ export enum LLMModels {
   GEMINI_1_PRO = "gemini-1.0-pro",
   GEMINI_1_PRO_001 = "gemini-1.0-pro-001",
   GEMINI_1_PRO_LATEST = "gemini-1.0-pro-latest",
+  // support for gemini-1.5 flash & pro
+  GEMINI_1_5_FLASH_LATEST = "gemini-1.5-flash-latest",
+  GEMINI_1_5_PRO_LATEST = "gemini-1.5-pro-latest",
 }
 
 type LLMSettings = {
