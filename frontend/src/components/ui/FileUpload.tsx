@@ -84,7 +84,7 @@ const FileUpload = () => {
       // Get the first file from the array of accepted files
       const file = acceptedFiles[0];
       // Check if the file size exceeds 5MB and alert the user if it does
-      if (file.size > 6500000) {
+      if (file.size > 12500000) {
         // TODO add toast component here
         alert("File is too big!");
         return;
