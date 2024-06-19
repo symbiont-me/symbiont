@@ -66,9 +66,15 @@ export enum LLMModels {
   CLAUDE_2_0 = "claude-2.0",
   CLAUDE_INSTANT_1_2 = "claude-instant-1.2",
   GEMINI_PRO = "gemini-pro",
-  GEMINI_1_PRO = "gemini-1.0-pro",
-  GEMINI_1_PRO_001 = "gemini-1.0-pro-001",
-  GEMINI_1_PRO_LATEST = "gemini-1.0-pro-latest",
+  GEMINI_1_PRO = "models/gemini-1.0-pro",
+  GEMINI_1_PRO_001 = "models/gemini-1.0-pro-001",
+  GEMINI_1_PRO_LATEST = "models/gemini-1.0-pro-latest",
+  GEMINI_1_5_FLASH = "models/gemini-1.5-flash",
+  GEMINI_1_5_FLASH_001 = "models/gemini-1.5-flash-001",
+  GEMINI_1_5_FLASH_LATEST = "models/gemini-1.5-flash-latest",
+  GEMINI_1_5_PRO = "models/gemini-1.5-pro",
+  GEMINI_1_5_PRO_001 = "models/gemini-1.5-pro-001",
+  GEMINI_1_5_PRO_LATEST = "models/gemini-1.5-pro-latest",
 }
 
 type LLMSettings = {
