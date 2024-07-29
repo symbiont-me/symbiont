@@ -168,7 +168,8 @@ const LeftSideBar = () => {
         </List>
         <Divider />
         <List sx={{ flexGrow: 1 }}>
-          {["Extension", "Discord", "Github"].map((text, index) => (
+          {/* @note: to add more: ["Extension", "Discord", "Github"].map() */}
+          {["Github"].map((text, index) => (
             <ListItem key={text} disablePadding sx={{ display: "block" }}>
               <ListItemButton
                 sx={{
@@ -184,34 +185,13 @@ const LeftSideBar = () => {
                     justifyContent: "center",
                   }}
                 >
-                  {text === "Extension" && (
-                    <Image
-                      src="https://www.svgrepo.com/show/475640/chrome-color.svg"
-                      width={20}
-                      height={20}
-                      alt="chrome"
-                    />
-                  )}
-                  {text === "Discord" && (
-                    <Image
-                      src="https://www.svgrepo.com/show/353655/discord-icon.svg"
-                      width={20}
-                      height={20}
-                      alt="discord"
-                    />
-                  )}
                   {text === "Github" && (
                     <a
                       href="https://github.com/symbiont-me/symbiont-frontend"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <Image
-                        src="https://www.svgrepo.com/show/512317/github-142.svg"
-                        width={20}
-                        height={20}
-                        alt="github"
-                      />
+                      <Image src="/logos/github.svg" width={25} height={25} alt="github" />
                     </a>
                   )}
                 </ListItemIcon>
