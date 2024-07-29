@@ -191,12 +191,7 @@ const LeftSideBar = () => {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <Image
-                        src="https://www.svgrepo.com/show/512317/github-142.svg"
-                        width={20}
-                        height={20}
-                        alt="github"
-                      />
+                      <Image src="/logos/github.svg" width={25} height={25} alt="github" />
                     </a>
                   )}
                 </ListItemIcon>
