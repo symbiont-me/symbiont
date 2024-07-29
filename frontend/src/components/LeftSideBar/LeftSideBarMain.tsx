@@ -99,12 +99,7 @@ const LeftSideBar = () => {
   }
 
   if (settingsOpen) {
-    return (
-      <LLMSettings
-        settingsOpen={settingsOpen}
-        handleSettingsClose={handleSettingsClose}
-      />
-    );
+    return <LLMSettings settingsOpen={settingsOpen} handleSettingsClose={handleSettingsClose} />;
   }
 
   function handleSignOut() {
@@ -121,11 +116,7 @@ const LeftSideBar = () => {
         <DrawerHeader>
           {drawerOpen ? (
             <IconButton onClick={handleDrawerClose}>
-              {theme.direction === "rtl" ? (
-                <ChevronRightIcon />
-              ) : (
-                <ChevronLeftIcon />
-              )}
+              {theme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}
             </IconButton>
           ) : (
             <IconButton
@@ -169,10 +160,7 @@ const LeftSideBar = () => {
                   >
                     {index % 2 === 0 ? <HomeIcon /> : <LibraryBooksIcon />}
                   </ListItemIcon>
-                  <ListItemText
-                    primary={text}
-                    sx={{ opacity: drawerOpen ? 1 : 0 }}
-                  />
+                  <ListItemText primary={text} sx={{ opacity: drawerOpen ? 1 : 0 }} />
                 </ListItemButton>
               </ListItem>
             </Link>
@@ -180,7 +168,7 @@ const LeftSideBar = () => {
         </List>
         <Divider />
         <List sx={{ flexGrow: 1 }}>
-          {["Extension", "Discord"].map((text, index) => (
+          {["Extension", "Discord", "Github"].map((text, index) => (
             <ListItem key={text} disablePadding sx={{ display: "block" }}>
               <ListItemButton
                 sx={{
@@ -211,6 +199,20 @@ const LeftSideBar = () => {
                       height={20}
                       alt="discord"
                     />
+                  )}
+                  {text === "Github" && (
+                    <a
+                      href="https://github.com/symbiont-me/symbiont-frontend"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Image
+                        src="https://www.svgrepo.com/show/512317/github-142.svg"
+                        width={20}
+                        height={20}
+                        alt="github"
+                      />
+                    </a>
                   )}
                 </ListItemIcon>
                 <ListItemText
@@ -245,8 +247,8 @@ const LeftSideBar = () => {
                   text === "Settings"
                     ? handleSettingsOpen
                     : text === "Logout"
-                    ? handleSignOut
-                    : () => {}
+                      ? handleSignOut
+                      : () => {}
                 }
               >
                 <ListItemIcon
@@ -266,10 +268,7 @@ const LeftSideBar = () => {
                   )}
                   {text === "Logout" && <LogoutIcon />}
                 </ListItemIcon>
-                <ListItemText
-                  primary={text}
-                  sx={{ opacity: drawerOpen ? 1 : 0 }}
-                />
+                <ListItemText primary={text} sx={{ opacity: drawerOpen ? 1 : 0 }} />
               </ListItemButton>
             </ListItem>
           ))}
