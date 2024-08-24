@@ -60,6 +60,7 @@ export enum LLMModels {
   GPT_4 = "gpt-4",
   GPT_4_32k = "gpt-4-32k",
   GPT_OMNI = "gpt-4o",
+  GPT_OMNI_MINI = "gpt-4o-mini",
   CLAUDE_3_OPUS = "claude-3-opus-20240229",
   CLAUDE_3_SONNET = "claude-3-5-sonnet-20240620",
   CLAUDE_3_HAIKU = "claude-3-haiku-20240307",
