@@ -36,7 +36,7 @@ const PdfViewer = () => {
 
   async function getFileFromStorage(storageRef: string) {
     const endpoint = `${process.env.NEXT_PUBLIC_BASE_URL}/get-file-from-storage?storage_ref=${storageRef}`;
-    const userToken = await authContext?.user?.getIdToken();
+    const userToken = await authContext?.user?.accessToken;
     if (!userToken) {
       return;
     }
