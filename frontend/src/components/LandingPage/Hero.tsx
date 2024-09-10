@@ -4,6 +4,7 @@ import Button from "@mui/material/Button";
 import "./styles.css";
 import { UserAuth } from "@/app/context/AuthContext";
 import CheckIcon from "@mui/icons-material/Check";
+import Link from "next/link";
 const slides = [
   { src: "/slides/slide1.jpg", alt: "symbiont writer" },
   { src: "/slides/slide2.jpg", alt: "symbiont pdf viewer" },
@@ -54,23 +55,20 @@ const Hero = () => {
             <span className="ml-2">{feature}</span>
           </div>
         ))}
-        <Button
-          variant="outlined"
-          sx={{ width: "220px", marginTop: "30px" }}
-          className="flex justify-between items-center"
-          onClick={handleSignIn}
-        >
-          <div className="border-r-2 border-slate-400 pr-2">
-            <Image
-              src="/logos/google-logo.svg"
-              width={20}
-              height={20}
-              alt="google-sign-in"
-            />
-          </div>
-          <span className="mx-auto ml-12">Log in</span>
-          <div className="mr-8"></div>
-        </Button>
+        <Link href="sign-in">
+          <Button
+            variant="outlined"
+            sx={{ width: "220px", marginTop: "30px" }}
+            className="flex justify-between items-center"
+            // onClick={handleSignIn}
+          >
+            <div className="border-r-2 border-slate-400 pr-2">
+              <Image src="/logos/google-logo.svg" width={20} height={20} alt="google-sign-in" />
+            </div>
+            <span className="mx-auto ml-12">Log in</span>
+            <div className="mr-8"></div>
+          </Button>
+        </Link>
       </div>
       <div className="md:min-w-[60%] w-full  ">
         <div className="relative w-full h-96 md:w-full md:h-full">

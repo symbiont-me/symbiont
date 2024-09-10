@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { usePathname } from "next/navigation";
 import { Study } from "@/types";
 import CircularProgress from "@mui/material/CircularProgress";
-
+import Session from "supertokens-auth-react/recipe/session";
 // TODO remove if response.status === 200 statements from try-catch blocks
 
 type StudyContextType = {
@@ -67,20 +67,16 @@ const jokes = [
   "'The four most beautiful words in our common language: I told you so.'",
 ];
 
-export const StudyContext = createContext<StudyContextType | undefined>(
-  undefined,
-);
+export const StudyContext = createContext<StudyContextType | undefined>(undefined);
 
-export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
   const [allStudies, setAllStudies] = useState<Study[]>([]);
   // TODO update name to currentStudy
   const [study, setStudy] = useState<Study | undefined>(undefined);
   const studyId = usePathname().split("/")[2];
   const authContext = UserAuth();
-  const userTokenPromise = authContext?.user?.getIdToken();
+  const userTokenPromise = authContext?.user?.accessToken;
   const [userToken, setUserToken] = useState<string | undefined>(undefined);
   const [isStudyLoading, setIsStudyLoading] = useState(true);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -92,9 +88,7 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     if (userTokenPromise) {
-      userTokenPromise.then((token) => {
-        setUserToken(token);
-      });
+      setUserToken(userTokenPromise);
     }
   }, [userTokenPromise]);
 
@@ -111,8 +105,7 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
   // Set studies
   const fetchStudiesQuery = useQuery({
     queryKey: ["get-studies", userTokenPromise],
-    queryFn: () =>
-      userToken ? fetchUserStudies(userToken) : Promise.reject("No token"),
+    queryFn: () => (userToken ? fetchUserStudies(userToken) : Promise.reject("No token")),
     enabled: !!userToken, // This will ensure the query does not run until the token is available
   });
 
@@ -157,9 +150,7 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
   const fetchCurrentStudyQuery = useQuery({
     queryKey: ["get-study", userTokenPromise, studyId],
     queryFn: () =>
-      userToken && studyId
-        ? fetchCurrentStudy(studyId)
-        : Promise.reject("No token or studyId"),
+      userToken && studyId ? fetchCurrentStudy(studyId) : Promise.reject("No token or studyId"),
     enabled: !!userToken && !!studyId,
   });
 
@@ -170,32 +161,23 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
       setAllStudies(fetchStudiesQuery.data.studies);
     }
     if (fetchCurrentStudyQuery.data) {
-      console.log(
-        "Setting current study...",
-        fetchCurrentStudyQuery.data.studies,
-      );
+      console.log("Setting current study...", fetchCurrentStudyQuery.data.studies);
       setStudy(fetchCurrentStudyQuery.data.studies[0]); // @note all study routes return an array
       setIsStudyLoading(false);
     }
   }, [fetchStudiesQuery.data, fetchCurrentStudyQuery.data, studyId]);
 
-  const createStudy = async (
-    studyName: string,
-    description: string,
-    image: string,
-  ) => {
+  const createStudy = async (studyName: string, description: string, image: string) => {
+    const accessToken = await Session.getAccessToken();
     /*  @note this is a bit of unnecessary optimization
      *   we are updating the UI immediately
      *   the backend will update the UI again after the study is created or if there is an error
      */
     function createAlphaNumericId() {
-      const alphaNumeric =
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      const alphaNumeric = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
       let result = "";
       for (let i = 0; i < 6; i++) {
-        result += alphaNumeric.charAt(
-          Math.floor(Math.random() * alphaNumeric.length),
-        );
+        result += alphaNumeric.charAt(Math.floor(Math.random() * alphaNumeric.length));
       }
       return result;
     }
@@ -210,11 +192,12 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
       text: "",
     };
     setAllStudies([...allStudies, tempStudy]);
+
     const endpoint = `${BASE_URL}/create-study`;
     const body = { name: studyName, description: description, image: image };
     const headers = {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${userToken}`,
+      Authorization: `Bearer ${accessToken}`,
     };
 
     try {

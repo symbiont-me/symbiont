@@ -6,10 +6,19 @@ import LandingPage from "@/components/LandingPage/LandingPageMain";
 import { useEffect, useState } from "react";
 import { CircularProgress } from "@mui/material";
 import axios from "axios";
+import Session from "supertokens-auth-react/recipe/session";
+
 export default function Home() {
   const authContext = UserAuth();
   const [loading, setLoading] = useState(true);
-
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  useEffect(() => {
+    async function checkSession() {
+      const sessionExists = await Session.doesSessionExist();
+      setIsLoggedIn(sessionExists);
+    }
+    checkSession();
+  }, []);
   useEffect(() => {
     // Assuming `UserAuth` provides a way to check if the auth status is being resolved
     const checkAuthStatus = async () => {
@@ -25,10 +34,10 @@ export default function Home() {
     };
 
     checkAuthStatus();
-  }, [authContext, authContext?.user, authContext?.user?.uid]);
+  }, [authContext, authContext?.user, authContext?.user?.accessToken, authContext?.user?.id]);
 
   async function logIn() {
-    const userToken = await authContext?.user?.getIdToken();
+    const userToken = await authContext?.user?.accessToken;
 
     if (!userToken) {
       return;
@@ -64,5 +73,5 @@ export default function Home() {
     authContext?.user && logIn();
   }
 
-  return <>{authContext?.user ? <UserDashboard /> : <LandingPage />}</>;
+  return <>{isLoggedIn ? <UserDashboard /> : <LandingPage />}</>;
 }
