@@ -6,8 +6,9 @@ import { useQuery } from "@tanstack/react-query";
 import { usePathname } from "next/navigation";
 import { Study } from "@/types";
 import CircularProgress from "@mui/material/CircularProgress";
-import Session from "supertokens-auth-react/recipe/session";
+
 import { Loader } from "lucide-react";
+import useUserToken from "@/hooks/useUserToken";
 // TODO remove if response.status === 200 statements from try-catch blocks
 
 type StudyContextType = {
@@ -80,7 +81,7 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
   // TODO update name to currentStudy
   const [study, setStudy] = useState<Study | undefined>(undefined);
   const studyId = usePathname().split("/")[2];
-  const [userToken, setUserToken] = useState<string | undefined>(undefined);
+  const { userToken, loading, error } = useUserToken();
   const [isStudyLoading, setIsStudyLoading] = useState(true);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -88,16 +89,6 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
   const [currentJoke, setCurrentJoke] = useState(jokes[0]);
 
   // TODO if authContext is available but userId is not, display the landing page
-
-  useEffect(() => {
-    async function fetchAccessToken() {
-      const accessToken = await Session.getAccessToken();
-      if (accessToken) {
-        setUserToken(accessToken);
-      }
-    }
-    fetchAccessToken();
-  }, []);
 
   // TODO update to filter studies by studyId on the backend
   const fetchUserStudies = async (userToken: string) => {
