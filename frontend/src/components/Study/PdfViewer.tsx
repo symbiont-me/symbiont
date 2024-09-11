@@ -12,6 +12,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import useUserToken from "@/hooks/useUserToken";
 type PDFViewerProps = {
   study: Study | undefined;
 };
@@ -22,6 +23,7 @@ const PdfViewer = () => {
   const [pdfs, setPdfs] = useState<StudyResource[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [pdfUrl, setPdfUrl] = useState<string>("");
+  const { userToken, loading, error } = useUserToken();
 
   const filterPdfs = (allResources: StudyResource[]) => {
     return allResources.filter((resource) => resource.category === "pdf");
@@ -36,7 +38,7 @@ const PdfViewer = () => {
 
   async function getFileFromStorage(storageRef: string) {
     const endpoint = `${process.env.NEXT_PUBLIC_BASE_URL}/get-file-from-storage?storage_ref=${storageRef}`;
-    const userToken = await authContext?.user?.accessToken;
+
     if (!userToken) {
       return;
     }
@@ -55,8 +57,25 @@ const PdfViewer = () => {
     queryFn: async ({ queryKey }) => {
       const [_, queryValue] = queryKey;
       const { storageRef } = queryValue as { storageRef: string };
-      return getFileFromStorage(storageRef);
+
+      if (!storageRef) {
+        throw new Error("Storage reference is not available");
+      }
+
+      try {
+        const file = await getFileFromStorage(storageRef);
+
+        if (!file) {
+          throw new Error("File retrieved from storage is undefined");
+        }
+
+        return file;
+      } catch (error) {
+        console.error("Error fetching file from storage:", error);
+        throw error;
+      }
     },
+    enabled: !!pdfs[currentIndex]?.storage_ref, // Only enable the query if storageRef is defined
   });
 
   useEffect(() => {
