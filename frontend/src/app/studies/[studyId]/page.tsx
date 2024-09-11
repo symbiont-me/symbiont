@@ -28,6 +28,9 @@ import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import CircularProgress from "@mui/material/CircularProgress";
 import Loader from "../../../components/Loader";
+import Session from "supertokens-auth-react/recipe/session";
+import { set } from "zod";
+import useAuthRedirect from "@/hooks/useAuthRedirect";
 
 // an object that maps each ViewSelected enum value to a corresponding React component.
 // this allows the application to dynamically render different components based on the current view selection
@@ -45,61 +48,26 @@ const viewComponents: { [key in ViewSelected]?: React.ComponentType<any> } = {
 };
 
 const StudyPage = () => {
-  const authContext = UserAuth();
+  const { loading } = useAuthRedirect();
   const currentStudyContext = useStudyContext();
-  const router = useRouter();
   const path = usePathname();
   const [currentStudy, setCurrentStudy] = useState<Study | undefined>(
     undefined
   );
-  const [loading, setLoading] = useState(true);
+
   const [viewSelected, setViewSelected] = useState<ViewSelected>(
     ViewSelected.Writer
   );
-  const [user, setUser] = useState<User | null>(null);
+
   // TODO update the writer state in its own comaponent
   const [textWriterValue, setTextWriterValue] = useState<string>("");
 
   // TODO the best thing would be to delete this here as Context handles this
   const studyId = path.split("/")[2];
   const SelectedViewComponent = viewComponents[viewSelected] || null;
-
   useEffect(() => {
-    // Check if the authContext is not null and has finished loading the user's authentication status
-    if (authContext && !authContext.isAuthLoading) {
-      if (authContext.user === null) {
-        // No user is logged in, redirect to the landing page
-        router.push("/");
-      } else {
-        // User is logged in, we update the user state
-        setUser(authContext.user);
-      }
-    }
-  }, [authContext, router]);
-
-  useEffect(() => {
-    if (currentStudyContext && currentStudyContext.study) {
-      setCurrentStudy(currentStudyContext.study);
-    }
+    setCurrentStudy(currentStudyContext?.study);
   }, [currentStudyContext?.study]);
-
-  useEffect(() => {
-    if (currentStudy) {
-      setLoading(false);
-    }
-  }, [currentStudy]);
-
-  if (currentStudyContext?.isError) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <Alert severity="error">
-          <AlertTitle>Error Loading the Study</AlertTitle>
-          {/* This shouldn&apos;t be happening. What did you do? */}
-          {currentStudyContext?.studyError?.message}
-        </Alert>
-      </div>
-    );
-  }
 
   if (loading) {
     return <Loader />;
