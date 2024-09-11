@@ -6,23 +6,13 @@ import Button from "@mui/material/Button";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
-type VideoViewerProps = {
-  study: Study | undefined;
-};
-
-type Resource = {
-  category: string;
-  identifier: string;
-  name: string;
-  studyId: string;
-  url: string;
-};
+// ... existing code ...
 
 const VideoViewer = () => {
   const currentStudyContext = useStudyContext();
 
   const [currentVideoId, setCurrentVideoId] = useState<string | undefined>(
-    undefined,
+    undefined
   );
   const [videos, setVideos] = useState<Resource[] | null>(null);
   const [videoIndex, setVideoIndex] = useState<number>(0);
@@ -31,7 +21,7 @@ const VideoViewer = () => {
     if (currentStudyContext?.study) {
       const allResources = currentStudyContext.study.resources;
       const filteredVideos = allResources.filter(
-        (resource) => resource.category === "video",
+        (resource) => resource.category === "video"
       );
 
       setVideos(filteredVideos as Resource[]);
@@ -42,16 +32,13 @@ const VideoViewer = () => {
     filterVideos();
   }, [currentStudyContext]);
 
-  useEffect(() => {
-    console.log(videos);
-  }, [videos]);
-
   function createVideoId(url: string) {
     const videoId = new URL(url).searchParams.get("v");
     if (videoId) {
       setCurrentVideoId(videoId);
     }
   }
+
   useEffect(() => {
     if (videos && videos.length > 0) {
       createVideoId(videos[videoIndex].url);
@@ -71,12 +58,10 @@ const VideoViewer = () => {
   };
 
   const handlePreviousVideo = () => {
-    if (videos && videoIndex < videos.length - 1) {
-      const newIndex = videoIndex + 1;
+    if (videos && videoIndex > 0) {
+      const newIndex = videoIndex - 1;
       setVideoIndex(newIndex);
-      if (videos) {
-        createVideoId(videos[newIndex].url);
-      }
+      createVideoId(videos[newIndex].url);
     }
   };
 
