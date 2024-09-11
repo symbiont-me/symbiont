@@ -68,11 +68,14 @@ const useAddResourceRequest = () => {
       },
       onSuccess: (data) => {
         setResourceStatus({ error: null, success: true });
-        console.log("Added resource:", data.data.resources[0]);
-        // update the state in the context
-        currentStudyContext?.updateResourcesInStudy(data.data.resources);
+        if (data.data.resources && Array.isArray(data.data.resources)) {
+          console.log("Added resource:", data.data.resources[0]);
+          // update the state in the context
+          currentStudyContext?.updateResourcesInStudy(data.data.resources);
+        } else {
+          console.error("Unexpected response format:", data.data);
+        }
         // we refetch the study data in case there was a change
-        // ?is this necessary
         queryClient.invalidateQueries({ queryKey: ["get-study"] });
       },
     }),
