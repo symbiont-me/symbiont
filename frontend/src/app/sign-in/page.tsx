@@ -2,11 +2,11 @@
 import React, { useEffect } from "react";
 import { UserAuth } from "@/app/context/AuthContext";
 import { useRouter } from "next/navigation";
-import AuthForm from "@/components/AuthForm";
+import AuthForm from "@/components/Auth/AuthForm";
+import MaterialForm from "@/components/Auth/AuthFormMaterial";
 function SignInPage() {
   return (
     <div>
-      <h1>Sign In</h1>
       <AuthForm />
     </div>
   );

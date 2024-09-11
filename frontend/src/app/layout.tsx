@@ -45,19 +45,23 @@ if (typeof window !== "undefined") {
     recipeList: [EmailPassword.init(), Session.init()],
   });
 }
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
       {/* ? shouldn't the reactqueryprovider be below the body tag ? */}
       <ReactQueryProvider>
         <body className={lato.className}>
-          <AuthContextProvider>
-            <SuperTokensWrapper>
+          <SuperTokensWrapper>
+            <AuthContextProvider>
               <StudyProvider>
                 <AppRouterCacheProvider>{children}</AppRouterCacheProvider>
               </StudyProvider>
-            </SuperTokensWrapper>
-          </AuthContextProvider>
+            </AuthContextProvider>
+          </SuperTokensWrapper>
         </body>
       </ReactQueryProvider>
     </html>
