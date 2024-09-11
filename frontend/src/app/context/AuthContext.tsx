@@ -11,7 +11,6 @@ import { User } from "../../types";
 
 import { signOut } from "supertokens-auth-react/recipe/session";
 import Session from "supertokens-auth-react/recipe/session";
-
 type AuthContextType = {
   user: User | null;
   googleSignIn: () => void;
