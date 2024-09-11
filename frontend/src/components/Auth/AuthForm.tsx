@@ -12,24 +12,12 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import SuperTokens from "supertokens-auth-react";
-import EmailPassword from "supertokens-auth-react/recipe/emailpassword";
+
 import Session from "supertokens-auth-react/recipe/session";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Link from "next/link";
-
-SuperTokens.init({
-  appInfo: {
-    appName: "symbiont",
-    apiDomain: "http://127.0.0.1:8000", // todo should come from env
-    websiteDomain: "http://localhost:3003", // todo should come from env
-    apiBasePath: "/auth",
-    websiteBasePath: "/auth",
-  },
-  recipeList: [EmailPassword.init(), Session.init()],
-});
 
 const schema = z.object({
   email: z.string().email("Invalid email address"),
@@ -66,22 +54,8 @@ export default function AuthForm() {
     resolver: zodResolver(schema),
   });
 
-  async function fetchSessionDetails() {
-    try {
-      let response = await fetch("http://127.0.0.1:8000/session-details");
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      let data = await response.json();
-      console.log("Session details:", data);
-    } catch (error) {
-      console.error("Error fetching session details:", error);
-    }
-  }
-
   // TODO fix event type issue
-  const handleAuth = async (data: FormData, event) => {
-    event.preventDefault();
+  const handleAuth = async () => {
     const endpoint = isSignUp ? "signup" : "signin";
     const response = await fetch(`http://127.0.0.1:8000/auth/${endpoint}`, {
       method: "POST",
@@ -90,8 +64,8 @@ export default function AuthForm() {
       },
       body: JSON.stringify({
         formFields: [
-          { id: "email", value: "retailstash@gmail.com" },
-          { id: "password", value: "password_12345" },
+          { id: "email", value: email },
+          { id: "password", value: password },
         ],
       }),
     });

@@ -6,9 +6,8 @@ import { useQuery } from "@tanstack/react-query";
 import { usePathname } from "next/navigation";
 import { Study } from "@/types";
 import CircularProgress from "@mui/material/CircularProgress";
-
-import { Loader } from "lucide-react";
 import useUserToken from "@/hooks/useUserToken";
+
 // TODO remove if response.status === 200 statements from try-catch blocks
 
 type StudyContextType = {
@@ -178,7 +177,6 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
     description: string,
     image: string
   ) => {
-    const accessToken = await Session.getAccessToken();
     /*  @note this is a bit of unnecessary optimization
      *   we are updating the UI immediately
      *   the backend will update the UI again after the study is created or if there is an error
@@ -210,7 +208,7 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
     const body = { name: studyName, description: description, image: image };
     const headers = {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
+      Authorization: `Bearer ${userToken}`,
     };
 
     try {
