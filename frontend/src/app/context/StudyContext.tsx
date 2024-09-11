@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import { Study } from "@/types";
 import CircularProgress from "@mui/material/CircularProgress";
 import Session from "supertokens-auth-react/recipe/session";
+import { Loader } from "lucide-react";
 // TODO remove if response.status === 200 statements from try-catch blocks
 
 type StudyContextType = {
@@ -67,16 +68,18 @@ const jokes = [
   "'The four most beautiful words in our common language: I told you so.'",
 ];
 
-export const StudyContext = createContext<StudyContextType | undefined>(undefined);
+export const StudyContext = createContext<StudyContextType | undefined>(
+  undefined
+);
 
-export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
   const [allStudies, setAllStudies] = useState<Study[]>([]);
   // TODO update name to currentStudy
   const [study, setStudy] = useState<Study | undefined>(undefined);
   const studyId = usePathname().split("/")[2];
-  const authContext = UserAuth();
-  const userTokenPromise = authContext?.user?.accessToken;
   const [userToken, setUserToken] = useState<string | undefined>(undefined);
   const [isStudyLoading, setIsStudyLoading] = useState(true);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -87,13 +90,19 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   // TODO if authContext is available but userId is not, display the landing page
 
   useEffect(() => {
-    if (userTokenPromise) {
-      setUserToken(userTokenPromise);
+    async function fetchAccessToken() {
+      const accessToken = await Session.getAccessToken();
+      if (accessToken) {
+        setUserToken(accessToken);
+      }
     }
-  }, [userTokenPromise]);
+    fetchAccessToken();
+  }, []);
 
   // TODO update to filter studies by studyId on the backend
   const fetchUserStudies = async (userToken: string) => {
+    console.log("Fetching User Studies...");
+
     const url = `${BASE_URL}/get-user-studies`;
     const headers = {
       Authorization: `Bearer ${userToken}`,
@@ -104,8 +113,9 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   // Set studies
   const fetchStudiesQuery = useQuery({
-    queryKey: ["get-studies", userTokenPromise],
-    queryFn: () => (userToken ? fetchUserStudies(userToken) : Promise.reject("No token")),
+    queryKey: ["get-studies", userToken],
+    queryFn: () =>
+      userToken ? fetchUserStudies(userToken) : Promise.reject("No token"),
     enabled: !!userToken, // This will ensure the query does not run until the token is available
   });
 
@@ -138,7 +148,7 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       const response = await axios.get(endpoint, { headers });
       return response.data;
     } catch (error) {
-      console.log("Error Fetching the Current Study", error);
+      console.error("Error Fetching the Current Study", error);
       // @note we update the relevant states here to show the error in relevant components
       setStudy(undefined);
       setStudyError(fetchCurrentStudyQuery.error as Error);
@@ -148,9 +158,11 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   }
   const fetchCurrentStudyQuery = useQuery({
-    queryKey: ["get-study", userTokenPromise, studyId],
+    queryKey: ["get-study", userToken, studyId],
     queryFn: () =>
-      userToken && studyId ? fetchCurrentStudy(studyId) : Promise.reject("No token or studyId"),
+      userToken && studyId
+        ? fetchCurrentStudy(studyId)
+        : Promise.reject("No token or studyId"),
     enabled: !!userToken && !!studyId,
   });
 
@@ -161,23 +173,33 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       setAllStudies(fetchStudiesQuery.data.studies);
     }
     if (fetchCurrentStudyQuery.data) {
-      console.log("Setting current study...", fetchCurrentStudyQuery.data.studies);
+      console.log(
+        "Setting current study...",
+        fetchCurrentStudyQuery.data.studies
+      );
       setStudy(fetchCurrentStudyQuery.data.studies[0]); // @note all study routes return an array
       setIsStudyLoading(false);
     }
   }, [fetchStudiesQuery.data, fetchCurrentStudyQuery.data, studyId]);
 
-  const createStudy = async (studyName: string, description: string, image: string) => {
+  const createStudy = async (
+    studyName: string,
+    description: string,
+    image: string
+  ) => {
     const accessToken = await Session.getAccessToken();
     /*  @note this is a bit of unnecessary optimization
      *   we are updating the UI immediately
      *   the backend will update the UI again after the study is created or if there is an error
      */
     function createAlphaNumericId() {
-      const alphaNumeric = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      const alphaNumeric =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
       let result = "";
       for (let i = 0; i < 6; i++) {
-        result += alphaNumeric.charAt(Math.floor(Math.random() * alphaNumeric.length));
+        result += alphaNumeric.charAt(
+          Math.floor(Math.random() * alphaNumeric.length)
+        );
       }
       return result;
     }
@@ -267,6 +289,7 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   }
 
+  // TODO Where is this being used and how?
   async function uploadFileResource(file: File, studyId: string) {
     setIsStudyLoading(true);
     const endpoint = `${process.env.NEXT_PUBLIC_BASE_URL}/upload-resource?studyId=${studyId}`;
@@ -309,7 +332,7 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       setStudy({
         ...study,
         resources: study.resources?.filter(
-          (resource) => resource.identifier !== resourceIdentifier,
+          (resource) => resource.identifier !== resourceIdentifier
         ),
       });
     }
@@ -364,8 +387,9 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   }, []);
 
   // NOTE Note this part, just update the loader
-  if (!authContext) {
-    return <div>Loading...</div>;
+  // TODO this needs to be fixed
+  if (!userToken) {
+    return <Loader />;
   }
 
   // TODO REPLACE THIS BLOCK WHEN DEPLOYING TO PRODUCTION OR MOVING TO GOOGLE CLOUD

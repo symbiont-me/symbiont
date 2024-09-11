@@ -16,45 +16,46 @@ export default function Home() {
     async function checkSession() {
       const sessionExists = await Session.doesSessionExist();
       setIsLoggedIn(sessionExists);
+      setLoading(false);
     }
     checkSession();
   }, []);
-  useEffect(() => {
-    // Assuming `UserAuth` provides a way to check if the auth status is being resolved
-    const checkAuthStatus = async () => {
-      try {
-        if (!authContext) {
-          return;
-        }
-        setLoading(false);
-      } catch (error) {
-        console.error(error);
-        setLoading(false);
-      }
-    };
+  // useEffect(() => {
+  //   // Assuming `UserAuth` provides a way to check if the auth status is being resolved
+  //   const checkAuthStatus = async () => {
+  //     try {
+  //       if (!authContext) {
+  //         return;
+  //       }
+  //       setLoading(false);
+  //     } catch (error) {
+  //       console.error(error);
+  //       setLoading(false);
+  //     }
+  //   };
 
-    checkAuthStatus();
-  }, [authContext, authContext?.user, authContext?.user?.accessToken, authContext?.user?.id]);
+  //   checkAuthStatus();
+  // }, [authContext, authContext?.user, authContext?.user?.accessToken, authContext?.user?.id]);
 
-  async function logIn() {
-    const userToken = await authContext?.user?.accessToken;
+  // async function logIn() {
+  //   const userToken = await authContext?.user?.accessToken;
 
-    if (!userToken) {
-      return;
-    }
-    const endpoint = `${process.env.NEXT_PUBLIC_BASE_URL}/login`;
-    const body = {};
-    const headers = {
-      Authorization: `Bearer ${userToken}`,
-    };
+  //   if (!userToken) {
+  //     return;
+  //   }
+  //   const endpoint = `${process.env.NEXT_PUBLIC_BASE_URL}/login`;
+  //   const body = {};
+  //   const headers = {
+  //     Authorization: `Bearer ${userToken}`,
+  //   };
 
-    try {
-      const res = await axios.post(endpoint, body, { headers });
-      console.log(res);
-    } catch (error) {
-      console.error(error);
-    }
-  }
+  //   try {
+  //     const res = await axios.post(endpoint, body, { headers });
+  //     console.log(res);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // }
 
   if (!authContext) {
     <div className="h-screen w-screen flex flex-col justify-center items-center">
@@ -67,10 +68,6 @@ export default function Home() {
         <CircularProgress />
       </div>
     );
-  }
-
-  {
-    authContext?.user && logIn();
   }
 
   return <>{isLoggedIn ? <UserDashboard /> : <LandingPage />}</>;
