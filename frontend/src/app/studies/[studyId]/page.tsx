@@ -27,6 +27,7 @@ import StudyInfo from "@/components/Study/StudyInfo";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import CircularProgress from "@mui/material/CircularProgress";
+import Loader from "../../../components/Loader";
 
 // an object that maps each ViewSelected enum value to a corresponding React component.
 // this allows the application to dynamically render different components based on the current view selection
@@ -93,21 +94,15 @@ const StudyPage = () => {
       <div className="flex justify-center items-center h-screen">
         <Alert severity="error">
           <AlertTitle>Error Loading the Study</AlertTitle>
-          This shouldn&apos;t be happening. What did you do?
+          {/* This shouldn&apos;t be happening. What did you do? */}
+          {currentStudyContext?.studyError?.message}
         </Alert>
       </div>
     );
   }
 
   if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="flex flex-col items-center justify-center">
-          <CircularProgress color="secondary" />
-          <h3 className="mt-10">Loading Study ...</h3>
-        </div>
-      </div>
-    );
+    return <Loader />;
   }
 
   return (

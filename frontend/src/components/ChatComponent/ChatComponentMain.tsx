@@ -14,7 +14,7 @@ import Checkbox from "@mui/material/Checkbox";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Alert } from "@mui/material";
 import LinearProgress from "@mui/material/LinearProgress";
-
+import Session from "supertokens-auth-react/recipe/session";
 const label = { inputProps: { "aria-label": "Combine Resources" } };
 
 type ChatComponentProps = {
@@ -41,13 +41,15 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
   >(undefined);
   const [userQuery, setUserQuery] = useState("");
   const [previousMessage, setPreviousMessage] = useState("");
-
-  async function getUserAuthToken() {
-    if (authContext?.user?.getIdToken) {
-      const token = await authContext.user.getIdToken();
-      setUserToken(token);
+  useEffect(() => {
+    async function fetchAccessToken() {
+      const accessToken = await Session.getAccessToken();
+      if (accessToken) {
+        setUserToken(accessToken);
+      }
     }
-  }
+    fetchAccessToken();
+  }, []);
 
   useEffect(() => {
     if (currentStudyContext?.study) {
@@ -87,7 +89,7 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
     }
     setUserQuery(input);
     setPreviousMessage(messages[messages.length - 1]?.content);
-    getUserAuthToken();
+    // getUserAuthToken();
     setChatLoading(false);
   }, [messages, selectedResource, input]); // TODO include getUserAuthToken if there is an error
 

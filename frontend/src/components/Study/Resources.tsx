@@ -13,6 +13,7 @@ import { Alert } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import LinearProgress from "@mui/material/LinearProgress";
 import useAddResourceRequest from "@/hooks/useAddResourceRequest";
+import Session from "supertokens-auth-react/recipe/session";
 
 // NOTE this component should not be part of the Study Nav as it is
 // TODO should be refactored to make a dialog box where users can add and remove resources
@@ -39,14 +40,15 @@ const Resources = () => {
   const { resourceType, resourceStatus, mutation } = useAddResourceRequest();
 
   useEffect(() => {
-    const getUserAuthToken = async () => {
-      if (authContext?.user?.getIdToken) {
-        const token = await authContext.user.getIdToken();
-        setUserToken(token);
+    async function fetchAccessToken() {
+      const accessToken = await Session.getAccessToken();
+      if (accessToken) {
+        setUserToken(accessToken);
       }
-    };
-    getUserAuthToken();
+    }
+    fetchAccessToken();
   }, [authContext]);
+
   const authHeadersForRequests: AuthHeaders = {
     Authorization: `Bearer ${userToken}`,
   };

@@ -17,6 +17,8 @@ import CircularProgress from "@mui/material/CircularProgress";
 
 import useAddResourceRequest, { Headers } from "@/hooks/useAddResourceRequest";
 import Alert from "@mui/material/Alert";
+import Session from "supertokens-auth-react/recipe/session";
+
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
   clipPath: "inset(50%)",
@@ -42,17 +44,14 @@ const FileUpload = () => {
   const [userToken, setUserToken] = useState<string | undefined>(undefined);
 
   useEffect(() => {
-    async function getUserAuthToken() {
-      if (authContext?.user?.getIdToken) {
-        const token = await authContext.user.getIdToken();
-        setUserToken(token);
+    async function fetchAccessToken() {
+      const accessToken = await Session.getAccessToken();
+      if (accessToken) {
+        setUserToken(accessToken);
       }
     }
-    const fetchToken = async () => {
-      await getUserAuthToken();
-    };
-    fetchToken();
-  }, [authContext?.user]);
+    fetchAccessToken();
+  }, [authContext]);
 
   const { resourceType, resourceStatus, mutation } = useAddResourceRequest();
 

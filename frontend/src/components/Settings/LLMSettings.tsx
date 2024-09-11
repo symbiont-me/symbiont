@@ -21,6 +21,8 @@ import { LLMModels } from "@/types";
 import { UserAuth } from "@/app/context/AuthContext";
 import { SelectChangeEvent } from "@mui/material/Select";
 import axios from "axios";
+import Session from "supertokens-auth-react/recipe/session";
+import { auth } from "@/firebase/config";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -46,6 +48,8 @@ async function updateLlmSettings(
     llm_name: model,
     api_key: apiKey,
   };
+
+  console.log("User token: ", userToken);
   const headers = {
     "Content-Type": "application/json",
     Authorization: `Bearer ${userToken}`,
@@ -87,12 +91,13 @@ export default function FullScreenSettingsDialog({
   const [open, setOpen] = useState(true);
 
   useEffect(() => {
-    if (!authContext || !authContext.user) {
-      return;
+    async function fetchAccessToken() {
+      const accessToken = await Session.getAccessToken();
+      if (accessToken) {
+        setUserToken(accessToken);
+      }
     }
-    authContext.user.getIdToken().then((token) => {
-      setUserToken(token);
-    });
+    fetchAccessToken();
   }, [authContext]);
 
   useEffect(() => {
@@ -109,7 +114,7 @@ export default function FullScreenSettingsDialog({
   }, [userToken]);
 
   async function saveSettings() {
-    if (!authContext || !authContext.user || !userToken) {
+    if (!authContext || !userToken) {
       return;
     }
     await updateLlmSettings(model, apiKey, userToken);
