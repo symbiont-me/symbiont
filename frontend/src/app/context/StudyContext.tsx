@@ -387,10 +387,10 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
   }, []);
 
   // NOTE Note this part, just update the loader
-  // TODO this needs to be fixed
-  if (!userToken) {
-    return <Loader />;
-  }
+  // TODO Remove, this is most likely not needed
+  // if (!userToken) {
+  //   return <Loader />;
+  // }
 
   // TODO REPLACE THIS BLOCK WHEN DEPLOYING TO PRODUCTION OR MOVING TO GOOGLE CLOUD
   if (fetchStudiesQuery.isLoading) {

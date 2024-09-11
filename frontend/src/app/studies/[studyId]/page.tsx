@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
-import { User } from "firebase/auth";
+import { User } from "../../../types";
 import { Study } from "@/types";
 import { ViewSelected } from "@/const";
 import { UserAuth } from "@/app/context/AuthContext";
