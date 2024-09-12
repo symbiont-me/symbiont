@@ -48,7 +48,7 @@ const viewComponents: { [key in ViewSelected]?: React.ComponentType<any> } = {
 };
 
 const StudyPage = () => {
-  const { loading } = useAuthRedirect();
+  const { isLoggedIn, loading } = useAuthRedirect();
   const currentStudyContext = useStudyContext();
   const path = usePathname();
   const [currentStudy, setCurrentStudy] = useState<Study | undefined>(
@@ -66,6 +66,9 @@ const StudyPage = () => {
   const studyId = path.split("/")[2];
   const SelectedViewComponent = viewComponents[viewSelected] || null;
   useEffect(() => {
+    if (!isLoggedIn) {
+      return;
+    }
     setCurrentStudy(currentStudyContext?.study);
   }, [currentStudyContext?.study]);
 

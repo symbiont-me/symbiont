@@ -13,6 +13,7 @@ import Item from "@mui/material/Grid";
 import CircularProgress from "@mui/material/CircularProgress";
 import Alert from "@mui/material/Alert";
 import UserGuideSwipe from "@/components/ui/UserGuideSwipe";
+import useAuthRedirect from "@/hooks/useAuthRedirect";
 import "./styles.css";
 
 const UserDashboard = () => {
