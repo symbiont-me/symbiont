@@ -36,7 +36,7 @@ const Hero = () => {
   useEffect(() => {
     const intervalId = setInterval(() => {
       setCurrentSlideIndex((prevSlideIndex) =>
-        prevSlideIndex === slides.length - 1 ? 0 : prevSlideIndex + 1,
+        prevSlideIndex === slides.length - 1 ? 0 : prevSlideIndex + 1
       );
     }, 3000);
 
@@ -57,16 +57,12 @@ const Hero = () => {
         ))}
         <Link href="sign-in">
           <Button
-            variant="outlined"
+            variant="contained"
             sx={{ width: "220px", marginTop: "30px" }}
-            className="flex justify-between items-center"
+
             // onClick={handleSignIn}
           >
-            <div className="border-r-2 border-slate-400 pr-2">
-              <Image src="/logos/google-logo.svg" width={20} height={20} alt="google-sign-in" />
-            </div>
-            <span className="mx-auto ml-12">Log in</span>
-            <div className="mr-8"></div>
+            Log in
           </Button>
         </Link>
       </div>
