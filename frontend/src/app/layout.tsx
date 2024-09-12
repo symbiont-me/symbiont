@@ -37,8 +37,12 @@ if (typeof window !== "undefined") {
   SuperTokens.init({
     appInfo: {
       appName: "symbiont",
-      apiDomain: "http://127.0.0.1:8000", // todo should come from env
-      websiteDomain: "http://localhost:3003", // todo should come from env
+      apiDomain:
+        process.env.NEXT_PUBLIC_SUPERTOKENS_WEBSITE_DOMAIN ||
+        "http://127.0.0.1:8000",
+      websiteDomain:
+        process.env.NEXT_PUBLIC_SUPERTOKENS_API_DOMAIN ||
+        window.location.origin,
       apiBasePath: "/auth",
       websiteBasePath: "/auth",
     },
