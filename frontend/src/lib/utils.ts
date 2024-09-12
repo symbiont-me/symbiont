@@ -30,12 +30,3 @@ export function truncateFileName(fileName: string) {
     ? fileName.substring(0, 20) + "..." + fileName.slice(-10)
     : fileName;
 }
-
-// NOTE won't work because useContext is a hook and can't be used outside of a component
-// export async function getUserAuthToken() {
-//   const authContext = UserAuth();
-//   if (authContext?.user?.getIdToken) {
-//     const token = await authContext.user.getIdToken();
-//     return token;
-//   }
-// }

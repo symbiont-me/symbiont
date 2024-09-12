@@ -6,7 +6,7 @@ import { useState } from "react";
 import ToastMessage from "./ToastMessage";
 import { usePathname } from "next/navigation";
 import { StudyResource, StudyResourceCategory } from "@/types";
-import { uploadToFirebaseStorage } from "@/firebase/uploadToStorage";
+
 import { UserAuth } from "@/app/context/AuthContext";
 import { useEffect } from "react";
 import { useStudyContext } from "@/app/context/StudyContext";

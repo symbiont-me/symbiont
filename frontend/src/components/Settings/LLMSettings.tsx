@@ -22,7 +22,6 @@ import { UserAuth } from "@/app/context/AuthContext";
 import { SelectChangeEvent } from "@mui/material/Select";
 import axios from "axios";
 import Session from "supertokens-auth-react/recipe/session";
-import { auth } from "@/firebase/config";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
