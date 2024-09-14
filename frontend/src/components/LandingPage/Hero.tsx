@@ -23,16 +23,7 @@ const features = [
 const Hero = () => {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const authContext = UserAuth();
-  const handleSignIn = () => {
-    if (!authContext) {
-      return;
-    }
-    try {
-      authContext.googleSignIn();
-    } catch (error) {
-      console.error(error);
-    }
-  };
+
   useEffect(() => {
     const intervalId = setInterval(() => {
       setCurrentSlideIndex((prevSlideIndex) =>

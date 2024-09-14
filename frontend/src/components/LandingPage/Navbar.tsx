@@ -27,16 +27,6 @@ const navItems = [
 const Navbar = () => {
   const authContext = UserAuth();
 
-  const handleSignIn = () => {
-    if (!authContext) {
-      return;
-    }
-    try {
-      authContext.googleSignIn();
-    } catch (error) {
-      console.error(error);
-    }
-  };
   return (
     <>
       <div className="flex flex-row h-20 w-screen">
@@ -74,10 +64,12 @@ const Navbar = () => {
         </div>
 
         <div className="w-1/3 flex flex-row items-center justify-center">
-          <Button onClick={handleSignIn} variant="contained">
-            Sign Up
-            <LoginIcon sx={{ marginLeft: "4px" }} />
-          </Button>
+          <Link href="/sign-in">
+            <Button variant="contained">
+              Sign Up
+              <LoginIcon sx={{ marginLeft: "4px" }} />
+            </Button>
+          </Link>
         </div>
       </div>
       <Divider />

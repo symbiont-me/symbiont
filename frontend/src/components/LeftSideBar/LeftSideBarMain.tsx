@@ -99,12 +99,17 @@ const LeftSideBar = () => {
   }
 
   if (settingsOpen) {
-    return <LLMSettings settingsOpen={settingsOpen} handleSettingsClose={handleSettingsClose} />;
+    return (
+      <LLMSettings
+        settingsOpen={settingsOpen}
+        handleSettingsClose={handleSettingsClose}
+      />
+    );
   }
 
   function handleSignOut() {
-    if (authContext && authContext.googleSignOut) {
-      authContext.googleSignOut();
+    if (authContext && authContext.userSignOut) {
+      authContext.userSignOut();
     }
   }
 
@@ -116,7 +121,11 @@ const LeftSideBar = () => {
         <DrawerHeader>
           {drawerOpen ? (
             <IconButton onClick={handleDrawerClose}>
-              {theme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+              {theme.direction === "rtl" ? (
+                <ChevronRightIcon />
+              ) : (
+                <ChevronLeftIcon />
+              )}
             </IconButton>
           ) : (
             <IconButton
@@ -160,7 +169,10 @@ const LeftSideBar = () => {
                   >
                     {index % 2 === 0 ? <HomeIcon /> : <LibraryBooksIcon />}
                   </ListItemIcon>
-                  <ListItemText primary={text} sx={{ opacity: drawerOpen ? 1 : 0 }} />
+                  <ListItemText
+                    primary={text}
+                    sx={{ opacity: drawerOpen ? 1 : 0 }}
+                  />
                 </ListItemButton>
               </ListItem>
             </Link>
@@ -191,7 +203,12 @@ const LeftSideBar = () => {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <Image src="/logos/github.svg" width={25} height={25} alt="github" />
+                      <Image
+                        src="/logos/github.svg"
+                        width={25}
+                        height={25}
+                        alt="github"
+                      />
                     </a>
                   )}
                 </ListItemIcon>
@@ -227,8 +244,8 @@ const LeftSideBar = () => {
                   text === "Settings"
                     ? handleSettingsOpen
                     : text === "Logout"
-                      ? handleSignOut
-                      : () => {}
+                    ? handleSignOut
+                    : () => {}
                 }
               >
                 <ListItemIcon
@@ -248,7 +265,10 @@ const LeftSideBar = () => {
                   )}
                   {text === "Logout" && <LogoutIcon />}
                 </ListItemIcon>
-                <ListItemText primary={text} sx={{ opacity: drawerOpen ? 1 : 0 }} />
+                <ListItemText
+                  primary={text}
+                  sx={{ opacity: drawerOpen ? 1 : 0 }}
+                />
               </ListItemButton>
             </ListItem>
           ))}

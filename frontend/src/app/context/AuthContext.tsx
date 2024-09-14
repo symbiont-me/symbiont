@@ -13,8 +13,7 @@ import { signOut } from "supertokens-auth-react/recipe/session";
 import Session from "supertokens-auth-react/recipe/session";
 type AuthContextType = {
   user: User | null;
-  googleSignIn: () => void;
-  googleSignOut: () => void;
+  userSignOut: () => void;
   isAuthLoading: boolean;
   userToken: string | null;
 };
@@ -51,40 +50,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     fetchAccessToken();
   }, []);
 
-  // @note if access token is null should be an error
-  async function login() {
-    try {
-      let response = await axios.post(`http://127.0.0.1:8000/auth/signin`, {
-        formFields: [
-          { id: "email", value: "retailstash@gmail.com" },
-          { id: "password", value: "password_12345" },
-        ],
-        headers: {
-          Authorization: `Bearer ${userToken}`,
-        },
-      });
-
-      let responseData = response.data;
-      setUser(responseData.user);
-      setIsLoggedIn(true);
-    } catch (error) {
-      console.error("Error during Google Sign-In:", error);
-    }
-  }
-
-  async function googleSignIn() {
-    await login();
-    try {
-      let sessionResponse = await axios.get(
-        "http://127.0.0.1:8000/session-details"
-      );
-      console.log("Session details:", sessionResponse.data);
-    } catch (error) {
-      console.error("Error fetching session details:", error);
-    }
-  }
-
-  async function googleSignOut() {
+  async function userSignOut() {
     await signOut();
     setIsLoggedIn(false);
     window.location.href = "/";
@@ -98,7 +64,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, googleSignIn, googleSignOut, isAuthLoading, userToken }}
+      value={{ user, userSignOut, isAuthLoading, userToken }}
     >
       {children}
     </AuthContext.Provider>
