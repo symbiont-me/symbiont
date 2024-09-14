@@ -1,11 +1,11 @@
-version: "3.8"
+version: '3.9'
+
 services:
-  nextjs-app:
+  nextapp:
+    container_name: nextapp
+    image: nextapp
     build: .
     ports:
       - "3000:3000"
-    volumes:
-      - ./src:/app/src
-    env_file:
-      - .env.${ENV}
-    command: sh -c "pnpm install && pnpm dev"
+    environment:
+      - NEXT_PUBLIC_BASE_URL=http://127.0.0.1:8000
