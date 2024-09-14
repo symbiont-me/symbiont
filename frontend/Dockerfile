@@ -1,24 +1,52 @@
-# Stage 1: Build the application
-FROM node:alpine AS builder
+FROM node:18-alpine AS base
+
+# 1. Install dependencies only when needed
+FROM base AS deps
+# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
+RUN apk add --no-cache libc6-compat
 
 WORKDIR /app
 
-COPY package.json pnpm-lock.yaml ./
+# Install pnpm
+RUN npm install -g pnpm
 
-RUN npm install -g pnpm && pnpm install
+# Copy package.json only (do not copy lock file)
+COPY package.json ./
 
+# Install dependencies without using a lock file
+RUN pnpm install --shamefully-hoist --no-lockfile
+
+# 2. Rebuild the source code only when needed
+FROM base AS builder
+WORKDIR /app
+
+# Reinstall pnpm in the builder stage
+RUN npm install -g pnpm
+
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+RUN pnpm run build
 
-# Stage 2: Create a smaller production image
-FROM alpine:3.14
-
-# Install Node.js
-RUN apk add --no-cache nodejs npm
-
+# 3. Production image, copy all the files and run next
+FROM base AS runner
 WORKDIR /app
 
-COPY --from=builder /app .
+ENV NODE_ENV=production
+
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S nextjs -u 1001
+
+COPY --from=builder /app/public ./public
+
+# Automatically leverage output traces to reduce image size
+# https://nextjs.org/docs/advanced-features/output-file-tracing
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+USER nextjs
 
 EXPOSE 3000
 
-CMD ["npm", "run", "dev"]
+ENV PORT=3000
+
+CMD ["node", "server.js"]
