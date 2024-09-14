@@ -68,13 +68,9 @@ const jokes = [
   "'The four most beautiful words in our common language: I told you so.'",
 ];
 
-export const StudyContext = createContext<StudyContextType | undefined>(
-  undefined
-);
+export const StudyContext = createContext<StudyContextType | undefined>(undefined);
 
-export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
   const [allStudies, setAllStudies] = useState<Study[]>([]);
   // TODO update name to currentStudy
@@ -104,8 +100,7 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
   // Set studies
   const fetchStudiesQuery = useQuery({
     queryKey: ["get-studies", userToken],
-    queryFn: () =>
-      userToken ? fetchUserStudies(userToken) : Promise.reject("No token"),
+    queryFn: () => (userToken ? fetchUserStudies(userToken) : Promise.reject("No token")),
     enabled: !!userToken, // This will ensure the query does not run until the token is available
   });
 
@@ -150,9 +145,7 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
   const fetchCurrentStudyQuery = useQuery({
     queryKey: ["get-study", userToken, studyId],
     queryFn: () =>
-      userToken && studyId
-        ? fetchCurrentStudy(studyId)
-        : Promise.reject("No token or studyId"),
+      userToken && studyId ? fetchCurrentStudy(studyId) : Promise.reject("No token or studyId"),
     enabled: !!userToken && !!studyId,
   });
 
@@ -163,32 +156,22 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
       setAllStudies(fetchStudiesQuery.data.studies);
     }
     if (fetchCurrentStudyQuery.data) {
-      console.log(
-        "Setting current study...",
-        fetchCurrentStudyQuery.data.studies
-      );
+      console.log("Setting current study...", fetchCurrentStudyQuery.data.studies);
       setStudy(fetchCurrentStudyQuery.data.studies[0]); // @note all study routes return an array
       setIsStudyLoading(false);
     }
   }, [fetchStudiesQuery.data, fetchCurrentStudyQuery.data, studyId]);
 
-  const createStudy = async (
-    studyName: string,
-    description: string,
-    image: string
-  ) => {
+  const createStudy = async (studyName: string, description: string, image: string) => {
     /*  @note this is a bit of unnecessary optimization
      *   we are updating the UI immediately
      *   the backend will update the UI again after the study is created or if there is an error
      */
     function createAlphaNumericId() {
-      const alphaNumeric =
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      const alphaNumeric = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
       let result = "";
       for (let i = 0; i < 6; i++) {
-        result += alphaNumeric.charAt(
-          Math.floor(Math.random() * alphaNumeric.length)
-        );
+        result += alphaNumeric.charAt(Math.floor(Math.random() * alphaNumeric.length));
       }
       return result;
     }
@@ -321,7 +304,7 @@ export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({
       setStudy({
         ...study,
         resources: study.resources?.filter(
-          (resource) => resource.identifier !== resourceIdentifier
+          (resource) => resource.identifier !== resourceIdentifier,
         ),
       });
     }

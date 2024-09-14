@@ -14,7 +14,7 @@ function useUserToken() {
           setUserToken(accessToken);
         }
       } catch (err) {
-        setError(err);
+        setError(err as Error);
       } finally {
         setLoading(false);
       }

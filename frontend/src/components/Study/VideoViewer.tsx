@@ -5,8 +5,7 @@ import { useStudyContext } from "@/app/context/StudyContext";
 import Button from "@mui/material/Button";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-
-// ... existing code ...
+import { StudyResource } from "@/types";
 
 const VideoViewer = () => {
   const currentStudyContext = useStudyContext();
@@ -14,7 +13,7 @@ const VideoViewer = () => {
   const [currentVideoId, setCurrentVideoId] = useState<string | undefined>(
     undefined
   );
-  const [videos, setVideos] = useState<Resource[] | null>(null);
+  const [videos, setVideos] = useState<StudyResource[] | null>(null);
   const [videoIndex, setVideoIndex] = useState<number>(0);
 
   function filterVideos() {
@@ -24,7 +23,7 @@ const VideoViewer = () => {
         (resource) => resource.category === "video"
       );
 
-      setVideos(filteredVideos as Resource[]);
+      setVideos(filteredVideos as StudyResource[]);
     }
   }
 

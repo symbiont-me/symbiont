@@ -5,12 +5,7 @@ import { useState, useEffect } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
 import Session from "supertokens-auth-react/recipe/session";
@@ -88,8 +83,7 @@ export default function AuthForm() {
             {isSignUp ? "Sign Up to Symbiont" : "Sign In to Symbiont"}
           </Typography>
           <Typography variant="body2">
-            Enter your details below to{" "}
-            {isSignUp ? "create your account" : "access your account"}.
+            Enter your details below to {isSignUp ? "create your account" : "access your account"}.
           </Typography>
         </CardHeader>
         <CardContent>
@@ -134,26 +128,16 @@ export default function AuthForm() {
               {isSignUp ? "Sign Up" : "Sign In"}
             </Button>
             <Link href="/" passHref>
-              <Button
-                variant="contained"
-                fullWidth
-                style={{ marginTop: "16px" }}
-              >
+              <Button variant="contained" fullWidth style={{ marginTop: "16px" }}>
                 Back
               </Button>
             </Link>
           </form>
         </CardContent>
         <CardFooter>
-          <Button
-            variant="link"
-            onClick={() => setIsSignUp(!isSignUp)}
-            className="w-full"
-          >
+          <Button variant="outlined" onClick={() => setIsSignUp(!isSignUp)} className="w-full">
             <Typography variant="body2">
-              {isSignUp
-                ? "Already have an account? Sign In"
-                : "Don't have an account? Sign Up"}
+              {isSignUp ? "Already have an account? Sign In" : "Don't have an account? Sign Up"}
             </Typography>
           </Button>
         </CardFooter>

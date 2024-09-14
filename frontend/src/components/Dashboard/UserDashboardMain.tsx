@@ -74,7 +74,11 @@ const UserDashboard = () => {
         >
           <div className="flex flex-row items-center overflow-x-scroll max-w-full">
             {studies.map((study) => (
-              <div className="m-2" key={study._id} sx={{ minWidth: "250px" }}>
+              <div
+                className="m-2"
+                key={study._id}
+                style={{ minWidth: "250px" }}
+              >
                 <StudyCard study={study} />
               </div>
             ))}
