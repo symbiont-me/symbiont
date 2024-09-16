@@ -2,10 +2,10 @@ version: '3.9'
 
 services:
   nextapp:
-    container_name: nextapp
-    image: nextapp
+    container_name: symbiont-frontend
+    image: symbiont-frontend
     build: .
     ports:
-      - "3000:3000"
+      - "4000:4000"
     environment:
       - NEXT_PUBLIC_BASE_URL=http://127.0.0.1:8000
