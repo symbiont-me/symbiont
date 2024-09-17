@@ -1,6 +1,7 @@
 # Symbiont - An Open Source Self-hosted RAG App 🌐
 
 Welcome to Symbiont, the premier RAG (Retrieval Argument Generation)-based application designed for secure, self-hosted deployment on personal or organizational servers. Built with privacy and user control in mind, Symbiont ensures that sensitive data is managed securely without requiring transmission to third-party servers, except when interacting with LLM (Large Language Model) providers such as OpenAI or Anthropic.
+Symbiont is a free and Open Source alternative to https://jenni.ai/ and https://paperpal.com/ (we are a few features behind).
 
 🔗 **Explore the Backend**: For more about the backed of the Symbiont app, please visit: [Symbiont Backed Repo](https://github.com/symbiont-me/symbiont-backend)
 
@@ -31,9 +32,7 @@ Works with various Large Language Models from industry leaders such as Anthropic
 
 ## Branches 🌿
 
-- **`main`**: Stable branch, uses hosted services like Pinecone for vectors and Firebase for database and storage.
-- **`dev`**: Includes the latest features, fully functional with a self-hosted MongoDB for enhanced privacy, still uses Pinecone for vectors.
-- **`vector-db`**: Focuses on integrating various vector databases, both self-hosted and cloud-based, for ultimate privacy and control.
+- **`main`**: Stable branch, uses Qdrant and MongoDB. Both can be self-hosted for maximum privacy
 
 ## Setup
 
