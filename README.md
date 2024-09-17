@@ -3,8 +3,6 @@
 Welcome to Symbiont, the premier RAG (Retrieval Argument Generation)-based application designed for secure, self-hosted deployment on personal or organizational servers. Built with privacy and user control in mind, Symbiont ensures that sensitive data is managed securely without requiring transmission to third-party servers, except when interacting with LLM (Large Language Model) providers such as OpenAI or Anthropic.
 Symbiont is a free and Open Source alternative to https://jenni.ai/ and https://paperpal.com/ (we are a few features behind).
 
-🔗 **Explore the Backend**: For more about the backed of the Symbiont app, please visit: [Symbiont Backed Repo](https://github.com/symbiont-me/symbiont-backend)
-
 ## Use Cases 🛠️
 
 - **Academic Research**: Secure analysis of sensitive data.
