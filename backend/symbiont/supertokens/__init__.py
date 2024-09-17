@@ -37,7 +37,9 @@ def override_emailpassword_functions(
 ) -> RecipeInterface:
     original_sign_up = original_implementation.sign_up
 
-    async def sign_up(email: str, password: str, tenant_id: str, user_context: Dict[str, Any]):
+    async def sign_up(
+        email: str, password: str, tenant_id: str, user_context: Dict[str, Any]
+    ):
         result = await original_sign_up(email, password, tenant_id, user_context)
 
         if isinstance(result, SignUpOkResult):
@@ -83,9 +85,9 @@ def init_supertokens():
     else:
         api_domain = "http://127.0.0.1:8000"
 
-        website_domain = "http://localhost:3000"
-        if not re.match(r"^http://localhost:(300[0-9]|3010)$", website_domain):
-            raise ValueError("Port number must be between 3001 and 3010")
+        website_domain = "http://localhost:4000"
+        if not re.match(r"^http://localhost:(400[0-9]|4010)$", website_domain):
+            raise ValueError("Port number must be between 4001 and 4010")
         connection_uri = "localhost:3567"
 
     init(
@@ -107,7 +109,9 @@ def init_supertokens():
                 cookie_same_site="lax",
             ),
             emailpassword.init(
-                override=emailpassword.InputOverrideConfig(functions=override_emailpassword_functions),
+                override=emailpassword.InputOverrideConfig(
+                    functions=override_emailpassword_functions
+                ),
             ),
         ],
         mode="wsgi",

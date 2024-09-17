@@ -55,9 +55,9 @@ app.include_router(llm_settings_router.router)
 FASTAPI_ENV = os.getenv("FASTAPI_ENV", "production")
 origins = None
 if FASTAPI_ENV == "development":
-    origins = [f"http://localhost:300{i}" for i in range(11)]
+    origins = [f"http://localhost:400{i}" for i in range(11)]
 else:
-    origins = [os.getenv("FRONTEND_URL", "http://localhost:3000")]
+    origins = [os.getenv("FRONTEND_URL", "http://localhost:4000")]
 
 app.add_middleware(
     CORSMiddleware,
