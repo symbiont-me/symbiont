@@ -64,5 +64,8 @@ class RerankerService:
             )
             for i in reranked_indices
         ]
-        logger.critical(f"Reranked text: {citations}")
-        return (reranked_text, citations)
+        citations_dict = [c.__dict__ for c in citations]
+
+        logger.critical(citations_dict)
+
+        return (reranked_text, citations_dict)
