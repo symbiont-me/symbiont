@@ -23,7 +23,7 @@ class VectorStoreSettings:
             vector_store_dimension=os.getenv("VECTOR_STORE_DIMENSION", "768"),
             vector_store_distance=os.getenv("VECTOR_STORE_DISTANCE", "DOT"),
             vector_store_token=os.getenv("VECTOR_STORE_TOKEN"),
-            embeddings_model=os.getenv("EMBEDDINGS_MODEL", ""),
+            embeddings_model=os.getenv("EMBEDDINGS_MODEL", "bge-base-en"),
         )
 
 
