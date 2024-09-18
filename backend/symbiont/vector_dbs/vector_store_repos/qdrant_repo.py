@@ -61,7 +61,7 @@ class QdrantRepository(BaseVectorRepository):
         if self.client.collection_exists(collection_name=namespace) is False:
             self.create_collection(
                 collection_name=namespace,
-                vector_size=1536,  # TODO use vector_store_settings.vector_store_dimension
+                vector_size=int(self.dimension),  # TODO use vector_store_settings.vector_store_dimension
                 distance=Distance.DOT,
             )
         #
