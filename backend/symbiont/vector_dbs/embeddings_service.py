@@ -5,6 +5,7 @@ from langchain_openai import OpenAIEmbeddings
 from langchain_community.embeddings.huggingface import HuggingFaceBgeEmbeddings
 import os
 from langchain_voyageai import VoyageAIEmbeddings
+from pydantic import config
 from symbiont.models import EmbeddingModels
 from .. import logger
 
@@ -34,7 +35,7 @@ class EmbeddingsService:
             raise ValueError(f"Model name {model_name} is not supported")
         return OpenAIEmbeddings(
             model=EmbeddingModels.OPENAI_TEXT_EMBEDDING_3_SMALL,
-            dimensions=1536,
+            dimensions=self.configs.vector_store_dimension,
             api_key=openai_api_key,
         )
 
