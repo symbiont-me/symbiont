@@ -17,11 +17,11 @@ from .models import ConfigsModel
 class VectorStoreSettings:
     def __init__(self):
         self.configs = ConfigsModel(
-            vector_store=os.getenv("VECTOR_STORE", ""),
-            vector_store_url=os.getenv("VECTOR_STORE_URL", ""),
-            vector_store_port=os.getenv("VECTOR_STORE_PORT", ""),
-            vector_store_dimension=os.getenv("VECTOR_STORE_DIMENSION", "1536"),
-            vector_store_distance=os.getenv("VECTOR_STORE_DISTANCE", ""),
+            vector_store=os.getenv("VECTOR_STORE", "qdrant"),
+            vector_store_url=os.getenv("VECTOR_STORE_URL", "http://localhost"),
+            vector_store_port=os.getenv("VECTOR_STORE_PORT", "6333"),
+            vector_store_dimension=os.getenv("VECTOR_STORE_DIMENSION", "768"),
+            vector_store_distance=os.getenv("VECTOR_STORE_DISTANCE", "DOT"),
             vector_store_token=os.getenv("VECTOR_STORE_TOKEN"),
             embeddings_model=os.getenv("EMBEDDINGS_MODEL", "bge-base-en"),
         )
