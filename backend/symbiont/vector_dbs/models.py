@@ -5,11 +5,11 @@ from pydantic import Field
 
 
 class ConfigsModel(BaseModel):
-    vector_store: str
-    vector_store_url: str
-    vector_store_port: str
-    vector_store_dimension: str = Field(default="1536")
-    vector_store_distance: str
+    vector_store: str = Field(default="qdrant")
+    vector_store_url: str = Field(default="http://localhost")
+    vector_store_port: str = Field(default="6333")
+    vector_store_dimension: str = Field(default="768")
+    vector_store_distance: str = Field(default="DOT")
     vector_store_token: Optional[str] = None
     embeddings_model: str = Field(default="bge-base-en")
 
