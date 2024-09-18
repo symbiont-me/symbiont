@@ -5,6 +5,7 @@ from langchain.retrievers.document_compressors import CrossEncoderReranker
 from langchain_community.cross_encoders import HuggingFaceCrossEncoder
 from langchain.schema import Document
 from typing import List, Dict, Union, Tuple
+from symbiont.models import CohereTextModels
 
 
 class Citation:
@@ -44,7 +45,7 @@ class RerankerService:
                 query=query,
                 documents=context,
                 top_n=3,
-                model="cohere-rerank-v2",  # TODO the model name should be in a config
+                model=CohereTextModels.COHERE_RERANK_V2,
             )
             reranked_indices = [r.index for r in reranked_context.results]
             reranked_text = "".join([r.document.get("text", "") for r in reranked_context.results])
@@ -65,7 +66,5 @@ class RerankerService:
             for i in reranked_indices
         ]
         citations_dict = [c.__dict__ for c in citations]
-
-        logger.critical(citations_dict)
 
         return (reranked_text, citations_dict)
