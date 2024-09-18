@@ -72,7 +72,5 @@ class EmbeddingsService:
         nltk_text_splitter = NLTKTextSplitter()
         text_splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=0)
         embeddings_model = self.init_embeddings_model()
-        logger.info(
-            f"Embeddings model: {embeddings_model.model}"
-        )  # TODO .model will probably give errors for huggingface
+        logger.info(f"Embeddings model: {embeddings_model}")  # TODO .model will probably give errors for huggingface
         return embeddings_model, text_splitter, nltk_text_splitter
