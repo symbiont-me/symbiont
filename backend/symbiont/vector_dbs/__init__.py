@@ -20,10 +20,10 @@ class VectorStoreSettings:
             vector_store=os.getenv("VECTOR_STORE", ""),
             vector_store_url=os.getenv("VECTOR_STORE_URL", ""),
             vector_store_port=os.getenv("VECTOR_STORE_PORT", ""),
-            vector_store_dimension=os.getenv("VECTOR_STORE_DIMENSION", "1536"),
+            vector_store_dimension=os.getenv("VECTOR_STORE_DIMENSION", ""),
             vector_store_distance=os.getenv("VECTOR_STORE_DISTANCE", ""),
             vector_store_token=os.getenv("VECTOR_STORE_TOKEN"),
-            embeddings_model=os.getenv("EMBEDDINGS_MODEL", "bge-base-en"),
+            embeddings_model=os.getenv("EMBEDDINGS_MODEL", ""),
         )
 
 
