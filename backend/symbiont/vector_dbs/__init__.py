@@ -37,5 +37,5 @@ embeddings_model, text_splitter, nltk_text_splitter = (
     embeddings_service.nltk_text_splitter,
 )
 
-reranker_service = RerankerService("cohere")
-reranker = reranker_service.reranker
+reranker_service = RerankerService(reranker_name="huggingface")
+reranker = reranker_service
