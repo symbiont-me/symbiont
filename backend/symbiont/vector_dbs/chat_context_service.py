@@ -191,18 +191,6 @@ class ChatContextService(VectorStoreContext):
     def delete_context(self) -> None:
         self.vector_store_repo.delete_vectors(self.resource_identifier)
 
-    # TODO create Pydantic type for the context
-    def rerank_context(
-        self, context: List[Dict[str, str]], query: str
-    ) -> Union[Tuple[str, List[Citation]], Tuple[None, None]]:
-        # fixes: cohere.error.CohereAPIError: invalid request: list of documents must not be empty
-        if not context:
-            return None, None
-
-        reranked_text, citations = reranker.rerank_context(context=context, query=query)
-
-        return (reranked_text, citations)
-
     # TODO document this
     # TODO query does not need to be passed as an arg
     # TODO test and remove query from args
@@ -221,9 +209,9 @@ class ChatContextService(VectorStoreContext):
             vectors_metadata_dicts = vectors_metadata_from_db
             # TODO fix this type error if possible or ignore
             # @dev important! this is working as is, so make sure it works if the type error is fixed
-            reranked_context = self.rerank_context(vectors_metadata_dicts, query)
+            reranked_text, citations = reranker.rerank_context(context=vectors_metadata_dicts, query=query)  # type: ignore
 
-            return reranked_context
+            return (reranked_text, citations)  # type: ignore
         except Exception as e:
             logger.error(f"Error in get_single_chat_context: {e}")
             return None
