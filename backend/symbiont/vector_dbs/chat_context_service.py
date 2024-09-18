@@ -31,7 +31,7 @@ def create_vec_refs_in_db(
             "text": doc.page_content,
         }
 
-    logger.debug(f"Creating Vectors in DB: {vec_data}")
+    logger.debug("Creating Vectors in DB")
 
     # Create update data for individual fields within vectors.{file_identifier}
     update_data = {f"vectors.{file_identifier}.{id}": data for id, data in vec_data.items()}
@@ -167,7 +167,7 @@ class ChatContextService(VectorStoreContext):
             for split_text in split_texts
         ]
         ids = self.vector_store_repo.upsert_vectors(self.resource_identifier, docs)
-        logger.debug(ids)
+
         create_vec_refs_in_db(ids, self.resource_identifier, docs, self.user_id, self.study_id)
 
     # TODO make this private
@@ -191,36 +191,6 @@ class ChatContextService(VectorStoreContext):
     def delete_context(self) -> None:
         self.vector_store_repo.delete_vectors(self.resource_identifier)
 
-    # TODO create Pydantic type for the context
-    def rerank_context(
-        self, context: List[Dict[str, str]], query: str
-    ) -> Union[Tuple[str, List[Citation]], Tuple[None, None]]:
-        # fixes: cohere.error.CohereAPIError: invalid request: list of documents must not be empty
-        if not context:
-            return None, None
-
-        reranked_context = reranker.rerank(
-            query=query,
-            documents=context,
-            top_n=3,
-            model=CohereTextModels.COHERE_RERANK_V2,  # TODO the model name should be in a config
-        )
-        reranked_indices = [r.index for r in reranked_context.results]
-        reranked_text = ""
-        for text in reranked_context.results:
-            reranked_text += text.document.get("text", "")
-
-        # Ensure all required fields are present in the context dictionaries
-        citations = [
-            Citation(
-                text=context[i].get("text", ""),
-                source=context[i].get("source", ""),
-                page=int(context[i].get("page", 0)),  # if not present, default to 0
-            )
-            for i in reranked_indices
-        ]
-        return (reranked_text, citations)
-
     # TODO document this
     # TODO query does not need to be passed as an arg
     # TODO test and remove query from args
@@ -232,16 +202,16 @@ class ChatContextService(VectorStoreContext):
             logger.debug(f"Found {len(ids)} results: {ids}")
 
             vectors_metadata_from_db = get_vec_refs_from_db(self.study_id, self.resource_identifier, ids)
-            logger.debug(f"Found {len(vectors_metadata_from_db)} vectors from db: {vectors_metadata_from_db}")
+            logger.debug(f"Found {len(vectors_metadata_from_db)}")
 
             logger.debug("Reranking")
             # No need to call dict() on each item
             vectors_metadata_dicts = vectors_metadata_from_db
             # TODO fix this type error if possible or ignore
             # @dev important! this is working as is, so make sure it works if the type error is fixed
-            reranked_context = self.rerank_context(vectors_metadata_dicts, query)
+            reranked_text, citations = reranker.rerank_context(context=vectors_metadata_dicts, query=query)  # type: ignore
 
-            return reranked_context
+            return (reranked_text, citations)  # type: ignore
         except Exception as e:
             logger.error(f"Error in get_single_chat_context: {e}")
             return None

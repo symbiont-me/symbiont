@@ -23,7 +23,7 @@ class VectorStoreSettings:
             vector_store_dimension=os.getenv("VECTOR_STORE_DIMENSION", "768"),
             vector_store_distance=os.getenv("VECTOR_STORE_DISTANCE", "DOT"),
             vector_store_token=os.getenv("VECTOR_STORE_TOKEN"),
-            embeddings_model=os.getenv("EMBEDDINGS_MODEL", "bge-base-en"),
+            embeddings_model=os.getenv("EMBEDDINGS_MODEL", ""),
         )
 
 
@@ -37,5 +37,4 @@ embeddings_model, text_splitter, nltk_text_splitter = (
     embeddings_service.nltk_text_splitter,
 )
 
-reranker_service = RerankerService("cohere")
-reranker = reranker_service.reranker
+reranker = RerankerService(os.getenv("RERANKER", "huggingface"))
