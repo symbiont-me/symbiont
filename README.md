@@ -39,9 +39,6 @@ Works with various Large Language Models from industry leaders such as Anthropic
 git clone git@github.com:symbiont-me/symbiont.git
 cd symbiont
 
-# create local data dir
-mkdir -p ./data/{mongodb,qdrant_storage}
-
 # run symbiont containers
 docker-compose up -d
 
