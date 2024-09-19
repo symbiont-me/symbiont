@@ -10,13 +10,12 @@ services:
 
   mongodb:
     container_name: "mongodb"
-    image: mongodb/mongodb-community-server:${MONGODB_VERSION:-latest}
+    image: mongodb/mongodb-community-server:latest
     ports:
       - 27017:27017
     volumes:
       - ./data/mongodb:/data/db
     environment:
-      - MONGODB_VERSION=${MONGODB_VERSION}
       - MONGO_INITDB_DATABASE=symbiont-local-mongodb
     depends_on:
       data-cleanup:
