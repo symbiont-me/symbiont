@@ -41,13 +41,20 @@ services:
 
   backend:
     container_name: "symbiont-backend"
-    image: symbiont-backend:0.2.0
+    image: symbiont-backend:0.1.0
     build:
       context: ./backend
       dockerfile: Dockerfile
     ports:
       - 8080:8080
     environment:
+      - FASTAPI_ENV=development
+      - VECTOR_STORE=qdrant
+      - VECTOR_STORE_URL=http://qdrant
+      - VECTOR_STORE_PORT=6333
+      - VECTOR_STORE_DIMENSION=768
+      - VECTOR_STORE_DISTANCE=DOT
+      - VECTOR_STORE_TOKEN=
       - MONGO_URI=mongodb://mongodb
       - MONGO_PORT=27017
       - MONGO_DB_NAME=symbiont-local-mongodb
@@ -72,7 +79,10 @@ services:
     ports:
       - 4000:4000
     environment:
-      - NEXT_PUBLIC_BASE_URL=http://backend:8080
+      - NEXT_PUBLIC_BASE_URL=http://symbiont-backend:8080
+      - NEXT_PUBLIC_SUPERTOKENS_WEBSITE_DOMAIN=http://supertokens:8000
     depends_on:
       backend:
+        condition: service_started
+      supertokens:
         condition: service_started
