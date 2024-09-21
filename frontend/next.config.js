@@ -4,7 +4,8 @@ const nextConfig = {
     domains: ["images.unsplash.com"],
   },
   env: {
-    NEXT_PUBLIC_BASE_URL: 'http://127.0.0.1:8000'
+    NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
+    NEXT_PUBLIC_SUPERTOKENS_WEBSITE_DOMAIN: process.env.NEXT_PUBLIC_SUPERTOKENS_WEBSITE_DOMAIN,
   },
   output: "standalone",
 };
