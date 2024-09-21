@@ -5,7 +5,8 @@ const nextConfig = {
   },
   env: {
     NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
-    NEXT_PUBLIC_SUPERTOKENS_WEBSITE_DOMAIN: process.env.NEXT_PUBLIC_SUPERTOKENS_WEBSITE_DOMAIN,
+    NEXT_PUBLIC_SUPERTOKENS_API_ENDPOINT:
+      process.env.NEXT_PUBLIC_SUPERTOKENS_API_ENDPOINT,
   },
   output: "standalone",
 };
