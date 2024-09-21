@@ -34,20 +34,28 @@ const open_sans = Open_Sans({ subsets: ["latin"], weight: "400" });
 // };
 
 if (typeof window !== "undefined") {
-  SuperTokens.init({
-    appInfo: {
-      appName: "symbiont",
-      apiDomain:
-        process.env.NEXT_PUBLIC_SUPERTOKENS_WEBSITE_DOMAIN ||
-        "http://127.0.0.1:8000",
-      websiteDomain:
-        process.env.NEXT_PUBLIC_SUPERTOKENS_API_DOMAIN ||
-        window.location.origin,
-      apiBasePath: "/auth",
-      websiteBasePath: "/auth",
-    },
-    recipeList: [EmailPassword.init(), Session.init()],
-  });
+  const apiDomain = process.env.NEXT_PUBLIC_SUPERTOKENS_API_ENDPOINT;
+
+  if (!apiDomain) {
+    console.error(
+      "Environment variable NEXT_PUBLIC_SUPERTOKENS_WEBSITE_DOMAIN is not defined"
+    );
+    console.log(apiDomain);
+  } else {
+    SuperTokens.init({
+      appInfo: {
+        appName: "symbiont",
+        apiDomain: apiDomain,
+        websiteDomain:
+          window.location.origin ||
+          process.env.NEXT_PUBLIC_SUPERTOKENS_WEBSITE_DOMAIN ||
+          "",
+        apiBasePath: "/auth",
+        websiteBasePath: "/auth",
+      },
+      recipeList: [EmailPassword.init(), Session.init()],
+    });
+  }
 }
 export default function RootLayout({
   children,

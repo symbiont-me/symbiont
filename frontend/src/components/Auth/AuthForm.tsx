@@ -58,8 +58,9 @@ export default function AuthForm() {
     const endpoint = isSignUp ? "signup" : "signin";
     try {
       const supertokensAuthUrl =
-        process.env.NEXT_PUBLIC_SUPERTOKENS_WEBSITE_DOMAIN ||
-        "http://127.0.0.1:8000";
+        process.env.NEXT_PUBLIC_SUPERTOKENS_API_ENDPOINT;
+
+      console.log("Auth URL:", supertokensAuthUrl);
       const response = await axios.post(
         `${supertokensAuthUrl}/auth/${endpoint}`,
         {
