@@ -34,7 +34,88 @@ Works with various Large Language Models from industry leaders such as Anthropic
 
 ## Setup
 
-TBD
+Follow the steps below to set up and run the Symbiont app.
+
+## Step 1: Clone the repo and Navigate to the Backend Folder
+
+Open your terminal and navigate to the folder where the backend of the application is located:
+
+```bash
+cd backend
+```
+
+## Step 2: Set Environment Variables
+
+Create a file named `.env.development` in the backend folder and set the following environment variables:
+
+```bash
+echo "FASTAPI_ENV=development" >> .env.development
+echo "VECTOR_STORE=qdrant" >> .env.development
+echo "VECTOR_STORE_URL=http://localhost" >> .env.development
+echo "VECTOR_STORE_PORT=6333" >> .env.development
+echo "VECTOR_STORE_DIMENSION=768" >> .env.development # should correspond to the model's output dimension
+echo "VECTOR_STORE_DISTANCE=DOT" >> .env.development # search metric
+echo "VECTOR_STORE_TOKEN=" >> .env.development # <only required for cloud instance>
+
+echo "MONGO_URI=mongodb://localhost" >> .env.development
+echo "MONGO_PORT=27017" >> .env.development
+echo "MONGO_DB_NAME=symbiont-local-mongodb" >> .env.development
+
+echo "RERANKER=huggingface" >> .env.development
+echo "RERANKER_API_KEY=" >> .env.development # only if cohere model
+echo "EMBEDDINGS_MODEL=BAAI/bge-base-en" >> .env.development
+echo "EMBEDDINGS_MODEL_API_KEY=" >> .env.development # only if voyage or openai model
+```
+
+## Step 3: Start Containers
+
+Run the following script to start the necessary containers (supertokens, MongoDB, and Qdrant):
+
+```bash
+./start_containers.sh
+```
+
+## Step 4: Start the Backend Server
+
+Use the following command to start the backend server:
+
+```bash
+poetry run uvicorn symbiont.main:app --reload
+```
+
+## Step 5: Navigate to the Frontend Folder
+
+Open another terminal window and navigate to the frontend folder:
+
+```bash
+cd frontend
+```
+
+## Step 6: Set the Frontend Environment Variable
+
+Set the required environment variable for the frontend:
+
+```bash
+echo "NEXT_PUBLIC_API_URL=http://127.0.0.1:8000" >> .env
+```
+
+## Step 7: Run the Docker Compose
+
+Run the following command to start the frontend application using Docker:
+
+```bash
+docker-compose up
+```
+
+## Step 8: Access the Application
+
+You can now access the application in your web browser at:
+
+```
+http://localhost:4000
+```
+
+Enjoy using the Symbiont application!
 
 ---
 
