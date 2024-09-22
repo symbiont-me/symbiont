@@ -1,0 +1,88 @@
+name: symbiont
+services:
+  data-cleanup:
+    container_name: "data-cleanup"
+    image: "alpine:3.19.0"
+    command: sh -c "echo 'Cleaning up data...' && rm -rf /{mongodb,qdrant_storage} && echo 'Cleanup complete'"
+    volumes:  
+      - ./data/mongodb:/mongodb
+      - ./data/qdrant_storage:/qdrant_storage
+
+  mongodb:
+    container_name: "mongodb"
+    image: mongodb/mongodb-community-server:latest
+    ports:
+      - 27017:27017
+    volumes:
+      - ./data/mongodb:/data/db
+    environment:
+      - MONGO_INITDB_DATABASE=symbiont-local-mongodb
+    depends_on:
+      data-cleanup:
+        condition: service_completed_successfully
+
+  qdrant:
+    container_name: "qdrant"
+    image: qdrant/qdrant
+    ports:
+      - 6333:6333
+      - 6334:6334
+    volumes:
+      - ./data/qdrant_storage:/qdrant/storage
+    depends_on:
+      data-cleanup:
+        condition: service_completed_successfully
+
+  supertokens:
+    container_name: "supertokens"
+    image: registry.supertokens.io/supertokens/supertokens-mysql
+    ports:
+      - 3567:3567
+
+  backend:
+    container_name: "symbiont-backend"
+    image: symbiont-backend:0.1.0
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    environment:
+      - FASTAPI_ENV=development
+      - VECTOR_STORE=qdrant
+      - VECTOR_STORE_URL=http://qdrant
+      - VECTOR_STORE_PORT=6333
+      - VECTOR_STORE_DIMENSION=768
+      - VECTOR_STORE_DISTANCE=DOT
+      - VECTOR_STORE_TOKEN=
+      - MONGO_URI=mongodb://mongodb
+      - MONGO_PORT=27017
+      - MONGO_DB_NAME=symbiont-local-mongodb
+      - RERANKER=huggingface
+      - RERANKER_API_KEY=
+      - EMBEDDINGS_MODEL=BAAI/bge-base-en
+      - EMBEDDINGS_MODEL_API_KEY=
+    depends_on:
+      mongodb:
+        condition: service_started
+      qdrant:
+        condition: service_started
+      supertokens:
+        condition: service_started
+
+  frontend:
+    container_name: "symbiont-frontend"
+    image: symbiont-frontend:0.1.0
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - 4000:4000
+    environment:
+      - NEXT_PUBLIC_BASE_URL=http://127.0.0.1:8080
+      - NEXT_PUBLIC_SUPERTOKENS_API_ENDPOINT=http://127.0.0.1:8080
+    depends_on:
+      backend:
+        condition: service_started
+      supertokens:
+        condition: service_started
