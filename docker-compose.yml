@@ -79,8 +79,8 @@ services:
     ports:
       - 4000:4000
     environment:
-      - NEXT_PUBLIC_BASE_URL=http://symbiont-backend:8080
-      - NEXT_PUBLIC_SUPERTOKENS_WEBSITE_DOMAIN=http://supertokens:8000
+      - NEXT_PUBLIC_BASE_URL=http://127.0.0.1:8080
+      - NEXT_PUBLIC_SUPERTOKENS_API_ENDPOINT=http://127.0.0.1:8080
     depends_on:
       backend:
         condition: service_started

@@ -39,13 +39,15 @@ Works with various Large Language Models from industry leaders such as Anthropic
 git clone git@github.com:symbiont-me/symbiont.git
 cd symbiont
 
+# populate env vars
+cp .env.example .env && source .env
+
 # run symbiont containers
 docker-compose up -d
 
 # check logs
 docker logs -f symbiont-backend
 docker logs -f symbiont-frontend
-
 ```
 
 ## Access the Application
