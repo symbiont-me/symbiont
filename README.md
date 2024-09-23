@@ -1,7 +1,10 @@
 # Symbiont - An Open Source Self-hosted RAG App 🌐
 
-Welcome to Symbiont, the premier RAG (Retrieval Argument Generation)-based application designed for secure, self-hosted deployment on personal or organizational servers. Built with privacy and user control in mind, Symbiont ensures that sensitive data is managed securely without requiring transmission to third-party servers, except when interacting with LLM (Large Language Model) providers such as OpenAI or Anthropic.
-Symbiont is a free and Open Source alternative to https://jenni.ai/ and https://paperpal.com/ (we are a few features behind).
+Welcome to Symbiont, a free and open-source tool designed for researchers and journalists to efficiently search and analyse large volumes of text. Utilitising advanced vector-based search and retrieval argument generation, Symbiont enables users to uncover relevant information, draw connections between disparate data, and synthesize coherent narratives from extensive text sources.
+Symbiont aims to enhance research quality by minimising errors, and increasing efficiency, thereby saving time.
+Symbiont can be fully sel-hosted, addressing privacy conccerns by giving users complete control over their data.
+Built with privacy and user control in mind, Symbiont ensures that sensitive data is managed securely without requiring transmission to third-party servers, except when interacting with LLM (Large Language Model) providers such as OpenAI or Anthropic.
+
 
 ## Use Cases 🛠️
 
@@ -31,6 +34,11 @@ Works with various Large Language Models from industry leaders such as Anthropic
 ## Branches 🌿
 
 - **`main`**: Stable branch, uses Qdrant and MongoDB. Both can be self-hosted for maximum privacy
+
+## Planned Features 
+- [ ]  AI Writer: a Notion like text editor with AI copilot for writing. We want to "contexualise" the copilot as well to provide more accurate suggestions
+- [x]  Symbiont CLI for similarity search and chat: these are various cli-based scripts that can help with going through large amound of text data.
+
 
 ## Setup
 
