@@ -35,6 +35,11 @@ Works with various Large Language Models from industry leaders such as Anthropic
 
 - **`main`**: Stable branch, uses Qdrant and MongoDB. Both can be self-hosted for maximum privacy
 
+## Planned Features 
+- [ ]  AI Writer: a Notion like text editor with AI copilot for writing. We want to "contexualise" the copilot as well to provide more accurate suggestions
+- [x]  Symbiont CLI for similarity search and chat: these are various cli-based scripts that can help with going through large amound of text data.
+
+
 ## Setup
 
 Follow the steps below to set up and run the Symbiont app.
