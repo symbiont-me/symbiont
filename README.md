@@ -1,7 +1,10 @@
 # Symbiont - An Open Source Self-hosted RAG App 🌐
 
-Welcome to Symbiont, the premier RAG (Retrieval Argument Generation)-based application designed for secure, self-hosted deployment on personal or organizational servers. Built with privacy and user control in mind, Symbiont ensures that sensitive data is managed securely without requiring transmission to third-party servers, except when interacting with LLM (Large Language Model) providers such as OpenAI or Anthropic.
-Symbiont is a free and Open Source alternative to https://jenni.ai/ and https://paperpal.com/ (we are a few features behind).
+Welcome to Symbiont, a free and open-source tool designed for researchers and journalists to efficiently search and analyse large volumes of text. Utilitising advanced vector-based search and retrieval argument generation, Symbiont enables users to uncover relevant information, draw connections between disparate data, and synthesize coherent narratives from extensive text sources.
+Symbiont aims to enhance research quality by minimising errors, and increasing efficiency, thereby saving time.
+Symbiont can be fully sel-hosted, addressing privacy conccerns by giving users complete control over their data.
+Built with privacy and user control in mind, Symbiont ensures that sensitive data is managed securely without requiring transmission to third-party servers, except when interacting with LLM (Large Language Model) providers such as OpenAI or Anthropic.
+
 
 ## Use Cases 🛠️
 
