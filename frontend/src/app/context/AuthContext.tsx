@@ -6,11 +6,10 @@ import {
   useState,
   useEffect,
 } from "react";
-import axios from "axios";
 import { User } from "../../types";
-
 import { signOut } from "supertokens-auth-react/recipe/session";
 import Session from "supertokens-auth-react/recipe/session";
+
 type AuthContextType = {
   user: User | null;
   userSignOut: () => void;
@@ -19,48 +18,49 @@ type AuthContextType = {
 };
 
 export const AuthContext = createContext<AuthContextType | null>(null);
-// TODO this needs to be refactored to remove unnecessary information
+
 export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userToken, setUserToken] = useState<string | null>(null);
-  // Check if session exists and set user to null if it doesn't
-  useEffect(() => {
-    if (Session.getUserId() !== undefined) {
-      setIsAuthLoading(true);
-    }
 
-    (async () => {
-      if ((await Session.doesSessionExist()) === false) {
-        setUser(null);
-        setIsLoggedIn(false);
+  useEffect(() => {
+    async function initAuth() {
+      try {
+        const sessionExists = await Session.doesSessionExist();
+        if (!sessionExists) {
+          setUser(null);
+          setIsAuthLoading(false);
+          return;
+        }
+
+        const accessToken = await Session.getAccessToken();
+        setUserToken(accessToken ?? null);
+        
+        // If you need to get user info, do it here
+        // const userId = await Session.getUserId();
+        // setUser({ id: userId, ... });
+        
+        setIsAuthLoading(false);
+      } catch (error) {
+        console.error("Auth initialization error:", error);
         setIsAuthLoading(false);
       }
-    })();
-  }, []);
-
-  useEffect(() => {
-    async function fetchAccessToken() {
-      const accessToken = await Session.getAccessToken();
-      if (accessToken) {
-        setUserToken(accessToken);
-      }
     }
-    fetchAccessToken();
+
+    initAuth();
   }, []);
 
   async function userSignOut() {
-    await signOut();
-    setIsLoggedIn(false);
-    window.location.href = "/";
-  }
-
-  useEffect(() => {
-    if (isLoggedIn) {
-      setIsAuthLoading(false);
+    try {
+      await signOut();
+      setUser(null);
+      setUserToken(null);
+      window.location.href = "/";
+    } catch (error) {
+      console.error("Sign out error:", error);
     }
-  }, [user, isLoggedIn]);
+  }
 
   return (
     <AuthContext.Provider
