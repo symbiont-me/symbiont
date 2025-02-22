@@ -1,73 +1,68 @@
 import os
 from supertokens_python import init, InputAppInfo, SupertokensConfig
 from supertokens_python.recipe import session, emailpassword
-from supertokens_python.recipe.emailpassword.interfaces import (
-    RecipeInterface,
-    SignUpOkResult,
-)
+from supertokens_python.recipe.emailpassword.interfaces import RecipeInterface, SignUpOkResult
 from typing import Dict, Any
-import re
-
 from ..mongodb import users_collection
 from ..models import UserCollection
-from .. import logger
-
 
 def create_user_if_not_exists(user_uid):
+    print(f"Attempting to create user with ID: {user_uid}")
+    
+    if users_collection.find_one({"_id": user_uid}):
+        print(f"User {user_uid} already exists in MongoDB")
+        return False
+    
     try:
-        # Check if user already exists
-        user = users_collection.find_one({"_id": user_uid})
-        if user:
-            return False  # User already exists
-
-        # Create new user if not exists
         new_user = UserCollection(studies=[], settings={})
         users_collection.insert_one({"_id": user_uid, **new_user.model_dump()})
-        logger.info(f"User created in db with id {user_uid}")
-        return True  # User created successfully
+        print(f"Successfully created user in MongoDB with ID: {user_uid}")
+        return True
     except Exception as e:
-        logger.error(f"Error creating user: {str(e)}")
+        print(f"Failed to create user in MongoDB: {str(e)}")
         return False
 
-
-# Custom EmailPassword API implementation
-# Override emailpassword functions
-def override_emailpassword_functions(
-    original_implementation: RecipeInterface,
-) -> RecipeInterface:
+def override_emailpassword_functions(original_implementation: RecipeInterface) -> RecipeInterface:
     original_sign_up = original_implementation.sign_up
 
     async def sign_up(
-        email: str, password: str, tenant_id: str, user_context: Dict[str, Any]
+        email: str,
+        password: str,
+        tenant_id: str,
+        session: session.SessionContainer,
+        user_context: Dict[str, Any],
+        should_try_linking_with_session_user: bool = False
     ):
-        result = await original_sign_up(email, password, tenant_id, user_context)
-
-        if isinstance(result, SignUpOkResult):
-            user_uid = result.user.user_id
-            # we don't need to save the email for now
-            # user_email = result.user.email
-
-            # Create user if not exists
-            create_user_if_not_exists(user_uid)
-
-        return result
+        print(f"Sign up attempt for email: {email}")
+        
+        try:
+            result = await original_sign_up(
+                email=email,
+                password=password,
+                tenant_id=tenant_id,
+                session=session,
+                user_context=user_context,
+                should_try_linking_with_session_user=should_try_linking_with_session_user
+            )
+            
+            print(f"SuperTokens sign up result type: {type(result)}")
+            
+            if isinstance(result, SignUpOkResult):
+                print(f"Successful sign up, got user ID: {result.user.id}")
+                create_user_if_not_exists(result.user.id)
+            else:
+                print(f"Sign up result not OK: {type(result)}")
+            
+            return result
+            
+        except Exception as e:
+            print(f"Error during sign up process: {str(e)}")
+            raise
 
     original_implementation.sign_up = sign_up
-
     return original_implementation
 
-
 def init_supertokens():
-    """
-    Initializes the Supertokens configuration for the application.
-
-    Checks the environment variable "AUTH" to determine whether to use production or development settings.
-    If "AUTH" is set to "production", it expects the environment variables "PROD_API_DOMAIN", "PROD_WEBSITE_DOMAIN",
-    and "PROD_CONNECTION_URI" to be set.
-    If "AUTH" is not set to "production", it uses default development settings.
-
-    Initializes the Supertokens configuration with the specified app info, connection URI, framework, and recipe list.
-    """
     auth_env = os.getenv("AUTH")
 
     if auth_env == "production":
@@ -75,19 +70,11 @@ def init_supertokens():
         website_domain = os.getenv("PROD_WEBSITE_DOMAIN")
         connection_uri = os.getenv("PROD_CONNECTION_URI")
 
-        if not api_domain or not website_domain or not connection_uri:
-            raise ValueError(
-                (
-                    "Production environment variables PROD_API_DOMAIN, PROD_WEBSITE_DOMAIN, "
-                    "and PROD_CONNECTION_URI must be set"
-                )
-            )
+        if not all([api_domain, website_domain, connection_uri]):
+            raise ValueError("Missing required production environment variables")
     else:
         api_domain = "http://127.0.0.1:8000"
-
         website_domain = "http://localhost:4000"
-        if not re.match(r"^http://localhost:(400[0-9]|4010)$", website_domain):
-            raise ValueError("Port number must be between 4001 and 4010")
         connection_uri = "localhost:3567"
 
     init(
@@ -98,9 +85,7 @@ def init_supertokens():
             api_base_path="/auth",
             website_base_path="/auth",
         ),
-        supertokens_config=SupertokensConfig(
-            connection_uri=connection_uri,
-        ),
+        supertokens_config=SupertokensConfig(connection_uri=connection_uri),
         framework="fastapi",
         recipe_list=[
             session.init(
