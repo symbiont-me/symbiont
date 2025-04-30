@@ -1,17 +1,19 @@
-import pytest
 from unittest.mock import patch
+
+import numpy as np
+import pytest
+
 from symbiont.vector_dbs.vector_store_repos.weaviate_repo import (
-    upsert_vectors,
     init_weaviate,
+    search_vectors,
+    upsert_vectors,
 )
-from symbiont.vector_dbs.vector_store_repos.weaviate_repo import search_vectors
-import torch
 
 
 # Mock embedding model
 class MockEmbedding:
     def embed_query(self, text):
-        return torch.randn(1536).tolist()
+        return np.random.randn(1536).tolist()
 
 
 @pytest.fixture
@@ -72,9 +74,11 @@ def test_upsert_vectors(mock_embedding, weaviate_client, docs):
     namespace = "DocumentSearch"
 
     # Mock the client methods
-    with patch.object(weaviate_client.schema, "create_class") as mock_create_class, patch.object(
-        weaviate_client.batch, "configure"
-    ) as mock_configure, patch.object(weaviate_client.batch, "add_data_object") as mock_add_data_object:
+    with (
+        patch.object(weaviate_client.schema, "create_class") as mock_create_class,
+        patch.object(weaviate_client.batch, "configure") as mock_configure,
+        patch.object(weaviate_client.batch, "add_data_object") as mock_add_data_object,
+    ):
         result_ids = upsert_vectors(namespace, docs)
 
         # Assertions

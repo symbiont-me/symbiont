@@ -1,0 +1,53 @@
+networks:
+  symbiont-network:
+    driver: bridge
+
+services:
+  mongodb:
+    environment:
+      MONGO_INITDB_DATABASE: "${MONGO_INITDB_DATABASE}"
+    image: mongodb/mongodb-community-server:7.0.6-ubuntu2204-20250430T085931Z
+    ports:
+      - "${MONGODB_PORT}:27017"
+    volumes:
+      - ./data:/data/db
+    networks:
+      - symbiont-network
+
+  fastapi:
+    environment:
+      MONGODB_PORT: "${MONGODB_PORT}"
+      MONGODB_URI: mongodb
+      MONGO_INITDB_DATABASE: symbiont-local-mongodb
+    build:
+      context: backend
+      dockerfile: Dockerfile
+      target: development
+    volumes:
+      - .:/app
+      - dev-venv:/app/.venv
+    ports:
+      - "${APP_PORT}:8000"
+    env_file:
+      - backend/.env.development
+    networks:
+      - symbiont-network
+
+  nextapp:
+    environment:
+      NEXT_PUBLIC_BASE_URL: "fastapi:${APP_PORT}"
+    container_name: symbiont-frontend
+    image: symbiont-frontend
+    build:
+      context: frontend
+      dockerfile: Dockerfile
+      target: development
+    ports:
+      - "${FRONTEND_PORT}:4000"
+    networks:
+      - symbiont-network
+    depends_on:
+      - fastapi
+
+volumes:
+  dev-venv: {}

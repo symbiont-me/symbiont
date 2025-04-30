@@ -10,10 +10,8 @@ dependencies = [
     "firebase-admin<7.0.0,>=6.4.0",
     "langchain<1.0.0,>=0.1.7",
     "langchain-openai<1.0.0,>=0.0.6",
-    "pinecone-client<4.0.0,>=3.0.3",
     "pypdf<5.0.0,>=4.0.2",
     "nltk<4.0.0,>=3.8.1",
-    "langchain-pinecone<1.0.0,>=0.0.2",
     "youtube-transcript-api<1.0.0,>=0.6.2",
     "pytube<16.0.0,>=15.0.0",
     "beautifulsoup4<5.0.0,>=4.12.3",
@@ -33,13 +31,9 @@ dependencies = [
     "pymongo<5.0.0,>=4.6.3",
     "pymupdf<2.0.0,>=1.24.2",
     "pytest-mock<4.0.0,>=3.14.0",
-    "langchain-weaviate<1.0.0,>=0.0.2",
-    "torch<3.0.0,>=2.4.0",
-    "pymilvus<3.0.0,>=2.4.5",
     "pytest-watch<5.0.0,>=4.2.0",
     "supertokens-python<1.0.0,>=0.24.2",
     "qdrant-client<2.0.0,>=1.11.1",
-    "sentence-transformers<4.0.0,>=3.1.0",
 ]
 name = "symbiont"
 version = "0.1.0"
@@ -59,3 +53,8 @@ dev = [
     "pytest-trio<1.0.0,>=0.8.0",
     "mongomock<5.0.0,>=4.1.2",
 ]
+
+[tool.ruff]
+line-length = 120
+fix = true
+exclude = [".venv", "alembic/versions"]
