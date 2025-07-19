@@ -32,7 +32,15 @@ app = FastAPI()
 
 
 class SessionMiddleware(BaseHTTPMiddleware):
+    def __init__(self, app):
+        super().__init__(app)
+        self.excluded_routes = ["/docs", "/redoc", "/openapi.json", "/status", "/health"]
+    
     async def dispatch(self, request, call_next):
+        # Skip authentication for excluded routes
+        if request.url.path in self.excluded_routes:
+            return await call_next(request)
+        
         session = await verify_session()(request)
         request.state.session = session
         return await call_next(request)
@@ -76,6 +84,11 @@ async def status_check():
         "environemnt": ENVIRONMENT,
     }
     return status_response
+
+
+@app.get("/health")
+async def health_check():
+    return {"status": "healthy"}
 
 
 @app.get("/session-details/")
