@@ -101,19 +101,19 @@ const FileUpload = () => {
   return (
     <div className="flex flex-col justify-center items-center mr-4 mt-12">
       {mutation.isError && (
-        <Alert severity="error">{resourceStatus.error?.message}</Alert>
+        <Alert severity="error" data-testid="file-upload-error">{resourceStatus.error?.message}</Alert>
       )}
       {mutation.isSuccess && (
-        <Alert severity="success">
+        <Alert severity="success" data-testid="file-upload-success">
           {resourceType === "application/pdf"
             ? `PDF file was succesfully uploaded!`
             : `Audio file was succesfully uploaded!`}
         </Alert>
       )}
       {mutation.isPending ? (
-        <CircularProgress />
+        <CircularProgress data-testid="file-upload-progress" />
       ) : (
-        <div {...getRootProps({ className: "dropzone" })}>
+        <div {...getRootProps({ className: "dropzone" })} data-testid="file-upload-dropzone">
           <input {...getInputProps()} />
 
           <Button
@@ -123,6 +123,7 @@ const FileUpload = () => {
             tabIndex={-1}
             startIcon={<CloudUploadIcon />}
             sx={{ marginTop: "1rem" }}
+            data-testid="file-upload-button"
           >
             Upload file
             {/* Input handles the upload */}

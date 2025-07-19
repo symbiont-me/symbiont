@@ -143,6 +143,7 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
               {...label}
               onChange={handleCombineResources}
               sx={{ height: "10px" }}
+              data-testid="combine-resources-checkbox"
             />
             <label htmlFor="combineResources" className="text-xs">
               Combine Resources
@@ -157,6 +158,7 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
               endIcon={<DeleteIcon />}
               size="small"
               style={{ minWidth: "auto", height: "24px" }}
+              data-testid="clear-chat-button"
             >
               <span className="text-2xs">Clear Chat</span>
             </Button>
@@ -167,6 +169,7 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
       <div
         id="message-container"
         className="flex h-screen flex-col overflow-y-auto"
+        data-testid="chat-container"
       >
         {chatLoading ? (
           <div className="flex justify-cent  items-center">
@@ -179,7 +182,7 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
       {/* TODO fix height of the input */}
       <div className="m-4">
         {error && (
-          <Alert severity="error">
+          <Alert severity="error" data-testid="chat-error">
             {error?.message === "network error"
               ? "Error: Check your Api Key"
               : error?.message}
@@ -191,7 +194,7 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
               LLM generated responses can have mistakes.{" "}
               <span className="italic">Doveryai, No Proveryai</span>.
             </p>
-            <LinearProgress color="secondary" className="mb-2" />
+            <LinearProgress color="secondary" className="mb-2" data-testid="chat-loading" />
           </>
         )}
         <UserChatInput

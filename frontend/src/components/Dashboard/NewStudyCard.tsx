@@ -63,7 +63,7 @@ const NewStudyCard = ({ onNewStudyCreated }: NewStudyCardProps) => {
       style={{ width: 245, height: 290 }}
     >
       <React.Fragment>
-        <Button variant="contained" onClick={handleClickOpen}>
+        <Button variant="contained" onClick={handleClickOpen} data-testid="new-study-button">
           +
         </Button>
         <Typography
@@ -76,6 +76,7 @@ const NewStudyCard = ({ onNewStudyCreated }: NewStudyCardProps) => {
         <Dialog
           open={open}
           onClose={handleClose}
+          data-testid="create-study-modal"
           // TODO remove if not needed
           PaperProps={{
             component: "form",
@@ -107,6 +108,7 @@ const NewStudyCard = ({ onNewStudyCreated }: NewStudyCardProps) => {
               variant="standard"
               value={studyName}
               onChange={handleInputChange}
+              data-testid="study-name-input"
             />
             <TextField
               autoFocus
@@ -119,6 +121,7 @@ const NewStudyCard = ({ onNewStudyCreated }: NewStudyCardProps) => {
               variant="standard"
               value={image}
               onChange={handleInputChange}
+              data-testid="study-image-input"
             />
             <TextField
               autoFocus
@@ -132,11 +135,12 @@ const NewStudyCard = ({ onNewStudyCreated }: NewStudyCardProps) => {
               variant="standard"
               value={description}
               onChange={handleInputChange}
+              data-testid="study-description-input"
             />
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose}>Cancel</Button>
-            <Button type="submit" onClick={handleCreateStudy}>
+            <Button onClick={handleClose} data-testid="create-study-cancel">Cancel</Button>
+            <Button type="submit" onClick={handleCreateStudy} data-testid="create-study-submit">
               Create Study
             </Button>
           </DialogActions>

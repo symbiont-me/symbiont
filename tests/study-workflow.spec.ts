@@ -17,9 +17,9 @@ test.describe('Study Workflow (Complex)', () => {
     
     // Look for new study creation elements
     const newStudySelectors = [
+      '[data-testid="new-study-button"]',
       'button:has-text("New Study")',
       'button:has-text("Create Study")',
-      '[data-testid="new-study"]',
       '.new-study-button',
       'a[href*="studies/new"]'
     ];
@@ -40,13 +40,13 @@ test.describe('Study Workflow (Complex)', () => {
       await page.waitForTimeout(2000);
       
       // Look for study name input
-      const studyNameInput = page.locator('input[name="name"], input[placeholder*="study" i], input[placeholder*="title" i]').first();
+      const studyNameInput = page.locator('[data-testid="study-name-input"], input[name="name"], input[placeholder*="study" i], input[placeholder*="title" i]').first();
       
       if (await studyNameInput.isVisible({ timeout: 5000 })) {
         await studyNameInput.fill('Test Study - E2E');
         
         // Look for submit button
-        const submitButton = page.locator('button[type="submit"], button:has-text("Create"), button:has-text("Save")').first();
+        const submitButton = page.locator('[data-testid="create-study-submit"], button[type="submit"], button:has-text("Create"), button:has-text("Save")').first();
         
         if (await submitButton.isVisible()) {
           await submitButton.click();
@@ -70,9 +70,10 @@ test.describe('Study Workflow (Complex)', () => {
     
     // Look for upload functionality
     const uploadSelectors = [
+      '[data-testid="file-upload-dropzone"]',
+      '[data-testid="file-upload-button"]',
       'input[type="file"]',
       'button:has-text("Upload")',
-      '[data-testid="upload"]',
       '.dropzone',
       '.file-upload'
     ];
@@ -91,7 +92,7 @@ test.describe('Study Workflow (Complex)', () => {
       await expect(uploadElement).toBeVisible();
       
       // Test drag and drop area if available
-      const dropzone = page.locator('.dropzone, [data-testid="dropzone"]').first();
+      const dropzone = page.locator('[data-testid="file-upload-dropzone"], .dropzone').first();
       if (await dropzone.isVisible({ timeout: 2000 })) {
         await expect(dropzone).toBeVisible();
       }
@@ -108,7 +109,8 @@ test.describe('Study Workflow (Complex)', () => {
     
     // Look for chat interface elements
     const chatSelectors = [
-      '[data-testid="chat"]',
+      '[data-testid="chat-container"]',
+      '[data-testid="chat-input-field"]',
       '.chat-container',
       '.chat-input',
       'textarea[placeholder*="ask" i]',
@@ -126,13 +128,13 @@ test.describe('Study Workflow (Complex)', () => {
     
     if (chatElement && await chatElement.isVisible({ timeout: 5000 })) {
       // Test chat input
-      const chatInput = page.locator('textarea, input').filter({ hasText: '' }).first();
+      const chatInput = page.locator('[data-testid="chat-input-field"], textarea, input').filter({ hasText: '' }).first();
       
       if (await chatInput.isVisible({ timeout: 2000 })) {
         await chatInput.fill('Hello, this is a test message');
         
         // Look for send button
-        const sendButton = page.locator('button:has-text("Send"), button[type="submit"]').first();
+        const sendButton = page.locator('[data-testid="chat-send-button"], button:has-text("Send"), button[type="submit"]').first();
         
         if (await sendButton.isVisible()) {
           await sendButton.click();
@@ -156,6 +158,7 @@ test.describe('Study Workflow (Complex)', () => {
     
     // Look for settings or LLM configuration
     const settingsSelectors = [
+      '[data-testid="llm-settings-dialog"]',
       'a[href*="settings"]',
       'button:has-text("Settings")',
       '[data-testid="settings"]',
@@ -179,6 +182,8 @@ test.describe('Study Workflow (Complex)', () => {
       
       // Look for LLM provider selection
       const llmSelectors = [
+        '[data-testid="llm-model-select"]',
+        '[data-testid="api-key-input"]',
         'select[name*="provider"]',
         'select[name*="model"]',
         '.model-selector',

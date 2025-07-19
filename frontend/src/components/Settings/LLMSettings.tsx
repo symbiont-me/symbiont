@@ -135,6 +135,7 @@ export default function FullScreenSettingsDialog({
         open={open}
         onClose={handleSettingsClose}
         TransitionComponent={Transition}
+        data-testid="llm-settings-dialog"
       >
         <AppBar sx={{ position: "relative" }}>
           <Toolbar>
@@ -143,13 +144,14 @@ export default function FullScreenSettingsDialog({
               color="inherit"
               onClick={handleSettingsClose}
               aria-label="close"
+              data-testid="llm-settings-close"
             >
               <CloseIcon />
             </IconButton>
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
               LLM Settings
             </Typography>
-            <Button autoFocus color="inherit" onClick={saveSettings}>
+            <Button autoFocus color="inherit" onClick={saveSettings} data-testid="llm-settings-save">
               save
             </Button>
           </Toolbar>
@@ -164,6 +166,7 @@ export default function FullScreenSettingsDialog({
               label="llm-models"
               onChange={handleChange}
               sx={{ width: "70%" }}
+              data-testid="llm-model-select"
             >
               {Object.entries(LLMModels).map(([key, value]) => (
                 <MenuItem key={key} value={value}>
@@ -178,6 +181,7 @@ export default function FullScreenSettingsDialog({
             sx={{ marginTop: "16px", width: "70%" }}
             onChange={handleApiKey}
             value={apiKey}
+            data-testid="api-key-input"
           />
           <Typography
             sx={{

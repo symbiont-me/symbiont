@@ -78,7 +78,7 @@ const UserChatInput = ({
         ))}
       </SpeedDial> */}
       {noResourceAlert && (
-        <Alert severity="info" sx={{ fontSize: 12, marginBottom: "10px" }}>
+        <Alert severity="info" sx={{ fontSize: 12, marginBottom: "10px" }} data-testid="no-resources-alert">
           Please add resources before chat
         </Alert>
       )}
@@ -93,12 +93,14 @@ const UserChatInput = ({
             className="w-full"
             InputProps={{ style: { fontSize: 12 } }} // Set the font size of input text
             InputLabelProps={{ style: { fontSize: 12 } }} // Set the font size of the label when it's shrunk
+            data-testid="chat-input-field"
           />
           <Button
             variant="text"
             endIcon={<SendIcon />}
             type="submit"
             sx={{ width: "10px" }}
+            data-testid="chat-send-button"
           />
         </div>
       </form>
