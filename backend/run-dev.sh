@@ -24,7 +24,7 @@ sleep 5  # Adjust sleep time if needed for your containers to fully initialize
 
 # Run symbiont application after Docker containers are up
 echo "Starting symbiont application..."
-poetry run uvicorn symbiont.main:app --reload &
+uv run uvicorn symbiont.main:app --reload &
 
 # Move up to the parent directory and then to the frontend directory
 cd ..
