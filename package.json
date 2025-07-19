@@ -1,0 +1,22 @@
+{
+  "name": "symbiont-e2e-tests",
+  "version": "1.0.0",
+  "description": "End-to-end tests for Symbiont application",
+  "scripts": {
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:headed": "playwright test --headed",
+    "test:smoke": "playwright test --grep @smoke",
+    "report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.54.1"
+  },
+  "keywords": [
+    "e2e",
+    "testing",
+    "playwright"
+  ],
+  "author": "",
+  "license": "ISC"
+}
