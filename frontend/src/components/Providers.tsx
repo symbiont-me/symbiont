@@ -11,7 +11,7 @@ const ReactQueryProvider = ({children}: Props) => {
 const [client] = useState(() => new QueryClient());
   return (
     <>
-      <QueryClientProvider client={client}> {children}</QueryClientProvider>
+      <QueryClientProvider client={client}>{children}</QueryClientProvider>
     </>
   );
 };

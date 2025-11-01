@@ -1,15 +1,12 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
-import "react-quill/dist/quill.snow.css";
+import "@uiw/react-md-editor/markdown-editor.css";
+import "@uiw/react-markdown-preview/markdown.css";
 
 import { useStudyContext } from "@/app/context/StudyContext";
-// TODO on render, fetch text from db and set value to that text
 
-// TODO move inside the component
-// NOTE this fixes the issue with document not being defined at initial render
-// ref: https://github.com/zenoamaro/react-quill/issues/292
-const ReactQuill = dynamic(() => import("react-quill"), {
+const MDEditor = dynamic(() => import("@uiw/react-md-editor"), {
   ssr: false,
   loading: () => (
     <div className="flex justify-center items-center h-screen">
@@ -43,13 +40,18 @@ const TextEditor = () => {
   }, [text]);
 
   return (
-    <div className="w-full ">
-      <ReactQuill
-        className="ql-container q-snow"
-        theme="snow"
+    <div className="w-full">
+      <MDEditor
         value={text}
-        onChange={setText}
-        style={{ height: "calc(100vh - 125px)", borderRadius: "5px" }}
+        onChange={(val) => setText(val || "")}
+        height={600}
+        preview="edit"
+        hideToolbar={false}
+        visibleDragBar={false}
+        data-color-mode="light"
+        style={{
+          backgroundColor: 'white',
+        }}
       />
     </div>
   );
