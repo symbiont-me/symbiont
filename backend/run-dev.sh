@@ -32,4 +32,4 @@ cd frontend
 
 # Start the frontend application using nohup
 echo "Starting frontend application in background..."
-nohup pnpm run dev > /dev/null 2>&1 &
+nohup bun --bun run dev > /dev/null 2>&1 &

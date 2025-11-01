@@ -58,7 +58,7 @@ export default defineConfig({
       reuseExistingServer: !process.env.CI,
     },
     {
-      command: 'cd frontend && pnpm run dev',
+      command: 'cd frontend && bun --bun run dev',
       port: 4000,
       reuseExistingServer: !process.env.CI,
     }

@@ -25,7 +25,7 @@ trap cleanup EXIT
 if [ "$1" = "--manual-services" ]; then
     echo "📋 Manual service mode - please ensure backend (port 8000) and frontend (port 4000) are running"
     echo "   Backend: cd backend && uvicorn symbiont.main:app --reload"
-    echo "   Frontend: cd frontend && pnpm run dev"
+    echo "   Frontend: cd frontend && bun --bun run dev"
     read -p "Press Enter when services are ready..."
 else
     echo "🔧 Starting backend containers..."
@@ -40,7 +40,7 @@ else
     
     echo "🌐 Starting frontend server..."
     cd frontend
-    pnpm run dev &
+    bun --bun run dev &
     FRONTEND_PID=$!
     cd ..
     

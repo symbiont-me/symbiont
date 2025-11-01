@@ -9,53 +9,35 @@ command_exists() {
     command -v "$1" >/dev/null 2>&1
 }
 
-# Function to check Node.js version
-check_node() {
-    if command_exists node; then
-        NODE_VERSION=$(node --version | cut -d 'v' -f 2)
-        echo "✅ Node.js is installed: v$NODE_VERSION"
-        
-        # Check if Node.js version is >= 18 (required for Next.js 14)
-        MAJOR_VERSION=$(echo $NODE_VERSION | cut -d '.' -f 1)
-        if [ "$MAJOR_VERSION" -ge 18 ]; then
-            echo "✅ Node.js version is compatible"
-            return 0
-        else
-            echo "❌ Node.js version $NODE_VERSION is too old. Next.js 14 requires Node.js 18+"
-            echo "Please update Node.js to version 18 or higher"
-            exit 1
-        fi
-    else
-        echo "❌ Node.js not found. Please install Node.js 18+ first."
-        echo "Visit: https://nodejs.org/"
-        exit 1
-    fi
-}
+# Function removed - using bun instead of Node.js
 
-# Function to check and install pnpm
-check_and_install_pnpm() {
-    if command_exists pnpm; then
-        echo "✅ pnpm is already installed"
-        pnpm --version
+# Function to check and install bun
+check_and_install_bun() {
+    if command_exists bun; then
+        echo "✅ bun is already installed"
+        bun --version
         return 0
     else
-        echo "📦 Installing pnpm..."
-        if command_exists npm; then
-            npm install -g pnpm
-        else
-            echo "Installing pnpm via curl..."
-            curl -fsSL https://get.pnpm.io/install.sh | sh
-            
-            # Add pnpm to PATH for this session
-            export PNPM_HOME="$HOME/.local/share/pnpm"
-            export PATH="$PNPM_HOME:$PATH"
+        echo "📦 Installing bun..."
+        echo "Installing bun via curl..."
+        curl -fsSL https://bun.com/install | bash
+        
+        # Add bun to PATH for this session
+        export BUN_INSTALL="$HOME/.bun"
+        export PATH="$BUN_INSTALL/bin:$PATH"
+        
+        # Source the shell profile to pick up bun
+        if [ -f "$HOME/.bashrc" ]; then
+            source "$HOME/.bashrc"
+        elif [ -f "$HOME/.zshrc" ]; then
+            source "$HOME/.zshrc"
         fi
         
-        if command_exists pnpm; then
-            echo "✅ pnpm installed successfully"
-            pnpm --version
+        if command_exists bun; then
+            echo "✅ bun installed successfully"
+            bun --version
         else
-            echo "❌ pnpm installation failed"
+            echo "❌ bun installation failed"
             exit 1
         fi
     fi
@@ -94,8 +76,8 @@ install_dependencies() {
     echo "📚 Installing frontend dependencies..."
     cd frontend
     
-    echo "Running pnpm install..."
-    pnpm install
+    echo "Running bun install..."
+    bun install
     
     echo "✅ Dependencies installed successfully"
     cd ..
@@ -130,7 +112,7 @@ start_nextjs_server() {
     echo "Press Ctrl+C to stop the server"
     echo ""
     
-    pnpm run dev
+    bun --bun run dev
 }
 
 # Main execution
@@ -138,11 +120,8 @@ main() {
     echo "🎯 Symbiont Frontend Startup Script"
     echo "===================================="
     
-    # Check Node.js
-    check_node
-    
-    # Check and install pnpm
-    check_and_install_pnpm
+    # Check and install bun
+    check_and_install_bun
     
     # Setup environment
     setup_environment

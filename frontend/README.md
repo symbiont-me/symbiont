@@ -42,7 +42,7 @@ To run the development server directly:
 - .env.local or .env.development must be present
 
 ```bash
-pnpm run dev
+bun --bun run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
