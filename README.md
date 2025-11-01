@@ -66,7 +66,7 @@ cd symbiont-monorepo/monorepo
 
 That's it! The script will automatically:
 - Install `uv` (Python package manager) if needed
-- Install `pnpm` (Node.js package manager) if needed
+- Install `bun` (Node.js package manager) if needed
 - Start backend services (MongoDB, Qdrant, SuperTokens)
 - Install all dependencies
 - Start the FastAPI backend server
@@ -145,11 +145,11 @@ uv run uvicorn symbiont.main:app --reload
 ```bash
 cd frontend
 # Install Node.js dependencies
-npm install -g pnpm  # Install pnpm if needed
-pnpm install
+npm install -g bun  # Install bun if needed
+bun install
 
 # Start development server
-pnpm run dev
+bun --bun run dev
 ```
 
 ## Development

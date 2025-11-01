@@ -20,9 +20,10 @@ Symbiont is a self-hosted RAG (Retrieval Augmented Generation) application built
 - **Manual server start**: `cd backend && uv run uvicorn symbiont.main:app --reload`
 - **Environment**: Uses `uv` for dependency management; create `.env.development` file with required variables
 
-### Frontend (Next.js)
-- **Manual development server**: `cd frontend && pnpm run dev` (runs on port 4000)
-- **Lint**: `cd frontend && pnpm run lint`
+### Frontend (Next.js 16 Beta)
+- **Manual development server**: `cd frontend && bun --bun run dev` (runs on port 4000)
+- **Build**: `cd frontend && bun run build`
+- **Lint**: `cd frontend && bun run lint` (now uses ESLint directly with flat config)
 
 ## Architecture Overview
 
@@ -99,7 +100,7 @@ npm run report                  # View HTML test report
 ### Automatic Setup
 The startup scripts will automatically:
 - Install `uv` (Python package manager) if not present
-- Install `pnpm` (Node.js package manager) if not present
+- Install `bun` (Node.js package manager) if not present
 - Create environment files from examples
 - Install all dependencies
 - Start required services (MongoDB, Qdrant, SuperTokens)
