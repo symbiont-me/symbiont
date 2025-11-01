@@ -72,5 +72,8 @@ export async function navigateToStudyWorkspace(page: Page, studyName: string): P
   
   // Verify we're in study workspace
   await expect(page).toHaveURL(/\/studies\/[a-f0-9-]+$/);
-  await expect(page.getByRole('tab', { name: 'writer' })).toBeVisible();
+  
+  // Wait for page to fully load and tabs to appear (with longer timeout)
+  await page.waitForLoadState('networkidle');
+  await expect(page.getByRole('tab', { name: 'writer' })).toBeVisible({ timeout: 15000 });
 }
