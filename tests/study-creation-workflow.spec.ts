@@ -17,31 +17,31 @@ test.describe('Study Creation Workflow Tests', () => {
     const studyDescription = `Test study created at ${new Date().toISOString()} for comprehensive workflow testing`;
     const studyImage = `test-image-${timestamp}.jpg`;
 
-    // Click Add Study button
+    // Click Add Study button using data-testid
     await page.getByTestId('new-study-button').click();
 
-    // Verify modal opened
-    await expect(page.getByRole('dialog', { name: 'Create Study' })).toBeVisible();
+    // Verify modal opened using data-testid
+    await expect(page.getByTestId('create-study-modal')).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Create Study', level: 2 })).toBeVisible();
 
-    // Verify form fields are present
-    await expect(page.getByRole('textbox', { name: 'Study Name' })).toBeVisible();
-    await expect(page.getByRole('textbox', { name: 'Description' })).toBeVisible();
-    await expect(page.getByRole('textbox', { name: 'Image' })).toBeVisible();
+    // Verify form fields are present using data-testid
+    await expect(page.getByTestId('study-name-input')).toBeVisible();
+    await expect(page.getByTestId('study-description-input')).toBeVisible();
+    await expect(page.getByTestId('study-image-input')).toBeVisible();
 
     // Verify required field indicators (simplified check)
     await expect(page.getByText('*').first()).toBeVisible();
 
-    // Fill out all fields
-    await page.getByRole('textbox', { name: 'Study Name' }).fill(studyName);
-    await page.getByRole('textbox', { name: 'Description' }).fill(studyDescription);
-    await page.getByRole('textbox', { name: 'Image' }).fill(studyImage);
+    // Fill out all fields using data-testid (target input within the testid container)
+    await page.getByTestId('study-name-input').locator('input').fill(studyName);
+    await page.getByTestId('study-description-input').locator('input').fill(studyDescription);
+    await page.getByTestId('study-image-input').locator('input').fill(studyImage);
 
-    // Submit form
+    // Submit form using data-testid
     await page.getByTestId('create-study-submit').click();
 
     // Wait for modal to close and study to be created
-    await expect(page.getByRole('dialog', { name: 'Create Study' })).not.toBeVisible();
+    await expect(page.getByTestId('create-study-modal')).not.toBeVisible();
 
     // Verify study card appears on dashboard
     await expect(page.getByRole('link', { name: new RegExp(studyName) })).toBeVisible();
@@ -62,62 +62,62 @@ test.describe('Study Creation Workflow Tests', () => {
     const studyName = `Minimal Study ${timestamp}`;
     const studyDescription = `Minimal test study ${timestamp}`;
 
-    // Open study creation modal
+    // Open study creation modal using data-testid
     await page.getByTestId('new-study-button').click();
 
-    // Fill only required fields
-    await page.getByRole('textbox', { name: 'Study Name' }).fill(studyName);
-    await page.getByRole('textbox', { name: 'Description' }).fill(studyDescription);
+    // Fill only required fields using data-testid (target input within the testid container)
+    await page.getByTestId('study-name-input').locator('input').fill(studyName);
+    await page.getByTestId('study-description-input').locator('input').fill(studyDescription);
     // Leave image field empty
 
-    // Submit form
+    // Submit form using data-testid
     await page.getByTestId('create-study-submit').click();
 
     // Verify study was created successfully
-    await expect(page.getByRole('dialog', { name: 'Create Study' })).not.toBeVisible();
+    await expect(page.getByTestId('create-study-modal')).not.toBeVisible();
     await expect(page.getByRole('heading', { name: studyName, level: 6 })).toBeVisible();
     await expect(page.getByText(studyDescription)).toBeVisible();
   });
 
   test('Study creation form validation', async ({ page }) => {
-    // Open study creation modal
+    // Open study creation modal using data-testid
     await page.getByTestId('new-study-button').click();
 
-    // Try to submit empty form
+    // Try to submit empty form using data-testid
     await page.getByTestId('create-study-submit').click();
 
     // Form should still be visible (validation should prevent submission)
-    await expect(page.getByRole('dialog', { name: 'Create Study' })).toBeVisible();
+    await expect(page.getByTestId('create-study-modal')).toBeVisible();
 
-    // Fill only name field
-    await page.getByRole('textbox', { name: 'Study Name' }).fill('Test Name Only');
+    // Fill only name field using data-testid (target input within the testid container)
+    await page.getByTestId('study-name-input').locator('input').fill('Test Name Only');
     await page.getByTestId('create-study-submit').click();
 
     // Form should still be visible (description is required)
-    await expect(page.getByRole('dialog', { name: 'Create Study' })).toBeVisible();
+    await expect(page.getByTestId('create-study-modal')).toBeVisible();
 
-    // Fill description to complete required fields
-    await page.getByRole('textbox', { name: 'Description' }).fill('Test description added');
+    // Fill description to complete required fields using data-testid (target input within the testid container)
+    await page.getByTestId('study-description-input').locator('input').fill('Test description added');
     await page.getByTestId('create-study-submit').click();
 
     // Now form should submit successfully
-    await expect(page.getByRole('dialog', { name: 'Create Study' })).not.toBeVisible();
+    await expect(page.getByTestId('create-study-modal')).not.toBeVisible();
     await expect(page.getByText('Test Name Only').first()).toBeVisible();
   });
 
   test('Cancel study creation', async ({ page }) => {
-    // Open study creation modal
+    // Open study creation modal using data-testid
     await page.getByTestId('new-study-button').click();
 
-    // Fill some fields
-    await page.getByRole('textbox', { name: 'Study Name' }).fill('Cancelled Study');
-    await page.getByRole('textbox', { name: 'Description' }).fill('This should be cancelled');
+    // Fill some fields using data-testid (target input within the testid container)
+    await page.getByTestId('study-name-input').locator('input').fill('Cancelled Study');
+    await page.getByTestId('study-description-input').locator('input').fill('This should be cancelled');
 
-    // Click cancel
-    await page.getByRole('button', { name: 'Cancel' }).click();
+    // Click cancel using data-testid
+    await page.getByTestId('create-study-cancel').click();
 
     // Modal should close without creating study
-    await expect(page.getByRole('dialog', { name: 'Create Study' })).not.toBeVisible();
+    await expect(page.getByTestId('create-study-modal')).not.toBeVisible();
     await expect(page.getByText('Cancelled Study')).not.toBeVisible();
   });
 
@@ -143,19 +143,19 @@ test.describe('Study Creation Workflow Tests', () => {
   test('Multiple studies can be created and displayed', async ({ page }) => {
     const timestamp = Date.now();
     
-    // Create first study
+    // Create first study using data-testid
     await page.getByTestId('new-study-button').click();
-    await page.getByRole('textbox', { name: 'Study Name' }).fill(`First Study ${timestamp}`);
-    await page.getByRole('textbox', { name: 'Description' }).fill('First study description');
+    await page.getByTestId('study-name-input').locator('input').fill(`First Study ${timestamp}`);
+    await page.getByTestId('study-description-input').locator('input').fill('First study description');
     await page.getByTestId('create-study-submit').click();
     
     // Wait for first study to appear
     await expect(page.getByText(`First Study ${timestamp}`)).toBeVisible();
 
-    // Create second study
+    // Create second study using data-testid
     await page.getByTestId('new-study-button').click();
-    await page.getByRole('textbox', { name: 'Study Name' }).fill(`Second Study ${timestamp}`);
-    await page.getByRole('textbox', { name: 'Description' }).fill('Second study description');
+    await page.getByTestId('study-name-input').locator('input').fill(`Second Study ${timestamp}`);
+    await page.getByTestId('study-description-input').locator('input').fill('Second study description');
     await page.getByTestId('create-study-submit').click();
 
     // Verify both studies are visible
@@ -166,12 +166,12 @@ test.describe('Study Creation Workflow Tests', () => {
   });
 
   test('Study creation shows loading states appropriately', async ({ page }) => {
-    // Open study creation modal
+    // Open study creation modal using data-testid
     await page.getByTestId('new-study-button').click();
 
-    // Fill form
-    await page.getByRole('textbox', { name: 'Study Name' }).fill('Loading Test Study');
-    await page.getByRole('textbox', { name: 'Description' }).fill('Testing loading states');
+    // Fill form using data-testid (target input within the testid container)
+    await page.getByTestId('study-name-input').locator('input').fill('Loading Test Study');
+    await page.getByTestId('study-description-input').locator('input').fill('Testing loading states');
 
     // Submit form and immediately check for loading state or disabled button
     await page.getByTestId('create-study-submit').click();
@@ -183,7 +183,7 @@ test.describe('Study Creation Workflow Tests', () => {
     
     // Wait for either modal to close or loading to complete (max 10 seconds)
     await expect(async () => {
-      const modalVisible = await page.getByRole('dialog', { name: 'Create Study' }).isVisible();
+      const modalVisible = await page.getByTestId('create-study-modal').isVisible();
       const studyVisible = await page.getByText('Loading Test Study').first().isVisible();
       
       // Either modal closed (study created) or we're still in a reasonable loading state

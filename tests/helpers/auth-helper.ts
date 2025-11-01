@@ -49,14 +49,14 @@ export async function createTestStudy(page: Page, studyName: string, description
   // Ensure we're on dashboard
   await expect(page.getByRole('heading', { name: 'Add Study' })).toBeVisible();
   
-  // Click Add Study button
+  // Click Add Study button using data-testid
   await page.getByTestId('new-study-button').click();
   
-  // Fill out study form
-  await page.getByRole('textbox', { name: 'Study Name' }).fill(studyName);
-  await page.getByRole('textbox', { name: 'Description' }).fill(description);
+  // Fill out study form using data-testid (target input within the testid container)
+  await page.getByTestId('study-name-input').locator('input').fill(studyName);
+  await page.getByTestId('study-description-input').locator('input').fill(description);
   
-  // Submit form
+  // Submit form using data-testid
   await page.getByTestId('create-study-submit').click();
   
   // Verify study was created (use first occurrence to avoid conflicts)
