@@ -6,9 +6,22 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - ./data:/data/db
+      - mongodb_data:/data/db
     environment:
       MONGO_INITDB_DATABASE: symbiont-local-mongodb
+
+  qdrant:
+    image: qdrant/qdrant
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant_storage:/qdrant/storage
+
+  supertokens:
+    image: registry.supertokens.io/supertokens/supertokens-mysql
+    ports:
+      - "3567:3567"
 
   fastapi-dev:
     build:
@@ -34,3 +47,7 @@ services:
       - .env.production
     command: "uvicorn symbiont.main:app --host 0.0.0.0 --port 8080"
     profiles: ["production"]
+
+volumes:
+  mongodb_data:
+  qdrant_storage:
