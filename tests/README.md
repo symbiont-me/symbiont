@@ -92,7 +92,7 @@ Make sure your backend has the following:
 
 ## Frontend Requirements
 
-1. Dependencies installed: `cd frontend && pnpm install`
+1. Dependencies installed: `cd frontend && bun install`
 2. Environment variables configured
 
 ## Writing New Tests
