@@ -17,6 +17,8 @@ import { Select } from "@mui/material";
 import { MenuItem } from "@mui/material";
 import { FormControl } from "@mui/material";
 import { InputLabel } from "@mui/material";
+import { InputAdornment } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { LLMModels } from "@/types";
 import { UserAuth } from "@/app/context/AuthContext";
 import { SelectChangeEvent } from "@mui/material/Select";
@@ -87,6 +89,7 @@ export default function FullScreenSettingsDialog({
 
   const [model, setModel] = useState<string>(LLMModels.GPT_3_5_TURBO);
   const [apiKey, setApiKey] = useState<string>("");
+  const [showApiKey, setShowApiKey] = useState(false);
   const [open, setOpen] = useState(true);
 
   useEffect(() => {
@@ -127,6 +130,10 @@ export default function FullScreenSettingsDialog({
   function handleApiKey(event: React.ChangeEvent<HTMLInputElement>) {
     setApiKey(event.target.value);
   }
+
+  const handleToggleApiKeyVisibility = () => {
+    setShowApiKey(!showApiKey);
+  };
 
   return (
     <React.Fragment>
@@ -178,10 +185,22 @@ export default function FullScreenSettingsDialog({
 
           <Input
             placeholder="API Key"
+            type={showApiKey ? "text" : "password"}
             sx={{ marginTop: "16px", width: "70%" }}
             onChange={handleApiKey}
             value={apiKey}
             data-testid="api-key-input"
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle api key visibility"
+                  onClick={handleToggleApiKeyVisibility}
+                  edge="end"
+                >
+                  {showApiKey ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
           />
           <Typography
             sx={{
