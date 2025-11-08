@@ -37,9 +37,9 @@ export async function signInWithTestCredentials(page: Page): Promise<void> {
   // Submit sign-in form
   await page.getByRole('button', { name: 'Sign In' }).click();
   
-  // Verify successful sign-in by checking we're on dashboard
-  await expect(page).toHaveURL('http://localhost:4000/');
-  await expect(page.getByRole('heading', { name: 'Add Study' })).toBeVisible();
+  // Verify successful sign-in by checking we're on studies page
+  await expect(page).toHaveURL('http://localhost:4000/studies');
+  await expect(page.getByRole('heading', { name: 'My Studies' })).toBeVisible();
 }
 
 /**
@@ -47,14 +47,14 @@ export async function signInWithTestCredentials(page: Page): Promise<void> {
  */
 export async function createTestStudy(page: Page, studyName: string, description: string): Promise<void> {
   // Ensure we're on dashboard
-  await expect(page.getByRole('heading', { name: 'Add Study' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'My Studies' })).toBeVisible();
   
   // Click Add Study button using data-testid
   await page.getByTestId('new-study-button').click();
   
-  // Fill out study form using data-testid (target input within the testid container)
-  await page.getByTestId('study-name-input').locator('input').fill(studyName);
-  await page.getByTestId('study-description-input').locator('input').fill(description);
+  // Fill out study form using data-testid (inputs are now direct inputs)
+  await page.getByTestId('study-name-input').fill(studyName);
+  await page.getByTestId('study-description-input').fill(description);
   
   // Submit form using data-testid
   await page.getByTestId('create-study-submit').click();

@@ -3,87 +3,98 @@ import Link from "next/link";
 import "./studyStyles.css";
 import { useStudyContext } from "@/app/context/StudyContext";
 import * as React from "react";
-import { styled } from "@mui/material/styles";
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import CardMedia from "@mui/material/CardMedia";
-import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
-import IconButton, { IconButtonProps } from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import DeleteIcon from "@mui/icons-material/Delete";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Trash2, Calendar, FileText } from "lucide-react";
+import Image from "next/image";
 
-interface ExpandMoreProps extends IconButtonProps {
-  expand: boolean;
-}
-
-const ExpandMore = styled((props: ExpandMoreProps) => {
-  const { expand, ...other } = props;
-  return <IconButton {...other} />;
-})(({ theme, expand }) => ({
-  transform: !expand ? "rotate(0deg)" : "rotate(180deg)",
-  marginLeft: "auto",
-  transition: theme.transitions.create("transform", {
-    duration: theme.transitions.duration.shortest,
-  }),
-}));
 
 const placeholderImage =
   "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8";
 
 export default function StudyCard({ study }: { study: Study }) {
-  const [expanded, setExpanded] = React.useState(false);
   const studyContext = useStudyContext();
 
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
+  const formatDate = (dateString: string | undefined) => {
+    if (!dateString) return "No date";
+    return new Date(dateString).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
   };
 
   return (
-    <Card sx={{ maxWidth: 245, maxHeight: 345 }}>
-      <Link href={`studies/${study._id}`}>
-        <CardHeader
-          title={
-            <Typography variant="h6" style={{ fontSize: 14 }}>
-              {study.name}
-            </Typography>
-          }
-          subheader={
-            <Typography variant="subtitle2" style={{ fontSize: 8 }}>
-              {study?.createdAt?.toString()}
-            </Typography>
-          }
-          sx={{ cursor: "pointer" }}
+    <Card className="w-80 overflow-hidden transition-all duration-300 hover:shadow-lg hover:scale-[1.02] border-0 shadow-md group">
+      {/* Image Section */}
+      <div className="relative h-48 overflow-hidden">
+        <Image
+          src={study.image || placeholderImage}
+          alt={study.name}
+          fill
+          className="object-cover transition-transform duration-300 group-hover:scale-105"
         />
-      </Link>
-      <CardMedia
-        component="img"
-        height="194"
-        image={study.image || placeholderImage}
-        alt={study.name}
-      />
-      <CardContent>
-        <Typography variant="body2" color="text.secondary">
-          {study.description}
-        </Typography>
-      </CardContent>
-      <CardActions disableSpacing>
-        {/* <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
-        </IconButton>
-        <IconButton aria-label="share">
-          <ShareIcon />
-        </IconButton> */}
-        <IconButton
-          aria-label="delete"
-          onClick={() =>
-            study._id && studyContext?.deleteStudy(study._id.toString())
-          }
-          sx={{ marginLeft: "auto", height: 20, width: 20 }}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+        
+        {/* Delete button overlay */}
+        <Button
+          variant="destructive"
+          size="icon"
+          className="absolute top-2 right-2 h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            study._id && studyContext?.deleteStudy(study._id.toString());
+          }}
         >
-          <DeleteIcon />
-        </IconButton>
-      </CardActions>
+          <Trash2 className="h-4 w-4" />
+        </Button>
+      </div>
+
+      {/* Content Section */}
+      <Link href={`studies/${study._id}`} className="block">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-lg font-semibold text-gray-900 hover:text-blue-600 transition-colors"
+            style={{
+              display: '-webkit-box',
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden'
+            }}>
+            {study.name}
+          </CardTitle>
+          <div className="flex items-center text-sm text-gray-500 mt-2">
+            <Calendar className="h-4 w-4 mr-1" />
+            <span>{formatDate(study?.createdAt?.toString())}</span>
+          </div>
+        </CardHeader>
+
+        <CardContent className="pt-0">
+          <div className="flex items-start mb-3">
+            <FileText className="h-4 w-4 text-gray-400 mr-2 mt-1 flex-shrink-0" />
+            <p className="text-sm text-gray-600 leading-relaxed"
+              style={{
+                display: '-webkit-box',
+                WebkitLineClamp: 3,
+                WebkitBoxOrient: 'vertical',
+                overflow: 'hidden'
+              }}>
+              {study.description || "No description provided"}
+            </p>
+          </div>
+          
+          {/* Study metadata */}
+          <div className="flex items-center justify-between pt-3 border-t border-gray-100">
+            <div className="flex items-center text-xs text-gray-500">
+              <div className="w-2 h-2 bg-green-400 rounded-full mr-2" />
+              Active
+            </div>
+            <div className="text-xs text-gray-400">
+              Study #{study._id?.toString().slice(-6)}
+            </div>
+          </div>
+        </CardContent>
+      </Link>
     </Card>
   );
 }

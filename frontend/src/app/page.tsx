@@ -5,9 +5,11 @@ import LandingPage from "@/components/LandingPage/LandingPageMain";
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 import Session from "supertokens-auth-react/recipe/session";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const authContext = UserAuth();
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -16,14 +18,18 @@ export default function Home() {
       try {
         const sessionExists = await Session.doesSessionExist();
         setIsLoggedIn(sessionExists);
-        setLoading(false);
+        if (sessionExists) {
+          router.push("/studies");
+        } else {
+          setLoading(false);
+        }
       } catch (error) {
         console.error("Session check error:", error);
         setLoading(false);
       }
     }
     checkSession();
-  }, []);
+  }, [router]);
 
   if (loading) {
     return (
@@ -33,5 +39,5 @@ export default function Home() {
     );
   }
 
-  return <>{isLoggedIn ? <UserDashboard /> : <LandingPage />}</>;
+  return <LandingPage />;
 }
