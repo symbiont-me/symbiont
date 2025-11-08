@@ -4,11 +4,9 @@ import MessageList from "@/components/ChatComponent/MessageList";
 import UserChatInput from "@/components/ChatComponent/UserChatInput";
 import { useState, useEffect } from "react";
 import { StudyResource } from "@/types";
-import ResourceSwitcher from "@/components/ResourceSwitcher";
 import "./chats.css";
 import { useStudyContext } from "@/app/context/StudyContext";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
@@ -17,21 +15,17 @@ import Session from "supertokens-auth-react/recipe/session";
 
 type ChatComponentProps = {
   studyId: string;
+  selectedResources: StudyResource[];
 };
 
 
 // TODO model selection and api key input should be on the Dashboard
 // TODO Fix isLoading state in the message list
-const ChatComponent = ({ studyId }: ChatComponentProps) => {
+const ChatComponent = ({ studyId, selectedResources }: ChatComponentProps) => {
   const currentStudyContext = useStudyContext();
   const [chatLoading, setChatLoading] = useState(true);
   const [chatMessages, setChatMessages] = useState<Message[]>([]);
   const [userToken, setUserToken] = useState<string | undefined>(undefined);
-  const [combineResources, setCombineResources] = useState(false);
-  // NOTE this is used to switch the context for the chat
-  const [selectedResource, setSelectedResource] = useState<
-    StudyResource | undefined
-  >(undefined);
   const [userQuery, setUserQuery] = useState("");
   const [previousMessage, setPreviousMessage] = useState("");
   useEffect(() => {
@@ -65,8 +59,8 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
       user_query: userQuery,
       previous_message: previousMessage,
       study_id: studyId,
-      resource_identifier: selectedResource?.identifier,
-      combined: combineResources,
+      resource_identifier: selectedResources.length > 0 ? selectedResources[0].identifier : null,
+      combined: selectedResources.length > 1,
     },
     credentials: "include",
     headers: {
@@ -84,7 +78,7 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
     setPreviousMessage(messages[messages.length - 1]?.content);
     // getUserAuthToken();
     setChatLoading(false);
-  }, [messages, selectedResource, input]); // TODO include getUserAuthToken if there is an error
+  }, [messages, selectedResources, input]); // TODO include getUserAuthToken if there is an error
 
   function deleteChat() {
     if (!currentStudyContext?.study) {
@@ -116,29 +110,11 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
     }
   }, [isLoading]);
 
-  function handleCombineResources(checked: boolean) {
-    setCombineResources(checked);
-    console.log(checked);
-  }
 
   return (
     <>
       <div className="p-2">
-        <ResourceSwitcher
-          studyId={studyId}
-          onResourceChange={setSelectedResource}
-        />
-        <div className="flex flex-row justify-between items-center">
-          <div className="flex flex-row items-center justify-center gap-2">
-            <Checkbox
-              checked={combineResources}
-              onCheckedChange={handleCombineResources}
-              data-testid="combine-resources-checkbox"
-            />
-            <label htmlFor="combineResources" className="text-xs">
-              Combine Resources
-            </label>
-          </div>
+        <div className="flex flex-row justify-end items-center">
           <div
             className="flex flex-row justify-center items-center cursor-pointer p-2"
             onClick={deleteChat}

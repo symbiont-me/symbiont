@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import { User } from "../../../types";
-import { Study } from "@/types";
+import { Study, StudyResource } from "@/types";
 import { ViewSelected } from "@/const";
 import { UserAuth } from "@/app/context/AuthContext";
 import { useStudyContext } from "@/app/context/StudyContext";
@@ -18,6 +18,7 @@ import TestKnowledge from "@/components/Study/TestKnowledge";
 import TextEvaluation from "@/components/Study/TextEvaluation";
 import Summaries from "@/components/Study/Summaries";
 import Resources from "@/components/Study/Resources";
+import ResourcesList from "@/components/Study/ResourcesList";
 import ChatComponent from "@/components/ChatComponent/ChatComponentMain";
 import { Card, CardContent } from "@/components/ui/card";
 import "@/app/studies/studyStyles.css";
@@ -38,7 +39,8 @@ const viewComponents: { [key in ViewSelected]?: React.ComponentType<any> } = {
   [ViewSelected.VideoViewer]: VideoViewer,
   // [ViewSelected.AudioPlayer]: AudioPlayer,
   [ViewSelected.Summaries]: Summaries,
-  [ViewSelected.Resources]: Resources, // TODO name this properly or replace with the correct component
+  [ViewSelected.AddResources]: Resources,
+  [ViewSelected.Resources]: ResourcesList,
   // Add any other enum values that are missing
 };
 
@@ -56,6 +58,9 @@ const StudyPage = () => {
 
   // TODO update the writer state in its own comaponent
   const [textWriterValue, setTextWriterValue] = useState<string>("");
+  
+  // State for selected resources
+  const [selectedResources, setSelectedResources] = useState<StudyResource[]>([]);
 
   // TODO the best thing would be to delete this here as Context handles this
   const studyId = path.split("/")[2];
@@ -65,6 +70,11 @@ const StudyPage = () => {
       return;
     }
     setCurrentStudy(currentStudyContext?.study);
+    
+    // Auto-select first resource when study loads
+    if (currentStudyContext?.study?.resources?.length > 0 && selectedResources.length === 0) {
+      setSelectedResources([currentStudyContext.study.resources[0]]);
+    }
   }, [currentStudyContext?.study]);
 
   if (loading) {
@@ -105,6 +115,8 @@ const StudyPage = () => {
                     textWriterValue={textWriterValue}
                     studyId={studyId}
                     study={currentStudy}
+                    selectedResources={selectedResources}
+                    onResourceSelectionChange={setSelectedResources}
                   />
                 </CardContent>
               </Card>
@@ -115,7 +127,7 @@ const StudyPage = () => {
         <div className="chat flex flex-col m-4 mb-0">
           <Card className="border shadow-sm">
             <CardContent className="p-0">
-              <ChatComponent studyId={studyId} />
+              <ChatComponent studyId={studyId} selectedResources={selectedResources} />
             </CardContent>
           </Card>
         </div>

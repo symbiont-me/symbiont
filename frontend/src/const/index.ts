@@ -13,7 +13,8 @@ export enum ViewSelected {
   VideoViewer = "video viewer",
   // AudioPlayer = "audio player",
   Summaries = "summaries",
-  Resources = "add resources",
+  AddResources = "add resources",
+  Resources = "Resources",
 }
 
 // TODO use these wherever possible
