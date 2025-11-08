@@ -201,6 +201,7 @@ const Resources = () => {
               value={textResourceContent}
               onChange={(e) => setTextResourceContent(e.target.value)}
               className="mb-2"
+              data-testid="text-resource-content-input"
             />
 
             <TextField
@@ -211,9 +212,14 @@ const Resources = () => {
               value={textResourceName}
               onChange={(e) => setTextResourceName(e.target.value)}
               className="mb-2"
+              data-testid="text-resource-name-input"
             />
 
-            <Button variant="contained" onClick={handleTextResource}>
+            <Button 
+              variant="contained" 
+              onClick={handleTextResource}
+              data-testid="add-text-resource-button"
+            >
               Add Text Resource
             </Button>
           </>
@@ -234,8 +240,13 @@ const Resources = () => {
               value={ytLink}
               onChange={(e) => setYtLink(e.target.value)}
               className="mb-2"
+              data-testid="youtube-url-input"
             />
-            <Button variant="contained" onClick={handleYtLinkSubmission}>
+            <Button 
+              variant="contained" 
+              onClick={handleYtLinkSubmission}
+              data-testid="add-youtube-button"
+            >
               Add Youtube Link
             </Button>
           </>
