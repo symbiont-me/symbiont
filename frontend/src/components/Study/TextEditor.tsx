@@ -46,7 +46,6 @@ const TextEditor = () => {
         height={600}
         preview="edit"
         hideToolbar={false}
-        visibleDragBar={false}
         data-color-mode="light"
         style={{
           backgroundColor: 'white',

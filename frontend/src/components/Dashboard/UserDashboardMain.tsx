@@ -19,7 +19,7 @@ const UserDashboard = () => {
     if (studyContext && studyContext.allStudies) {
       setStudies(studyContext.allStudies);
     }
-  }, [studyContext, studies]);
+  }, [studyContext]);
 
   function fetchStudies() {
     if (studyContext && studyContext.allStudies) {
@@ -77,8 +77,11 @@ const UserDashboard = () => {
               <NewStudyCard onNewStudyCreated={fetchStudies} />
               
               {/* Existing Studies */}
-              {studies.map((study) => (
-                <StudyCard key={study._id} study={study} />
+              {studies.map((study, index) => (
+                <StudyCard 
+                  key={study._id ? study._id.toString() : `study-${index}`} 
+                  study={study} 
+                />
               ))}
             </div>
 

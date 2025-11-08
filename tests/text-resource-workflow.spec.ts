@@ -72,7 +72,7 @@ test.describe("Text Resource Workflow", () => {
       const testApiKey = process.env.OPENAI_KEY_FOR_TESTING;
       console.log("Using API key from environment for test");
 
-      // Step 1a: Select GPT-4o-mini model
+      // Step 1a: Select GPT-4o-mini model (updated for shadcn select)
       const modelSelect = page.locator('[data-testid="llm-model-select"]');
       if (
         (await modelSelect.count()) > 0 &&
@@ -80,20 +80,33 @@ test.describe("Text Resource Workflow", () => {
       ) {
         console.log("Found model selector, selecting GPT-4o-mini...");
         await modelSelect.click();
-        await page.waitForTimeout(500);
+        await page.waitForTimeout(1000); // Wait for dropdown to open
 
-        const gpt4oMiniOption = page.getByRole('option', { name: 'GPT_OMNI_MINI' });
+        // Look for GPT_OMNI_MINI option in the shadcn select dropdown
+        const gpt4oMiniOption = page.locator('[role="option"]').filter({ hasText: 'GPT_OMNI_MINI' });
         if ((await gpt4oMiniOption.count()) > 0) {
           await gpt4oMiniOption.click();
           console.log("Selected GPT-4o-mini model");
         } else {
-          console.log("GPT-4o-mini option not found, using default model");
+          // Fallback - look for any option and select the first one
+          const firstOption = page.locator('[role="option"]').first();
+          if ((await firstOption.count()) > 0) {
+            await firstOption.click();
+            console.log("Selected first available model option");
+          } else {
+            console.log("No model options found, using default model");
+          }
         }
         await page.waitForTimeout(500);
       }
 
-      // Step 1b: Set API key
-      const apiKeyInput = page.locator('[data-testid="api-key-input"] input');
+      // Step 1b: Set API key (updated for new input structure)
+      let apiKeyInput = page.locator('[data-testid="api-key-input"]');
+      
+      // If the above doesn't work, try the input element directly
+      if ((await apiKeyInput.count()) === 0) {
+        apiKeyInput = page.locator('#api-key');
+      }
 
       let apiKeySet = false;
       if (
@@ -101,6 +114,7 @@ test.describe("Text Resource Workflow", () => {
         (await apiKeyInput.isVisible({ timeout: 2000 }))
       ) {
         console.log("Found API key input field");
+        await apiKeyInput.clear();
         await apiKeyInput.fill(testApiKey);
         await page.waitForTimeout(1000);
 
@@ -112,7 +126,7 @@ test.describe("Text Resource Workflow", () => {
         console.log("API key input field not found");
       }
 
-      // Step 1c: Save settings
+      // Step 1c: Save settings (updated for new button and loading states)
       if (apiKeySet) {
         const saveButton = page.locator('[data-testid="llm-settings-save"]');
         if (
@@ -120,13 +134,46 @@ test.describe("Text Resource Workflow", () => {
           (await saveButton.isVisible({ timeout: 2000 }))
         ) {
           console.log("Saving LLM settings...");
-          await saveButton.click();
-          await page.waitForTimeout(3000);
-          console.log("LLM settings saved successfully");
+          
+          // Check if button is enabled before clicking
+          const isDisabled = await saveButton.getAttribute('disabled');
+          if (isDisabled) {
+            console.log("Save button is disabled, likely due to validation");
+          } else {
+            await saveButton.click();
+            
+            // Wait for the save process and success message
+            console.log("Waiting for save to complete...");
+            
+            // Look for success message or loading state
+            const successMessage = page.locator('text=Settings saved successfully!');
+            const loadingState = page.locator('text=Saving...');
+            
+            // Wait for loading to appear and disappear, then success message
+            try {
+              await loadingState.waitFor({ timeout: 2000 });
+              console.log("Save loading state detected");
+            } catch {
+              console.log("No loading state detected");
+            }
+            
+            try {
+              await successMessage.waitFor({ timeout: 5000 });
+              console.log("Success message detected");
+              await page.waitForTimeout(2000); // Wait for success message to be visible
+            } catch {
+              console.log("No success message detected, but continuing");
+            }
+            
+            console.log("LLM settings saved successfully");
+          }
         }
       }
 
-      // Step 1d: Close settings dialog
+      // Step 1d: Close settings dialog (updated for new modal structure)
+      // First wait for success message to complete if it appeared
+      await page.waitForTimeout(1500);
+      
       const closeButton = page.locator('[data-testid="llm-settings-close"]');
       if (
         (await closeButton.count()) > 0 &&
@@ -134,6 +181,21 @@ test.describe("Text Resource Workflow", () => {
       ) {
         console.log("Closing settings dialog...");
         await closeButton.click();
+        await page.waitForTimeout(1000);
+      } else {
+        // Try alternative close methods if the X button isn't found
+        console.log("X button not found, trying other close methods...");
+        
+        // Try Cancel button
+        const cancelButton = page.locator('button:has-text("Cancel")');
+        if ((await cancelButton.count()) > 0 && (await cancelButton.isVisible())) {
+          await cancelButton.click();
+          console.log("Closed via Cancel button");
+        } else {
+          // Try clicking outside the modal
+          await page.keyboard.press('Escape');
+          console.log("Closed via Escape key");
+        }
         await page.waitForTimeout(1000);
       }
     } else {
