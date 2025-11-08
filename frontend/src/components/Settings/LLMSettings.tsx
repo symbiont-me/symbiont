@@ -30,12 +30,16 @@ type FullScreenSettingsDialogProps = {
 async function updateLlmSettings(
   model: string,
   apiKey: string,
+  customApiUrl: string,
+  customModelName: string,
   userToken: string
 ) {
   const endpoint = `${process.env.NEXT_PUBLIC_BASE_URL}/set-llm-settings`;
   const body = {
     llm_name: model,
     api_key: apiKey,
+    custom_api_url: customApiUrl || undefined,
+    custom_model_name: customModelName || undefined,
   };
 
   console.log("User token: ", userToken);
@@ -77,10 +81,12 @@ export default function FullScreenSettingsDialog({
 
   const [model, setModel] = useState<string>(LLMModels.GPT_3_5_TURBO);
   const [apiKey, setApiKey] = useState<string>("");
+  const [customApiUrl, setCustomApiUrl] = useState<string>("");
+  const [customModelName, setCustomModelName] = useState<string>("");
   const [showApiKey, setShowApiKey] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
-  const [errors, setErrors] = useState<{model?: string; apiKey?: string}>({});
+  const [errors, setErrors] = useState<{model?: string; apiKey?: string; customApiUrl?: string; customModelName?: string}>({});
 
   useEffect(() => {
     async function fetchAccessToken() {
@@ -102,6 +108,8 @@ export default function FullScreenSettingsDialog({
       }
       setModel(res.llm_name);
       setApiKey(res.api_key);
+      setCustomApiUrl(res.custom_api_url || "");
+      setCustomModelName(res.custom_model_name || "");
     });
   }, [userToken]);
 
@@ -111,12 +119,20 @@ export default function FullScreenSettingsDialog({
     }
 
     // Validate inputs
-    const newErrors: {model?: string; apiKey?: string} = {};
+    const newErrors: {model?: string; apiKey?: string; customApiUrl?: string; customModelName?: string} = {};
     if (!model) {
       newErrors.model = "Please select a model";
     }
     if (!apiKey || !apiKey.trim()) {
       newErrors.apiKey = "Please enter an API key";
+    }
+    if (model === LLMModels.CUSTOM_OPEN_SOURCE) {
+      if (!customApiUrl || !customApiUrl.trim()) {
+        newErrors.customApiUrl = "Please enter a custom API URL";
+      }
+      if (!customModelName || !customModelName.trim()) {
+        newErrors.customModelName = "Please enter a model name";
+      }
     }
 
     setErrors(newErrors);
@@ -126,7 +142,7 @@ export default function FullScreenSettingsDialog({
 
     setIsSaving(true);
     try {
-      await updateLlmSettings(model, apiKey, userToken);
+      await updateLlmSettings(model, apiKey, customApiUrl, customModelName, userToken);
       setSaveSuccess(true);
       setTimeout(() => {
         setSaveSuccess(false);
@@ -280,6 +296,88 @@ export default function FullScreenSettingsDialog({
                 </div>
               </div>
             </div>
+
+            {/* Custom Model Fields */}
+            {model === LLMModels.CUSTOM_OPEN_SOURCE && (
+              <div className="space-y-6 border-t border-gray-200 pt-6">
+                <div className="space-y-3">
+                  <Label htmlFor="custom-api-url" className="text-sm font-semibold text-gray-800 flex items-center gap-2">
+                    <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                    Custom API URL
+                  </Label>
+                  <p className="text-sm text-gray-600 -mt-1">
+                    OpenAI-compatible API endpoint URL
+                  </p>
+                  <Input
+                    id="custom-api-url"
+                    placeholder="https://api.netmind.ai/inference-api/openai/v1"
+                    className={`h-12 border-2 transition-all duration-200 rounded-xl shadow-sm ${
+                      errors.customApiUrl 
+                        ? 'border-red-300 focus:border-red-500 focus:ring-red-200' 
+                        : 'border-gray-200 hover:border-blue-300 focus:border-blue-500 focus:ring-blue-200'
+                    } bg-white`}
+                    onChange={(e) => {
+                      setCustomApiUrl(e.target.value);
+                      if (errors.customApiUrl) {
+                        setErrors(prev => ({ ...prev, customApiUrl: undefined }));
+                      }
+                    }}
+                    value={customApiUrl}
+                    data-testid="custom-api-url-input"
+                  />
+                  {errors.customApiUrl && (
+                    <div className="flex items-center gap-2 text-red-600 text-sm">
+                      <AlertCircle className="h-4 w-4" />
+                      <span>{errors.customApiUrl}</span>
+                    </div>
+                  )}
+                </div>
+
+                <div className="space-y-3">
+                  <Label htmlFor="custom-model-name" className="text-sm font-semibold text-gray-800 flex items-center gap-2">
+                    <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                    Model Name
+                  </Label>
+                  <p className="text-sm text-gray-600 -mt-1">
+                    The specific model identifier (e.g., deepseek-ai/DeepSeek-V3.2-Exp)
+                  </p>
+                  <Input
+                    id="custom-model-name"
+                    placeholder="deepseek-ai/DeepSeek-V3.2-Exp"
+                    className={`h-12 border-2 transition-all duration-200 rounded-xl shadow-sm ${
+                      errors.customModelName 
+                        ? 'border-red-300 focus:border-red-500 focus:ring-red-200' 
+                        : 'border-gray-200 hover:border-blue-300 focus:border-blue-500 focus:ring-blue-200'
+                    } bg-white`}
+                    onChange={(e) => {
+                      setCustomModelName(e.target.value);
+                      if (errors.customModelName) {
+                        setErrors(prev => ({ ...prev, customModelName: undefined }));
+                      }
+                    }}
+                    value={customModelName}
+                    data-testid="custom-model-name-input"
+                  />
+                  {errors.customModelName && (
+                    <div className="flex items-center gap-2 text-red-600 text-sm">
+                      <AlertCircle className="h-4 w-4" />
+                      <span>{errors.customModelName}</span>
+                    </div>
+                  )}
+                </div>
+
+                <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
+                  <div className="text-sm text-orange-800">
+                    <div className="font-medium mb-2">Example Configuration:</div>
+                    <div className="text-xs space-y-1 font-mono">
+                      <div>• API URL: https://api.netmind.ai/inference-api/openai/v1</div>
+                      <div>• Model: deepseek-ai/DeepSeek-V3.2-Exp</div>
+                      <div>• API Key: Your provider's API key</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Action Buttons */}
             <div className="flex flex-col-reverse sm:flex-row gap-3 pt-4">

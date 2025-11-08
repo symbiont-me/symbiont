@@ -55,12 +55,19 @@ def isGoogleModel(llm_name: str) -> bool:
     return bool(re.match(r"(models/)?gemini", llm_name))
 
 
+def isCustomModel(llm_name: str) -> bool:
+    return llm_name.startswith("custom/")
+
+
 class UsersLLMSettings(BaseModel):
     llm_name: str
     # api_key: SecretStr
     max_tokens: int = 1500
     temperature: float = 0.7
     timeout: int = 60
+    # For custom/open source models
+    custom_api_url: str | None = None
+    custom_model_name: str | None = None
 
 
 def init_llm(settings: UsersLLMSettings, api_key: str):
@@ -99,7 +106,25 @@ def init_llm(settings: UsersLLMSettings, api_key: str):
                 transport=None,
                 client=None,
             )
-
+            return llm
+        elif isCustomModel(settings.llm_name):
+            if not settings.custom_api_url or not settings.custom_model_name:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Custom model requires both custom_api_url and custom_model_name"
+                )
+            # Strip whitespace from custom fields
+            custom_api_url = settings.custom_api_url.strip()
+            custom_model_name = settings.custom_model_name.strip()
+            
+            llm = ChatOpenAI(
+                model=custom_model_name,
+                api_key=api_key,
+                base_url=custom_api_url,
+                max_tokens=settings.max_tokens,
+                temperature=settings.temperature,
+            )
+            return llm
         else:
             logger.error(f"Couldn't find the llm provider, {settings.llm_name}")
             raise HTTPException(

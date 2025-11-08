@@ -13,6 +13,12 @@ router = APIRouter()
 class LLMSettingsRequest(BaseModel):
     llm_name: str
     api_key: str
+    max_tokens: int = 1500
+    temperature: float = 0.7
+    timeout: int = 60
+    # For custom/open source models
+    custom_api_url: str | None = None
+    custom_model_name: str | None = None
 
 
 @router.post("/set-llm-settings")
@@ -27,6 +33,13 @@ async def set_llm_settings(
 
     user_uid = session_data["user_id"]
     await user_exists(user_uid)
+    
+    # Strip whitespace from custom fields if they exist
+    if settings.custom_api_url:
+        settings.custom_api_url = settings.custom_api_url.strip()
+    if settings.custom_model_name:
+        settings.custom_model_name = settings.custom_model_name.strip()
+    
     # we attach the api_key to the response as we are not storing it in the database
     response.set_cookie(key="api_key", value=settings.api_key, samesite="none", secure=True)
     # delete the api_key from the settings object for security

@@ -100,6 +100,7 @@ export enum LLMModels {
   GEMINI_1_5_FLASH_001 = "models/gemini-1.5-flash-001",
   GEMINI_1_5_FLASH_LATEST = "models/gemini-1.5-flash-latest",
   GEMINI_1_5_PRO = "models/gemini-1.5-pro",
+  CUSTOM_OPEN_SOURCE = "custom/open-source",
   GEMINI_1_5_PRO_001 = "models/gemini-1.5-pro-001",
   GEMINI_1_5_PRO_LATEST = "models/gemini-1.5-pro-latest",
 }
