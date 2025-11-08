@@ -76,33 +76,27 @@ export type UserAuthDetails = {
 };
 
 export enum LLMModels {
-  GPT_3_5_TURBO = "gpt-3.5-turbo",
-  GPT_3_5_TURBO_16K = "gpt-3.5-turbo-16k",
-  GPT_3_5_Turbo_0125 = "gpt-3.5-turbo-0125",
-  GPT_3_5_Turbo_1106 = "gpt-3.5-turbo-1106",
-  GPT_4_Turbo_Preview = "gpt-4-turbo-preview",
-  GPT_4_1106_Preview = "gpt-4-1106-preview",
-  GPT_4 = "gpt-4",
-  GPT_4_32k = "gpt-4-32k",
-  GPT_OMNI = "gpt-4o",
-  GPT_OMNI_MINI = "gpt-4o-mini",
-  CLAUDE_3_OPUS = "claude-3-opus-20240229",
-  CLAUDE_3_SONNET = "claude-3-5-sonnet-20240620",
-  CLAUDE_3_HAIKU = "claude-3-haiku-20240307",
-  CLAUDE_2_1 = "claude-2.1",
-  CLAUDE_2_0 = "claude-2.0",
-  CLAUDE_INSTANT_1_2 = "claude-instant-1.2",
-  GEMINI_PRO = "gemini-pro",
-  GEMINI_1_PRO = "models/gemini-1.0-pro",
-  GEMINI_1_PRO_001 = "models/gemini-1.0-pro-001",
-  GEMINI_1_PRO_LATEST = "models/gemini-1.0-pro-latest",
-  GEMINI_1_5_FLASH = "models/gemini-1.5-flash",
-  GEMINI_1_5_FLASH_001 = "models/gemini-1.5-flash-001",
-  GEMINI_1_5_FLASH_LATEST = "models/gemini-1.5-flash-latest",
-  GEMINI_1_5_PRO = "models/gemini-1.5-pro",
+  // OpenAI Models
+  GPT_5_2025_08_07 = "gpt-5-2025-08-07",
+  GPT_5_MINI_2025_08_07 = "gpt-5-mini-2025-08-07",
+  GPT_5_NANO_2025_08_07 = "gpt-5-nano-2025-08-07",
+  GPT_5_PRO_2025_10_06 = "gpt-5-pro-2025-10-06",
+  GPT_4_1_2025_04_14 = "gpt-4.1-2025-04-14",
+  GPT_4O_MINI_2024_07_18 = "gpt-4o-mini-2024-07-18",
+  GPT_4O_2024_08_06 = "gpt-4o-2024-08-06",
+  
+  // Anthropic Models
+  CLAUDE_SONNET_4_5_20250929 = "claude-sonnet-4-5-20250929",
+  CLAUDE_HAIKU_4_5_20251001 = "claude-haiku-4-5-20251001",
+  CLAUDE_OPUS_4_1_20250805 = "claude-opus-4-1-20250805",
+  
+  // Google Gemini Models
+  GEMINI_2_5_PRO = "gemini-2.5-pro",
+  GEMINI_2_5_FLASH = "gemini-2.5-flash",
+  GEMINI_2_5_FLASH_LITE = "gemini-2.5-flash-lite",
+  
+  // Custom Models
   CUSTOM_OPEN_SOURCE = "custom/open-source",
-  GEMINI_1_5_PRO_001 = "models/gemini-1.5-pro-001",
-  GEMINI_1_5_PRO_LATEST = "models/gemini-1.5-pro-latest",
 }
 
 type LLMSettings = {

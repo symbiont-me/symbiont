@@ -91,8 +91,8 @@ test.describe("Comprehensive End-to-End Workflow", () => {
         await modelSelect.click();
         await page.waitForTimeout(1000); // Wait for dropdown to open
 
-        // Look for GPT_OMNI_MINI option in the shadcn select dropdown
-        const gpt4oMiniOption = page.locator('[role="option"]').filter({ hasText: 'GPT_OMNI_MINI' });
+        // Look for GPT-4o Mini option in the shadcn select dropdown
+        const gpt4oMiniOption = page.locator('[role="option"]').filter({ hasText: 'GPT-4o Mini' });
         if ((await gpt4oMiniOption.count()) > 0) {
           await gpt4oMiniOption.click();
           console.log("Selected GPT-4o-mini model");

@@ -36,7 +36,10 @@ const LLMSettings = () => {
     timeout: 60,
   });
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState<{ text: string; type: "success" | "error" } | null>(null);
+  const [message, setMessage] = useState<{
+    text: string;
+    type: "success" | "error";
+  } | null>(null);
   const [showCustomFields, setShowCustomFields] = useState(false);
 
   useEffect(() => {
@@ -66,7 +69,7 @@ const LLMSettings = () => {
   const handleSave = async () => {
     setLoading(true);
     setMessage(null);
-    
+
     try {
       const response = await fetch("/api/set-llm-settings", {
         method: "POST",
@@ -81,7 +84,10 @@ const LLMSettings = () => {
         setMessage({ text: "Settings saved successfully!", type: "success" });
       } else {
         const error = await response.json();
-        setMessage({ text: error.detail || "Failed to save settings", type: "error" });
+        setMessage({
+          text: error.detail || "Failed to save settings",
+          type: "error",
+        });
       }
     } catch (error) {
       setMessage({ text: "Failed to save settings", type: "error" });
@@ -91,14 +97,27 @@ const LLMSettings = () => {
   };
 
   const predefinedModels = [
-    { value: "gpt-4", label: "GPT-4" },
-    { value: "gpt-4-turbo", label: "GPT-4 Turbo" },
-    { value: "gpt-3.5-turbo", label: "GPT-3.5 Turbo" },
-    { value: "claude-3-opus-20240229", label: "Claude 3 Opus" },
-    { value: "claude-3-sonnet-20240229", label: "Claude 3 Sonnet" },
-    { value: "claude-3-haiku-20240307", label: "Claude 3 Haiku" },
-    { value: "gemini-pro", label: "Gemini Pro" },
-    { value: "custom/open-source", label: "Custom Open Source Model" },
+    // OpenAI Models
+    { value: "gpt-5-2025-08-07", label: "GPT-5" },
+    { value: "gpt-5-mini-2025-08-07", label: "GPT-5 Mini" },
+    { value: "gpt-5-nano-2025-08-07", label: "GPT-5 Nano" },
+    { value: "gpt-5-pro-2025-10-06", label: "GPT-5 Pro" },
+    { value: "gpt-4.1-2025-04-14", label: "GPT-4.1" },
+    { value: "gpt-4o-2024-08-06", label: "GPT-4o" },
+    { value: "gpt-4o-mini-2024-07-18", label: "GPT-4o Mini" },
+    
+    // Anthropic Models
+    { value: "claude-sonnet-4-5-20250929", label: "Claude Sonnet 4.5" },
+    { value: "claude-haiku-4-5-20251001", label: "Claude Haiku 4.5" },
+    { value: "claude-opus-4-1-20250805", label: "Claude Opus 4.1" },
+    
+    // Google Models
+    { value: "gemini-2.5-pro", label: "Gemini 2.5 Pro" },
+    { value: "gemini-2.5-flash", label: "Gemini 2.5 Flash" },
+    { value: "gemini-2.5-flash-lite", label: "Gemini 2.5 Flash Lite" },
+    
+    // Custom Models
+    { value: "custom/open-source", label: "Custom open source model" },
   ];
 
   return (
@@ -162,7 +181,10 @@ const LLMSettings = () => {
                   fullWidth
                   value={settings.custom_model_name || ""}
                   onChange={(e) =>
-                    setSettings({ ...settings, custom_model_name: e.target.value })
+                    setSettings({
+                      ...settings,
+                      custom_model_name: e.target.value,
+                    })
                   }
                   placeholder="deepseek-ai/DeepSeek-V3.2-Exp"
                   helperText="The specific model identifier"
@@ -236,8 +258,7 @@ const LLMSettings = () => {
           • API URL: https://api.netmind.ai/inference-api/openai/v1
           <br />
           • Model Name: deepseek-ai/DeepSeek-V3.2-Exp
-          <br />
-          • API Key: Your provider's API key
+          <br />• API Key: Your provider's API key
         </Typography>
       </Box>
     </Box>
