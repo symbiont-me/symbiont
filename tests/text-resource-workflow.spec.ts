@@ -140,24 +140,50 @@ test.describe("Text Resource Workflow", () => {
       console.log("Settings interface not found - continuing with workflow");
     }
 
-    // Step 2: Navigate to the "add resources" tab and add text resource
+    // Step 2: Navigate to the Resources tab and open add resources modal for text
     console.log(
-      "Step 2: Navigating to add resources tab and adding text resource..."
+      "Step 2: Navigating to Resources tab and adding text resource..."
     );
 
-    // Click on the "add resources" tab
-    const addResourcesTab = page.locator(
-      '[role="tab"]:has-text("add resources")'
+    // Click on the "Resources" tab
+    const resourcesTab = page.locator(
+      '[role="tab"]:has-text("Resources")'
     );
     if (
-      (await addResourcesTab.count()) > 0 &&
-      (await addResourcesTab.isVisible({ timeout: 3000 }))
+      (await resourcesTab.count()) > 0 &&
+      (await resourcesTab.isVisible({ timeout: 3000 }))
     ) {
-      console.log("Found add resources tab, clicking...");
-      await addResourcesTab.click();
+      console.log("Found Resources tab, clicking...");
+      await resourcesTab.click();
       await page.waitForTimeout(1000);
     } else {
-      console.log("Add resources tab not found - trying alternative selectors");
+      console.log("Resources tab not found - trying alternative selectors");
+    }
+
+    // Click on the "Add Resources" button to open the modal
+    const addResourcesButton = page.locator('button:has-text("Add Resources")').first();
+    if (
+      (await addResourcesButton.count()) > 0 &&
+      (await addResourcesButton.isVisible({ timeout: 3000 }))
+    ) {
+      console.log("Found Add Resources button, clicking...");
+      await addResourcesButton.click();
+      await page.waitForTimeout(2000); // Wait for modal to open
+    } else {
+      console.log("Add Resources button not found - trying alternative selectors");
+    }
+
+    // Click on the "Text" tab within the modal (it should be the default)
+    const textTab = page.locator('[role="tab"]:has-text("Text")');
+    if (
+      (await textTab.count()) > 0 &&
+      (await textTab.isVisible({ timeout: 3000 }))
+    ) {
+      console.log("Found Text tab in modal, clicking...");
+      await textTab.click();
+      await page.waitForTimeout(1000);
+    } else {
+      console.log("Text tab not found in modal - it may be selected by default");
     }
 
     // Add text resource content and name using "The Right to the City" content

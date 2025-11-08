@@ -17,7 +17,6 @@ import AudioPlayer from "@/components/Study/AudioPlayer";
 import TestKnowledge from "@/components/Study/TestKnowledge";
 import TextEvaluation from "@/components/Study/TextEvaluation";
 import Summaries from "@/components/Study/Summaries";
-import Resources from "@/components/Study/Resources";
 import ResourcesList from "@/components/Study/ResourcesList";
 import ChatComponent from "@/components/ChatComponent/ChatComponentMain";
 import { Card, CardContent } from "@/components/ui/card";
@@ -39,7 +38,6 @@ const viewComponents: { [key in ViewSelected]?: React.ComponentType<any> } = {
   [ViewSelected.VideoViewer]: VideoViewer,
   // [ViewSelected.AudioPlayer]: AudioPlayer,
   [ViewSelected.Summaries]: Summaries,
-  [ViewSelected.AddResources]: Resources,
   [ViewSelected.Resources]: ResourcesList,
   // Add any other enum values that are missing
 };

@@ -151,37 +151,50 @@ test.describe("Comprehensive End-to-End Workflow", () => {
       console.log("Settings interface not found - continuing with workflow");
     }
 
-    // Step 2: Navigate to the "add resources" tab and add PDF resource
+    // Step 2: Navigate to the Resources tab and open add resources modal
     console.log(
-      "Step 2: Navigating to add resources tab and adding PDF resource..."
+      "Step 2: Navigating to Resources tab and adding PDF resource..."
     );
 
-    // First click on the "add resources" tab
-    const addResourcesTab = page.locator(
-      '[role="tab"]:has-text("add resources")'
+    // First click on the "Resources" tab
+    const resourcesTab = page.locator(
+      '[role="tab"]:has-text("Resources")'
     );
     if (
-      (await addResourcesTab.count()) > 0 &&
-      (await addResourcesTab.isVisible({ timeout: 3000 }))
+      (await resourcesTab.count()) > 0 &&
+      (await resourcesTab.isVisible({ timeout: 3000 }))
     ) {
-      console.log("Found add resources tab, clicking...");
-      await addResourcesTab.click();
+      console.log("Found Resources tab, clicking...");
+      await resourcesTab.click();
       await page.waitForTimeout(1000);
     } else {
-      console.log("Add resources tab not found - trying alternative selectors");
+      console.log("Resources tab not found - trying alternative selectors");
     }
 
-    // Click on the "Upload file" tab within the resources section
+    // Click on the "Add Resources" button to open the modal
+    const addResourcesButton = page.locator('button:has-text("Add Resources")').first();
+    if (
+      (await addResourcesButton.count()) > 0 &&
+      (await addResourcesButton.isVisible({ timeout: 3000 }))
+    ) {
+      console.log("Found Add Resources button, clicking...");
+      await addResourcesButton.click();
+      await page.waitForTimeout(2000); // Wait for modal to open
+    } else {
+      console.log("Add Resources button not found - trying alternative selectors");
+    }
+
+    // Click on the "Upload file" tab within the modal
     const uploadFileTab = page.locator('[role="tab"]:has-text("Upload file")');
     if (
       (await uploadFileTab.count()) > 0 &&
       (await uploadFileTab.isVisible({ timeout: 3000 }))
     ) {
-      console.log("Found Upload file tab, clicking...");
+      console.log("Found Upload file tab in modal, clicking...");
       await uploadFileTab.click();
       await page.waitForTimeout(1000);
     } else {
-      console.log("Upload file tab not found - trying alternative selectors");
+      console.log("Upload file tab not found in modal - trying alternative selectors");
     }
 
     // Look for the file input inside the dropzone component
