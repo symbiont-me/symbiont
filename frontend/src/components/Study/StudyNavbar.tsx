@@ -5,7 +5,7 @@ import { useState } from "react";
 import "@/app/globals.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSave, faShare } from "@fortawesome/free-solid-svg-icons";
-import { Box, Tab, Tabs } from "@mui/material";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 type NavigationProps = {
   setViewSelected: (view: ViewSelected) => void;
@@ -25,33 +25,24 @@ const Navigation = ({ setViewSelected, study }: NavigationProps) => {
   return (
     <>
       <nav className="mb-2">
-        <div className="flex gap-4 ">
-          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-            <Tabs
-              value={selectedView} // Use the state to control the selected tab
-              onChange={(event, newValue) => handleViewSelection(newValue)} // Update the state when a new tab is selected
-              aria-label="basic tabs example"
-              variant="scrollable" // Optional: makes the tabs scrollable if they overflow their container
-              scrollButtons="auto" // Optional: adds scroll buttons if the tabs overflow their container
-            >
+        <div className="flex gap-4">
+          <Tabs
+            value={selectedView}
+            onValueChange={(value: string) => handleViewSelection(value as ViewSelected)}
+            className="w-full"
+          >
+            <TabsList className="grid w-full grid-cols-4 h-auto p-1">
               {Object.values(ViewSelected).map((view) => (
-                <Tab
+                <TabsTrigger
                   key={view}
-                  value={view} // Set the value of each tab to its corresponding view
-                  label={view} // Use the label prop to set the tab's text
-                  className={`  ${
-                    selectedView === view ? "selected-tab-class" : ""
-                  }`} // Apply conditional styling
-                  sx={{
-                    minWidth: "auto",
-                    height: "20px",
-                    fontSize: 10,
-                    textTransform: "uppercase",
-                  }}
-                />
+                  value={view}
+                  className="text-xs font-medium uppercase data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                >
+                  {view}
+                </TabsTrigger>
               ))}
-            </Tabs>
-          </Box>
+            </TabsList>
+          </Tabs>
         </div>
         {/* TODO add these function some place else */}
         {/* <div className="flex gap-4  mr-6">

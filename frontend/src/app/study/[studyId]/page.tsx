@@ -19,17 +19,12 @@ import TextEvaluation from "@/components/Study/TextEvaluation";
 import Summaries from "@/components/Study/Summaries";
 import Resources from "@/components/Study/Resources";
 import ChatComponent from "@/components/ChatComponent/ChatComponentMain";
-import { Container, Typography } from "@mui/material";
-import Box from "@mui/material/Box";
+import { Card, CardContent } from "@/components/ui/card";
 import "@/app/studies/studyStyles.css";
 import "@/app/globals.css";
 import StudyInfo from "@/components/Study/StudyInfo";
-import Alert from "@mui/material/Alert";
-import AlertTitle from "@mui/material/AlertTitle";
-import CircularProgress from "@mui/material/CircularProgress";
 import Loader from "../../../components/Loader";
 import Session from "supertokens-auth-react/recipe/session";
-import { set } from "zod";
 import useAuthRedirect from "@/hooks/useAuthRedirect";
 
 // an object that maps each ViewSelected enum value to a corresponding React component.
@@ -83,40 +78,46 @@ const StudyPage = () => {
         <LeftSideBarMain />
       </div>
 
-      <div className="viewer-container" style={{ height: "100vh" }}>
+      <div className="viewer-container bg-background" style={{ height: "100vh" }}>
         {/* TODO add it some place else as it takes space from the top */}
         {/* <div className="header">
             <StudyInfo study={currentStudy} />
           </div> */}
-        <div className="study-navv">
+        <div className="study-navv p-4 border-b bg-card">
           <StudyNavbar
             setViewSelected={setViewSelected}
             study={currentStudy as Study}
           />
         </div>
-        <Container
+        <div
           className="overflow-y-auto"
           style={{
-            height: "calc(100vh - 80px)",
+            height: "calc(100vh - 120px)",
             scrollbarWidth: "none",
             msOverflowStyle: "none",
-            padding: "0px",
           }}
         >
-          <Box sx={{ height: "100%" }}>
+          <div className="h-full p-4">
             {SelectedViewComponent && (
-              // TODO fix this type error
-              <SelectedViewComponent
-                textWriterValue={textWriterValue}
-                studyId={studyId}
-                study={currentStudy}
-              />
+              <Card className="h-full border-0 shadow-sm">
+                <CardContent className="p-6 h-full">
+                  <SelectedViewComponent
+                    textWriterValue={textWriterValue}
+                    studyId={studyId}
+                    study={currentStudy}
+                  />
+                </CardContent>
+              </Card>
             )}
-          </Box>
-        </Container>
+          </div>
+        </div>
 
-        <div className="chat flex flex-col  m-4 mb-0">
-          <ChatComponent studyId={studyId} />
+        <div className="chat flex flex-col m-4 mb-0">
+          <Card className="border shadow-sm">
+            <CardContent className="p-0">
+              <ChatComponent studyId={studyId} />
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>

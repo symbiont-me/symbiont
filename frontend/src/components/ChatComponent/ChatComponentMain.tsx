@@ -6,35 +6,28 @@ import { useState, useEffect } from "react";
 import { StudyResource } from "@/types";
 import ResourceSwitcher from "@/components/ResourceSwitcher";
 import "./chats.css";
-import { UserAuth } from "@/app/context/AuthContext";
 import { useStudyContext } from "@/app/context/StudyContext";
-import Button from "@mui/material/Button";
-import DeleteIcon from "@mui/icons-material/Delete";
-import Checkbox from "@mui/material/Checkbox";
-import CircularProgress from "@mui/material/CircularProgress";
-import { Alert } from "@mui/material";
-import LinearProgress from "@mui/material/LinearProgress";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Progress } from "@/components/ui/progress";
+import { Trash2 } from "lucide-react";
 import Session from "supertokens-auth-react/recipe/session";
-const label = { inputProps: { "aria-label": "Combine Resources" } };
 
 type ChatComponentProps = {
   studyId: string;
 };
 
-type Chat = {
-  chatMessages: Message[];
-};
 
 // TODO model selection and api key input should be on the Dashboard
 // TODO Fix isLoading state in the message list
 const ChatComponent = ({ studyId }: ChatComponentProps) => {
-  const authContext = UserAuth();
   const currentStudyContext = useStudyContext();
   const [chatLoading, setChatLoading] = useState(true);
   const [chatMessages, setChatMessages] = useState<Message[]>([]);
   const [userToken, setUserToken] = useState<string | undefined>(undefined);
   const [combineResources, setCombineResources] = useState(false);
-  const [isMessageComplete, setIsMessageComplete] = useState(false);
   // NOTE this is used to switch the context for the chat
   const [selectedResource, setSelectedResource] = useState<
     StudyResource | undefined
@@ -118,16 +111,14 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
   }
 
   useEffect(() => {
-    setIsMessageComplete(isLoading);
-
     if (currentStudyContext?.study) {
       updateChat();
     }
   }, [isLoading]);
 
-  function handleCombineResources() {
-    setCombineResources(!combineResources);
-    console.log(combineResources);
+  function handleCombineResources(checked: boolean) {
+    setCombineResources(checked);
+    console.log(checked);
   }
 
   return (
@@ -138,11 +129,10 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
           onResourceChange={setSelectedResource}
         />
         <div className="flex flex-row justify-between items-center">
-          <div className="flex flex-row items-center justify-center">
+          <div className="flex flex-row items-center justify-center gap-2">
             <Checkbox
-              {...label}
-              onChange={handleCombineResources}
-              sx={{ height: "10px" }}
+              checked={combineResources}
+              onCheckedChange={handleCombineResources}
               data-testid="combine-resources-checkbox"
             />
             <label htmlFor="combineResources" className="text-xs">
@@ -154,13 +144,13 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
             onClick={deleteChat}
           >
             <Button
-              variant="contained"
-              endIcon={<DeleteIcon />}
-              size="small"
-              style={{ minWidth: "auto", height: "24px" }}
+              variant="destructive"
+              size="sm"
+              className="h-6 min-w-fit"
               data-testid="clear-chat-button"
             >
-              <span className="text-2xs">Clear Chat</span>
+              <Trash2 className="h-3 w-3 mr-1" />
+              <span className="text-xs">Clear Chat</span>
             </Button>
           </div>
         </div>
@@ -172,8 +162,8 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
         data-testid="chat-container"
       >
         {chatLoading ? (
-          <div className="flex justify-cent  items-center">
-            <CircularProgress />
+          <div className="flex justify-center items-center">
+            <LoadingSpinner />
           </div>
         ) : (
           <MessageList messages={messages} isLoading={isLoading} />
@@ -182,19 +172,21 @@ const ChatComponent = ({ studyId }: ChatComponentProps) => {
       {/* TODO fix height of the input */}
       <div className="m-4">
         {error && (
-          <Alert severity="error" data-testid="chat-error">
-            {error?.message === "network error"
-              ? "Error: Check your Api Key"
-              : error?.message}
+          <Alert variant="destructive" data-testid="chat-error">
+            <AlertDescription>
+              {error?.message === "network error"
+                ? "Error: Check your Api Key"
+                : error?.message}
+            </AlertDescription>
           </Alert>
         )}
         {isLoading && (
           <>
-            <p className="mb-2 text-2xs">
+            <p className="mb-2 text-xs text-muted-foreground">
               LLM generated responses can have mistakes.{" "}
               <span className="italic">Doveryai, No Proveryai</span>.
             </p>
-            <LinearProgress color="secondary" className="mb-2" data-testid="chat-loading" />
+            <Progress value={undefined} className="mb-2" data-testid="chat-loading" />
           </>
         )}
         <UserChatInput
