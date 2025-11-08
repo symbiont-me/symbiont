@@ -175,7 +175,7 @@ class ChatContextService(VectorStoreContext):
         "pdf": add_pdf_resource,
         "webpage": add_web_resource,
         "youtube": add_yt_resource,
-        "add_plain_text": add_plaintext_resource,
+        "text": add_plaintext_resource,
     }
 
     # TODO this should single Document

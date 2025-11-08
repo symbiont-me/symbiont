@@ -346,8 +346,23 @@ async def add_plain_text_resource(
         summary="",
     )
 
-    # TODO rename the method as used for both plain text and webpage
+    # Create a document object for vector processing
+    from langchain.schema import Document
+    text_document = Document(
+        page_content=plain_text_resource.content,
+        metadata={"source": plain_text_resource.name, "title": plain_text_resource.name}
+    )
 
+    # Add to vector database
+    chat_context_service = ChatContextService(
+        text_document,
+        study_resource.identifier,
+        ResourceTypes.TEXT,
+        study_id=plain_text_resource.studyId,
+    )
+    chat_context_service.add_resource()
+
+    # Add to MongoDB
     study_resources_repo = StudyResourceRepo(study_resource, user_id=user_uid, study_id=plain_text_resource.studyId)
     study_resources_repo.add_study_resource_to_db()
 

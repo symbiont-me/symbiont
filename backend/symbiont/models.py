@@ -33,6 +33,7 @@ class ResourceTypes(str, Enum):
     AUDIO = "audio"
     WEBPAGE = "webpage"
     YOUTUBE = "youtube"
+    TEXT = "text"
 
 
 class EmbeddingModels(str, Enum):
