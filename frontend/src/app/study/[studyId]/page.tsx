@@ -58,9 +58,11 @@ const StudyPage = () => {
 
   // TODO update the writer state in its own comaponent
   const [textWriterValue, setTextWriterValue] = useState<string>("");
-  
+
   // State for selected resources
-  const [selectedResources, setSelectedResources] = useState<StudyResource[]>([]);
+  const [selectedResources, setSelectedResources] = useState<StudyResource[]>(
+    []
+  );
 
   // TODO the best thing would be to delete this here as Context handles this
   const studyId = path.split("/")[2];
@@ -70,9 +72,12 @@ const StudyPage = () => {
       return;
     }
     setCurrentStudy(currentStudyContext?.study);
-    
+
     // Auto-select first resource when study loads
-    if (currentStudyContext?.study?.resources?.length > 0 && selectedResources.length === 0) {
+    if (
+      currentStudyContext?.study?.resources?.length > 0 &&
+      selectedResources.length === 0
+    ) {
       setSelectedResources([currentStudyContext.study.resources[0]]);
     }
   }, [currentStudyContext?.study]);
@@ -88,7 +93,10 @@ const StudyPage = () => {
         <LeftSideBarMain />
       </div>
 
-      <div className="viewer-container bg-background" style={{ height: "100vh" }}>
+      <div
+        className="viewer-container bg-background"
+        style={{ height: "100vh" }}
+      >
         {/* TODO add it some place else as it takes space from the top */}
         {/* <div className="header">
             <StudyInfo study={currentStudy} />
@@ -124,10 +132,13 @@ const StudyPage = () => {
           </div>
         </div>
 
-        <div className="chat flex flex-col m-4 mb-0">
-          <Card className="border shadow-sm">
-            <CardContent className="p-0">
-              <ChatComponent studyId={studyId} selectedResources={selectedResources} />
+        <div className="chat flex flex-col m-4 mb-0" style={{ height: "95vh" }}>
+          <Card className="border shadow-sm h-full">
+            <CardContent className="p-0 h-full">
+              <ChatComponent
+                studyId={studyId}
+                selectedResources={selectedResources}
+              />
             </CardContent>
           </Card>
         </div>
