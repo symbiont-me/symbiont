@@ -1,26 +1,19 @@
-// TODO this component is used to add resources to a study and should be refactored to be a dialog box
-// TODO the Resources view should be a separate component that lists the resources being used
-// TODO use Context to handle the state of the resources
-import { useState } from "react";
+"use client";
+import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { useEffect } from "react";
 import { UserAuth } from "@/app/context/AuthContext";
 import { useStudyContext } from "@/app/context/StudyContext";
-import { Container } from "@mui/material";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import { Alert } from "@mui/material";
-import CheckIcon from "@mui/icons-material/Check";
-import LinearProgress from "@mui/material/LinearProgress";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/Input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Progress } from "@/components/ui/progress";
+import { Upload, Link, FileText, Video, CheckCircle, AlertCircle } from "lucide-react";
 import useAddResourceRequest from "@/hooks/useAddResourceRequest";
 import Session from "supertokens-auth-react/recipe/session";
-
-// NOTE this component should not be part of the Study Nav as it is
-// TODO should be refactored to make a dialog box where users can add and remove resources
-// TODO add a separate component for the Study Navbar which lists the resources being used
-import FileUpload from "@/components/ui/FileUpload";
-// TODO handle audio file uploads using the FileUpload component
-// TODO refactor to loop over an array of resources
 
 type AuthHeaders = {
   Authorization: `Bearer ${string}`;
@@ -48,6 +41,32 @@ const Resources = () => {
     }
     fetchAccessToken();
   }, [authContext]);
+
+  // File upload handler
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 12500000) {
+      alert("File is too big! Maximum size is 12.5MB");
+      return;
+    }
+
+    const endpoint = `${process.env.NEXT_PUBLIC_BASE_URL}/upload-resource?studyId=${studyId}`;
+    const body = new FormData();
+    const headers = {
+      "Content-Type": "multipart/form-data",
+      Authorization: `Bearer ${userToken}`,
+    };
+    body.append("file", file);
+    
+    mutation.mutate({
+      endpoint,
+      body,
+      headers,
+      resourceType: file.type,
+    });
+  };
 
   const authHeadersForRequests: AuthHeaders = {
     Authorization: `Bearer ${userToken}`,
@@ -131,128 +150,244 @@ const Resources = () => {
   }
 
   return (
-    <Container maxWidth="sm" className="overflow-hidden">
-      {resourceType === "web" && resourceStatus.error ? (
-        <Alert severity="error">
-          {resourceStatus.error.message}: Failed to upload Web Resource
-        </Alert>
-      ) : resourceType === "web" && mutation.isSuccess ? (
-        <Alert severity="success">
-          <CheckIcon />
-          Web Resource Uploaded Successfully
-        </Alert>
-      ) : resourceType === "youtube" && resourceStatus.error ? (
-        <Alert severity="error">
-          {resourceStatus.error.message}: Failed to upload Youtube Resource
-        </Alert>
-      ) : resourceType === "youtube" && mutation.isSuccess ? (
-        <Alert severity="success">
-          <CheckIcon />
-          Youtube Resource Uploaded Successfully
-        </Alert>
-      ) : resourceType === "text" && resourceStatus.error ? (
-        <Alert severity="error">
-          {resourceStatus.error.message}: Failed to upload Text Resource
-        </Alert>
-      ) : resourceType === "text" && mutation.isSuccess ? (
-        <Alert severity="success">
-          <CheckIcon />
-          Text Resource Uploaded Successfully
-        </Alert>
-      ) : null}
-
-      <div className="mb-10">
-        <FileUpload />
+    <div className="max-w-4xl mx-auto p-6 space-y-6">
+      <div className="text-center space-y-2 mb-8">
+        <h1 className="text-3xl font-bold text-gray-900">Add sources</h1>
+        <p className="text-gray-600">
+          Sources let your AI base its responses on the information that matters most to you.
+        </p>
+        <p className="text-sm text-gray-500">
+          (Examples: PDFs, text documents, website links, YouTube videos, etc.)
+        </p>
       </div>
 
-      {/* WEB RESOURCE */}
-      <div className="flex flex-col mb-4">
-        {resourceType == "web" && mutation.isPending ? (
-          <LinearProgress color="secondary" className="mb-2" />
-        ) : (
-          <>
-            <TextField
-              id="outlined-textarea"
-              label="Add Web Resource"
-              placeholder="Webpages separated by newlines"
-              multiline
-              value={webLink}
-              onChange={(e) => setWebLink(e.target.value)}
-              className="mb-2"
-            />
-            <Button variant="contained" onClick={handleWebLinks}>
-              Add Webpages
-            </Button>
-          </>
-        )}
-      </div>
+      {/* Status Messages */}
+      {resourceStatus.error && (
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>
+            {resourceStatus.error.message}: Failed to upload {resourceType} resource
+          </AlertDescription>
+        </Alert>
+      )}
+      
+      {mutation.isSuccess && (
+        <Alert className="border-green-200 bg-green-50 text-green-800">
+          <CheckCircle className="h-4 w-4" />
+          <AlertDescription>
+            {resourceType === "application/pdf" && "PDF uploaded successfully!"}
+            {resourceType === "web" && "Website resource added successfully!"}
+            {resourceType === "youtube" && "YouTube video added successfully!"}
+            {resourceType === "text" && "Text resource added successfully!"}
+          </AlertDescription>
+        </Alert>
+      )}
 
-      {/* TEXT RESOURCE */}
-      <div className="flex flex-col mb-4">
-        {resourceType == "text" && mutation.isPending ? (
-          <LinearProgress color="secondary" className="mb-2" />
-        ) : (
-          <>
-            <TextField
-              id="outlined-textarea"
-              label="Add Text Resource"
-              placeholder="Multiline Text"
-              multiline
-              value={textResourceContent}
-              onChange={(e) => setTextResourceContent(e.target.value)}
-              className="mb-2"
-              data-testid="text-resource-content-input"
-            />
+      <Tabs defaultValue="text" className="w-full">
+        <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="upload" className="flex items-center gap-2">
+            <Upload className="h-4 w-4" />
+            Upload file
+          </TabsTrigger>
+          <TabsTrigger value="link" className="flex items-center gap-2">
+            <Link className="h-4 w-4" />
+            Website
+          </TabsTrigger>
+          <TabsTrigger value="text" className="flex items-center gap-2">
+            <FileText className="h-4 w-4" />
+            Text
+          </TabsTrigger>
+          <TabsTrigger value="youtube" className="flex items-center gap-2">
+            <Video className="h-4 w-4" />
+            YouTube
+          </TabsTrigger>
+        </TabsList>
 
-            <TextField
-              id="standard-basic"
-              label="Text Resource Name"
-              variant="standard"
-              type="text"
-              value={textResourceName}
-              onChange={(e) => setTextResourceName(e.target.value)}
-              className="mb-2"
-              data-testid="text-resource-name-input"
-            />
+        {/* File Upload Tab */}
+        <TabsContent value="upload" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Upload className="h-5 w-5" />
+                Upload sources
+              </CardTitle>
+              <CardDescription>
+                Upload PDF, text, markdown, or audio files (max 12.5MB)
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {mutation.isPending && resourceType?.includes("application") ? (
+                <div className="space-y-2">
+                  <p className="text-sm text-gray-600">Uploading file...</p>
+                  <Progress value={undefined} className="w-full" />
+                </div>
+              ) : (
+                <div 
+                  className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-gray-400 transition-colors"
+                  data-testid="file-upload-dropzone"
+                >
+                  <Upload className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                  <Label htmlFor="file-upload" className="cursor-pointer">
+                    <span className="text-blue-600 hover:text-blue-500 font-medium">Choose file</span>
+                    <span className="text-gray-600"> to upload</span>
+                  </Label>
+                  <Input
+                    id="file-upload"
+                    type="file"
+                    accept=".pdf,.txt,.md,.mp3,.wav,.m4a"
+                    onChange={handleFileUpload}
+                    className="hidden"
+                  />
+                  <p className="text-sm text-gray-500 mt-2">
+                    Supported file types: PDF, txt, Markdown, Audio (mp3, wav, m4a)
+                  </p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
 
-            <Button 
-              variant="contained" 
-              onClick={handleTextResource}
-              data-testid="add-text-resource-button"
-            >
-              Add Text Resource
-            </Button>
-          </>
-        )}
-      </div>
+        {/* Website Link Tab */}
+        <TabsContent value="link" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Link className="h-5 w-5" />
+                Website
+              </CardTitle>
+              <CardDescription>
+                Add web pages to your sources
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {mutation.isPending && resourceType === "web" ? (
+                <div className="space-y-2">
+                  <p className="text-sm text-gray-600">Processing websites...</p>
+                  <Progress value={undefined} className="w-full" />
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="web-links">Website URLs</Label>
+                    <Textarea
+                      id="web-links"
+                      placeholder="Enter website URLs, one per line&#10;https://example.com&#10;https://another-site.com"
+                      value={webLink}
+                      onChange={(e) => setWebLink(e.target.value)}
+                      rows={4}
+                    />
+                  </div>
+                  <Button 
+                    onClick={handleWebLinks}
+                    disabled={!webLink.trim()}
+                    className="w-full"
+                  >
+                    Add Websites
+                  </Button>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
 
-      {/* YOUTUBE LINK */}
-      <div className="flex flex-col mb-4">
-        {resourceType == "youtube" && mutation.isPending ? (
-          <LinearProgress color="secondary" className="mb-2" />
-        ) : (
-          <>
-            <TextField
-              id="standard-basic"
-              label="Add Youtube Link"
-              variant="standard"
-              type="text"
-              value={ytLink}
-              onChange={(e) => setYtLink(e.target.value)}
-              className="mb-2"
-              data-testid="youtube-url-input"
-            />
-            <Button 
-              variant="contained" 
-              onClick={handleYtLinkSubmission}
-              data-testid="add-youtube-button"
-            >
-              Add Youtube Link
-            </Button>
-          </>
-        )}
-      </div>
-    </Container>
+        {/* Text Tab */}
+        <TabsContent value="text" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <FileText className="h-5 w-5" />
+                Text
+              </CardTitle>
+              <CardDescription>
+                Add text content directly
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {mutation.isPending && resourceType === "text" ? (
+                <div className="space-y-2">
+                  <p className="text-sm text-gray-600">Saving text resource...</p>
+                  <Progress value={undefined} className="w-full" />
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  <div className="space-y-2" data-testid="text-resource-name-input">
+                    <Label htmlFor="text-name">Resource Name</Label>
+                    <Input
+                      id="text-name"
+                      placeholder="Enter a name for this text resource"
+                      value={textResourceName}
+                      onChange={(e) => setTextResourceName(e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2" data-testid="text-resource-content-input">
+                    <Label htmlFor="text-content">Text Content</Label>
+                    <Textarea
+                      id="text-content"
+                      placeholder="Paste or type your text content here..."
+                      value={textResourceContent}
+                      onChange={(e) => setTextResourceContent(e.target.value)}
+                      rows={6}
+                    />
+                  </div>
+                  <Button 
+                    onClick={handleTextResource}
+                    disabled={!textResourceName.trim() || !textResourceContent.trim()}
+                    className="w-full"
+                    data-testid="add-text-resource-button"
+                  >
+                    Add Text Resource
+                  </Button>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* YouTube Tab */}
+        <TabsContent value="youtube" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Video className="h-5 w-5" />
+                YouTube
+              </CardTitle>
+              <CardDescription>
+                Add YouTube videos to extract transcripts
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {mutation.isPending && resourceType === "youtube" ? (
+                <div className="space-y-2">
+                  <p className="text-sm text-gray-600">Processing YouTube video...</p>
+                  <Progress value={undefined} className="w-full" />
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="youtube-url">YouTube URL</Label>
+                    <Input
+                      id="youtube-url"
+                      placeholder="https://www.youtube.com/watch?v=..."
+                      value={ytLink}
+                      onChange={(e) => setYtLink(e.target.value)}
+                      data-testid="youtube-url-input"
+                    />
+                  </div>
+                  <Button 
+                    onClick={handleYtLinkSubmission}
+                    disabled={!ytLink.trim()}
+                    className="w-full"
+                    data-testid="add-youtube-button"
+                  >
+                    Add YouTube Video
+                  </Button>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
+    </div>
   );
 };
 

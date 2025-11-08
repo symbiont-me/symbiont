@@ -171,6 +171,19 @@ test.describe("Comprehensive End-to-End Workflow", () => {
       console.log("Add resources tab not found - trying alternative selectors");
     }
 
+    // Click on the "Upload file" tab within the resources section
+    const uploadFileTab = page.locator('[role="tab"]:has-text("Upload file")');
+    if (
+      (await uploadFileTab.count()) > 0 &&
+      (await uploadFileTab.isVisible({ timeout: 3000 }))
+    ) {
+      console.log("Found Upload file tab, clicking...");
+      await uploadFileTab.click();
+      await page.waitForTimeout(1000);
+    } else {
+      console.log("Upload file tab not found - trying alternative selectors");
+    }
+
     // Look for the file input inside the dropzone component
     const fileInput = page.locator(
       '[data-testid="file-upload-dropzone"] input[type="file"]'
@@ -232,8 +245,8 @@ test.describe("Comprehensive End-to-End Workflow", () => {
     // Wait a bit more for chat interface
     await page.waitForTimeout(2000);
 
-    // Look for chat input using the correct data-testid (Material-UI TextField input)
-    const chatInput = page.locator('[data-testid="chat-input-field"] input');
+    // Look for chat input using the correct data-testid (now a textarea)
+    const chatInput = page.locator('[data-testid="chat-input-field"]');
 
     if ((await chatInput.count()) === 0) {
       console.log("Chat input field not found");
@@ -449,7 +462,7 @@ test.describe("Comprehensive End-to-End Workflow", () => {
 
     // Look for existing chat messages or send a test message
     const chatInput = page
-      .locator('[data-testid="chat-input-field"] input')
+      .locator('[data-testid="chat-input-field"]')
       .first();
 
     if (await chatInput.isVisible({ timeout: 3000 })) {

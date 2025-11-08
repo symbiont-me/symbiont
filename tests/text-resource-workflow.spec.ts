@@ -253,8 +253,8 @@ At present, an analytical science of the city, which is necessary, is only at th
 
     await page.waitForTimeout(2000);
 
-    // Look for chat input
-    const chatInput = page.locator('[data-testid="chat-input-field"] input');
+    // Look for chat input (now a textarea)
+    const chatInput = page.locator('[data-testid="chat-input-field"]');
 
     if ((await chatInput.count()) === 0) {
       console.log("Chat input field not found");
@@ -458,7 +458,7 @@ At present, an analytical science of the city, which is necessary, is only at th
     `;
     
     // Test that specific phrases from the text can be found in chat responses
-    const chatInput = page.locator('[data-testid="chat-input-field"] input');
+    const chatInput = page.locator('[data-testid="chat-input-field"]');
     if ((await chatInput.count()) > 0) {
       await chatInput.fill("Tell me about the Quick Brown Fox Experiment");
       await chatInput.press("Enter");
