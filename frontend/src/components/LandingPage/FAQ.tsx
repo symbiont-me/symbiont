@@ -1,9 +1,10 @@
 import React from "react";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import Divider from "@mui/material/Divider";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 type FAQ = {
   question: string;
@@ -50,56 +51,52 @@ const FAQ = () => {
     <>
       <h2 className="font-bold text-2xl mb-4 text-center pt-4"> FAQs </h2>
 
-      {faqs.map((faq, index) => {
-        return (
-          <div className="h-full ml-2 mr-2" key={index}>
-            <Accordion>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1-content"
-                id="panel1-header"
-                sx={{ fontWeight: 800 }}
-              >
-                {faq.question}
-              </AccordionSummary>
-              <Divider />
-              <AccordionDetails sx={{ fontWeight: 100 }}>
-                {faq.question === "Where can I get the API key?" ? (
-                  <>
-                    <p>{faq.answer}</p>
-                    <ul className="pl-4">
-                      <li>
-                        OpenAI:{" "}
-                        <a
-                          href="https://platform.openai.com/api-keys"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-500 underline hover:text-blue-800 "
-                        >
-                          https://platform.openai.com/api-keys
-                        </a>
-                      </li>
-                      <li>
-                        Anthropic:{" "}
-                        <a
-                          href="https://docs.anthropic.com/claude/reference/getting-started-with-the-api"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-500 underline hover:text-blue-800 "
-                        >
-                          https://docs.anthropic.com/claude/reference/getting-started-with-the-api
-                        </a>
-                      </li>
-                    </ul>
-                  </>
-                ) : (
-                  faq.answer
-                )}
-              </AccordionDetails>
-            </Accordion>
-          </div>
-        );
-      })}
+      <div className="mx-2">
+        <Accordion type="single" collapsible className="w-full">
+          {faqs.map((faq, index) => {
+            return (
+              <AccordionItem key={index} value={`item-${index}`}>
+                <AccordionTrigger className="font-bold text-left">
+                  {faq.question}
+                </AccordionTrigger>
+                <AccordionContent className="font-light">
+                  {faq.question === "Where can I get the API key?" ? (
+                    <>
+                      <p>{faq.answer}</p>
+                      <ul className="pl-4 mt-2">
+                        <li>
+                          OpenAI:{" "}
+                          <a
+                            href="https://platform.openai.com/api-keys"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-500 underline hover:text-blue-800 "
+                          >
+                            https://platform.openai.com/api-keys
+                          </a>
+                        </li>
+                        <li>
+                          Anthropic:{" "}
+                          <a
+                            href="https://docs.anthropic.com/claude/reference/getting-started-with-the-api"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-500 underline hover:text-blue-800 "
+                          >
+                            https://docs.anthropic.com/claude/reference/getting-started-with-the-api
+                          </a>
+                        </li>
+                      </ul>
+                    </>
+                  ) : (
+                    faq.answer
+                  )}
+                </AccordionContent>
+              </AccordionItem>
+            );
+          })}
+        </Accordion>
+      </div>
     </>
   );
 };

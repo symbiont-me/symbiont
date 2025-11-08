@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import Button from "@mui/material/Button";
+import { Button } from "@/components/ui/button";
 import "./styles.css";
 import { UserAuth } from "@/app/context/AuthContext";
-import CheckIcon from "@mui/icons-material/Check";
+import { Check } from "lucide-react";
 import Link from "next/link";
 const slides = [
   { src: "/slides/slide1.jpg", alt: "symbiont writer" },
@@ -42,16 +42,14 @@ const Hero = () => {
         </h1>
         {features.map((feature, index) => (
           <div key={index} className="flex items-center mb-2">
-            <CheckIcon sx={{ color: "green" }} />
+            <Check className="h-5 w-5 text-green-600" />
             <span className="ml-2">{feature}</span>
           </div>
         ))}
         <Link href="sign-in">
           <Button
-            variant="contained"
-            sx={{ width: "220px", marginTop: "30px" }}
-
-            // onClick={handleSignIn}
+            className="w-56 mt-8 bg-blue-600 hover:bg-blue-700 text-white"
+            size="lg"
           >
             Log in
           </Button>

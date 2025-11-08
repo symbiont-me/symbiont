@@ -3,7 +3,7 @@ import UserDashboard from "@/components/Dashboard/UserDashboardMain";
 import { UserAuth } from "@/app/context/AuthContext";
 import LandingPage from "@/components/LandingPage/LandingPageMain";
 import { useEffect, useState } from "react";
-import { CircularProgress } from "@mui/material";
+import { Loader2 } from "lucide-react";
 import Session from "supertokens-auth-react/recipe/session";
 
 export default function Home() {
@@ -28,7 +28,7 @@ export default function Home() {
   if (loading) {
     return (
       <div className="h-screen w-screen flex flex-col justify-center items-center">
-        <CircularProgress />
+        <Loader2 className="h-8 w-8 animate-spin" />
       </div>
     );
   }

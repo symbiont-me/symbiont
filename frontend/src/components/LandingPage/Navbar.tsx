@@ -1,8 +1,7 @@
 import React from "react";
 import Image from "next/image";
-import Button from "@mui/material/Button";
-import Divider from "@mui/material/Divider";
-import LoginIcon from "@mui/icons-material/Login";
+import { Button } from "@/components/ui/button";
+import { LogIn } from "lucide-react";
 import { UserAuth } from "@/app/context/AuthContext";
 import Link from "next/link";
 const navItems = [
@@ -47,15 +46,9 @@ const Navbar = () => {
                 className="p-2 font-semibold hover:text-blue-500"
               >
                 <Button
-                  variant="text"
-                  sx={{
-                    color: "black",
-                    textTransform: "capitalize",
-                    fontSize: 18,
-                    fontWeight: 400,
-                  }}
+                  variant="ghost"
+                  className="text-black text-lg font-normal capitalize"
                 >
-                  {" "}
                   {item.title}
                 </Button>
               </Link>
@@ -65,14 +58,14 @@ const Navbar = () => {
 
         <div className="w-1/3 flex flex-row items-center justify-center">
           <Link href="/sign-in">
-            <Button variant="contained">
+            <Button className="bg-blue-600 hover:bg-blue-700 text-white">
               Sign Up
-              <LoginIcon sx={{ marginLeft: "4px" }} />
+              <LogIn className="ml-1 h-4 w-4" />
             </Button>
           </Link>
         </div>
       </div>
-      <Divider />
+      <div className="w-full border-b border-border" />
     </>
   );
 };
