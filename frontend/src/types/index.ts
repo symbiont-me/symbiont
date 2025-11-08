@@ -75,29 +75,8 @@ export type UserAuthDetails = {
   password: string;
 };
 
-export enum LLMModels {
-  // OpenAI Models
-  GPT_5_2025_08_07 = "gpt-5-2025-08-07",
-  GPT_5_MINI_2025_08_07 = "gpt-5-mini-2025-08-07",
-  GPT_5_NANO_2025_08_07 = "gpt-5-nano-2025-08-07",
-  GPT_5_PRO_2025_10_06 = "gpt-5-pro-2025-10-06",
-  GPT_4_1_2025_04_14 = "gpt-4.1-2025-04-14",
-  GPT_4O_MINI_2024_07_18 = "gpt-4o-mini-2024-07-18",
-  GPT_4O_2024_08_06 = "gpt-4o-2024-08-06",
-  
-  // Anthropic Models
-  CLAUDE_SONNET_4_5_20250929 = "claude-sonnet-4-5-20250929",
-  CLAUDE_HAIKU_4_5_20251001 = "claude-haiku-4-5-20251001",
-  CLAUDE_OPUS_4_1_20250805 = "claude-opus-4-1-20250805",
-  
-  // Google Gemini Models
-  GEMINI_2_5_PRO = "gemini-2.5-pro",
-  GEMINI_2_5_FLASH = "gemini-2.5-flash",
-  GEMINI_2_5_FLASH_LITE = "gemini-2.5-flash-lite",
-  
-  // Custom Models
-  CUSTOM_OPEN_SOURCE = "custom/open-source",
-}
+// Import shared models configuration
+export { LLMModels } from '../utils/shared-models';
 
 type LLMSettings = {
   model: LLMModels;

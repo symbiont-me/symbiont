@@ -72,7 +72,7 @@ test.describe("Text Resource Workflow", () => {
       const testApiKey = process.env.OPENAI_KEY_FOR_TESTING;
       console.log("Using API key from environment for test");
 
-      // Step 1a: Select GPT-4o-mini model (updated for shadcn select)
+      // Step 1a: Select GPT-4o-mini model (using shared models config display names)
       const modelSelect = page.locator('[data-testid="llm-model-select"]');
       if (
         (await modelSelect.count()) > 0 &&

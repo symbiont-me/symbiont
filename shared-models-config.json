@@ -1,0 +1,114 @@
+{
+  "models": {
+    "openai": [
+      {
+        "id": "gpt-5-2025-08-07",
+        "displayName": "GPT-5",
+        "provider": "openai",
+        "category": "latest"
+      },
+      {
+        "id": "gpt-5-mini-2025-08-07",
+        "displayName": "GPT-5 Mini",
+        "provider": "openai",
+        "category": "latest"
+      },
+      {
+        "id": "gpt-5-nano-2025-08-07",
+        "displayName": "GPT-5 Nano",
+        "provider": "openai",
+        "category": "latest"
+      },
+      {
+        "id": "gpt-5-pro-2025-10-06",
+        "displayName": "GPT-5 Pro",
+        "provider": "openai",
+        "category": "latest"
+      },
+      {
+        "id": "gpt-4.1-2025-04-14",
+        "displayName": "GPT-4.1",
+        "provider": "openai",
+        "category": "latest"
+      },
+      {
+        "id": "gpt-4o-2024-08-06",
+        "displayName": "GPT-4o",
+        "provider": "openai",
+        "category": "latest"
+      },
+      {
+        "id": "gpt-4o-mini-2024-07-18",
+        "displayName": "GPT-4o Mini",
+        "provider": "openai",
+        "category": "latest"
+      }
+    ],
+    "anthropic": [
+      {
+        "id": "claude-sonnet-4-5-20250929",
+        "displayName": "Claude Sonnet 4.5",
+        "provider": "anthropic",
+        "category": "latest"
+      },
+      {
+        "id": "claude-haiku-4-5-20251001",
+        "displayName": "Claude Haiku 4.5",
+        "provider": "anthropic",
+        "category": "latest"
+      },
+      {
+        "id": "claude-opus-4-1-20250805",
+        "displayName": "Claude Opus 4.1",
+        "provider": "anthropic",
+        "category": "latest"
+      }
+    ],
+    "google": [
+      {
+        "id": "gemini-2.5-pro",
+        "displayName": "Gemini 2.5 Pro",
+        "provider": "google",
+        "category": "latest"
+      },
+      {
+        "id": "gemini-2.5-flash",
+        "displayName": "Gemini 2.5 Flash",
+        "provider": "google",
+        "category": "latest"
+      },
+      {
+        "id": "gemini-2.5-flash-lite",
+        "displayName": "Gemini 2.5 Flash Lite",
+        "provider": "google",
+        "category": "latest"
+      }
+    ],
+    "custom": [
+      {
+        "id": "custom/open-source",
+        "displayName": "Custom open source model",
+        "provider": "custom",
+        "category": "custom"
+      }
+    ]
+  },
+  "providerDetection": {
+    "openai": {
+      "pattern": "^gpt",
+      "description": "Models starting with 'gpt'"
+    },
+    "anthropic": {
+      "pattern": "^claude",
+      "description": "Models starting with 'claude'"
+    },
+    "google": {
+      "pattern": "^(models/)?gemini",
+      "description": "Models starting with 'gemini' (with or without 'models/' prefix)"
+    },
+    "custom": {
+      "pattern": "^custom/",
+      "description": "Models starting with 'custom/'"
+    }
+  }
+}

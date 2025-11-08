@@ -19,35 +19,12 @@ import { Label } from "@/components/ui/label";
 import { Eye, EyeOff, X, Settings, Check, AlertCircle } from "lucide-react";
 import { LLMModels } from "@/types";
 import { UserAuth } from "@/app/context/AuthContext";
+import { getSharedModelsConfig } from "../../utils/shared-models";
 import axios from "axios";
 import Session from "supertokens-auth-react/recipe/session";
 
-// Helper function to format model display names
-function formatModelDisplayName(key: string): string {
-  // Special cases for better formatting
-  const specialCases: Record<string, string> = {
-    'CUSTOM_OPEN_SOURCE': 'Custom open source model',
-    'GPT_5_2025_08_07': 'GPT-5',
-    'GPT_5_MINI_2025_08_07': 'GPT-5 Mini',
-    'GPT_5_NANO_2025_08_07': 'GPT-5 Nano',
-    'GPT_5_PRO_2025_10_06': 'GPT-5 Pro',
-    'GPT_4_1_2025_04_14': 'GPT-4.1',
-    'GPT_4O_MINI_2024_07_18': 'GPT-4o Mini',
-    'GPT_4O_2024_08_06': 'GPT-4o',
-    'CLAUDE_SONNET_4_5_20250929': 'Claude Sonnet 4.5',
-    'CLAUDE_HAIKU_4_5_20251001': 'Claude Haiku 4.5',
-    'CLAUDE_OPUS_4_1_20250805': 'Claude Opus 4.1',
-    'GEMINI_2_5_PRO': 'Gemini 2.5 Pro',
-    'GEMINI_2_5_FLASH': 'Gemini 2.5 Flash',
-    'GEMINI_2_5_FLASH_LITE': 'Gemini 2.5 Flash Lite',
-  };
-  
-  return specialCases[key] || key
-    .replace(/_/g, ' ')
-    .toLowerCase()
-    .replace(/\b\w/g, (char) => char.toUpperCase())
-    .trim();
-}
+// Get shared models configuration
+const sharedModels = getSharedModelsConfig();
 
 type FullScreenSettingsDialogProps = {
   settingsOpen: boolean;
@@ -153,7 +130,7 @@ export default function FullScreenSettingsDialog({
     if (!apiKey || !apiKey.trim()) {
       newErrors.apiKey = "Please enter an API key";
     }
-    if (model === LLMModels.CUSTOM_OPEN_SOURCE) {
+    if (sharedModels.isCustomModel(model)) {
       if (!customApiUrl || !customApiUrl.trim()) {
         newErrors.customApiUrl = "Please enter a custom API URL";
       }
@@ -260,11 +237,11 @@ export default function FullScreenSettingsDialog({
                   <SelectValue placeholder="Select a language model" />
                 </SelectTrigger>
                 <SelectContent className="rounded-xl border-2 shadow-xl">
-                  {Object.entries(LLMModels).map(([key, value]) => (
-                    <SelectItem key={key} value={value} className="h-12 rounded-lg mx-1">
+                  {sharedModels.getAllModels().map((model) => (
+                    <SelectItem key={model.id} value={model.id} className="h-12 rounded-lg mx-1">
                       <div className="flex flex-col">
-                        <span className="font-medium">{formatModelDisplayName(key)}</span>
-                        <span className="text-xs text-gray-500">{value}</span>
+                        <span className="font-medium">{model.displayName}</span>
+                        <span className="text-xs text-gray-500">{model.id}</span>
                       </div>
                     </SelectItem>
                   ))}

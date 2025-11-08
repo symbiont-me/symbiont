@@ -10,6 +10,12 @@ import datetime
 from .. import logger
 import os
 from ..mongodb import users_collection
+from ..shared_models import (
+    isOpenAImodel,
+    isAnthropicModel, 
+    isGoogleModel,
+    isCustomModel
+)
 
 
 google_api_key = os.getenv("GOOGLE_GEMINI_API_KEY")
@@ -41,22 +47,8 @@ def create_prompt(user_query: str, context: str):
     return prompt
 
 
-# TODO move to utils
-# TODO These functions should match the LLMs in the LLMs collection for better security
-def isOpenAImodel(llm_name: str) -> bool:
-    return bool(re.match(r"gpt", llm_name))
-
-
-def isAnthropicModel(llm_name: str) -> bool:
-    return bool(re.match(r"claude", llm_name))
-
-
-def isGoogleModel(llm_name: str) -> bool:
-    return bool(re.match(r"(models/)?gemini", llm_name))
-
-
-def isCustomModel(llm_name: str) -> bool:
-    return llm_name.startswith("custom/")
+# Model detection functions are now imported from shared_models.py
+# This ensures consistency between frontend and backend
 
 
 class UsersLLMSettings(BaseModel):

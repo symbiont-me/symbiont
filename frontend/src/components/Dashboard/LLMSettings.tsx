@@ -15,6 +15,7 @@ import {
   Collapse,
 } from "@mui/material";
 import { useAuthContext } from "../../context/AuthContext";
+import { getSharedModelsConfig } from "../../utils/shared-models";
 
 interface LLMSettings {
   llm_name: string;
@@ -47,7 +48,7 @@ const LLMSettings = () => {
   }, []);
 
   useEffect(() => {
-    setShowCustomFields(settings.llm_name.startsWith("custom/"));
+    setShowCustomFields(sharedModels.isCustomModel(settings.llm_name));
   }, [settings.llm_name]);
 
   const loadSettings = async () => {
@@ -96,29 +97,9 @@ const LLMSettings = () => {
     }
   };
 
-  const predefinedModels = [
-    // OpenAI Models
-    { value: "gpt-5-2025-08-07", label: "GPT-5" },
-    { value: "gpt-5-mini-2025-08-07", label: "GPT-5 Mini" },
-    { value: "gpt-5-nano-2025-08-07", label: "GPT-5 Nano" },
-    { value: "gpt-5-pro-2025-10-06", label: "GPT-5 Pro" },
-    { value: "gpt-4.1-2025-04-14", label: "GPT-4.1" },
-    { value: "gpt-4o-2024-08-06", label: "GPT-4o" },
-    { value: "gpt-4o-mini-2024-07-18", label: "GPT-4o Mini" },
-    
-    // Anthropic Models
-    { value: "claude-sonnet-4-5-20250929", label: "Claude Sonnet 4.5" },
-    { value: "claude-haiku-4-5-20251001", label: "Claude Haiku 4.5" },
-    { value: "claude-opus-4-1-20250805", label: "Claude Opus 4.1" },
-    
-    // Google Models
-    { value: "gemini-2.5-pro", label: "Gemini 2.5 Pro" },
-    { value: "gemini-2.5-flash", label: "Gemini 2.5 Flash" },
-    { value: "gemini-2.5-flash-lite", label: "Gemini 2.5 Flash Lite" },
-    
-    // Custom Models
-    { value: "custom/open-source", label: "Custom open source model" },
-  ];
+  // Get models from shared configuration
+  const sharedModels = getSharedModelsConfig();
+  const predefinedModels = sharedModels.getModelsForUI();
 
   return (
     <Box sx={{ maxWidth: 600, mx: "auto", p: 3 }}>
