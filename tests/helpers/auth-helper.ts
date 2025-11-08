@@ -84,7 +84,7 @@ export async function navigateToStudyWorkspace(page: Page, studyName: string): P
   await page.getByRole('link', { name: new RegExp(studyName) }).click();
   
   // Verify we're in study workspace
-  await expect(page).toHaveURL(/\/studies\/[a-f0-9-]+$/);
+  await expect(page).toHaveURL(/\/study\/[a-f0-9-]+$/);
   
   // Wait for page to fully load and tabs to appear (with longer timeout)
   await page.waitForLoadState('networkidle');

@@ -33,7 +33,7 @@ test.describe("Comprehensive End-to-End Workflow", () => {
 
     // Navigate to study workspace
     await page.getByRole("link", { name: new RegExp(studyName) }).click();
-    await expect(page).toHaveURL(/\/studies\/[a-f0-9-]+$/);
+    await expect(page).toHaveURL(/\/study\/[a-f0-9-]+$/);
 
     // Wait for page to load completely
     await page.waitForLoadState("networkidle");
@@ -367,7 +367,7 @@ test.describe("Comprehensive End-to-End Workflow", () => {
     }
 
     // Final verification - ensure we're still on the study page
-    await expect(page).toHaveURL(/\/studies\/[a-f0-9-]+$/);
+    await expect(page).toHaveURL(/\/study\/[a-f0-9-]+$/);
     console.log("Comprehensive workflow test completed");
   });
 
@@ -384,7 +384,7 @@ test.describe("Comprehensive End-to-End Workflow", () => {
       "Resource context selection test"
     );
     await page.getByRole("link", { name: new RegExp(testStudyName) }).click();
-    await expect(page).toHaveURL(/\/studies\/[a-f0-9-]+$/);
+    await expect(page).toHaveURL(/\/study\/[a-f0-9-]+$/);
     await page.waitForLoadState("networkidle");
     await page.waitForTimeout(3000);
 
@@ -431,7 +431,7 @@ test.describe("Comprehensive End-to-End Workflow", () => {
       console.log("Resource context selection not yet implemented");
     }
 
-    await expect(page).toHaveURL(/\/studies\/[a-f0-9-]+$/);
+    await expect(page).toHaveURL(/\/study\/[a-f0-9-]+$/);
   });
 
   test.skip("verify chat history persistence", async ({ page }) => {
@@ -443,7 +443,7 @@ test.describe("Comprehensive End-to-End Workflow", () => {
     const testStudyName = `Chat History Test Study ${timestamp}`;
     await createTestStudy(page, testStudyName, "Chat history persistence test");
     await page.getByRole("link", { name: new RegExp(testStudyName) }).click();
-    await expect(page).toHaveURL(/\/studies\/[a-f0-9-]+$/);
+    await expect(page).toHaveURL(/\/study\/[a-f0-9-]+$/);
     await page.waitForLoadState("networkidle");
     await page.waitForTimeout(3000);
 
@@ -476,6 +476,6 @@ test.describe("Comprehensive End-to-End Workflow", () => {
       console.log("Chat interface not available for persistence test");
     }
 
-    await expect(page).toHaveURL(/\/studies\/[a-f0-9-]+$/);
+    await expect(page).toHaveURL(/\/study\/[a-f0-9-]+$/);
   });
 });

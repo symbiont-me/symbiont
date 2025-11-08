@@ -378,7 +378,7 @@ At present, an analytical science of the city, which is necessary, is only at th
     }
 
     // Final verification - ensure we're still on the study page
-    await expect(page).toHaveURL(/\/studies\/[a-f0-9-]+$/);
+    await expect(page).toHaveURL(/\/study\/[a-f0-9-]+$/);
     console.log("Text resource workflow test completed");
   });
 
@@ -431,7 +431,7 @@ At present, an analytical science of the city, which is necessary, is only at th
       console.log("Text resource not found in resource list - may not be implemented yet");
     }
 
-    await expect(page).toHaveURL(/\/studies\/[a-f0-9-]+$/);
+    await expect(page).toHaveURL(/\/study\/[a-f0-9-]+$/);
   });
 
   test.skip("verify text resource content is searchable", async ({ page }) => {
@@ -476,6 +476,6 @@ At present, an analytical science of the city, which is necessary, is only at th
       }
     }
 
-    await expect(page).toHaveURL(/\/studies\/[a-f0-9-]+$/);
+    await expect(page).toHaveURL(/\/study\/[a-f0-9-]+$/);
   });
 });

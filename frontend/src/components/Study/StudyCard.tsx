@@ -52,7 +52,7 @@ export default function StudyCard({ study }: { study: Study }) {
       </div>
 
       {/* Content Section */}
-      <Link href={`studies/${study._id}`} className="block">
+      <Link href={`study/${study._id}`} className="block">
         <CardHeader className="pb-3">
           <CardTitle className="text-lg font-semibold text-gray-900 hover:text-blue-600 transition-colors"
             style={{

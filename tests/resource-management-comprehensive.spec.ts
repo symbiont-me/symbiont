@@ -16,7 +16,7 @@ test.describe('Resource Management Workflow Tests', () => {
     
     // Navigate to study workspace
     await page.getByRole('link', { name: new RegExp(studyName) }).click();
-    await expect(page).toHaveURL(/\/studies\/[a-f0-9-]+$/);
+    await expect(page).toHaveURL(/\/study\/[a-f0-9-]+$/);
     
     // Wait for page to load completely
     await page.waitForLoadState('networkidle');
@@ -51,7 +51,7 @@ test.describe('Resource Management Workflow Tests', () => {
     }
     
     // At minimum, verify we're on the study workspace page
-    await expect(page).toHaveURL(/\/studies\/[a-f0-9-]+$/);
+    await expect(page).toHaveURL(/\/study\/[a-f0-9-]+$/);
     
     if (resourceInterfaceFound) {
       console.log(`Resource management interface detected: ${foundSelector}`);
@@ -102,7 +102,7 @@ test.describe('Resource Management Workflow Tests', () => {
     }
     
     // Verify we remain on the study page
-    await expect(page).toHaveURL(/\/studies\/[a-f0-9-]+$/);
+    await expect(page).toHaveURL(/\/study\/[a-f0-9-]+$/);
   });
 
   test('should handle web resource addition', async ({ page }) => {
@@ -145,7 +145,7 @@ test.describe('Resource Management Workflow Tests', () => {
       console.log('Web resource addition not yet implemented - test ready for validation');
     }
     
-    await expect(page).toHaveURL(/\/studies\/[a-f0-9-]+$/);
+    await expect(page).toHaveURL(/\/study\/[a-f0-9-]+$/);
   });
 
   test('should handle YouTube video addition', async ({ page }) => {
@@ -187,7 +187,7 @@ test.describe('Resource Management Workflow Tests', () => {
       console.log('YouTube integration not yet implemented - test ready for validation');
     }
     
-    await expect(page).toHaveURL(/\/studies\/[a-f0-9-]+$/);
+    await expect(page).toHaveURL(/\/study\/[a-f0-9-]+$/);
   });
 
   test('should handle plain text resource creation', async ({ page }) => {
@@ -231,7 +231,7 @@ test.describe('Resource Management Workflow Tests', () => {
       console.log('Plain text resource creation not yet implemented - test ready for validation');
     }
     
-    await expect(page).toHaveURL(/\/studies\/[a-f0-9-]+$/);
+    await expect(page).toHaveURL(/\/study\/[a-f0-9-]+$/);
   });
 
   test('should display resource list and management', async ({ page }) => {
@@ -268,7 +268,7 @@ test.describe('Resource Management Workflow Tests', () => {
       console.log('Resource listing not yet implemented - test ready for validation');
     }
     
-    await expect(page).toHaveURL(/\/studies\/[a-f0-9-]+$/);
+    await expect(page).toHaveURL(/\/study\/[a-f0-9-]+$/);
   });
 
   test('should handle resource deletion workflow', async ({ page }) => {
@@ -305,7 +305,7 @@ test.describe('Resource Management Workflow Tests', () => {
       console.log('Resource deletion not yet implemented - test ready for validation');
     }
     
-    await expect(page).toHaveURL(/\/studies\/[a-f0-9-]+$/);
+    await expect(page).toHaveURL(/\/study\/[a-f0-9-]+$/);
   });
 
   test('should validate resource processing status', async ({ page }) => {
@@ -337,7 +337,7 @@ test.describe('Resource Management Workflow Tests', () => {
       console.log('Resource processing status indicators not yet implemented - test ready for validation');
     }
     
-    await expect(page).toHaveURL(/\/studies\/[a-f0-9-]+$/);
+    await expect(page).toHaveURL(/\/study\/[a-f0-9-]+$/);
   });
 
   test('should handle resource search and filtering', async ({ page }) => {
@@ -380,7 +380,7 @@ test.describe('Resource Management Workflow Tests', () => {
       console.log('Resource search/filtering not yet implemented - test ready for validation');
     }
     
-    await expect(page).toHaveURL(/\/studies\/[a-f0-9-]+$/);
+    await expect(page).toHaveURL(/\/study\/[a-f0-9-]+$/);
   });
 
   test('should validate resource viewing capabilities', async ({ page }) => {
@@ -418,6 +418,6 @@ test.describe('Resource Management Workflow Tests', () => {
       console.log('Resource viewing capabilities not yet implemented - test ready for validation');
     }
     
-    await expect(page).toHaveURL(/\/studies\/[a-f0-9-]+$/);
+    await expect(page).toHaveURL(/\/study\/[a-f0-9-]+$/);
   });
 });

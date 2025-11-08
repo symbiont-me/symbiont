@@ -19,7 +19,7 @@ const StudyCard = ({ name, image, _id }: StudyCardProps) => {
         <div className="card-body">
           <h2 className="card-title">{name}</h2>
           <div className="card-actions justify-end">
-            <Link href={`studies/${_id}`} className="btn btn-primary">
+            <Link href={`study/${_id}`} className="btn btn-primary">
               Open
             </Link>
           </div>

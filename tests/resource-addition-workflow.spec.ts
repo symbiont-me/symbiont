@@ -16,7 +16,7 @@ test.describe('Study Workspace Navigation Tests', () => {
     
     // Navigate to study workspace manually with more robust approach
     await page.getByRole('link', { name: new RegExp(studyName) }).click();
-    await expect(page).toHaveURL(/\/studies\/[a-f0-9-]+$/);
+    await expect(page).toHaveURL(/\/study\/[a-f0-9-]+$/);
     
     // Wait for page to load and check if tabs are available
     await page.waitForLoadState('networkidle');
@@ -54,7 +54,7 @@ test.describe('Study Workspace Navigation Tests', () => {
 
   test('should navigate to study workspace successfully', async ({ page }) => {
     // Verify we're on the study workspace page
-    await expect(page).toHaveURL(/\/studies\/[a-f0-9-]+$/);
+    await expect(page).toHaveURL(/\/study\/[a-f0-9-]+$/);
     
     // Check if page has loaded content (look for common elements)
     const commonElements = [
@@ -81,7 +81,7 @@ test.describe('Study Workspace Navigation Tests', () => {
 
   test('should have basic page functionality', async ({ page }) => {
     // Verify the page is interactive
-    await expect(page).toHaveURL(/\/studies\/[a-f0-9-]+$/);
+    await expect(page).toHaveURL(/\/study\/[a-f0-9-]+$/);
     
     // Try to find any interactive elements
     const interactiveElements = [
@@ -115,7 +115,7 @@ test.describe('Study Workspace Navigation Tests', () => {
 
   test('should display study information', async ({ page }) => {
     // Verify we're on the correct study page
-    await expect(page).toHaveURL(/\/studies\/[a-f0-9-]+$/);
+    await expect(page).toHaveURL(/\/study\/[a-f0-9-]+$/);
     
     // Check if the page displays any study-related content
     // Look for common study page indicators
@@ -140,12 +140,12 @@ test.describe('Study Workspace Navigation Tests', () => {
     }
     
     // At minimum, verify we have the correct URL pattern
-    await expect(page).toHaveURL(/\/studies\/[a-f0-9-]+$/);
+    await expect(page).toHaveURL(/\/study\/[a-f0-9-]+$/);
   });
 
   test('should allow navigation back to dashboard', async ({ page }) => {
     // Verify we're on study workspace page
-    await expect(page).toHaveURL(/\/studies\/[a-f0-9-]+$/);
+    await expect(page).toHaveURL(/\/study\/[a-f0-9-]+$/);
     
     // Look for navigation elements that might take us back
     const navigationSelectors = [

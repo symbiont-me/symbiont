@@ -54,7 +54,7 @@ test.describe('Study Creation Workflow Tests', () => {
 
     // Verify study link is functional
     const studyLink = page.getByRole('link', { name: new RegExp(studyName) });
-    await expect(studyLink).toHaveAttribute('href', /studies\/[a-f0-9-]+/);
+    await expect(studyLink).toHaveAttribute('href', /study\/[a-f0-9-]+/);
   });
 
   test('Create study with required fields only', async ({ page }) => {

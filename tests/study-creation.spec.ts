@@ -87,7 +87,7 @@ test.describe('Study Creation', () => {
     await page.getByRole('link', { name: /Navigation Test Study/ }).click();
     
     // Verify we're in the study workspace
-    await expect(page).toHaveURL(/\/studies\/[a-f0-9-]+$/);
+    await expect(page).toHaveURL(/\/study\/[a-f0-9-]+$/);
     
     // Verify tab navigation is present
     await expect(page.getByRole('tab', { name: 'writer' })).toBeVisible();

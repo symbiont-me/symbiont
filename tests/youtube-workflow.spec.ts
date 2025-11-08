@@ -358,7 +358,7 @@ test.describe("YouTube Upload Workflow", () => {
     }
 
     // Final verification - ensure we're still on the study page
-    await expect(page).toHaveURL(/\/studies\/[a-f0-9-]+$/);
+    await expect(page).toHaveURL(/\/study\/[a-f0-9-]+$/);
     console.log("YouTube workflow test completed");
   });
 
@@ -411,7 +411,7 @@ test.describe("YouTube Upload Workflow", () => {
       console.log("YouTube resource not found in resource list - may not be implemented yet");
     }
 
-    await expect(page).toHaveURL(/\/studies\/[a-f0-9-]+$/);
+    await expect(page).toHaveURL(/\/study\/[a-f0-9-]+$/);
   });
 
   test.skip("verify YouTube transcript download functionality", async ({ page }) => {
@@ -456,6 +456,6 @@ test.describe("YouTube Upload Workflow", () => {
       console.log("Transcript processing indicators not found - may not be implemented yet");
     }
 
-    await expect(page).toHaveURL(/\/studies\/[a-f0-9-]+$/);
+    await expect(page).toHaveURL(/\/study\/[a-f0-9-]+$/);
   });
 });

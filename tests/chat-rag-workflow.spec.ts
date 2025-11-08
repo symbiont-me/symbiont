@@ -15,7 +15,7 @@ test.describe('Chat and RAG Functionality Tests', () => {
     
     // Navigate to study workspace
     await page.getByRole('link', { name: new RegExp(studyName) }).click();
-    await expect(page).toHaveURL(/\/studies\/[a-f0-9-]+$/);
+    await expect(page).toHaveURL(/\/study\/[a-f0-9-]+$/);
     
     // Wait for page to load completely
     await page.waitForLoadState('networkidle');
@@ -52,7 +52,7 @@ test.describe('Chat and RAG Functionality Tests', () => {
     }
     
     // Verify we're on the study workspace page
-    await expect(page).toHaveURL(/\/studies\/[a-f0-9-]+$/);
+    await expect(page).toHaveURL(/\/study\/[a-f0-9-]+$/);
     
     if (chatInterfaceFound) {
       console.log(`Chat interface detected: ${foundSelector}`);
@@ -160,7 +160,7 @@ test.describe('Chat and RAG Functionality Tests', () => {
       console.log('Chat messaging functionality not yet fully implemented');
     }
     
-    await expect(page).toHaveURL(/\/studies\/[a-f0-9-]+$/);
+    await expect(page).toHaveURL(/\/study\/[a-f0-9-]+$/);
   });
 
   test('should display resource selection for context', async ({ page }) => {
@@ -201,7 +201,7 @@ test.describe('Chat and RAG Functionality Tests', () => {
       console.log('Resource selection for RAG context not yet implemented');
     }
     
-    await expect(page).toHaveURL(/\/studies\/[a-f0-9-]+$/);
+    await expect(page).toHaveURL(/\/study\/[a-f0-9-]+$/);
   });
 
   test('should handle combine resources feature', async ({ page }) => {
@@ -239,7 +239,7 @@ test.describe('Chat and RAG Functionality Tests', () => {
       console.log('Combine resources feature not yet implemented');
     }
     
-    await expect(page).toHaveURL(/\/studies\/[a-f0-9-]+$/);
+    await expect(page).toHaveURL(/\/study\/[a-f0-9-]+$/);
   });
 
   test('should display chat history and persistence', async ({ page }) => {
@@ -275,7 +275,7 @@ test.describe('Chat and RAG Functionality Tests', () => {
       console.log('Chat history display not yet implemented');
     }
     
-    await expect(page).toHaveURL(/\/studies\/[a-f0-9-]+$/);
+    await expect(page).toHaveURL(/\/study\/[a-f0-9-]+$/);
   });
 
   test('should handle clear chat functionality', async ({ page }) => {
@@ -313,7 +313,7 @@ test.describe('Chat and RAG Functionality Tests', () => {
       console.log('Clear chat functionality not yet implemented');
     }
     
-    await expect(page).toHaveURL(/\/studies\/[a-f0-9-]+$/);
+    await expect(page).toHaveURL(/\/study\/[a-f0-9-]+$/);
   });
 
   test('should validate citation and source attribution', async ({ page }) => {
@@ -353,7 +353,7 @@ test.describe('Chat and RAG Functionality Tests', () => {
       console.log('Citation and source attribution not yet implemented');
     }
     
-    await expect(page).toHaveURL(/\/studies\/[a-f0-9-]+$/);
+    await expect(page).toHaveURL(/\/study\/[a-f0-9-]+$/);
   });
 
   test('should handle AI response display and formatting', async ({ page }) => {
@@ -389,7 +389,7 @@ test.describe('Chat and RAG Functionality Tests', () => {
       console.log('AI response display formatting not yet implemented');
     }
     
-    await expect(page).toHaveURL(/\/studies\/[a-f0-9-]+$/);
+    await expect(page).toHaveURL(/\/study\/[a-f0-9-]+$/);
   });
 
   test('should validate loading states during AI processing', async ({ page }) => {
@@ -422,7 +422,7 @@ test.describe('Chat and RAG Functionality Tests', () => {
       console.log('Chat loading states not yet implemented - will be visible during AI processing');
     }
     
-    await expect(page).toHaveURL(/\/studies\/[a-f0-9-]+$/);
+    await expect(page).toHaveURL(/\/study\/[a-f0-9-]+$/);
   });
 
   test('should handle error states and retry functionality', async ({ page }) => {
@@ -464,6 +464,6 @@ test.describe('Chat and RAG Functionality Tests', () => {
       console.log('Chat error handling and retry functionality not yet visible - will appear during error conditions');
     }
     
-    await expect(page).toHaveURL(/\/studies\/[a-f0-9-]+$/);
+    await expect(page).toHaveURL(/\/study\/[a-f0-9-]+$/);
   });
 });
