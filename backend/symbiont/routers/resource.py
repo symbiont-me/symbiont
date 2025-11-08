@@ -189,23 +189,92 @@ async def add_yt_resource(
         await user_exists(user_uid)
         check_user_authorization(video_resource.studyId, user_uid, studies_collection)
         for url in video_resource.urls:
-            loader = YoutubeLoader.from_youtube_url(
-                str(url),
-                add_video_info=True,
-                language=["en", "id"],
-                translation="en",
-            )
-            logger.info(f"Processing youtube video {url}")
-            # @dev there should only be a single document for this
-            doc = loader.load()[0]
-
-            # @dev if the transcript is empty, the video is not processed
-            # TODO if the transcript is empty, extract audio and convert to text using whisper
-            if doc.page_content == "":
-                raise HTTPException(
-                    status_code=404,
-                    detail="There is no content in the video. Please try again",
+            try:
+                loader = YoutubeLoader.from_youtube_url(
+                    str(url),
+                    add_video_info=True,
+                    language=["en", "id"],
+                    translation="en",
                 )
+                logger.info(f"Processing youtube video {url}")
+                
+                # Load documents with error handling
+                docs = loader.load()
+                if not docs:
+                    logger.warning(f"No documents returned for YouTube URL: {url}")
+                    raise HTTPException(
+                        status_code=404,
+                        detail=f"Could not load transcript for video: {url}. The video may not have captions available.",
+                    )
+                
+                doc = docs[0]
+
+                # @dev if the transcript is empty, the video is not processed
+                # TODO if the transcript is empty, extract audio and convert to text using whisper
+                if not doc.page_content or doc.page_content.strip() == "":
+                    logger.warning(f"Empty transcript for YouTube URL: {url}")
+                    raise HTTPException(
+                        status_code=404,
+                        detail=f"No transcript content available for video: {url}. The video may not have captions enabled.",
+                    )
+                    
+            except HTTPException:
+                # Re-raise HTTP exceptions (our custom errors)
+                raise
+            except Exception as e:
+                error_msg = str(e).lower()
+                logger.error(f"Error loading YouTube transcript for {url}: {str(e)}")
+                
+                # Handle specific HTTP errors
+                if "400" in str(e) or "bad request" in error_msg:
+                    # Try fallback with simpler configuration
+                    try:
+                        logger.info(f"Retrying {url} with fallback configuration")
+                        fallback_loader = YoutubeLoader.from_youtube_url(
+                            str(url),
+                            add_video_info=False,
+                            language=["en"],
+                        )
+                        docs = fallback_loader.load()
+                        if docs and docs[0].page_content.strip():
+                            doc = docs[0]
+                            logger.info(f"Successfully loaded transcript with fallback for {url}")
+                        else:
+                            raise HTTPException(
+                                status_code=404,
+                                detail=f"No transcript available for video: {url}. The video may not have captions enabled.",
+                            )
+                    except Exception as fallback_error:
+                        logger.error(f"Fallback also failed for {url}: {str(fallback_error)}")
+                        raise HTTPException(
+                            status_code=404,
+                            detail=f"Could not load transcript for video: {url}. This may be due to: 1) Video has no captions, 2) Captions are disabled, 3) Video is age-restricted, or 4) Regional restrictions.",
+                        )
+                elif "403" in str(e) or "forbidden" in error_msg:
+                    raise HTTPException(
+                        status_code=403,
+                        detail=f"Access forbidden for video: {url}. The video may be private or have restricted access.",
+                    )
+                elif "404" in str(e) or "not found" in error_msg:
+                    raise HTTPException(
+                        status_code=404,
+                        detail=f"Video not found: {url}. The video may have been deleted or the URL is incorrect.",
+                    )
+                elif "transcript" in error_msg or "caption" in error_msg:
+                    raise HTTPException(
+                        status_code=404,
+                        detail=f"Transcript not available for video: {url}. The video may have disabled captions.",
+                    )
+                elif "video" in error_msg and ("unavailable" in error_msg or "private" in error_msg):
+                    raise HTTPException(
+                        status_code=404,
+                        detail=f"Video not accessible: {url}. The video may be private, deleted, or unavailable.",
+                    )
+                else:
+                    raise HTTPException(
+                        status_code=500,
+                        detail=f"Failed to process YouTube video: {url}. Error: {str(e)}",
+                    )
             unique_file_identifier = make_file_identifier(doc.metadata["title"])
             study_resource = StudyResource(
                 studyId=video_resource.studyId,
