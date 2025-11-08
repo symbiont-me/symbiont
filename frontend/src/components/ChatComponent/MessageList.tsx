@@ -50,7 +50,7 @@ const MessageList = ({ messages, isLoading }: MessageListProps) => {
             {message.role === "user" ? (
               <>
                 <div
-                  className="user-message w-2/3 self-start rounded bg-teal-200 ml-auto p-4"
+                  className="user-message w-2/3 self-start rounded-lg bg-blue-600 text-white ml-auto p-4 shadow-sm"
                   style={{ maxWidth: "80%" }}
                 >
                   <div
@@ -58,11 +58,11 @@ const MessageList = ({ messages, isLoading }: MessageListProps) => {
                     onClick={() => onCopy(message.content, index)}
                   >
                     {isCopied && copyMessageId === index ? (
-                      <span className="text-2xs text-slate-800 font-semibold italic">
+                      <span className="text-2xs text-blue-100 font-semibold italic">
                         copied! <CheckIcon sx={{ height: "10px" }} />
                       </span>
                     ) : (
-                      <ContentCopyIcon sx={{ height: "14px" }} />
+                      <ContentCopyIcon sx={{ height: "14px", color: "rgba(255,255,255,0.7)" }} />
                     )}
                   </div>
                   <p className="text-sm">{message.content}</p>
@@ -70,7 +70,7 @@ const MessageList = ({ messages, isLoading }: MessageListProps) => {
               </>
             ) : (
               <div
-                className="ai-response m-2 self-end rounded bg-amber-100 mr-auto w-3/4 p-6 max-w-screen-sm	"
+                className="ai-response m-2 self-end rounded-lg bg-gray-50 border border-gray-200 mr-auto w-3/4 p-6 max-w-screen-sm shadow-sm"
                 onClick={handleTextSelect}
               >
                 <div
@@ -78,11 +78,11 @@ const MessageList = ({ messages, isLoading }: MessageListProps) => {
                   onClick={() => onCopy(message.content, index)}
                 >
                   {isCopied && copyMessageId === index ? (
-                    <span className="text-2xs text-slate-800 font-semibold italic">
+                    <span className="text-2xs text-gray-600 font-semibold italic">
                       copied! <CheckIcon sx={{ height: "10px" }} />
                     </span>
                   ) : (
-                    <ContentCopyIcon sx={{ height: "14px" }} />
+                    <ContentCopyIcon sx={{ height: "14px", color: "#6b7280" }} />
                   )}
                 </div>
 
@@ -93,15 +93,15 @@ const MessageList = ({ messages, isLoading }: MessageListProps) => {
                     </div>
                     {
                       <div className="min-h-20">
-                        <Divider />
-                        <p className="text-sm font-semibold mb-2 mt-4">
+                        <Divider style={{ margin: "16px 0" }} />
+                        <p className="text-sm font-semibold mb-2 mt-4 text-gray-700">
                           Citations
                         </p>
                         <div className="flex flex-row">
                           {message.citations &&
                             message.citations.map((citation, index) => (
                               <p
-                                className="text-xs text-blue-800 font-semibold mr-2 cursor-pointer"
+                                className="text-xs text-blue-600 font-semibold mr-2 cursor-pointer hover:text-blue-800"
                                 key={message.id}
                               >
                                 <CitationModal
