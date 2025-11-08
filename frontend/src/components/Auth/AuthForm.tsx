@@ -43,7 +43,7 @@ export default function AuthForm() {
       setIsLoggedIn(sessionExists);
       // Redirect to home if logged in
       if (sessionExists) {
-        window.location.href = "/";
+        window.location.href = "/studies";
       }
     }
 
@@ -84,7 +84,7 @@ export default function AuthForm() {
 
       const responseData = response.data;
       if (responseData.status === "OK") {
-        window.location.href = "/";
+        window.location.href = "/studies";
       } else if (responseData.status === "WRONG_CREDENTIALS_ERROR") {
         setAuthError("Invalid credentials. Please try again.");
       }

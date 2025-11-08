@@ -15,24 +15,24 @@ test.describe.serial('Setup', () => {
     await page.goto('http://localhost:4000/sign-in');
     
     // Switch to sign-up form
-    await page.getByRole('button', { name: 'Don\'t have an account? Sign Up' }).click();
-    await expect(page.getByRole('heading', { name: 'Sign Up to Symbiont' })).toBeVisible();
+    await page.getByRole('button', { name: 'Don\'t have an account? Sign up' }).click();
+    await expect(page.getByRole('heading', { name: 'Create your account' })).toBeVisible();
     
     // Fill out sign-up form with consistent test credentials
-    await page.getByRole('textbox', { name: 'Email' }).fill(TEST_CREDENTIALS.email);
+    await page.getByRole('textbox', { name: 'Email address' }).fill(TEST_CREDENTIALS.email);
     await page.getByRole('textbox', { name: 'Password' }).fill(TEST_CREDENTIALS.password);
     
     // Submit sign-up form
-    await page.getByRole('button', { name: 'Sign Up' }).click();
+    await page.getByRole('button', { name: 'Create account' }).click();
     
     // Wait a bit for sign-up processing and redirect
     await page.waitForTimeout(2000);
     
-    // Should navigate to dashboard after successful sign-up
-    await expect(page).toHaveURL('http://localhost:4000/', { timeout: 10000 });
+    // Should navigate to studies page after successful sign-up
+    await expect(page).toHaveURL('http://localhost:4000/studies', { timeout: 10000 });
     
-    // Verify sign-up was successful by checking dashboard elements
-    await expect(page.getByRole('heading', { name: 'Add Study' })).toBeVisible();
+    // Verify sign-up was successful by checking studies dashboard
+    await expect(page.getByRole('heading', { name: 'My Studies' })).toBeVisible();
     
     // Save credentials to file for other tests to use
     const credentialsPath = path.join(__dirname, 'test-credentials.json');
