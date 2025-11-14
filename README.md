@@ -50,15 +50,12 @@ Works with various Large Language Models from industry leaders such as Anthropic
 
 ### Prerequisites
 - Docker or Podman
-- Node.js 18+ (for frontend)
-- curl or wget (for automated dependency installation)
 
 ### One-Command Setup
 
 ```bash
 # Clone the repository
 git clone <repository-url>
-cd symbiont-monorepo/monorepo
 
 # Start the entire application
 ./start-app.sh
@@ -66,7 +63,7 @@ cd symbiont-monorepo/monorepo
 
 That's it! The script will automatically:
 - Install `uv` (Python package manager) if needed
-- Install `bun` (Node.js package manager) if needed
+- Install `bun` if needed
 - Start backend services (MongoDB, Qdrant, SuperTokens)
 - Install all dependencies
 - Start the FastAPI backend server
@@ -145,7 +142,9 @@ uv run uvicorn symbiont.main:app --reload
 ```bash
 cd frontend
 # Install Node.js dependencies
-npm install -g bun  # Install bun if needed
+# Install bun if needed
+curl -fsSL https://bun.com/install | bash
+
 bun install
 
 # Start development server
