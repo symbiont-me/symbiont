@@ -235,6 +235,10 @@ main() {
     # Check if scripts exist
     check_scripts
     
+    # Create environment files
+    log_app "Setting up environment files..."
+    ./create-env-files.sh
+    
     # Start backend
     start_backend
     
